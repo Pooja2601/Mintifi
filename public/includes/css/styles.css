@@ -2475,6 +2475,24 @@ input[type=number]::-webkit-outer-spin-button {
     margin: 0;
 }
 
+.fade-enter {
+    opacity: 0;
+    z-index: 1;
+}
+
+.fade-enter.fade-enter-active {
+    opacity: 1;
+    transition: opacity 250ms ease-in;
+}
+
+#numberPAN:valid, #numberMobile:valid, #numberAdhar:valid {
+    color: #00bfa5;
+}
+
+#numberPAN:invalid, #numberMobile:invalid, #numberAdhar:invalid {
+    color: crimson; /* indianred */
+}
+
 /*@media (min-width: 769px) and (max-width: 1024px){ 
 .mob_display{display: none;}
 .shadow_in_navbar{margin-top: unset;}

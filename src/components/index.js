@@ -1,40 +1,65 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
+import {Link, withRouter} from 'react-router-dom';
 // import {GetinTouch} from "../../shared/getin_touch";
-import { baseUrl } from "../shared/constants";
-import { connect } from "react-redux";
-import { checkExists } from "../actions";
+import {baseUrl} from "../shared/constants";
+import {connect} from "react-redux";
+import {checkExists} from "../actions";
 
 const Timer = 10;
 
-class Auth extends Component {
-  //   state = { loading: "" };
-  _formSubmit(e) {}
+class Login extends Component {
+    //   state = { loading: "" };
+    _formSubmit(e) {
+    }
 
-  render() {
-    return (
-      <div
-        className="row justify-content-center background-color"
-        style={{ backgroundColor: "#DDD", marginTop: "100px" }}
-      >
-        <div className="col-11 col-md-5 ml-5 mr-5 partner_section">
-          <div className="ml-2">
-            <div className="mt-4 text-center">
-              <div className="mt-4 mb-4 border_bottom">
-                <img
-                  src="images/logo.png"
-                  style={{ width: "150px", paddingBottom: "10px" }}
-                />
-                <h4>User Registration</h4>
+    _existCustomer = () => {
+        this.props.checkExists("exist");
+        setTimeout(() => {
+            this.props.history.push('/Auth')
+        }, 500);
+    };
+
+    _newCustomer = () => {
+        this.props.checkExists("new");
+        setTimeout(() => {
+            this.props.history.push('/AdharPan')
+        }, 500);
+    };
+
+    render() {
+        return (
+            <>
+                {/*<Link to={'/'} >Go Back </Link>*/}
+                <h5 align="center">User Registration</h5>
                 <p className="paragraph_styling">
-                  Find out how our platform can help you climb the ladder to
-                  another level of success today. {this.props.existing}
+                    Find out how our platform can help you climb the ladder to
+                    another level of success today.
                 </p>
-              </div>
-            </div>
-            <div className="mt-5 mb-5 text-center ">
-              <button
-                onClick={() => this.props.checkExists("new")}
+                <div className="mt-5 mb-5 text-center row">
+                    <div className={"col-sm-12 col-md-6"}><img
+                        src="images/boy.png"
+                        style={{
+                            width: "150px", boxShadow: '0 0 8px #cccccc', cursor: 'pointer',
+                            borderRadius: '50%', opacity: (this.props.existing === 'new') ? '1.0' : '0.4'
+                        }}
+                        onClick={() => this._newCustomer()}
+                    /><br/> New Customer
+                    </div>
+                    <div className={"col-sm-12 col-md-6"}><img
+                        src="images/man.png"
+                        style={{
+                            width: "150px", boxShadow: '0 0 8px #cccccc', cursor: 'pointer',
+                            borderRadius: '50%', opacity: (this.props.existing === 'exist') ? '1.0' : '0.4'
+                        }}
+                        onClick={() => this._existCustomer()}
+                    /> <br/>Existing Customer
+                    </div>
+                    <br/>
+
+                    {/* <button
+                onClick={() => this._newCustomer()}
                 name="submit"
+                style={{ padding: "5px 35px" }}
                 className="form-submit btn partenrs_submit_btn"
               >
                 New User
@@ -43,24 +68,23 @@ class Auth extends Component {
               OR
               <br />
               <button
-                onClick={() => this.props.checkExists("exist")}
+                onClick={() => this._existCustomer()}
+                style={{ padding: "5px 35px" }}
                 className="btn partenrs_submit_btn"
               >
                 Existing User
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+              </button>*/}
+                </div>
+            </>
+        );
+    }
 }
 
 const mapStateToProps = state => ({
-  existing: state.authPayload.existing
+    existing: state.authPayload.existing
 });
 
-export default connect(
-  mapStateToProps,
-  { checkExists }
-)(Auth);
+export default withRouter(connect(
+    mapStateToProps,
+    {checkExists}
+)(Login));
