@@ -11,6 +11,7 @@ import Privacy from "./shared/privacy_policy";
 import Login from "./components";
 import Auth from "./components/auth";
 import AdharPan from "./components/adhar_pan";
+import AdharComplete from "./components/adhar_pan/adhar_complete";
 
 import configureStore from "./store";
 
@@ -33,7 +34,7 @@ class App extends Component {
                                 className="row justify-content-center background-color"
                                 style={{backgroundColor: "#DDD", marginTop: "100px"}}
                             >
-                                <div className="col-11 col-md-6 ml-5 mr-5 partner_section"
+                                <div className="col-11 col-md-7 ml-5 mr-5 partner_section"
                                      style={{backgroundColor: '#fff'}}>
                                     <div className="ml-2">
                                         <div className="mt-4 text-center">
@@ -54,6 +55,7 @@ class App extends Component {
                                             <Route exact path="/" component={Login}/>
                                             <Route path="/Auth" component={Auth}/>
                                             <Route path="/AdharPan" component={AdharPan}/>
+                                            <Route path="/AdharComplete" component={AdharComplete}/>
                                             <Route path="/Privacy" component={Privacy}/>
                                             <Route component={Error}/>
                                         </Switch>

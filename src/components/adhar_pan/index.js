@@ -5,11 +5,10 @@ import {connect} from "react-redux";
 import {pan_adhar} from "../../actions";
 import {Link, withRouter} from "react-router-dom";
 
-const Timer = 10;
 
 class AdharPan extends Component {
-    state = {submitted: false, loading: false, showMsg: {}, timer: Timer, mobile: '', otp: ''};
-    obj = {pan: '', adhar: ''};
+    obj = {pan: '', adhar: '', pan_correct: false, adhar_skip: false, adhar_correct: false};
+    state = {adhar_skip: false};
 
     _formSubmit(e) {
         // alert('hi')
@@ -17,13 +16,28 @@ class AdharPan extends Component {
     }
 
     _PANEnter = e => {
-        if (e.target.value.length <= 10) this.props.pan_adhar(e.target.value, '');
-        else this.props.pan_adhar('', '');
+        let regex = /^[a-zA-Z]{5}([0-9]){4}[a-zA-Z]{1}?$/;
+        if (e.target.value.length <= 10) {
+            this.obj.pan_correct = regex.test(e.target.value);
+            this.props.pan_adhar(e.target.value, '');
+        }
     }
 
     _AdharEnter = e => {
-        if (e.target.value.length <= 12) this.props.pan_adhar(this.props.pan, e.target.value);
-        // else this.props.pan_adhar('', '');
+        let regex = /^([0-9]){12}$/;
+        if (e.target.value.length <= 12) {
+            this.obj.adhar_correct = regex.test(e.target.value);
+            this.props.pan_adhar(this.props.pan, e.target.value);
+        }
+    }
+
+    adharSkipped = () => {
+        // alert('skipped');
+        // this.obj.adhar_skip = !this.obj.adhar_skip;
+        this.setState({adhar_skip: !this.state.adhar_skip});
+        this.props.history.push('/AdharComplete')
+        // alert(this.state.adhar_skip);
+
     }
 
     render() {
@@ -45,6 +59,7 @@ class AdharPan extends Component {
                             type="text"
                             className="form-control font_weight"
                             placeholder="10 digit PAN Number"
+                            autoComplete={"off"}
                             name="url"
                             maxLength={10}
                             minLength={10}
@@ -57,11 +72,10 @@ class AdharPan extends Component {
                             value={this.props.pan}
                             // ref={ref => (this.obj.pan = ref)}
                             onChange={(e) => this._PANEnter(e)}
-                            // onBlur={() => this.props.pan_adhar(this.obj.pan.value, '')}
 
                         />
                     </div>
-                    {(this.props.pan) && (
+                    {(this.obj.pan_correct) && (
                         <div className="input-group mb-3">
                             <input
                                 type="number"
@@ -70,6 +84,7 @@ class AdharPan extends Component {
                                 name="url"
                                 pattern="^[0-9]{12}$"
                                 title="This field is required"
+                                autoComplete={"off"}
                                 style={{fontWeight: 600}}
                                 id="numberAdhar"
                                 maxLength={12}
@@ -82,15 +97,17 @@ class AdharPan extends Component {
                                 aria-describedby="adhar-area"
                             />
                             <div className="input-group-append">
-                                <button className="btn btn-outline-secondary"
-                                        type="button"
-                                        id="adhar-area">Skip Aadhaar
+                                <button
+                                    className={(this.state.adhar_skip) ? 'btn btn-secondary' : 'btn btn-default'}
+                                    style={{fontSize: '13px'}}
+                                    type="button" onClick={() => this.adharSkipped()}
+                                    id="adhar-area">Skip Aadhaar
                                 </button>
                             </div>
                         </div>
                     )}
                     <div className="mt-5 mb-5 text-center ">
-                        {this.props.pan && (
+                        {(this.obj.pan_correct && this.obj.adhar_correct) && (
                             <input
                                 type="submit"
                                 name="submit"

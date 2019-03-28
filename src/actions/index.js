@@ -1,6 +1,7 @@
 export const types = {
     CHECK_USER_EXISTS: "CHECK_USER_EXISTS",
     PAN_ADHAR: "PAN_ADHAR",
+    ADHAR_COMPLETE: "ADHAR_COMPLETE",
     FETCH_AUTH: "FETCH_AUTH",
     FETCH_AUTH_SUCCESS: "FETCH_AUTH_SUCCESS",
     FETCH_POSTS: "FETCH_POSTS",
@@ -16,7 +17,7 @@ export const checkExists = existing => ({
     existing
 });
 
-// export const setPan = pan => ({type.})
+export const setAdharManual = adharObj => ({type: types.ADHAR_COMPLETE, adharObj});
 
 export const pan_adhar = (pan, adhar) => ({
     type: types.PAN_ADHAR,

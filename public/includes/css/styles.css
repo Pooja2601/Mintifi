@@ -2485,12 +2485,22 @@ input[type=number]::-webkit-outer-spin-button {
     transition: opacity 250ms ease-in;
 }
 
-#numberPAN:valid, #numberMobile:valid, #numberAdhar:valid {
+#numberPAN:valid, #numberMobile:valid, #numberAdhar:valid, #fullName:valid,
+#textEmail:valid, #numberPincode:valid, #dobDate:valid, #otpVerify:valid {
     color: #00bfa5;
+    border-color: #00bfa5;
 }
 
-#numberPAN:invalid, #numberMobile:invalid, #numberAdhar:invalid {
+#numberPAN:invalid, #numberMobile:invalid, #numberAdhar:invalid,
+#fullName:invalid, #textEmail:invalid, #numberPincode:invalid, #dobDate:invalid, #otpVerify:invalid {
     color: crimson; /* indianred */
+    border-color: crimson;
+}
+
+.selectedBtn {
+    color: #fff;
+    background-color: #6c757d;
+    border-color: #6c757d;
 }
 
 /*@media (min-width: 769px) and (max-width: 1024px){ 

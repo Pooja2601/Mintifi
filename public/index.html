@@ -55,7 +55,8 @@
             type="text/javascript"
     ></script>-->
 </head>
-<body data-spy="scroll" data-target="#careerHeader" data-offset="50">
+<body data-spy="scroll" data-target="#careerHeader" data-offset="50" oncontextmenu="return false"
+>
 <noscript>You need to enable JavaScript to run this app.</noscript>
 <div id="root"></div>
 <!--
@@ -68,6 +69,25 @@
   To begin the development, run `npm start` or `yarn start`.
   To create a production bundle, use `npm run build` or `yarn build`.
 -->
+<script>
+
+    var element = new Image;
+    window.devtoolsRunner = true;
+    var devtoolsOpen = false;
+    element.__defineGetter__("id", function () {
+        devtoolsOpen = true; // This only executes when devtools is open.
+    });
+    console.log(element);
+    window.developerConsole = setInterval(function () {
+
+        if (window.devtoolsRunner === true && devtoolsOpen === true) {
+            console.log(element);
+            document.getElementById('root').innerHTML += " ";
+            console.log("Kindly Close the developer Console.");
+        }
+    }, 2000);
+
+</script>
 <script>
     $("ul.nav li.dropdown").hover(
         function () {
@@ -132,6 +152,30 @@
     }
 
     // setTimeout(initMap, 4000);
+
+    /*    window.console.log = function () {
+            console.error('Sorry , developers tools are blocked here....');
+            window.console.log = function () {
+                return false;
+            }
+    }*/
+
+    /*  (function () {
+
+          var _z = console;
+          Object.defineProperty(window, "console", {
+              get: function () {
+                  if (_z._commandLineAPI) {
+                      throw "Sorry, Can't execute scripts!";
+                  }
+                  return _z;
+              },
+              set: function (val) {
+                  _z = val;
+              }
+          });
+
+      })();*/
 
 </script>
 

@@ -5,14 +5,14 @@ import {connect} from "react-redux";
 import {setAuth} from "../../actions";
 import {Link, withRouter} from "react-router-dom";
 
-const Timer = 10;
+const Timer = 20;
 
 class Auth extends Component {
     state = {submitted: false, loading: false, showMsg: {}, timer: Timer, mobile: '', otp: ''};
-    obj = {};
+    obj = {mobile_correct: false};
 
     _formSubmit(e) {
-        // alert('hi')
+        // alert('hi');
         e.preventDefault();
         clearInterval(this.interval);
         this.setState({loading: true, submitted: true, timer: Timer});
@@ -27,9 +27,11 @@ class Auth extends Component {
     }
 
     _setMobile = (e) => {
-
-        if (e.target.value.length <= 10)
+        if (e.target.value.length <= 10) {
             this.props.setAuth(e.target.value);
+            this.obj.mobile_correct = true;
+        }
+        else this.obj.mobile_correct = false;
     }
 
     render() {
@@ -41,7 +43,7 @@ class Auth extends Component {
                 </p>
                 <form
                     id="serverless-contact-form"
-                    onSubmit={e => this._formSubmit(e)}
+
                 >
                     <label htmlFor="numberMobile">Mobile Number *</label>
                     <div className="input-group mb-3">
@@ -79,34 +81,35 @@ class Auth extends Component {
                                 name="url"
                                 pattern="^[0-9]{4}$"
                                 title="This field is required"
-                                id="basic-url"
-                                maxLength={4}
-                                minLength={4}
+                                id="otpVerify"
                                 style={{fontWeight: 600}}
                                 value={this.state.otp}
                                 min={1000}
                                 max={9999}
-                                onChange={(e) => this.setState({otp: e.target.value})}
+                                onChange={(e) => {
+                                    if (e.target.value.length <= 4) this.setState({otp: e.target.value})
+                                }}
                                 aria-describedby="otp-area"
                             />
                             <div className="input-group-append">
                                 <button className="btn btn-outline-secondary" disabled={this.state.timer}
                                         type="button"
                                         id="otp-area">Resending
-                                    OTP in {(this.state.timer) && `...${this.state.timer} Sec`}
+                                    in {(this.state.timer) && ` ${this.state.timer} Sec`}
                                 </button>
                             </div>
                         </div>
                     )}
                     <div className="mt-5 mb-5 text-center ">
-                        {!this.state.loading ? (
-                            <input
+                        {(!this.state.loading) ? (
+                            <button
                                 type="submit"
                                 name="submit"
-                                value={"Send OTP"}
+                                // value={"Send OTP"}
                                 onClick={e => this._formSubmit(e)}
                                 className="form-submit btn partenrs_submit_btn"
-                            />
+                            >Send OTP
+                            </button>
 
                         ) : (<>
                             {(this.state.otp !== '') && (<button className="btn partenrs_submit_btn">

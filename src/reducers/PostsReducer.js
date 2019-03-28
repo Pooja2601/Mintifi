@@ -16,6 +16,9 @@ export default (state = {}, action) => {
             // adhar = (action.adhar) ? action.adhar : state.authPayload.adhar;
             return {...state, pan: action.pan, adhar: action.adhar};
 
+        case types.ADHAR_COMPLETE:
+            return {...state, adharObj: action.adharObj};
+
         case types.FETCH_AUTH:
             return {...state, mobile: action.mobile, otp: action.otp};
 
