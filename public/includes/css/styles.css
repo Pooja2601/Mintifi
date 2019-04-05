@@ -396,7 +396,7 @@ li a:focus {
 
 /*.upper_section_space{margin-top: 3rem;}*/
 .parallax {
-    background-image: url(../../images/Sector-bg.png);
+    background-image: url('../../images/Sector-bg.png');
     min-height: 439px;
     background-attachment: fixed;
     background-position-y: 5.2rem;
@@ -948,9 +948,9 @@ li a:focus {
 .form-control:focus {
     color: #495057;
     background-color: #fff;
-    border-color: #80bdff1a;
+    /*border-color: #80bdff1a;*/
     outline: 0;
-    box-shadow: 0 0 0 0.2rem rgba(93, 193, 165, 0.1);
+    /*box-shadow: 0 0 0 0.2rem rgba(93, 193, 165, 0.1);*/
 }
 
 .sectors_fonts {
@@ -1285,11 +1285,11 @@ input[type="radio"]:after {
     height: 33rem;
 }
 
-.content_div {
-    top: 31rem;
-    position: fixed;
+.content_div_error {
+    position: static;
+    margin-top: -21rem;
     text-align: center;
-    width: 84%;
+    margin-bottom: 2rem;
 }
 
 .error_page_not_found {
@@ -2486,21 +2486,36 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 #numberPAN:valid, #numberMobile:valid, #numberAdhar:valid, #fullName:valid,
-#textEmail:valid, #numberPincode:valid, #dobDate:valid, #otpVerify:valid {
-    color: #00bfa5;
-    border-color: #00bfa5;
+#textEmail:valid, #numberPincode:valid, #dobDate:valid, #otpVerify:valid, #firstName:valid, #middleName:valid, #lastName:valid, #numberGST:valid {
+    color: #00bfa5 !important;
+    border-color: #00bfa5 !important;
 }
 
 #numberPAN:invalid, #numberMobile:invalid, #numberAdhar:invalid,
-#fullName:invalid, #textEmail:invalid, #numberPincode:invalid, #dobDate:invalid, #otpVerify:invalid {
-    color: crimson; /* indianred */
-    border-color: crimson;
+#fullName:invalid, #textEmail:invalid, #numberPincode:invalid, #dobDate:invalid, #otpVerify:invalid, #firstName:invalid, #middleName:invalid, #lastName:invalid, #numberGST:invalid {
+    color: crimson !important; /* indianred */
+    border-color: crimson !important;
 }
 
 .selectedBtn {
     color: #fff;
     background-color: #6c757d;
     border-color: #6c757d;
+}
+
+.checkCircle{
+    font-size: 66px;
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+    color: #709772;
+}
+.closeCircle{
+    font-size: 66px;
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+    color: crimson;
 }
 
 /*@media (min-width: 769px) and (max-width: 1024px){ 

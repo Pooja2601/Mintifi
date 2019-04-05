@@ -7,8 +7,7 @@ import {Link, withRouter} from "react-router-dom";
 
 
 class AdharPan extends Component {
-    obj = {pan: '', adhar: '', pan_correct: false, adhar_skip: false, adhar_correct: false};
-    state = {adhar_skip: false};
+    state = {pan: '', adhar: '', pan_correct: false, adhar_skip: false, adhar_correct: false};
 
     _formSubmit(e) {
         // alert('hi')
@@ -18,7 +17,8 @@ class AdharPan extends Component {
     _PANEnter = e => {
         let regex = /^[a-zA-Z]{5}([0-9]){4}[a-zA-Z]{1}?$/;
         if (e.target.value.length <= 10) {
-            this.obj.pan_correct = regex.test(e.target.value);
+            let pan_correct = regex.test(e.target.value);
+            this.setState({pan: e.target.value, pan_correct});
             this.props.pan_adhar(e.target.value, '');
         }
     }
@@ -26,7 +26,9 @@ class AdharPan extends Component {
     _AdharEnter = e => {
         let regex = /^([0-9]){12}$/;
         if (e.target.value.length <= 12) {
-            this.obj.adhar_correct = regex.test(e.target.value);
+            let adhar_correct = regex.test(e.target.value);
+            this.setState({adhar: e.target.value, adhar_correct});
+
             this.props.pan_adhar(this.props.pan, e.target.value);
         }
     }
@@ -43,7 +45,7 @@ class AdharPan extends Component {
     render() {
         return (
             <>
-                <Link to={'/'}>Go Back </Link>
+                <Link to={'/'} className={"btn btn-link"}>Go Back </Link>
                 <p className="paragraph_styling  text-center">
                     <b> New Customer?</b><br/>
                     Let us fetch some information for you.
@@ -52,13 +54,14 @@ class AdharPan extends Component {
                     id="serverless-contact-form"
                     onSubmit={e => this._formSubmit(e)}
                 >
-                    <label htmlFor="numberPAN">PAN Number *</label>
-                    <div className="input-group mb-3">
+                    <div className="form-group mb-3">
+                        {/*#00b7a5*/}
+                        <label htmlFor="numberPAN" className={"bmd-label-floating"}>PAN Number * </label>
 
                         <input
                             type="text"
                             className="form-control font_weight"
-                            placeholder="10 digit PAN Number"
+                            // placeholder="10 digit PAN Number"
                             autoComplete={"off"}
                             name="url"
                             maxLength={10}
@@ -75,12 +78,13 @@ class AdharPan extends Component {
 
                         />
                     </div>
-                    {(this.obj.pan_correct) && (
-                        <div className="input-group mb-3">
+
+                    <div className="form-group" style={{visibility: (this.state.pan_correct) ? 'visible' : 'hidden'}}>
+                        <label htmlFor="numberAdhar" className={"bmd-label-floating"}>Aadhaar Number *</label>
+                        <div className={"input-group"}>
                             <input
                                 type="number"
                                 className="form-control font_weight"
-                                placeholder="Enter the Aadhaar"
                                 name="url"
                                 pattern="^[0-9]{12}$"
                                 title="This field is required"
@@ -90,12 +94,12 @@ class AdharPan extends Component {
                                 maxLength={12}
                                 minLength={12}
                                 value={this.props.adhar}
-                                min={100000000000}
-                                max={999999999999}
                                 onChange={(e) => this._AdharEnter(e)}
                                 // ref={ref => (this.obj.adhar = ref)}
                                 aria-describedby="adhar-area"
-                            />
+                            /><br/>
+
+
                             <div className="input-group-append">
                                 <button
                                     className={(this.state.adhar_skip) ? 'btn btn-secondary' : 'btn btn-default'}
@@ -105,15 +109,18 @@ class AdharPan extends Component {
                                 </button>
                             </div>
                         </div>
-                    )}
+                        <span className="bmd-help">Don't have mobile linked with Aadhaar ?</span>
+                        <span className="bmd-help">No problem , skip it on the right side.</span>
+                    </div>
+
                     <div className="mt-5 mb-5 text-center ">
-                        {(this.obj.pan_correct && this.obj.adhar_correct) && (
+                        {(this.state.pan_correct && this.state.adhar_correct) && (
                             <input
                                 type="submit"
                                 name="submit"
                                 value={"Proceed"}
                                 onClick={e => this._formSubmit(e)}
-                                className="form-submit btn partenrs_submit_btn"
+                                className="form-submit btn btn-raised btn-raised partenrs_submit_btn"
                             />
 
                         )}
@@ -125,8 +132,8 @@ class AdharPan extends Component {
 }
 
 const mapStateToProps = state => ({
-    pan: state.authPayload.pan,
-    adhar: state.authPayload.adhar
+    pan: state.adharDetail.pan,
+    adhar: state.adharDetail.adhar
 
 });
 

@@ -31,25 +31,25 @@ class Login extends Component {
             <>
                 {/*<Link to={'/'} >Go Back </Link>*/}
                 <h5 align="center">User Registration</h5>
-                <p className="paragraph_styling">
+                <p className="paragraph_styling text-center">
                     Find out how our platform can help you climb the ladder to
                     another level of success today.
                 </p>
                 <div className="mt-5 mb-5 text-center row">
                     <div className={"col-sm-12 col-md-6"}><img
-                        src="images/boy.png"
+                        src="images/supply_chain/sapling.jpg"
                         style={{
                             width: "150px", boxShadow: '0 0 8px #cccccc', cursor: 'pointer',
-                            borderRadius: '50%', opacity: (this.props.existing === 'new') ? '1.0' : '0.4'
+                            borderRadius: '15%', opacity: (this.props.existing === 'new') ? '1.0' : '0.4'
                         }}
                         onClick={() => this._newCustomer()}
                     /><br/> New Customer
                     </div>
                     <div className={"col-sm-12 col-md-6"}><img
-                        src="images/man.png"
+                        src="images/supply_chain/tree.jpg"
                         style={{
-                            width: "150px", boxShadow: '0 0 8px #cccccc', cursor: 'pointer',
-                            borderRadius: '50%', opacity: (this.props.existing === 'exist') ? '1.0' : '0.4'
+                            width: "150px", boxShadow: '0 0 8px #cccccc', cursor: 'pointer', padding: '10px',
+                            borderRadius: '15%', opacity: (this.props.existing === 'exist') ? '1.0' : '0.4'
                         }}
                         onClick={() => this._existCustomer()}
                     /> <br/>Existing Customer

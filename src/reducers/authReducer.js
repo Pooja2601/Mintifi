@@ -11,22 +11,14 @@ export default (state = {}, action) => {
             if (action.query !== "") tempArr = filterArr(action, state);
             return {...state, filtered: tempArr};
 
-        case types.PAN_ADHAR:
-            // pan = (action.pan) ? action.pan : state.authPayload.pan;
-            // adhar = (action.adhar) ? action.adhar : state.authPayload.adhar;
-            return {...state, pan: action.pan, adhar: action.adhar};
-
-        case types.ADHAR_COMPLETE:
-            return {...state, adharObj: action.adharObj};
-
         case types.FETCH_AUTH:
-            return {...state, mobile: action.mobile, otp: action.otp};
+            return {...state, authObj: action.authObj};
 
         case types.CHECK_USER_EXISTS:
             return {...state, existing: action.existing};
 
-        case types.FETCH_AUTH_SUCCESS:
-            return {...state, authPayload: action.payload};
+        // case types.FETCH_AUTH_SUCCESS:
+        //     return {...state, authPayload: action.payload};
 
         default:
             return state;

@@ -5,11 +5,21 @@ import {connect} from "react-redux";
 import {setAuth} from "../../actions";
 import {Link, withRouter} from "react-router-dom";
 
-const Timer = 20;
+const Timer = 200;
 
 class Auth extends Component {
-    state = {submitted: false, loading: false, showMsg: {}, timer: Timer, mobile: '', otp: ''};
-    obj = {mobile_correct: false};
+    state = {
+        submitted: false,
+        loading: false,
+        showMsg: {},
+        timer: Timer,
+        mobile: '',
+        otp: '',
+        verified: false,
+        mobile_correct: false
+    };
+
+    // obj = {mobile_correct: false};
 
     _formSubmit(e) {
         // alert('hi');
@@ -26,63 +36,83 @@ class Auth extends Component {
         }, 1000);
     }
 
+    //authObj
     _setMobile = (e) => {
         if (e.target.value.length <= 10) {
-            this.props.setAuth(e.target.value);
-            this.obj.mobile_correct = true;
+            this.setState({mobile: e.target.value, mobile_correct: true}, () => this.props.setAuth(this.state));
         }
-        else this.obj.mobile_correct = false;
+        else this.setState({mobile_correct: false});
+    }
+
+    componentDidMount() {
+        if (this.props.authObj === Object(this.props.authObj))
+            this.setState({mobile: this.props.authObj.mobile, verified: this.props.authObj.verified});
+        else this.props.setAuth(this.state);
     }
 
     render() {
-        return (<>
-                <Link to={'/'}>Go Back </Link>
+        return (
+            <>
+                <Link to={'/'} className={"btn btn-link"}>Go Back </Link>
                 <p className="paragraph_styling text-center">
                     <b> Existing Customer?</b><br/>
                     Let us verify your Number.
                 </p>
                 <form
                     id="serverless-contact-form"
-
                 >
-                    <label htmlFor="numberMobile">Mobile Number *</label>
-                    <div className="input-group mb-3">
-                        <div className="input-group-prepend">
+                    <div className="form-group mb-3">
+                        <label htmlFor="numberMobile" style={{marginLeft: '3rem'}} className={"bmd-label-floating"}>Mobile
+                            Number *</label>
+                        <div className={"input-group"}>
+
+                            <div className="input-group-prepend">
                   <span className="input-group-text" id="basic-addon3">
                     +91
                   </span>
-                        </div>
-                        <input
-                            type="number"
-                            className="form-control font_weight"
-                            placeholder="10 digit Mobile Number"
-                            name="url"
-                            min={1000000000}
-                            max={9999999999}
-                            maxLength={10}
-                            minLength={10}
-                            pattern="^[0-9]{10}$"
-                            title="This field is required"
-                            id="numberMobile"
-                            style={{fontWeight: 600}}
-                            required={true}
-                            value={this.props.mobile}
-                            // ref={ref => (this.obj.number = ref)}
-                            onChange={(e) => this._setMobile(e)}
-                            aria-describedby="basic-addon3"
-                        />
-                    </div>
-                    {(this.state.submitted) && (
-                        <div className="input-group mb-3">
+                            </div>
                             <input
                                 type="number"
                                 className="form-control font_weight"
-                                placeholder="Enter the OTP"
+                                // placeholder="10 digit Mobile Number"
+                                name="url"
+                                disabled={this.state.submitted}
+                                min={1000000000}
+                                max={9999999999}
+                                maxLength={10}
+                                minLength={10}
+                                pattern="^[0-9]{10}$"
+                                title="This field is required"
+                                id="numberMobile"
+                                style={{
+                                    fontWeight: 600,
+                                    marginLeft: '1rem',
+                                    fontSize: '17px'
+                                }}
+                                required={true}
+                                value={this.state.mobile}
+                                // ref={ref => (this.obj.number = ref)}
+                                onChange={(e) => this._setMobile(e)}
+                                aria-describedby="basic-addon3"
+                            />
+                        </div>
+                    </div>
+                    <div className="form-group mb-3"
+                         style={{visibility: (this.state.submitted) ? 'visible' : 'hidden'}}>
+                        <label htmlFor="otpVerify" className={"bmd-label-floating"}>OTP *</label>
+                        <div className={"input-group"}>
+                            <input
+                                type="number"
+                                className="form-control font_weight"
+                                // placeholder="Enter the OTP"
                                 name="url"
                                 pattern="^[0-9]{4}$"
                                 title="This field is required"
                                 id="otpVerify"
-                                style={{fontWeight: 600}}
+                                style={{
+                                    fontWeight: 600, marginRight: '5px',
+                                    fontSize: '17px'
+                                }}
                                 value={this.state.otp}
                                 min={1000}
                                 max={9999}
@@ -99,20 +129,23 @@ class Auth extends Component {
                                 </button>
                             </div>
                         </div>
-                    )}
+                    </div>
+
                     <div className="mt-5 mb-5 text-center ">
                         {(!this.state.loading) ? (
+
                             <button
                                 type="submit"
                                 name="submit"
+                                style={{visibility: !this.state.mobile_correct ? 'visible' : 'hidden'}}
                                 // value={"Send OTP"}
                                 onClick={e => this._formSubmit(e)}
-                                className="form-submit btn partenrs_submit_btn"
+                                className="form-submit btn btn-raised partenrs_submit_btn"
                             >Send OTP
                             </button>
 
                         ) : (<>
-                            {(this.state.otp !== '') && (<button className="btn partenrs_submit_btn">
+                            {(this.state.otp !== '') && (<button className="btn btn-raised partenrs_submit_btn">
 
                                 Verify OTP
                             </button>)}
@@ -125,15 +158,13 @@ class Auth extends Component {
                     </div>
                 </form>
             </>
-
         );
     }
 }
 
 
 const mapStateToProps = state => ({
-    mobile: state.authPayload.mobile,
-    otp: state.authPayload.otp
+    authObj: state.authPayload.authObj
 });
 
 export default withRouter(connect(

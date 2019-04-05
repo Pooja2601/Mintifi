@@ -2,12 +2,11 @@ export const types = {
     CHECK_USER_EXISTS: "CHECK_USER_EXISTS",
     PAN_ADHAR: "PAN_ADHAR",
     ADHAR_COMPLETE: "ADHAR_COMPLETE",
+    BUSINESS_DETAIL: "BUSINESS_DETAIL",
     FETCH_AUTH: "FETCH_AUTH",
     FETCH_AUTH_SUCCESS: "FETCH_AUTH_SUCCESS",
     FETCH_POSTS: "FETCH_POSTS",
     FETCH_POSTS_SUCCESS: "FETCH_POSTS_SUCCESS",
-    FETCH_UPCOMING: "FETCH_UPCOMING",
-    FETCH_UPCOMING_SUCCESS: "FETCH_UPCOMING_SUCCESS",
     SORT_UPCOMING: "SORT_UPCOMING",
     FILTER_UPCOMING: "FILTER_UPCOMING"
 };
@@ -19,14 +18,15 @@ export const checkExists = existing => ({
 
 export const setAdharManual = adharObj => ({type: types.ADHAR_COMPLETE, adharObj});
 
+export const setBusinessDetail = businessObj => ({type: types.BUSINESS_DETAIL, businessObj});
+
 export const pan_adhar = (pan, adhar) => ({
     type: types.PAN_ADHAR,
     pan, adhar
 });
 
-export const setAuth = (mobile, otp) => ({
-    type: types.FETCH_AUTH, mobile,
-    otp,
+export const setAuth = (authObj) => ({
+    type: types.FETCH_AUTH, authObj
 });
 
 export const fetchUpcoming = () => ({type: types.FETCH_UPCOMING});
