@@ -1,6 +1,6 @@
 // import { mapKeys } from "lodash";
 
-import {types, sortArr, filterArr} from "../actions";
+import {filterArr, types} from "../actions";
 
 export default (state = {}, action) => {
     let tempArr = [];
@@ -17,8 +17,14 @@ export default (state = {}, action) => {
         case types.CHECK_USER_EXISTS:
             return {...state, existing: action.existing};
 
+        case types.SET_TOKEN:
+            return {...state, token: action.token, trans_id: action.trans_id};
+
+        case types.CHANGE_LOADER:
+            return {...state, loader: action.loader};
+
         // case types.FETCH_AUTH_SUCCESS:
-        //     return {...state, authPayload: action.payload};
+        // return {...state, authPayload: action.payload};
 
         default:
             return state;

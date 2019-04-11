@@ -1,14 +1,17 @@
 import React, {Component} from "react";
 import {Provider} from "react-redux";
-import {BrowserRouter, Route, Switch, Link} from "react-router-dom";
+import {BrowserRouter, Route, Switch, Link, withRouter} from "react-router-dom";
 import ScrollToTop from "./shared/scrollhack";
+
 import {TransitionGroup, CSSTransition} from "react-transition-group";
 
 // import Header from "./shared/header";
 // import Footer from "./shared/footer";
+import Loader from "./shared/loader";
 import Error from "./shared/error";
 import Privacy from "./shared/privacy_policy";
-import Login from "./components";
+import Index from "./components/";
+import Login from "./components/landing";
 import Auth from "./components/auth";
 import AdharPan from "./components/adhar_pan";
 import AdharComplete from "./components/adhar_pan/adhar_complete";
@@ -22,10 +25,10 @@ import configureStore from "./store";
 import {PersistGate} from 'redux-persist/integration/react';
 
 const {store, persistor} = configureStore();
+
 // const store = configureStore();   // without redux-persist
 
 class App extends Component {
-
 
     render() {
         return (
@@ -42,11 +45,12 @@ class App extends Component {
                                 >
                                     <div className="col-11 col-md-7 ml-5 mr-5 partner_section"
                                          style={{backgroundColor: '#fff'}}>
+                                        <Loader/>
                                         <div className="ml-2">
                                             <div className="mt-4 text-center">
                                                 <div className="mt-4 mb-4 border_bottom">
                                                     <img
-                                                        src="images/logo.png"
+                                                        src="/images/logo.png"
                                                         style={{width: "150px", paddingBottom: "10px"}}
                                                     />
                                                 </div>
@@ -58,8 +62,9 @@ class App extends Component {
                                                 classNames="fade"
                                                 timeout={50}>*/}
                                             <Switch location={location}>
-                                                <Route exact path="/" component={Login}/>
-                                                <Route path="/Auth" component={Auth}/>
+                                                <Route exact path="/" component={Index}/>
+                                                <Route exact path="/Token/:token?/:trans_id?" component={Login}/>
+                                                <Route path="/Auth/" component={Auth}/>
                                                 <Route path="/AdharPan" component={AdharPan}/>
                                                 <Route path="/AdharComplete" component={AdharComplete}/>
                                                 <Route path="/BusinessDetail" component={BusinessDetail}/>

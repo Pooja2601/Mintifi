@@ -7,6 +7,9 @@ export default (state = {}, action) => {
     let pan, adhar;
     switch (action.type) {
 
+        case types.GST_PROFILE:
+            return {...state, gstProfile: action.gstProfile};
+
         case types.BUSINESS_DETAIL:
             return {...state, businessObj: action.businessObj};
 

@@ -2,13 +2,14 @@ import React, {Component} from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
 // import {baseUrl} from "../../shared/constants";
 import {connect} from "react-redux";
-import {pan_adhar} from "../../actions";
+import {pan_adhar, changeLoader, setGstProfile} from "../../actions";
 import {Link, withRouter} from "react-router-dom";
 
 
 class AdharPan extends Component {
     state = {pan: '', adhar: '', pan_correct: false, adhar_skip: false, adhar_correct: false};
 
+    //ToDo : Check the PAN with the backend AP for Confirmation of new user
     _formSubmit(e) {
         // alert('hi')
         e.preventDefault();
@@ -18,10 +19,10 @@ class AdharPan extends Component {
         let regex = /^[a-zA-Z]{5}([0-9]){4}[a-zA-Z]{1}?$/;
         if (e.target.value.length <= 10) {
             let pan_correct = regex.test(e.target.value);
-            this.setState({pan: e.target.value, pan_correct});
-            this.props.pan_adhar(e.target.value, '');
+            this.setState({pan: (e.target.value).toUpperCase(), pan_correct});
+            this.props.pan_adhar((e.target.value).toUpperCase(), '');
         }
-    }
+    };
 
     _AdharEnter = e => {
         let regex = /^([0-9]){12}$/;
@@ -31,21 +32,68 @@ class AdharPan extends Component {
 
             this.props.pan_adhar(this.props.pan, e.target.value);
         }
-    }
+    };
 
     adharSkipped = () => {
-        // alert('skipped');
-        // this.obj.adhar_skip = !this.obj.adhar_skip;
         this.setState({adhar_skip: !this.state.adhar_skip});
-        this.props.history.push('/AdharComplete')
-        // alert(this.state.adhar_skip);
+        this.props.changeLoader(true);
+        this.props.history.push('/AdharComplete'); // comment to allow PAN/GST request
+        // this._panFetch();  // uncomment to allow PAN/GST request
+    };
 
-    }
+    _gstFetch = (gstPayload) => {
+        this.props.changeLoader(true);
+        fetch(`https://testapi.kscan.in/v1/gst/profile`, {
+            method: 'POST',
+            headers: {'Content-Type': "application/json", 'x-karza-key': "jdughfoP51majvjAUW6W"},
+            body: JSON.stringify({
+                consent: 'Y', gstin: gstPayload
+            })
+        })
+            .then(resp => resp.json())
+            .then(resp => {
+                this.props.changeLoader(false);
+                //  ADDPA8664N -prop // AAKCM7569B -pvt
+                if (resp.result === Object(resp.result)) {
+                    console.log("Could Not fetch GST Info"); // status 103
+                    this.props.history.push('/AdharComplete');
+                }
+                else {
+                    this.props.setGstProfile(resp.result);
+                    setTimeout(() => this.props.history.push('/AdharComplete'), 500);
+                    //  console.log(JSON.stringify(resp)); // status 101
+                }
+            }, () => {
+                this.props.changeLoader(false)
+            });
+    };
+
+    _panFetch = () => {
+        fetch(`https://gst.karza.in/uat/v1/search`, {
+            method: 'POST',
+            headers: {'Content-Type': "application/json", 'x-karza-key': "jdughfoP51majvjAUW6W"},
+            body: JSON.stringify({consent: 'Y', pan: (this.state.pan).toUpperCase()})
+        })
+            .then(resp => resp.json())
+            .then(resp => {
+                this.props.changeLoader(false);
+                //  ADDPA8664N -prop // AAKCM7569B -pvt
+                if (resp.result !== Object(resp.result)) {
+                    console.log("Not a Company"); // status 103
+                    this.props.history.push('/AdharComplete');
+                }
+                else {
+                    this._gstFetch(resp.result[0].gstinId);  // status 101
+                }
+            }, () => {
+                this.props.changeLoader(false)
+            });
+    };
 
     render() {
         return (
             <>
-                <Link to={'/'} className={"btn btn-link"}>Go Back </Link>
+                <Link to={'/Token'} className={"btn btn-link"}>Go Back </Link>
                 <p className="paragraph_styling  text-center">
                     <b> New Customer?</b><br/>
                     Let us fetch some information for you.
@@ -139,5 +187,5 @@ const mapStateToProps = state => ({
 
 export default withRouter(connect(
     mapStateToProps,
-    {pan_adhar}
+    {pan_adhar, changeLoader, setGstProfile}
 )(AdharPan));

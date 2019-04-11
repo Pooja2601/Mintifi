@@ -12,14 +12,12 @@ class BusinessDetail extends Component {
 
     state = {companytype: '', gst: '', bpan: '', avgtrans: '', dealercode: ''};
 
-
     _formSubmit(e) {
         e.preventDefault();
         // this.props.setBusinessDetail(this.state);
         setTimeout(() => {
             this.props.history.push('/ReviewChanges')
         });
-
     }
 
     _PANEnter = e => {
@@ -41,13 +39,16 @@ class BusinessDetail extends Component {
         if (this.props.businessObj === Object(this.props.businessObj))
             this.setState(this.props.businessObj);
         else this.props.setBusinessDetail(this.state);
+
+        if (this.props.gstProfile === Object(this.props.gstProfile))
+            this.setState({gst: this.props.gstProfile.result.gstin}, () => this.props.setBusinessDetail(this.state));
     }
 
     render() {
         return (
             <>
                 {/*<Link to={'/AdharPan'} className={"btn btn-link"}>Go Back </Link>*/}
-                <button onClick={this.props.history.goBack} className={"btn btn-link"}>Go Back</button>
+                <button onClick={() => this.props.history.goBack()} className={"btn btn-link"}>Go Back</button>
                 <br/><br/>
                 <p className="paragraph_styling  text-center">
                     <b> And the last Step, your Business Information.</b>
@@ -165,11 +166,12 @@ class BusinessDetail extends Component {
 
                     <div className="mt-5 mb-5 text-center ">
 
-                            <button
-                                type="submit"
-                                onClick={e => this._formSubmit(e)}
-                                className="form-submit btn btn-raised partenrs_submit_btn"
-                            >Proceed</button>
+                        <button
+                            type="submit"
+                            onClick={e => this._formSubmit(e)}
+                            className="form-submit btn btn-raised partenrs_submit_btn"
+                        >Proceed
+                        </button>
 
                     </div>
                 </form>
@@ -179,8 +181,8 @@ class BusinessDetail extends Component {
 }
 
 const mapStateToProps = state => ({
-    businessObj: state.businessDetail.businessObj
-
+    businessObj: state.businessDetail.businessObj,
+    gstProfile: state.businessDetail.gstProfile
 });
 
 export default withRouter(connect(

@@ -7,7 +7,7 @@ import {Link, withRouter} from "react-router-dom";
 
 const Timer = 200;
 
-class Auth extends Component {
+class MobileOtp extends Component {
     state = {
         submitted: false,
         loading: false,
@@ -31,10 +31,10 @@ class Auth extends Component {
 
         fetch(otpUrl + '/send_otp', {
             method: "POST",
-            headers: {'Content-Type': 'application/json', token: this.props.token},
+            headers: {'Content-Type': 'application/json', 'App-Id': 1},
             body: JSON.stringify({
-                "app_id": 3,
-                "otp_type": "send_otp",
+                "app_id": 1,
+                "otp_type": "agent_profile_creation",
                 "mobile_number": this.state.mobile,
                 "timestamp": new Date()
             })
@@ -61,10 +61,10 @@ class Auth extends Component {
     _verifyOTP(e) {
         fetch(otpUrl + '/verify_otp ', {
             method: "POST",
-            headers: {'Content-Type': 'application/json', token: this.props.token},
+            headers: {'Content-Type': 'application/json', 'App-Id': 1},
             body: JSON.stringify({
-                "app_id": 3,
-                "otp_reference_number": this.props.authObj.otp_reference_id,
+                "app_id": 1,
+                "otp_reference_id": this.props.authObj.otp_reference_id,
                 "mobile_number": this.props.authObj.mobile,
                 "otp": this.state.otp,
                 "timestamp": new Date()
@@ -190,7 +190,7 @@ class Auth extends Component {
                         <br/>
 
                         <button
-                            style={{visibility: (this.state.loading && (this.state.otp.length === 4)) ? 'visible' : 'hidden'}}
+                            style={{visibility: (this.state.loading && (this.state.otp !== '')) ? 'visible' : 'hidden'}}
                             onClick={e => this._verifyOTP(e)}
                             className="btn btn-raised partenrs_submit_btn text-center">
                             Verify OTP
@@ -210,11 +210,10 @@ class Auth extends Component {
 
 
 const mapStateToProps = state => ({
-    authObj: state.authPayload.authObj,
-    token: state.authPayload.token
+    authObj: state.authPayload.authObj
 });
 
 export default withRouter(connect(
     mapStateToProps,
     {setAuth, sendOTP}
-)(Auth));
+)(MobileOtp));
