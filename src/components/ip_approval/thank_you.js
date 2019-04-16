@@ -64,7 +64,7 @@ class ThankYou extends Component {
                         <button
                             type="button"
                             onClick={e => this.props.history.push('/')}
-                            className="form-submit btn btn-raised partenrs_submit_btn"
+                            className="form-submit btn btn-raised greenButton"
                         >Alright
                         </button>
                     </div>

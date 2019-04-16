@@ -5,14 +5,17 @@ import {setAdharManual} from "../../actions";
 
 class AppRejected extends Component {
 
+    state = {confirmed: false};
+
     componentWillMount() {
         if (this.props.adharObj !== Object(this.props.adharObj))
             this.props.history.push("/");
     }
 
     render() {
-        if (this.props.adharObj === Object(this.props.adharObj)) {
-            const {f_name, l_name} = this.props.adharObj;
+        const {adharObj} = this.props;
+        if (adharObj === Object(adharObj)) {
+            const {f_name, l_name} = adharObj;
             return (
                 <>
                     {/* <button onClick={() => this.props.history.push('/BusinessDetail')} className={"btn btn-link"}>
@@ -62,14 +65,19 @@ class AppRejected extends Component {
                     <br/>
                     <div className="checkbox">
                         <label>
-                            <input type="checkbox" value={""} on={(e) => console.log(e.target.value)}/> I confirm the Loan Amount and ready to proceed with the above Credit details.
+
+                            <input type="checkbox" checked={this.state.confirmed}
+                                   onChange={(e) =>
+                                       this.setState(prevState => ({confirmed: !prevState.confirmed}))
+                                   }/> I confirm the Loan Amount and ready to proceed with the above Credit details.
                         </label>
                     </div>
                     <div className="mt-5 mb-5 text-center ">
                         <button
                             type="button"
-                            // onClick={e => this.props.history.push('/')}
-                            className="form-submit btn btn-raised partenrs_submit_btn"
+                            disabled={!this.state.confirmed}
+                            onClick={e => this.props.history.push('/')}
+                            className="form-submit btn btn-raised greenButton"
                         >Process Loan
                         </button>
                     </div>

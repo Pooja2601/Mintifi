@@ -1,11 +1,11 @@
 import { combineReducers } from "redux";
-import PostsReducer from "./authReducer";
+import AuthReducer from "./authReducer";
 import AdharReducer from "./adharReducer";
 import BusinessReducer from "./businessReducer";
 // import UpcomingReducer from "./UpcomingReducer";
 
 const rootReducer = combineReducers({
-    authPayload: PostsReducer,
+    authPayload: AuthReducer,
     adharDetail: AdharReducer,
     businessDetail: BusinessReducer
 });

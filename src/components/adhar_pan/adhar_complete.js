@@ -18,11 +18,12 @@ class AdharPan extends Component {
         email: '',
         dob: new Date(),
         gender: 'male',
+        ownership: 'rented',
         pincode: '',
         // address1: '',
-        address2: '',
+        // address2: '',
         list_posts: '',
-        missed_fields: false
+        missed_fields: true
     };
 
     validate = {
@@ -49,13 +50,23 @@ class AdharPan extends Component {
                 });
             });
         else this.props.setAdharManual(this.state);
-
-        this._loadGstProfile();
+        setTimeout(() => this._loadGstProfile());
         this.props.changeLoader(false);
+        this.handleValidation();
     }
 
     _loadGstProfile() {
-
+        const {gstProfile} = this.props;
+        if (gstProfile === Object(gstProfile)) {
+            let tempName = gstProfile.mbr[0].split(' ');
+            this.setState({
+                f_name: tempName[0],
+                m_name: (tempName[2]) ? tempName[1] : '',
+                l_name: (tempName[2]) ? tempName[2] : '',
+                mobile: gstProfile.pradr.mb,
+                email: gstProfile.pradr.em
+            }, () => this.props.setAdharManual(this.state));
+        }
     }
 
     _formSubmit(e) {
@@ -63,24 +74,19 @@ class AdharPan extends Component {
         setTimeout(() => {
             this.props.history.push('/BusinessDetail');
         }, 500);
-        // alert('Blank fields ' + this.state.missed_fields);
     }
 
     handleValidation() {
-        let ctrerror = 0, missed_fields;
+        let ctrerror = 5, missed_fields;
         // let missed_fields = Object.keys(this.validate).some(x => this.validate[x]);
         Object.values(this.validate).map((val, key) => {
-            if (val)
-                --ctrerror;
-            else ++ctrerror;
+            if (!val)
+                ++ctrerror;
+            else --ctrerror;
             console.log(val);
         });
-        if (ctrerror <= 0)
-            missed_fields = false;
-        else missed_fields = true;
-
-        this.setState({missed_fields},()=> console.log('All Fields Validated : ' + missed_fields));
-
+        missed_fields = (ctrerror !== 0);
+        this.setState({missed_fields}, () => console.log('All Fields Validated : ' + this.state.missed_fields));
     }
 
     /* _PANEnter = e => {
@@ -308,6 +314,101 @@ class AdharPan extends Component {
                                 </button>
                             </div>
                         </div>
+                        <div className={"col-sm-12 col-md-6"}>
+                            {/*<label htmlFor="ResidenceOwnership" className="labelLoan">
+                                Gender
+                            </label><br/>*/}
+                            <div
+                                style={{marginBottom: '20px'}}
+                                className="btn-group"
+                                id="proprietorship"
+                                role="groupProperty"
+                                aria-label="..."
+                            >
+                                <button
+                                    type="button"
+                                    className="btn btn-default"
+                                    onClick={() => {
+                                        this.setState({ownership: 'rented'}, () => this.props.setAdharManual(this.state));
+                                    }}
+                                    style={{
+                                        width: "105px",
+                                        backgroundColor:
+                                            this.state.ownership === "rented" && "#00bfa5",
+                                        color: this.state.ownership === "rented" && "white",
+                                        borderBottomLeftRadius: '25px',
+                                        borderTopLeftRadius: '25px'
+                                    }}
+                                >
+                                    <i
+                                        className="fa fa-building"
+                                        style={{
+                                            fontSize: "x-large",
+                                            display: "block",
+                                            padding: "0 10px"
+                                        }}
+                                    />
+                                    <small style={{fontSize: "75%"}}>Rented</small>
+                                </button>
+                                <button
+                                    type="button"
+                                    className="btn btn-default"
+                                    onClick={() => {
+                                        this.setState({ownership: 'owned'}, () => this.props.setAdharManual(this.state));
+
+                                    }}
+                                    style={{
+                                        width: "105px",
+                                        backgroundColor:
+                                            this.state.ownership === "owned" && "#00bfa5",
+                                        color: this.state.ownership === "owned" && "white",
+                                        borderBottomRightRadius: '25px',
+                                        borderTopRightRadius: '25px'
+                                    }}
+                                >
+                                    <i
+                                        className="fa fa-home"
+                                        style={{
+                                            fontSize: "x-large",
+                                            display: "block",
+                                            padding: "0 10px"
+                                        }}
+                                    />
+                                    <small style={{fontSize: "75%"}}>Owned</small>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className={"row"}>
+                        <div className="form-group mb-3 col-md-6 col-sm-12">
+                            <label htmlFor="numberPincode" className="bmd-label-floating">
+                                Pincode *
+                            </label>
+                            <input
+                                type="number"
+                                className="form-control font_weight"
+                                // placeholder="Pincode"
+                                style={{textTransform: "uppercase", fontWeight: 600}}
+                                pattern="^[0-9]{6}$"
+                                title="Please enter Pincode"
+                                autoCapitalize="characters"
+                                id="numberPincode"
+                                required={true}
+                                value={this.state.pincode}
+                                onBlur={() => {
+                                    this.props.setAdharManual(this.state);
+                                    // this._pincodeFetch();
+                                    this.handleValidation();
+                                }}
+                                // ref={ref => (this.obj.pan = ref)}
+                                onChange={(e) => {
+                                    let regex = /^[0-9]{6,7}$/;
+                                    if (e.target.value.length <= 6) this.setState({pincode: e.target.value});
+                                    this.validate.pincode = (regex.test(e.target.value));
+                                }}
+                            />
+                        </div>
                         <div className="form-group mb-3 col-md-6 col-sm-12">
                             <label htmlFor="dobDate" className="bmd-label-floating">
                                 Date of Birth
@@ -330,35 +431,6 @@ class AdharPan extends Component {
                                 onBlur={() => this.props.setAdharManual(this.state)}
                             />
                         </div>
-                    </div>
-
-                    <div className="form-group mb-3">
-                        <label htmlFor="numberPincode" className="bmd-label-floating">
-                            Pincode *
-                        </label>
-                        <input
-                            type="number"
-                            className="form-control font_weight"
-                            // placeholder="Pincode"
-                            style={{textTransform: "uppercase", fontWeight: 600}}
-                            pattern="^[0-9]{6}$"
-                            title="Please enter Pincode"
-                            autoCapitalize="characters"
-                            id="numberPincode"
-                            required={true}
-                            value={this.state.pincode}
-                            onBlur={() => {
-                                this.props.setAdharManual(this.state);
-                                // this._pincodeFetch();
-                                this.handleValidation();
-                            }}
-                            // ref={ref => (this.obj.pan = ref)}
-                            onChange={(e) => {
-                                let regex = /^[0-9]{6}$/;
-                                if (e.target.value.length <= 6) this.setState({pincode: e.target.value});
-                                this.validate.pincode = (regex.test(e.target.value)) ? true : false;
-                            }}
-                        />
                     </div>
 
                     {/*  <div className="form-group mb-3">
@@ -385,13 +457,15 @@ class AdharPan extends Component {
                     </div>*/}
 
                     <div className="mt-5 mb-5 text-center ">
-                        <button
+                        {<button
                             type="submit"
                             onClick={e => this._formSubmit(e)}
                             disabled={this.state.missed_fields}
-                            className="form-submit btn btn-raised partenrs_submit_btn"
+                            className=" btn btn-raised greenButton"
                         >Proceed
-                        </button>
+                        </button>}
+                        {/* <a href={'#'} disabled={this.state.missed_fields} onClick={e => this._formSubmit(e)}
+                           className="form-submit btn btn-raised greenButton">Proceed</a>*/}
                     </div>
                 </form>
             </>
@@ -400,8 +474,8 @@ class AdharPan extends Component {
 }
 
 const mapStateToProps = state => ({
-    adharObj: state.adharDetail.adharObj
-
+    adharObj: state.adharDetail.adharObj,
+    gstProfile: state.businessDetail.gstProfile
 });
 
 export default withRouter(connect(

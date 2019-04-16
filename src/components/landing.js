@@ -8,18 +8,18 @@ import {checkExists, setToken} from "../actions";
 const Timer = 10;
 
 class Login extends Component {
-    //   state = { loading: "" };
 
-    _formSubmit(e) {
-    }
+    /*  _formSubmit(e) {
+      }*/
 
     componentDidMount() {
 
         const {setToken, match} = this.props;
-        setToken(match.params.token, match.params.trans_id);
+        let base64_decode = (match.params.payload !== undefined) ? JSON.parse(new Buffer(match.params.payload, 'base64').toString('ascii')) : {};
+        setToken(match.params.token, base64_decode);
         if (match.params.token === undefined)
             alert("You cannot access this page directly !! ");
-        console.log(match.params.trans_id);
+        console.log(base64_decode);
     }
 
     _existCustomer = () => {
@@ -49,16 +49,16 @@ class Login extends Component {
                 </p>
                 <div className="mt-5 mb-5 text-center row">
                     <div className={"col-sm-12 col-md-6"}><img
-                        src="/images/supply_chain/sapling.jpg"
+                        src="/images/supply_chain/new.png"
                         style={{
-                            width: "150px", boxShadow: '0 0 8px #cccccc', cursor: 'pointer',
+                            width: "150px", boxShadow: '0 0 8px #cccccc', cursor: 'pointer',  padding: '10px',
                             borderRadius: '15%', opacity: (this.props.existing === 'new') ? '1.0' : '0.4'
                         }}
                         onClick={() => this._newCustomer()}
                     /><br/> New Customer
                     </div>
                     <div className={"col-sm-12 col-md-6"}><img
-                        src="/images/supply_chain/tree.jpg"
+                        src="/images/supply_chain/existing.png"
                         style={{
                             width: "150px", boxShadow: '0 0 8px #cccccc', cursor: 'pointer', padding: '10px',
                             borderRadius: '15%', opacity: (this.props.existing === 'exist') ? '1.0' : '0.4'
@@ -72,7 +72,7 @@ class Login extends Component {
                 onClick={() => this._newCustomer()}
                 name="submit"
                 style={{ padding: "5px 35px" }}
-                className="form-submit btn partenrs_submit_btn"
+                className="form-submit btn greenButton"
               >
                 New User
               </button>
@@ -82,7 +82,7 @@ class Login extends Component {
               <button
                 onClick={() => this._existCustomer()}
                 style={{ padding: "5px 35px" }}
-                className="btn partenrs_submit_btn"
+                className="btn greenButton"
               >
                 Existing User
               </button>*/}
@@ -95,7 +95,7 @@ class Login extends Component {
 const mapStateToProps = state => ({
     existing: state.authPayload.existing,
     token: state.authPayload.token,
-    trans_id: state.authPayload.trans_id
+    payload: state.authPayload.payload
 });
 
 export default withRouter(connect(

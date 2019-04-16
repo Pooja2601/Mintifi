@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
-// import {baseUrl} from "../../shared/constants";
+import {baseUrl, gst_karza} from "../../shared/constants";
 import {connect} from "react-redux";
 import {pan_adhar, changeLoader, setGstProfile} from "../../actions";
 import {Link, withRouter} from "react-router-dom";
@@ -69,7 +69,7 @@ class AdharPan extends Component {
     };
 
     _panFetch = () => {
-        fetch(`https://gst.karza.in/uat/v1/search`, {
+        fetch(`${gst_karza}/search`, {
             method: 'POST',
             headers: {'Content-Type': "application/json", 'x-karza-key': "jdughfoP51majvjAUW6W"},
             body: JSON.stringify({consent: 'Y', pan: (this.state.pan).toUpperCase()})
@@ -168,7 +168,7 @@ class AdharPan extends Component {
                                 name="submit"
                                 value={"Proceed"}
                                 onClick={e => this._formSubmit(e)}
-                                className="form-submit btn btn-raised btn-raised partenrs_submit_btn"
+                                className="form-submit btn btn-raised btn-raised greenButton"
                             />
 
                         )}

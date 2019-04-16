@@ -5,6 +5,7 @@ export const types = {
     PAN_ADHAR: "PAN_ADHAR",
     ADHAR_COMPLETE: "ADHAR_COMPLETE",
     GST_PROFILE: "GST_PROFILE",
+    PREFLIGHT_RESPONSE: "PREFLIGHT_RESPONSE",
     BUSINESS_DETAIL: "BUSINESS_DETAIL",
     FETCH_AUTH: "FETCH_AUTH",
     FETCH_AUTH_SUCCESS: "FETCH_AUTH_SUCCESS",
@@ -23,9 +24,9 @@ export const changeLoader = loader => ({
     loader
 });
 
-export const setToken = (token, trans_id) => ({
+export const setToken = (token, payload) => ({
     type: types.SET_TOKEN,
-    token, trans_id
+    token, payload
 });
 
 export const checkExists = existing => ({
@@ -37,7 +38,9 @@ export const setAdharManual = adharObj => ({type: types.ADHAR_COMPLETE, adharObj
 
 export const setBusinessDetail = businessObj => ({type: types.BUSINESS_DETAIL, businessObj});
 
-export const setGstProfile = gstProfile => ({type: types.GST_PROFILE, gstProfile });
+export const setGstProfile = gstProfile => ({type: types.GST_PROFILE, gstProfile});
+
+export const storeResponse = preFlightResp => ({type: types.PREFLIGHT_RESPONSE, preFlightResp});
 
 export const pan_adhar = (pan, adhar) => ({
     type: types.PAN_ADHAR,

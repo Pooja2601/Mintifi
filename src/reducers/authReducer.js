@@ -18,7 +18,7 @@ export default (state = {}, action) => {
             return {...state, existing: action.existing};
 
         case types.SET_TOKEN:
-            return {...state, token: action.token, trans_id: action.trans_id};
+            return {...state, token: action.token, payload: action.payload};
 
         case types.CHANGE_LOADER:
             return {...state, loader: action.loader};

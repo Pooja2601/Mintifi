@@ -184,7 +184,7 @@ class MobileOtp extends Component {
                             style={{visibility: (!this.state.mobile_correct && !this.state.loading) ? 'visible' : 'hidden'}}
                             // value={"Send OTP"}
                             onClick={e => this._formSubmit(e)}
-                            className="form-submit btn btn-raised partenrs_submit_btn"
+                            className="form-submit btn btn-raised greenButton"
                         >Send OTP
                         </button>
                         <br/>
@@ -192,11 +192,11 @@ class MobileOtp extends Component {
                         <button
                             style={{visibility: (this.state.loading && (this.state.otp !== '')) ? 'visible' : 'hidden'}}
                             onClick={e => this._verifyOTP(e)}
-                            className="btn btn-raised partenrs_submit_btn text-center">
+                            className="btn btn-raised greenButton text-center">
                             Verify OTP
                         </button>
                         {/*<br/>
-                                    <button className="btn partenrs_submit_btn" disabled>
+                                    <button className="btn greenButton" disabled>
                                         <span className="spinner-border spinner-border-sm"/>
                                         Resend OTP.. {this.state.timer} Sec
                                     </button>*/}

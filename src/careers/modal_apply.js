@@ -227,12 +227,12 @@ class ModalCareerApply extends Component {
                                         type="submit"
                                         name="submit"
                                         disabled={this.state.btnDisabled}
-                                        className="form-submit btn partenrs_submit_btn"
+                                        className="form-submit btn greenButton"
                                     >
                                         Send Application
                                     </button>
                                 ) : (
-                                    <button className="btn partenrs_submit_btn" disabled>
+                                    <button className="btn greenButton" disabled>
                                         <span className="spinner-border spinner-border-sm"/>
                                         Shooting..
                                     </button>

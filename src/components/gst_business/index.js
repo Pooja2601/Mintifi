@@ -1,8 +1,8 @@
 import React, {Component} from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
-// import {baseUrl} from "../../shared/constants";
+import {baseUrl, BusinessType} from "../../shared/constants";
 import {connect} from "react-redux";
-import {setBusinessDetail, setAdharManual} from "../../actions";
+import {setBusinessDetail, setAdharManual, changeLoader} from "../../actions";
 import {Link, withRouter} from "react-router-dom";
 // import DatePicker from "react-datepicker";
 
@@ -10,7 +10,9 @@ import "react-datepicker/dist/react-datepicker.css";
 
 class BusinessDetail extends Component {
 
-    state = {companytype: '', gst: '', bpan: '', avgtrans: '', dealercode: ''};
+    state = {companytype: '', gst: '', bpan: '', avgtrans: '', dealercode: '', missed_fields: true};
+
+    validate = {companytype: false, gst: false, bpan: false, avgtrans: false, dealercode: false};
 
     _formSubmit(e) {
         e.preventDefault();
@@ -20,12 +22,18 @@ class BusinessDetail extends Component {
         });
     }
 
-    _PANEnter = e => {
-        let regex = /^[a-zA-Z]{5}([0-9]){4}[a-zA-Z]{1}?$/;
-        if (e.target.value.length <= 10) {
-            // this.obj.pan_correct = regex.test(e.target.value);
-            // this.props.pan_adhar(e.target.value, '');
-        }
+    handleValidation = () => {
+        let ctrerror = 5, missed_fields;
+        // let missed_fields = Object.keys(this.validate).some(x => this.validate[x]);
+        Object.values(this.validate).map((val, key) => {
+            if (!val)
+                ++ctrerror;
+            else --ctrerror;
+            console.log(val);
+        });
+        console.log(ctrerror);
+        missed_fields = (ctrerror !== 0);
+        this.setState({missed_fields}, () => console.log('All Fields Validated : ' + this.state.missed_fields));
     }
 
     businessGst(e) {
@@ -33,23 +41,45 @@ class BusinessDetail extends Component {
             let bpan = e.target.value.substr(2, 10);
             this.setState({gst: e.target.value, bpan}, () => this.props.setBusinessDetail(this.state))
         }
+        this.validate.gst = (e.target.value.length === 15) ? true : false;
     }
 
     componentWillMount() {
-        if (this.props.businessObj === Object(this.props.businessObj))
-            this.setState(this.props.businessObj);
+        const {businessObj, gstProfile, payload} = this.props;
+        if (businessObj === Object(businessObj))
+            this.setState(businessObj, () => {
+                Object.keys(this.state).map((val, key) => {
+                    if (this.validate[val] !== undefined)
+                        this.validate[val] = (this.state[val].length > 0);
+                    // console.log(this.validate);
+                });
+            });
         else this.props.setBusinessDetail(this.state);
 
-        if (this.props.gstProfile === Object(this.props.gstProfile))
-            this.setState({gst: this.props.gstProfile.result.gstin}, () => this.props.setBusinessDetail(this.state));
+        if (gstProfile === Object(gstProfile) && gstProfile.length) {
+            BusinessType.map((val, key) => {
+                (`/${val}/gi`).test(gstProfile.ctb);
+            });
+            this.setState({gst: gstProfile.gstin});
+        }
+        if (payload === Object(payload) && payload.length) {
+            this.setState({dealercode: payload.dealer_code});
+        }
+
+        // console.log(this.props.gstProfile)
+
+        this.props.changeLoader(false);
+        this.handleValidation();
     }
 
     render() {
+        const gstProfile = this.props.gstProfile;
         return (
             <>
                 {/*<Link to={'/AdharPan'} className={"btn btn-link"}>Go Back </Link>*/}
                 <button onClick={() => this.props.history.goBack()} className={"btn btn-link"}>Go Back</button>
                 <br/><br/>
+                <h4 className={"text-center"}>{(gstProfile === Object(gstProfile)) ? gstProfile.lgnm : ''}</h4>
                 <p className="paragraph_styling  text-center">
                     <b> And the last Step, your Business Information.</b>
                 </p>
@@ -57,22 +87,23 @@ class BusinessDetail extends Component {
                     id="serverless-contact-form"
                     onSubmit={e => this._formSubmit(e)}
                 >
-
                     <div className="form-group mb-3">
                         <label htmlFor="companyType" className={"bmd-label-floating"}>Company Type *</label>
 
                         <select style={{textTransform: "uppercase", fontWeight: 600}} title="Please select Company Type"
                                 value={this.state.companytype} required={true}
-                                onChange={(e) => this.setState({companytype: e.target.value}, () => this.props.setBusinessDetail(this.state))}
+                                onChange={(e) => {
+                                    this.setState({companytype: e.target.value}, () => this.props.setBusinessDetail(this.state));
+                                    this.validate.companytype = (e.target.value.length > 0) ? true : false
+                                }}
+                                onBlur={() => this.handleValidation()}
                                 className="form-control font_weight" id="companyType">
                             <option value={''}>Select Company Type</option>
-                            <option value={"proprietor"}>Proprietorship</option>
-                            <option value={"partner"}>Partnership</option>
-                            <option value={"trust"}>Trust</option>
-                            <option value={"llp"}>LLP</option>
-                            <option value={"pvt_ltd"}>Private Limited</option>
-                            <option value={"ltd"}>Limited</option>
-                            <option value={"other"}>Others</option>
+                            {
+                                Object.keys(BusinessType).map((key, index) =>
+                                    (<option key={index} value={key}>{BusinessType[key]}</option>)
+                                )
+                            }
                         </select>
 
                     </div>
@@ -89,11 +120,12 @@ class BusinessDetail extends Component {
                             id="numberGST"
                             required={true}
                             value={this.state.gst}
+                            onBlur={() => this.handleValidation()}
                             // ref={ref => (this.obj.pan = ref)}
                             onChange={(e) => this.businessGst(e)}
                         />
                     </div>
-                    {(this.state.companytype !== "proprietor" && this.state.companytype !== "") ? (
+                    {(this.state.companytype !== "proprietorship" && this.state.companytype !== "") ? (
                         <div className="form-group mb-3 ">
                             <label htmlFor="numberPAN" className={"bmd-label-floating"}>Business PAN *</label>
                             <input
@@ -107,6 +139,7 @@ class BusinessDetail extends Component {
                                 id="numberPAN"
                                 required={true}
                                 value={this.state.bpan}
+                                // onBlur={() => this.handleValidation()}
                                 readOnly={true}
                                 disabled={true}
                                 // ref={ref => (this.obj.pan = ref)}
@@ -135,10 +168,12 @@ class BusinessDetail extends Component {
                                 autoCapitalize="characters"
                                 id="avgTrans"
                                 required={true}
-                                value={this.state.avgTrans}
+                                value={this.state.avgtrans}
                                 // ref={ref => (this.obj.pan = ref)}
+                                onBlur={() => this.handleValidation()}
                                 onChange={(e) => {
-                                    if (e.target.value.length <= 10) this.setState({avgTrans: e.target.value}, () => this.props.setBusinessDetail(this.state))
+                                    if (e.target.value.length <= 10) this.setState({avgtrans: e.target.value}, () => this.props.setBusinessDetail(this.state));
+                                    this.validate.avgtrans = (e.target.value.length <= 10) ? true : false;
                                 }}
                             />
                         </div>
@@ -158,8 +193,10 @@ class BusinessDetail extends Component {
                             required={true}
                             value={this.state.dealercode}
                             // ref={ref => (this.obj.pan = ref)}
+                            onBlur={() => this.handleValidation()}
                             onChange={(e) => {
-                                if (e.target.value.length <= 8) this.setState({dealercode: e.target.value}, () => this.props.setBusinessDetail(this.state))
+                                if (e.target.value.length <= 8) this.setState({dealercode: e.target.value}, () => this.props.setBusinessDetail(this.state));
+                                this.validate.dealercode = (e.target.value.length < 10 && e.target.value.length >= 4) ? true : false;
                             }}
                         />
                     </div>
@@ -168,8 +205,9 @@ class BusinessDetail extends Component {
 
                         <button
                             type="submit"
+                            disabled={this.state.missed_fields}
                             onClick={e => this._formSubmit(e)}
-                            className="form-submit btn btn-raised partenrs_submit_btn"
+                            className="form-submit btn btn-raised greenButton"
                         >Proceed
                         </button>
 
@@ -182,10 +220,11 @@ class BusinessDetail extends Component {
 
 const mapStateToProps = state => ({
     businessObj: state.businessDetail.businessObj,
-    gstProfile: state.businessDetail.gstProfile
+    gstProfile: state.businessDetail.gstProfile,
+    payload: state.authPayload.payload
 });
 
 export default withRouter(connect(
     mapStateToProps,
-    {setBusinessDetail}
+    {setBusinessDetail, changeLoader}
 )(BusinessDetail));
