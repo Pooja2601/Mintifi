@@ -5,7 +5,7 @@ import {connect} from "react-redux";
 import {setAuth, sendOTP} from "../../actions";
 import {Link, withRouter} from "react-router-dom";
 
-const Timer = 200;
+const Timer = 120;
 
 class Auth extends Component {
     state = {
@@ -29,7 +29,7 @@ class Auth extends Component {
 
         this.setState({loading: true, submitted: true, timer: Timer});
 
-        fetch(otpUrl + '/send_otp', {
+        fetch(`${otpUrl}/send_otp`, {
             method: "POST",
             headers: {'Content-Type': 'application/json', token: this.props.token},
             body: JSON.stringify({
@@ -132,7 +132,8 @@ class Auth extends Component {
                                 style={{
                                     fontWeight: 600,
                                     marginLeft: '1rem',
-                                    fontSize: '17px'
+                                    fontSize: '17px',
+                                    paddingLeft: '10px'
                                 }}
                                 required={true}
                                 value={this.state.mobile}
@@ -151,7 +152,7 @@ class Auth extends Component {
                                 className="form-control font_weight"
                                 // placeholder="Enter the OTP"
                                 name="url"
-                                pattern="^[0-9]{4}$"
+                                pattern="^[0-9]{6}$"
                                 title="This field is required"
                                 id="otpVerify"
                                 style={{
@@ -159,10 +160,10 @@ class Auth extends Component {
                                     fontSize: '17px'
                                 }}
                                 value={this.state.otp}
-                                min={1000}
-                                max={9999}
+                                min={100000}
+                                max={999999}
                                 onChange={(e) => {
-                                    if (e.target.value.length <= 4) this.setState({otp: e.target.value})
+                                    if (e.target.value.length <= 6) this.setState({otp: e.target.value})
                                 }}
                                 aria-describedby="otp-area"
                             />
@@ -190,7 +191,7 @@ class Auth extends Component {
                         <br/>
 
                         <button
-                            style={{visibility: (this.state.loading && (this.state.otp.length === 4)) ? 'visible' : 'hidden'}}
+                            style={{visibility: (this.state.loading && (this.state.otp.length === 6)) ? 'visible' : 'hidden'}}
                             onClick={e => this._verifyOTP(e)}
                             className="btn btn-raised greenButton text-center">
                             Verify OTP

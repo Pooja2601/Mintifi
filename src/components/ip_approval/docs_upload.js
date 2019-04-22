@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {Link, withRouter} from "react-router-dom";
+import {baseUrl} from "../../shared/constants";
 import {pan_adhar, setAdharManual, setBusinessDetail} from "../../actions";
 
 const file_msg = "Select a file to upload";
@@ -9,39 +10,49 @@ class DocsUpload extends Component {
 
     state = {id_proof_msg: file_msg, add_proof_msg: file_msg, bank_proof_msg: file_msg, validated: false};
 
-
     RenderModalMessage = () => {
-        return (<div className="modal fade" id={"errorMsgModal"} ref={ref => this.errorMsgModal = ref} tabIndex="-1"
-                     role="dialog">
-            <div className="modal-dialog" role="document">
-                <div className="modal-content">
-                    <div className="modal-header">
-                        <h5 className="modal-title">Invalid Filetype</h5>
-                        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div className="modal-body">
-                        <p>Please upload file having extensions .jpeg , .jpg , .png , .gif only.</p>
-                    </div>
-                    <div className="modal-footer">
-                        {/*<button type="button" className="btn btn-primary">Save changes</button>*/}
-                        <button type="button" className="btn btn-primary" data-dismiss="modal">Close</button>
+        return (
+            <>
+                <button type="button" style={{visibilty: 'hidden'}} ref={ref => this.triggerModal = ref}
+                        id={"triggerModal"} data-toggle="modal"
+                        data-target="#errorMsgModal">
+                </button>
+
+                <div className="modal fade" id={"errorMsgModal"} ref={ref => this.errorMsgModal = ref} tabIndex="-1"
+                     role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog" role="document">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">Invalid Filetype</h5>
+                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                                <p>Please upload file having extensions .jpeg , .jpg , .png , .gif only.</p>
+                            </div>
+                            <div className="modal-footer">
+                                {/*<button type="button" className="btn btn-primary">Save changes</button>*/}
+                                <button type="button" className="btn btn-primary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>);
+            </>);
     }
 
     _onChangeFile(e, targetMsg) {
 
-        let errorMsgModal = document.getElementById('errorMsgModal');
-        let {value} = e.target;
+        // let modalBackface = document.querySelector('.modal-backdrop');
+        let {value, files} = e.target;
         var allowedExt = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
 
+// alert(files[0]);
+
         if (!allowedExt.exec(value)) {
-            // alert('Please upload file having extensions .jpeg/.jpg/.png/.gif only.');
-            errorMsgModal.modal('show');
+            // jQuery('#errorMsgModal').modal('show');
+            this.triggerModal.click();
+            // modalBackface.style.position = 'initial';
             if (targetMsg === 'id_proof')
                 this.idProofInput.value = '';
             else if (targetMsg === 'add_proof')
@@ -69,9 +80,47 @@ class DocsUpload extends Component {
     }
 
     formSubmit() {
-        fetch().then(resp => resp.json()).then(resp => {
 
-        });
+        let {payload, token, preFlightResp} = this.props;
+
+        // let token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozNiwidHlwZSI6ImFuY2hvciIsImV4cCI6MTU1NTUxMDEyMn0.yP258grzzA5aQUadZFl6BIvV29s2KFz9mq4V3849mO4";
+        preFlightResp = {loan_application_id: '1780'};
+
+        let doc_type = ['pan', 'aadhaar', 'cheque'];
+        let doc_cat = ['kyc', 'kyc', 'payment_type'];
+        let ctr = 0;
+
+        const inputFiles = document.querySelectorAll('input[type="file"]');
+        const formData = new FormData();
+
+        formData.append("app_id", '3');
+        formData.append("loan_application_id", preFlightResp.loan_application_id);
+
+        for (const file of inputFiles) {
+            formData.append('documents[][doc_type]', doc_type[ctr]);
+            formData.append('documents[][doc_category]', doc_cat[ctr]);
+            formData.append('documents[][file]', file.files[0]);
+            ctr++;
+        }
+
+        fetch(`${baseUrl}/documents`, {
+            method: 'POST',
+            // mode: 'no-cors',
+            headers: {
+                // "Authorization": 'Bearer:'+token,
+                "Content-Type": "",
+                "token": token,
+                "cache": "no-cache",
+                'Accept': 'application/json',
+            },
+            body: formData // This is your file object
+        })
+        // .then(resp => resp.json())
+            .then(
+                success => console.log(success) // Handle the success response object
+            ).catch(
+            error => console.log(error) // Handle the error response object
+        );
     }
 
     componentWillMount() {
@@ -132,6 +181,7 @@ class DocsUpload extends Component {
                             </div>
                             <small className="text-muted">Upload Aadhar, Driving License or Ration Card or Passport..
                             </small>
+
                             <br/>
                             <div className="input-container text-left">
                                 <input type="file" id="addressProofInput"
@@ -170,6 +220,9 @@ class DocsUpload extends Component {
 
 const mapStateToProps = state => ({
     adharObj: state.adharDetail.adharObj,
+    payload: state.authPayload.payload,
+    token: state.authPayload.token,
+    preFlightResp: state.businessDetail.preFlightResp
 });
 
 export default withRouter(

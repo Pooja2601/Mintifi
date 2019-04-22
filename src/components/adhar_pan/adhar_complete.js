@@ -17,11 +17,11 @@ class AdharPan extends Component {
         mobile: '',
         email: '',
         dob: new Date(),
-        gender: 'male',
+        gender: 'm',
         ownership: 'rented',
         pincode: '',
-        // address1: '',
-        // address2: '',
+        address1: '',
+        address2: '',
         list_posts: '',
         missed_fields: true
     };
@@ -35,8 +35,8 @@ class AdharPan extends Component {
         // dob: true,
         // gender: true,
         pincode: false,
-        // address1: false,
-        // address2: false,
+        address1: false,
+        address2: false,
     };
 
     componentWillMount() {
@@ -72,12 +72,12 @@ class AdharPan extends Component {
     _formSubmit(e) {
         e.preventDefault();
         setTimeout(() => {
-            this.props.history.push('/BusinessDetail');
+            this.props.history.push('/MobileOTP');
         }, 500);
     }
 
     handleValidation() {
-        let ctrerror = 5, missed_fields;
+        let ctrerror = 7, missed_fields;
         // let missed_fields = Object.keys(this.validate).some(x => this.validate[x]);
         Object.values(this.validate).map((val, key) => {
             if (!val)
@@ -110,6 +110,21 @@ class AdharPan extends Component {
                     this.setState({list_posts});
                 }
             });
+    };
+
+
+    changeDob = (dob) => {
+        /*        let date = d.getDate();
+                let month = d.getMonth();
+                let year = d.getFullYear();
+                let dob = `${year}-${month}-${date}`;
+         */
+        this.setState({
+            adharDetail: {
+                ...this.state.adharDetail,
+                dob
+            }
+        }, () => this.props.setAdharManual(this.state))
     };
 
     render() {
@@ -265,13 +280,13 @@ class AdharPan extends Component {
                                     type="button"
                                     className="btn btn-default"
                                     onClick={() => {
-                                        this.setState({gender: 'male'}, () => this.props.setAdharManual(this.state));
+                                        this.setState({gender: 'm'}, () => this.props.setAdharManual(this.state));
                                     }}
                                     style={{
                                         width: "105px",
                                         backgroundColor:
-                                            this.state.gender === "male" && "#00bfa5",
-                                        color: this.state.gender === "male" && "white",
+                                            this.state.gender === "m" && "#00bfa5",
+                                        color: this.state.gender === "m" && "white",
                                         borderBottomLeftRadius: '25px',
                                         borderTopLeftRadius: '25px'
                                     }}
@@ -290,14 +305,14 @@ class AdharPan extends Component {
                                     type="button"
                                     className="btn btn-default"
                                     onClick={() => {
-                                        this.setState({gender: 'female'}, () => this.props.setAdharManual(this.state));
+                                        this.setState({gender: 'f'}, () => this.props.setAdharManual(this.state));
 
                                     }}
                                     style={{
                                         width: "105px",
                                         backgroundColor:
-                                            this.state.gender === "female" && "#00bfa5",
-                                        color: this.state.gender === "female" && "white",
+                                            this.state.gender === "f" && "#00bfa5",
+                                        color: this.state.gender === "f" && "white",
                                         borderBottomRightRadius: '25px',
                                         borderTopRightRadius: '25px'
                                     }}
@@ -425,11 +440,66 @@ class AdharPan extends Component {
                                 showYearDropdown
                                 style={{margin: 'auto'}}
                                 dateFormat={'dd/MM/yyyy'}
-                                onChange={(date) => {
-                                    this.setState({dob: date});
-                                }}
-                                onBlur={() => this.props.setAdharManual(this.state)}
+                                onChange={(date) => this.changeDob(date)}
+
                             />
+                        </div>
+                    </div>
+
+                    <div className={"row"}>
+                        <div className={"col-md-6 col-sm-12"}>
+                            <div className="form-group mb-3 ">
+                                <label htmlFor="textAddress1" className="bmd-label-floating">
+                                    Address 1
+                                </label>
+                                <input
+                                    type="text"
+                                    className="form-control font_weight"
+                                    // placeholder="Pincode"
+                                    style={{textTransform: "uppercase", fontWeight: 600}}
+                                    title="Please enter Address 1"
+                                    autoCapitalize="characters"
+                                    id="textAddress1"
+                                    required={true}
+                                    value={this.state.address1}
+                                    onBlur={() => {
+                                        this.props.setAdharManual(this.state);
+                                        this.handleValidation();
+                                    }}
+                                    // ref={ref => (this.obj.pan = ref)}
+                                    onChange={(e) => {
+                                        this.setState({address1: e.target.value});
+                                        this.validate.address1 = (e.target.value);
+                                    }}
+                                />
+                            </div>
+                        </div>
+                        <div className={"col-md-6 col-sm-12"}>
+                            <div className="form-group mb-3 ">
+                                <label htmlFor="textAddress2" className="bmd-label-floating">
+                                    Address 2
+                                </label>
+                                <input
+                                    type="text"
+                                    className="form-control font_weight"
+                                    // placeholder="Pincode"
+                                    style={{textTransform: "uppercase", fontWeight: 600}}
+                                    title="Please enter Address 2"
+                                    autoCapitalize="characters"
+                                    id="textAddress2"
+                                    required={true}
+                                    value={this.state.address2}
+                                    onBlur={() => {
+                                        this.props.setAdharManual(this.state);
+                                        this.handleValidation();
+                                    }}
+                                    // ref={ref => (this.obj.pan = ref)}
+                                    onChange={(e) => {
+                                        this.setState({address2: e.target.value});
+                                        this.validate.address2 = (e.target.value);
+                                    }}
+                                />
+                            </div>
                         </div>
                     </div>
 

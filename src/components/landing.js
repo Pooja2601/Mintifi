@@ -45,7 +45,7 @@ class Login extends Component {
                 <p className="paragraph_styling text-center">
                     Find out how our platform can help you climb the ladder to
                     another level of success today.
-                    {token} , {trans_id}
+                    {/*{token} , {trans_id}*/}
                 </p>
                 <div className="mt-5 mb-5 text-center row">
                     <div className={"col-sm-12 col-md-6"}><img

@@ -63,11 +63,9 @@ class BusinessDetail extends Component {
             this.setState({gst: gstProfile.gstin});
         }
         if (payload === Object(payload) && payload.length) {
-            this.setState({dealercode: payload.dealer_code});
+            this.setState({dealercode: payload.distributor_dealer_code});
         }
-
         // console.log(this.props.gstProfile)
-
         this.props.changeLoader(false);
         this.handleValidation();
     }

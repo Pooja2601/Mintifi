@@ -10,12 +10,15 @@ class AppRejected extends Component {
     componentWillMount() {
         if (this.props.adharObj !== Object(this.props.adharObj))
             this.props.history.push("/");
+
     }
 
     render() {
-        const {adharObj} = this.props;
+        const {adharObj, match} = this.props;
+
         if (adharObj === Object(adharObj)) {
             const {f_name, l_name} = adharObj;
+            const {loan_application_id, credit_eligibility} = this.props.preFlightResp;
             return (
                 <>
                     {/* <button onClick={() => this.props.history.push('/BusinessDetail')} className={"btn btn-link"}>
@@ -23,14 +26,17 @@ class AppRejected extends Component {
                 </button>*/}
                     <br/>
                     <i className={"fa fa-check-circle checkCircle"}></i>
-                    <h3 className={"text-center"}> Application Approved !</h3>
+                    <h3 className={"text-center"}> Application {(match.params === 'pending') ? 'Pending' : 'Approved'} !</h3>
                     <br/>
 
-                    <div className="alert alert-success" role="alert">
+                    <div className={(match.params === 'pending') ? 'alert alert-warning' : 'alert alert-success'}
+                         role="alert">
                         <h4 className="alert-heading">Congratulations {f_name} {l_name}</h4>
                         <p className="paragraph_styling  text-center">
                             We're happy to inform you about the loan you're requesting.
-                            As your information aligned with our norms, It got approved by our Team.
+                            As your information aligned with our
+                            norms, {(match.params === 'pending') ? 'It is under pending state.' : 'It got approved by our Team.'}
+                            <br/> One of our representative will be in touch with you soon.
                         </p>
                     </div>
 
@@ -39,8 +45,12 @@ class AppRejected extends Component {
                         <table width="100%">
                             <tbody>
                             <tr>
+                                <td>PRODUCT OFFERED</td>
+                                <td>{credit_eligibility.product_offered}</td>
+                            </tr>
+                            <tr>
                                 <td>LOAN ID</td>
-                                <td>342HBJK4H3JKNL2K23J</td>
+                                <td>{loan_application_id}</td>
                             </tr>
                             <tr>
                                 <td>LENDER</td>
@@ -48,22 +58,23 @@ class AppRejected extends Component {
                             </tr>
                             <tr>
                                 <td>CREDIT APPROVED</td>
-                                <td>Rs. 4,00,000</td>
+                                <td>Rs. {credit_eligibility.loan_amount_approved}</td>
                             </tr>
-                            <tr>
+                            {/*<tr>
                                 <td>DURATION</td>
                                 <td>12 Months</td>
-                            </tr>
-                            <tr>
+                            </tr>*/}
+                            {/*<tr>
                                 <td>EMI</td>
                                 <td>Rs. 35,000</td>
-                            </tr>
+                            </tr>*/}
                             </tbody>
                         </table>
 
                     </div>
                     <br/>
-                    <div className="checkbox">
+                    {(match.params !== 'pending')?
+                    (<><div className="checkbox">
                         <label>
 
                             <input type="checkbox" checked={this.state.confirmed}
@@ -80,7 +91,8 @@ class AppRejected extends Component {
                             className="form-submit btn btn-raised greenButton"
                         >Process Loan
                         </button>
-                    </div>
+                    </div></>): <></>
+                    }
                 </>
             )
         }
@@ -89,6 +101,7 @@ class AppRejected extends Component {
 
 const mapStateToProps = state => ({
     adharObj: state.adharDetail.adharObj,
+    preFlightResp: state.businessDetail.preFlightResp
 });
 
 export default withRouter(

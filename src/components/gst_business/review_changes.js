@@ -1,8 +1,8 @@
 import React, {Component} from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
-import {baseUrl, BusinessType} from "../../shared/constants";
+import {baseUrl, loanUrl, BusinessType} from "../../shared/constants";
 import {connect} from "react-redux";
-import {setBusinessDetail, setAdharManual, pan_adhar, storeResponse} from "../../actions";
+import {setBusinessDetail, setAdharManual, pan_adhar, storeResponse, changeLoader} from "../../actions";
 import {Link, withRouter} from "react-router-dom";
 // import DatePicker from "react-datepicker";
 
@@ -25,7 +25,7 @@ class ReviewBusinessDetail extends Component {
             mobile: '',
             email: '',
             dob: new Date(),
-            gender: 'male',
+            gender: 'm',
             pincode: '',
             address1: '',
             address2: ''
@@ -33,14 +33,22 @@ class ReviewBusinessDetail extends Component {
     };
 
     _formSubmit(e) {
-        // alert('hi')
-        const {payload, gstProfile, businessObj, adharObj, pan, adhar, authObj} = this.props;
         e.preventDefault();
-        fetch(`${baseUrl}/application/instant`, {
+        this.props.changeLoader(true);
+        const {payload, gstProfile, businessObj, adharObj, pan, adhar, authObj} = this.props;
+        let dob = adharObj.dob.substr(0, 10);
+        /*
+                let date = (adharObj.dob).getDate();
+                let month = (adharObj.dob).getMonth();
+                let year = (adharObj.dob).getFullYear();
+                let dob = `${year}-${month}-${date}`;
+        */
+
+        fetch(`${loanUrl}/application/instant`, {
             method: "POST",
             headers: {"Content-Type": "application/json", "token": this.props.token},
-            body: {
-                "app_id": 3,
+            body: JSON.stringify({
+                "app_id": "3",
                 "anchor_id": payload.anchor_id,
                 "distributor_dealer_code": payload.distributor_dealer_code,
                 "sales_agent_mobile_number": payload.sales_agent_mobile_number,
@@ -52,13 +60,13 @@ class ReviewBusinessDetail extends Component {
                     "last_name": adharObj.l_name,
                     "pan": pan,
                     "gstin": businessObj.gst,
-                    "dob": adharObj.dob,
+                    "dob": dob,
                     "mobile_number": (authObj.mobile) ? authObj.mobile : adharObj.mobile,
                     "email": adharObj.email,
                     "gender": adharObj.gender,
                     "residence_address": {
                         "address_1": adharObj.address1,
-                        "address_2": " ",
+                        "address_2": adharObj.address2 ? adharObj.address2 : " ",
                         "address_3": " ",
                         "ownership_type": adharObj.ownership,
                         "pincode": adharObj.pincode
@@ -66,32 +74,38 @@ class ReviewBusinessDetail extends Component {
                 },
                 "loan_details": {
                     "loan_amount": payload.loan_amount,
-                    "average_monthly_transaction": businessObj.avgTrans,
+                    "average_monthly_transaction": businessObj.avgtrans,
                     "retailer_onboarding_date": payload.retailer_onboarding_date,
                     "vintage": 60
                 },
                 "is_credit_decision": true,
                 "timestamp": new Date()
-            }
-
+            })
         }).then(resp => resp.json()).then(resp => {
-
+            this.props.changeLoader(false);
             if (resp.response === Object(resp.response)) {
-                if (resp.response === 'closed' || resp.response === 'decline')
-                    this.props.history.push("/AppRejected");
-                else {
-                    this.props.storeResponse(resp.response);
-                    setTimeout(() => this.props.history.push("/AppApproved"), 500);
+                let {loan_status} = resp.response.credit_eligibility;
+                if (loan_status === 'closed' || loan_status === 'decline')
+                    this.props.history.push("/AppRejected",{status:'decline'});
+                else if (loan_status === 'pending') {
+                    setTimeout(() => this.props.history.push("/AppApproved",{status:'pending'}), 500);
                 }
+                else {
+                    setTimeout(() => this.props.history.push("/AppApproved",{status:'approved'}), 500);
+                }
+                this.props.storeResponse(resp.response);
             }
             else if (resp.error === Object(resp.error)) {
                 console.log(resp.message);
+                this.props.history.push("/AppRejected",{status:'error'});
             }
         }, (resp) => {
+            this.props.changeLoader(false);
             // console.log("Application Rejected");
             console.log("Internet Connectivity Issue");
             //        this.props.history.push("/AppRejected);
         });
+
     }
 
     _PANEnter = (e, pan = 'personal') => {
@@ -125,17 +139,25 @@ class ReviewBusinessDetail extends Component {
 
     //ToDo : Fetching info of the Business Information and Credit Line Check
     componentDidMount() {
+
         this.setState({
             adharDetail: this.props.adharObj,
             pan_adhar: {pan: this.props.pan, adhar: this.props.adhar},
             businessDetail: this.props.businessObj
         });
+
+        // console.log(this.changeDob(this.state.adharDetail.dob));
     }
 
-    componentWillMount() {
-        // this.props.setBusinessDetail(this.state.businessDetail);
-
-    }
+    changeDob = (dob) => {
+        // return dob;
+        this.setState({
+            adharDetail: {
+                ...this.state.adharDetail,
+                dob
+            }
+        }, () => this.props.setAdharManual(this.state.adharDetail))
+    };
 
     render() {
         const gstProfile = this.props.gstProfile;
@@ -305,12 +327,7 @@ class ReviewBusinessDetail extends Component {
                                             showYearDropdown
                                             style={{margin: 'auto'}}
                                             dateFormat={'dd/MM/yyyy'}
-                                            onChange={(date) => this.setState({
-                                                adharDetail: {
-                                                    ...this.state.adharDetail,
-                                                    dob: date
-                                                }
-                                            }, () => this.props.setAdharManual(this.state.adharDetail))}
+                                            onChange={(date) => this.changeDob(date)}
                                         />
                                     </div>
                                 </div>
@@ -491,7 +508,6 @@ class ReviewBusinessDetail extends Component {
                                 value={this.state.businessDetail.bpan}
                                 readOnly={true}
                                 disabled={true}
-
                                 // ref={ref => (this.obj.pan = ref)}
                                 onChange={e => this._PANEnter(e, 'business')}
                             />
@@ -499,52 +515,76 @@ class ReviewBusinessDetail extends Component {
                     ) : (
                         <></>
                     )}
-
-                    <div className="form-group mb-3">
-                        <label
-                            htmlFor="avgTrans"
-                            className="bmd-label-floating"
-                            style={{marginLeft: "2rem"}}
-                        >
-                            Average Monthly Transactions *
-                        </label>
-                        <div className={"input-group"}>
-                            <div className="input-group-prepend">
+                    <div className={"row"}>
+                        <div className={"col-md-6 col-sm-12"}>
+                            <div className="form-group mb-3">
+                                <label
+                                    htmlFor="avgTrans"
+                                    className="bmd-label-floating"
+                                    style={{marginLeft: "2rem"}}
+                                >
+                                    Average Monthly Transactions *
+                                </label>
+                                <div className={"input-group"}>
+                                    <div className="input-group-prepend">
                   <span className="input-group-text" id="basic-addon3">
                     ₹
                   </span>
+                                    </div>
+                                    <input
+                                        type="number"
+                                        className="form-control font_weight"
+                                        // placeholder="Pincode"
+                                        style={{
+                                            textTransform: "uppercase",
+                                            fontWeight: 600,
+                                            marginLeft: "1rem"
+                                        }}
+                                        pattern="^[0-9]{10}$"
+                                        title="Enter Average monthly Transactions"
+                                        autoCapitalize="characters"
+                                        id="avgTrans"
+                                        required={true}
+                                        value={this.state.businessDetail.avgtrans}
+                                        onBlur={() => {
+                                            this.props.setBusinessDetail(this.state.businessDetail)
+                                        }}
+                                        // ref={ref => (this.obj.pan = ref)}
+                                        onChange={e => {
+                                            if (e.target.value.length <= 10)
+                                                this.setState({
+                                                    businessDetail: {
+                                                        ...this.state.businessDetail,
+                                                        avgtrans: e.target.value
+                                                    }
+                                                });
+                                        }}
+                                    />
+                                </div>
                             </div>
-                            <input
-                                type="number"
-                                className="form-control font_weight"
-                                // placeholder="Pincode"
-                                style={{
-                                    textTransform: "uppercase",
-                                    fontWeight: 600,
-                                    marginLeft: "1rem"
-                                }}
-                                pattern="^[0-9]{10}$"
-                                title="Enter Average monthly Transactions"
-                                autoCapitalize="characters"
-                                id="avgTrans"
-                                required={true}
-                                value={this.state.businessDetail.avgTrans}
-                                onBlur={() => {
-                                    this.props.setBusinessDetail(this.state.businessDetail)
-                                }}
-                                // ref={ref => (this.obj.pan = ref)}
-                                onChange={e => {
-                                    if (e.target.value.length <= 10)
-                                        this.setState({
-                                            businessDetail: {
-                                                ...this.state.businessDetail,
-                                                avgTrans: e.target.value
-                                            }
-                                        });
-                                }}
-                            />
+                        </div>
+                        <div className={"col-md-6 col-sm-12"}>
+                            <div className="form-group mb-3">
+                                <label htmlFor="loanAmount" className="bmd-label-floating">
+                                    Loan Amount *
+                                </label>
+                                <input
+                                    type="text"
+                                    className="form-control font_weight"
+                                    style={{textTransform: "uppercase", fontWeight: 600}}
+                                    pattern="^[0-9]+$"
+                                    title="Loan Amount"
+                                    autoCapitalize="characters"
+                                    id="loanAmount"
+                                    required={true}
+                                    disabled={true}
+                                    value={this.props.payload.loan_amount}
+                                    // onBlur={() => this.props.setBusinessDetail(this.state.businessDetail)}
+                                />
+                            </div>
                         </div>
                     </div>
+
                     <div className="form-group mb-3">
                         <label htmlFor="dealerCode" className="bmd-label-floating">
                             Dealer Code *
@@ -594,12 +634,13 @@ const mapStateToProps = state => ({
     adhar: state.adharDetail.adhar,
     authObj: state.authPayload.authObj,
     token: state.authPayload.token,
-    payload: state.authPayload.payload
+    payload: state.authPayload.payload,
+    preFlightResp: state.businessDetail.preFlightResp
 });
 
 export default withRouter(
     connect(
         mapStateToProps,
-        {setBusinessDetail, pan_adhar, setAdharManual, storeResponse}
+        {setBusinessDetail, pan_adhar, setAdharManual, storeResponse, changeLoader}
     )(ReviewBusinessDetail)
 );

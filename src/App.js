@@ -15,6 +15,7 @@ import Login from "./components/landing";
 import Auth from "./components/auth";
 import AdharPan from "./components/adhar_pan";
 import AdharComplete from "./components/adhar_pan/adhar_complete";
+import MobileOTP from "./components/adhar_pan/mobile_otp";
 import BusinessDetail from "./components/gst_business";
 import ReviewChanges from "./components/gst_business/review_changes";
 import AppRejected from "./components/ip_approval/app_rejected";
@@ -83,6 +84,7 @@ class App extends Component {
                                                 <Route path="/Auth/" component={Auth}/>
                                                 <Route path="/AdharPan" component={AdharPan}/>
                                                 <Route path="/AdharComplete" component={AdharComplete}/>
+                                                <Route path="/MobileOTP" component={MobileOTP}/>
                                                 <Route path="/BusinessDetail" component={BusinessDetail}/>
                                                 <Route path="/ReviewChanges" component={ReviewChanges}/>
                                                 <Route path="/AppRejected" component={AppRejected}/>

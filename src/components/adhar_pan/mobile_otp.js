@@ -5,7 +5,7 @@ import {connect} from "react-redux";
 import {setAuth, sendOTP} from "../../actions";
 import {Link, withRouter} from "react-router-dom";
 
-const Timer = 200;
+const Timer = 120;
 
 class MobileOtp extends Component {
     state = {
@@ -29,12 +29,12 @@ class MobileOtp extends Component {
 
         this.setState({loading: true, submitted: true, timer: Timer});
 
-        fetch(otpUrl + '/send_otp', {
+        fetch(`${otpUrl}/send_otp`, {
             method: "POST",
-            headers: {'Content-Type': 'application/json', 'App-Id': 1},
+            headers: {'Content-Type': 'application/json', 'token': this.props.token},
             body: JSON.stringify({
-                "app_id": 1,
-                "otp_type": "agent_profile_creation",
+                "app_id": 3,
+                "otp_type": "send_otp",
                 "mobile_number": this.state.mobile,
                 "timestamp": new Date()
             })
@@ -42,9 +42,9 @@ class MobileOtp extends Component {
             // console.log(JSON.stringify(resp));
             if (resp.error === Object(resp.error))
                 alert(resp.error.message);
-            else if (resp.response === Object(resp.response)) {
+            else if (resp.response === Object(resp.response) && resp.response.status === 'success') {
                 // alert(resp.success.message);
-                this.setState({otp_reference_id: resp.response.otp_reference_id}, () => this.props.setAuth(this.state));
+                this.setState({otp_reference_id: resp.response.otp_reference_code}, () => this.props.setAuth(this.state));
                 this.interval = setInterval(e => {
                     this.setState({timer: this.state.timer - 1}, () => {
                         if (this.state.timer === 0) {
@@ -59,12 +59,13 @@ class MobileOtp extends Component {
     }
 
     _verifyOTP(e) {
-        fetch(otpUrl + '/verify_otp ', {
+        e.preventDefault();
+        fetch(`${otpUrl}/verify_otp`, {
             method: "POST",
-            headers: {'Content-Type': 'application/json', 'App-Id': 1},
+            headers: {'Content-Type': 'application/json', token: this.props.token},
             body: JSON.stringify({
-                "app_id": 1,
-                "otp_reference_id": this.props.authObj.otp_reference_id,
+                "app_id": 3,
+                "otp_reference_number": this.props.authObj.otp_reference_id,
                 "mobile_number": this.props.authObj.mobile,
                 "otp": this.state.otp,
                 "timestamp": new Date()
@@ -74,12 +75,17 @@ class MobileOtp extends Component {
             if (resp.error === Object(resp.error))
                 alert(resp.error.message);
             else if (resp.response === Object(resp.response)) {
-                this.setState({verified: resp.response.is_otp_verified});
+                this.setState({verified: resp.response.is_otp_verified}, () => {
+                    this.props.setAuth(this.state)
+                });
+                if (resp.response.is_otp_verified)
+                    setTimeout(() => {
+                        this.props.history.push('/BusinessDetail');
+                    }, 500);
 // Goes to New Page
             }
         })
     }
-
 
 //authObj
     _setMobile = (e) => {
@@ -87,11 +93,11 @@ class MobileOtp extends Component {
             this.setState({mobile: e.target.value, mobile_correct: true}, () => this.props.setAuth(this.state));
         }
         else this.setState({mobile_correct: false}, () => this.props.setAuth(this.state));
-    }
+    };
 
     componentDidMount() {
-        if (this.props.authObj === Object(this.props.authObj))
-            this.setState({mobile: this.props.authObj.mobile, verified: this.props.authObj.verified});
+        if (this.props.adharObj === Object(this.props.adharObj))
+            this.setState({mobile: this.props.adharObj.mobile});
         else this.props.setAuth(this.state);
     }
 
@@ -121,7 +127,7 @@ class MobileOtp extends Component {
                                 className="form-control font_weight"
                                 // placeholder="10 digit Mobile Number"
                                 name="url"
-                                disabled={this.state.submitted}
+                                disabled={true}
                                 min={1000000000}
                                 max={9999999999}
                                 maxLength={10}
@@ -132,9 +138,11 @@ class MobileOtp extends Component {
                                 style={{
                                     fontWeight: 600,
                                     marginLeft: '1rem',
-                                    fontSize: '17px'
+                                    fontSize: '17px',
+                                    paddingLeft: '10px'
                                 }}
                                 required={true}
+                                readOnly={true}
                                 value={this.state.mobile}
                                 // ref={ref => (this.obj.number = ref)}
                                 onChange={(e) => this._setMobile(e)}
@@ -151,7 +159,7 @@ class MobileOtp extends Component {
                                 className="form-control font_weight"
                                 // placeholder="Enter the OTP"
                                 name="url"
-                                pattern="^[0-9]{4}$"
+                                pattern="^[0-9]{6}$"
                                 title="This field is required"
                                 id="otpVerify"
                                 style={{
@@ -159,10 +167,10 @@ class MobileOtp extends Component {
                                     fontSize: '17px'
                                 }}
                                 value={this.state.otp}
-                                min={1000}
-                                max={9999}
+                                min={100000}
+                                max={999999}
                                 onChange={(e) => {
-                                    if (e.target.value.length <= 4) this.setState({otp: e.target.value})
+                                    if (e.target.value.length <= 6) this.setState({otp: e.target.value})
                                 }}
                                 aria-describedby="otp-area"
                             />
@@ -210,7 +218,9 @@ class MobileOtp extends Component {
 
 
 const mapStateToProps = state => ({
-    authObj: state.authPayload.authObj
+    authObj: state.authPayload.authObj,
+    adharObj: state.adharDetail.adharObj,
+    token: state.authPayload.token
 });
 
 export default withRouter(connect(
