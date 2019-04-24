@@ -40,6 +40,14 @@ class AdharPan extends Component {
     };
 
     componentWillMount() {
+
+        const {payload, authObj, adharObj} = this.props;
+
+        if (payload !== Object(payload))
+            if (authObj !== Object(authObj))
+                if (adharObj !== Object(adharObj))
+                    this.props.history.push("/Token");
+
         let state = this.props.adharObj;
         if (state === Object(state))
             this.setState(state, () => {
@@ -119,12 +127,7 @@ class AdharPan extends Component {
                 let year = d.getFullYear();
                 let dob = `${year}-${month}-${date}`;
          */
-        this.setState({
-            adharDetail: {
-                ...this.state.adharDetail,
-                dob
-            }
-        }, () => this.props.setAdharManual(this.state))
+        this.setState({dob}, () => this.props.setAdharManual(this.state))
     };
 
     render() {
@@ -544,6 +547,8 @@ class AdharPan extends Component {
 }
 
 const mapStateToProps = state => ({
+    authObj: state.authPayload.authObj,
+    payload: state.authPayload.payload,
     adharObj: state.adharDetail.adharObj,
     gstProfile: state.businessDetail.gstProfile
 });

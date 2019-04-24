@@ -2,7 +2,7 @@ import React, {Component} from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
 import {baseUrl, otpUrl} from "../../shared/constants";
 import {connect} from "react-redux";
-import {setAuth, sendOTP} from "../../actions";
+import {setAuth, sendOTP, changeLoader} from "../../actions";
 import {Link, withRouter} from "react-router-dom";
 
 const Timer = 120;
@@ -26,9 +26,8 @@ class Auth extends Component {
 
         e.preventDefault();
         clearInterval(this.interval);
-
+        this.props.changeLoader(true);
         this.setState({loading: true, submitted: true, timer: Timer});
-
         fetch(`${otpUrl}/send_otp`, {
             method: "POST",
             headers: {'Content-Type': 'application/json', token: this.props.token},
@@ -40,6 +39,7 @@ class Auth extends Component {
             })
         }).then(resp => resp.json()).then(resp => {
             // console.log(JSON.stringify(resp));
+            this.props.changeLoader(false);
             if (resp.error === Object(resp.error))
                 alert(resp.error.message);
             else if (resp.response === Object(resp.response)) {
@@ -54,11 +54,15 @@ class Auth extends Component {
                     });
                 }, 1000);
             }
+        }, resp => {
+            console.log('Looks like a connectivity issue..!');
+            this.props.changeLoader(false);
         });
         // this.props.sendOTP(this.state.mobile);
     }
 
     _verifyOTP(e) {
+        this.props.changeLoader(true);
         fetch(otpUrl + '/verify_otp ', {
             method: "POST",
             headers: {'Content-Type': 'application/json', token: this.props.token},
@@ -70,13 +74,16 @@ class Auth extends Component {
                 "timestamp": new Date()
             })
         }).then(resp => resp.json()).then(resp => {
-
+            this.props.changeLoader(false);
             if (resp.error === Object(resp.error))
                 alert(resp.error.message);
             else if (resp.response === Object(resp.response)) {
                 this.setState({verified: resp.response.is_otp_verified});
 // Goes to New Page
             }
+        }, resp => {
+            console.log('Looks like a connectivity issue..!');
+            this.props.changeLoader(false);
         })
     }
 
@@ -90,8 +97,9 @@ class Auth extends Component {
     }
 
     componentDidMount() {
-        if (this.props.authObj === Object(this.props.authObj))
-            this.setState({mobile: this.props.authObj.mobile, verified: this.props.authObj.verified});
+        const {authObj} = this.props;
+        if (authObj === Object(authObj))
+            this.setState({mobile: authObj.mobile, verified: authObj.verified});
         else this.props.setAuth(this.state);
     }
 
@@ -217,5 +225,5 @@ const mapStateToProps = state => ({
 
 export default withRouter(connect(
     mapStateToProps,
-    {setAuth, sendOTP}
+    {setAuth, sendOTP, changeLoader }
 )(Auth));

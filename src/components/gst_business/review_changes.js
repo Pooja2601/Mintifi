@@ -32,6 +32,16 @@ class ReviewBusinessDetail extends Component {
         }
     };
 
+    componentWillMount() {
+        const {payload, authObj, adharObj, businessObj} = this.props;
+        if (payload !== Object(payload))
+            if (authObj !== Object(authObj))
+                if (adharObj !== Object(adharObj))
+                    if (businessObj !== Object(businessObj))
+                        if (authObj.verified)
+                            this.props.history.push("/Token");
+    }
+
     _formSubmit(e) {
         e.preventDefault();
         this.props.changeLoader(true);
@@ -86,18 +96,18 @@ class ReviewBusinessDetail extends Component {
             if (resp.response === Object(resp.response)) {
                 let {loan_status} = resp.response.credit_eligibility;
                 if (loan_status === 'closed' || loan_status === 'decline')
-                    this.props.history.push("/AppRejected",{status:'decline'});
+                    this.props.history.push("/AppRejected", {status: 'decline'});
                 else if (loan_status === 'pending') {
-                    setTimeout(() => this.props.history.push("/AppApproved",{status:'pending'}), 500);
+                    setTimeout(() => this.props.history.push("/AppApproved", {status: 'pending'}), 500);
                 }
                 else {
-                    setTimeout(() => this.props.history.push("/AppApproved",{status:'approved'}), 500);
+                    setTimeout(() => this.props.history.push("/AppApproved", {status: 'approved'}), 500);
                 }
                 this.props.storeResponse(resp.response);
             }
             else if (resp.error === Object(resp.error)) {
                 console.log(resp.message);
-                this.props.history.push("/AppRejected",{status:'error'});
+                this.props.history.push("/AppRejected", {status: 'error'});
             }
         }, (resp) => {
             this.props.changeLoader(false);
@@ -143,9 +153,8 @@ class ReviewBusinessDetail extends Component {
         this.setState({
             adharDetail: this.props.adharObj,
             pan_adhar: {pan: this.props.pan, adhar: this.props.adhar},
-            businessDetail: this.props.businessObj
+            businessDetail: this.props.businessObj,
         });
-
         // console.log(this.changeDob(this.state.adharDetail.dob));
     }
 
@@ -174,6 +183,9 @@ class ReviewBusinessDetail extends Component {
                     <b> Kindly Review your Information.</b>
                 </p>
                 <form id="serverless-contact-form" onSubmit={e => this._formSubmit(e)}>
+                    <p className="paragraph_styling  text-center">
+                        <b> Personal Detail.</b>
+                    </p>
                     {(this.state.adharDetail === Object(this.state.adharDetail)) ?
                         (<div className={"row"}>
                             <div className={"col-md-4 col-sm-12"}>
@@ -435,7 +447,72 @@ class ReviewBusinessDetail extends Component {
                             </>) : <></>
                         }
                     </div>
-
+                    <div className={"row"}>
+                        <div className={"col-md-6 col-sm-12"}>
+                            <div className="form-group mb-3 ">
+                                <label htmlFor="textAddress1" className="bmd-label-floating">
+                                    Address 1
+                                </label>
+                                <input
+                                    type="text"
+                                    className="form-control font_weight"
+                                    // placeholder="Pincode"
+                                    style={{textTransform: "uppercase", fontWeight: 600}}
+                                    title="Please enter Address 1"
+                                    autoCapitalize="characters"
+                                    id="textAddress1"
+                                    required={true}
+                                    value={this.state.adharDetail.address1}
+                                    onBlur={() => {
+                                        this.props.setAdharManual(this.state.adharDetail);
+                                        // this.handleValidation();
+                                    }}
+                                    // ref={ref => (this.obj.pan = ref)}
+                                    onChange={(e) => {
+                                        this.setState({
+                                            ...this.state.adharDetail,
+                                            adharDetail: {address1: e.target.value}
+                                        });
+                                        // this.validate.address1 = (e.target.value);
+                                    }}
+                                />
+                            </div>
+                        </div>
+                        <div className={"col-md-6 col-sm-12"}>
+                            <div className="form-group mb-3 ">
+                                <label htmlFor="textAddress2" className="bmd-label-floating">
+                                    Address 2
+                                </label>
+                                <input
+                                    type="text"
+                                    className="form-control font_weight"
+                                    // placeholder="Pincode"
+                                    style={{textTransform: "uppercase", fontWeight: 600}}
+                                    title="Please enter Address 2"
+                                    autoCapitalize="characters"
+                                    id="textAddress2"
+                                    required={true}
+                                    value={this.state.adharDetail.address2}
+                                    onBlur={() => {
+                                        this.props.setAdharManual(this.state.adharDetail);
+                                        // this.handleValidation();
+                                    }}
+                                    // ref={ref => (this.obj.pan = ref)}
+                                    onChange={(e) => {
+                                        this.setState({
+                                            ...this.state.adharDetail,
+                                            adharDetail: {address2: e.target.value}
+                                        });
+                                        // this.validate.address2 = (e.target.value);
+                                    }}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+                    <p className="paragraph_styling  text-center">
+                        <b> Company Detail.</b>
+                    </p>
                     <div className="form-group mb-3">
                         <label htmlFor="companyType" className={"bmd-label-floating"}>
                             Company Type *
@@ -568,19 +645,31 @@ class ReviewBusinessDetail extends Component {
                                 <label htmlFor="loanAmount" className="bmd-label-floating">
                                     Loan Amount *
                                 </label>
-                                <input
-                                    type="text"
-                                    className="form-control font_weight"
-                                    style={{textTransform: "uppercase", fontWeight: 600}}
-                                    pattern="^[0-9]+$"
-                                    title="Loan Amount"
-                                    autoCapitalize="characters"
-                                    id="loanAmount"
-                                    required={true}
-                                    disabled={true}
-                                    value={this.props.payload.loan_amount}
-                                    // onBlur={() => this.props.setBusinessDetail(this.state.businessDetail)}
-                                />
+                                <div className={"input-group"}>
+                                    <div className="input-group-prepend">
+                  <span className="input-group-text" id="basic-addon3">
+                    ₹
+                  </span>
+                                    </div>
+                                    <input
+                                        type="text"
+                                        className="form-control font_weight"
+                                        style={{
+                                            textTransform: "uppercase",
+                                            fontWeight: 600,
+                                            paddingLeft: '5px',
+                                            marginLeft: '1rem'
+                                        }}
+                                        pattern="^[0-9]+$"
+                                        title="Loan Amount"
+                                        autoCapitalize="characters"
+                                        id="loanAmount"
+                                        required={true}
+                                        disabled={true}
+                                        value={this.props.payload.loan_amount}
+                                        // onBlur={() => this.props.setBusinessDetail(this.state.businessDetail)}
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>

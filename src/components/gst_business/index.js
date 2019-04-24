@@ -45,7 +45,14 @@ class BusinessDetail extends Component {
     }
 
     componentWillMount() {
-        const {businessObj, gstProfile, payload} = this.props;
+        const {businessObj, gstProfile, payload, authObj, adharObj} = this.props;
+
+        if (payload !== Object(payload))
+            if (authObj !== Object(authObj))
+                if (adharObj !== Object(adharObj))
+                    if (authObj.verified)
+                        this.props.history.push("/Token");
+
         if (businessObj === Object(businessObj))
             this.setState(businessObj, () => {
                 Object.keys(this.state).map((val, key) => {
@@ -62,8 +69,8 @@ class BusinessDetail extends Component {
             });
             this.setState({gst: gstProfile.gstin});
         }
-        if (payload === Object(payload) && payload.length) {
-            this.setState({dealercode: payload.distributor_dealer_code});
+        if (payload === Object(payload)) {
+            this.setState({dealercode: payload.distributor_dealer_code}, () => this.props.setBusinessDetail(this.state));
         }
         // console.log(this.props.gstProfile)
         this.props.changeLoader(false);
@@ -88,7 +95,8 @@ class BusinessDetail extends Component {
                     <div className="form-group mb-3">
                         <label htmlFor="companyType" className={"bmd-label-floating"}>Company Type *</label>
 
-                        <select style={{textTransform: "uppercase", fontWeight: 600}} title="Please select Company Type"
+                        <select style={{textTransform: "uppercase", fontWeight: 600}}
+                                title="Please select Company Type"
                                 value={this.state.companytype} required={true}
                                 onChange={(e) => {
                                     this.setState({companytype: e.target.value}, () => this.props.setBusinessDetail(this.state));
@@ -193,8 +201,8 @@ class BusinessDetail extends Component {
                             // ref={ref => (this.obj.pan = ref)}
                             onBlur={() => this.handleValidation()}
                             onChange={(e) => {
-                                if (e.target.value.length <= 8) this.setState({dealercode: e.target.value}, () => this.props.setBusinessDetail(this.state));
-                                this.validate.dealercode = (e.target.value.length < 10 && e.target.value.length >= 4) ? true : false;
+                                if (e.target.value.length <= 10) this.setState({dealercode: e.target.value}, () => this.props.setBusinessDetail(this.state));
+                                this.validate.dealercode = (e.target.value.length <= 10 && e.target.value.length >= 4) ? true : false;
                             }}
                         />
                     </div>
@@ -217,12 +225,13 @@ class BusinessDetail extends Component {
 }
 
 const mapStateToProps = state => ({
+    adharObj: state.adharDetail.adharObj,
+    authObj: state.authPayload.authObj,
     businessObj: state.businessDetail.businessObj,
     gstProfile: state.businessDetail.gstProfile,
     payload: state.authPayload.payload
 });
 
-export default withRouter(connect(
-    mapStateToProps,
-    {setBusinessDetail, changeLoader}
-)(BusinessDetail));
+export default withRouter(connect
+(mapStateToProps, {setBusinessDetail, changeLoader})
+(BusinessDetail));

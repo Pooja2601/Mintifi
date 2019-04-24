@@ -8,9 +8,12 @@ class AppRejected extends Component {
     state = {confirmed: false};
 
     componentWillMount() {
-        if (this.props.adharObj !== Object(this.props.adharObj))
-            this.props.history.push("/");
-
+        const {payload, authObj, adharObj, businessObj} = this.props;
+        if (payload !== Object(payload))
+            if (authObj !== Object(authObj))
+                if (adharObj !== Object(adharObj))
+                    if (businessObj !== Object(businessObj))
+                        this.props.history.push("/Token");
     }
 
     render() {
@@ -34,7 +37,7 @@ class AppRejected extends Component {
                         <h4 className="alert-heading">Congratulations {f_name} {l_name}</h4>
                         <p className="paragraph_styling  text-center">
                             We're happy to inform you about the loan you're requesting.
-                            As your information aligned with our
+                            As your informations aligned with our
                             norms, {(match.params === 'pending') ? 'It is under pending state.' : 'It got approved by our Team.'}
                             <br/> One of our representative will be in touch with you soon.
                         </p>
@@ -73,25 +76,28 @@ class AppRejected extends Component {
 
                     </div>
                     <br/>
-                    {(match.params !== 'pending')?
-                    (<><div className="checkbox">
-                        <label>
+                    {(match.params !== 'pending') ?
+                        (<>
+                            <div className="checkbox">
+                                <label>
 
-                            <input type="checkbox" checked={this.state.confirmed}
-                                   onChange={(e) =>
-                                       this.setState(prevState => ({confirmed: !prevState.confirmed}))
-                                   }/> I confirm the Loan Amount and ready to proceed with the above Credit details.
-                        </label>
-                    </div>
-                    <div className="mt-5 mb-5 text-center ">
-                        <button
-                            type="button"
-                            disabled={!this.state.confirmed}
-                            onClick={e => this.props.history.push('/')}
-                            className="form-submit btn btn-raised greenButton"
-                        >Process Loan
-                        </button>
-                    </div></>): <></>
+                                    <input type="checkbox" checked={this.state.confirmed}
+                                           onChange={(e) =>
+                                               this.setState(prevState => ({confirmed: !prevState.confirmed}))
+                                           }/> I confirm the Loan Amount and ready to proceed with the above Credit
+                                    details.
+                                </label>
+                            </div>
+                            <div className="mt-5 mb-5 text-center ">
+                                <button
+                                    type="button"
+                                    disabled={!this.state.confirmed}
+                                    onClick={e => this.props.history.push('/DocsUpload')}
+                                    className="form-submit btn btn-raised greenButton"
+                                >Process Loan
+                                </button>
+                            </div>
+                        </>) : <></>
                     }
                 </>
             )
@@ -101,6 +107,9 @@ class AppRejected extends Component {
 
 const mapStateToProps = state => ({
     adharObj: state.adharDetail.adharObj,
+    authObj: state.authPayload.authObj,
+    businessObj: state.businessDetail.businessObj,
+    payload: state.authPayload.payload,
     preFlightResp: state.businessDetail.preFlightResp
 });
 

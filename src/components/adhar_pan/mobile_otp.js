@@ -2,7 +2,7 @@ import React, {Component} from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
 import {baseUrl, otpUrl} from "../../shared/constants";
 import {connect} from "react-redux";
-import {setAuth, sendOTP} from "../../actions";
+import {setAuth, sendOTP, changeLoader} from "../../actions";
 import {Link, withRouter} from "react-router-dom";
 
 const Timer = 120;
@@ -26,6 +26,7 @@ class MobileOtp extends Component {
 
         e.preventDefault();
         clearInterval(this.interval);
+        this.props.changeLoader(true);
 
         this.setState({loading: true, submitted: true, timer: Timer});
 
@@ -40,6 +41,7 @@ class MobileOtp extends Component {
             })
         }).then(resp => resp.json()).then(resp => {
             // console.log(JSON.stringify(resp));
+            this.props.changeLoader(false);
             if (resp.error === Object(resp.error))
                 alert(resp.error.message);
             else if (resp.response === Object(resp.response) && resp.response.status === 'success') {
@@ -54,12 +56,16 @@ class MobileOtp extends Component {
                     });
                 }, 1000);
             }
+        }, resp => {
+            console.log('Looks like a connectivity issue..!');
+            this.props.changeLoader(false);
         });
         // this.props.sendOTP(this.state.mobile);
     }
 
     _verifyOTP(e) {
         e.preventDefault();
+        this.props.changeLoader(true);
         fetch(`${otpUrl}/verify_otp`, {
             method: "POST",
             headers: {'Content-Type': 'application/json', token: this.props.token},
@@ -71,7 +77,7 @@ class MobileOtp extends Component {
                 "timestamp": new Date()
             })
         }).then(resp => resp.json()).then(resp => {
-
+            this.props.changeLoader(false);
             if (resp.error === Object(resp.error))
                 alert(resp.error.message);
             else if (resp.response === Object(resp.response)) {
@@ -84,6 +90,9 @@ class MobileOtp extends Component {
                     }, 500);
 // Goes to New Page
             }
+        }, resp => {
+            console.log('Looks like a connectivity issue..!');
+            this.props.changeLoader(false);
         })
     }
 
@@ -96,9 +105,14 @@ class MobileOtp extends Component {
     };
 
     componentDidMount() {
-        if (this.props.adharObj === Object(this.props.adharObj))
-            this.setState({mobile: this.props.adharObj.mobile});
+        const {adharObj, payload,} = this.props;
+        if (adharObj === Object(adharObj))
+            this.setState({mobile: adharObj.mobile});
         else this.props.setAuth(this.state);
+
+        if (payload !== Object(payload))
+            if (adharObj !== Object(adharObj))
+                this.props.history.push("/Token");
     }
 
     render() {
@@ -225,5 +239,5 @@ const mapStateToProps = state => ({
 
 export default withRouter(connect(
     mapStateToProps,
-    {setAuth, sendOTP}
+    {setAuth, sendOTP, changeLoader}
 )(MobileOtp));

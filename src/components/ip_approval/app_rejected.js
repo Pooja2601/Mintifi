@@ -16,7 +16,7 @@ class AppRejected extends Component {
                 <i className={"fa fa-times-circle closeCircle"}></i>
                 <h3 className={"text-center"}> Application {(match.params === 'decline') ? 'Rejected' : 'Error'} !</h3>
                 <br/>
-                <p className="paragraph_styling  text-center">
+                <div className="paragraph_styling  text-center">
 
                     <div className={(match.params === 'decline') ? 'alert alert-error' : 'alert alert-warning'}
                          role="alert">
@@ -24,10 +24,10 @@ class AppRejected extends Component {
                         We're sorry for the inconvenience
                         caused <b><i> {adharObj.f_name} {adharObj.l_name}</i></b>, we cannot move
                         ahead with your application as of now.
-<br/>
+                        <br/>
                         <b>{(match.params === 'decline') ? 'Kindly try again after 3 months' : 'Kindly try again after some time'}</b>
                     </div>
-                </p>
+                </div>
                 <div className="mt-5 mb-5 text-center ">
                     <button
                         type="button"

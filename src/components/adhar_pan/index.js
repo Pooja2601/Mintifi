@@ -5,7 +5,6 @@ import {connect} from "react-redux";
 import {pan_adhar, changeLoader, setGstProfile} from "../../actions";
 import {Link, withRouter} from "react-router-dom";
 
-
 class AdharPan extends Component {
     state = {pan: '', adhar: '', pan_correct: false, adhar_skip: false, adhar_correct: false};
 
@@ -29,7 +28,6 @@ class AdharPan extends Component {
         if (e.target.value.length <= 12) {
             let adhar_correct = regex.test(e.target.value);
             this.setState({adhar: e.target.value, adhar_correct});
-
             this.props.pan_adhar(this.props.pan, e.target.value);
         }
     };
@@ -89,6 +87,18 @@ class AdharPan extends Component {
                 this.props.changeLoader(false)
             });
     };
+
+    componentWillMount() {
+        const {payload} = this.props;
+        if (payload !== Object(payload))
+            this.props.history.push("/Token");
+    }
+
+    componentDidMount() {
+        // console.log(this.props.pan.length);
+        if (this.props.pan.length == 10)
+            this.setState({pan_correct: true});
+    }
 
     render() {
         return (
@@ -181,8 +191,8 @@ class AdharPan extends Component {
 
 const mapStateToProps = state => ({
     pan: state.adharDetail.pan,
-    adhar: state.adharDetail.adhar
-
+    adhar: state.adharDetail.adhar,
+    payload: state.authPayload.authObj
 });
 
 export default withRouter(connect(

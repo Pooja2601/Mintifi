@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {Link, withRouter} from "react-router-dom";
-import {baseUrl} from "../../shared/constants";
+import {baseUrl, loanUrl} from "../../shared/constants";
 import {pan_adhar, setAdharManual, setBusinessDetail} from "../../actions";
 
 const file_msg = "Select a file to upload";
@@ -47,7 +47,6 @@ class DocsUpload extends Component {
         let {value, files} = e.target;
         var allowedExt = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
 
-// alert(files[0]);
 
         if (!allowedExt.exec(value)) {
             // jQuery('#errorMsgModal').modal('show');
@@ -84,7 +83,7 @@ class DocsUpload extends Component {
         let {payload, token, preFlightResp} = this.props;
 
         // let token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozNiwidHlwZSI6ImFuY2hvciIsImV4cCI6MTU1NTUxMDEyMn0.yP258grzzA5aQUadZFl6BIvV29s2KFz9mq4V3849mO4";
-        preFlightResp = {loan_application_id: '1780'};
+        // preFlightResp = {loan_application_id: '1780'};
 
         let doc_type = ['pan', 'aadhaar', 'cheque'];
         let doc_cat = ['kyc', 'kyc', 'payment_type'];
@@ -93,7 +92,8 @@ class DocsUpload extends Component {
         const inputFiles = document.querySelectorAll('input[type="file"]');
         const formData = new FormData();
 
-        formData.append("app_id", '3');
+        formData.append("app_id", "3");
+        formData.append("anchor_id", payload.anchor_id);
         formData.append("loan_application_id", preFlightResp.loan_application_id);
 
         for (const file of inputFiles) {
@@ -102,30 +102,45 @@ class DocsUpload extends Component {
             formData.append('documents[][file]', file.files[0]);
             ctr++;
         }
+        // console.log(formData);
 
         fetch(`${baseUrl}/documents`, {
             method: 'POST',
-            // mode: 'no-cors',
+            mode: 'cors',
             headers: {
                 // "Authorization": 'Bearer:'+token,
                 "Content-Type": "",
                 "token": token,
+                // 'App_Id' : "3"
                 "cache": "no-cache",
                 'Accept': 'application/json',
             },
             body: formData // This is your file object
         })
-        // .then(resp => resp.json())
+        .then(resp => resp.json())
             .then(
-                success => console.log(success) // Handle the success response object
+                resp => {
+                    console.log(resp); // Handle the success response object
+                    if (resp.error === Object(resp.error))
+                        alert("Something went wrong !");
+                    else if (resp.response === Object(resp.response))
+                        this.props.history.push('/ThankYou');
+                }
             ).catch(
-            error => console.log(error) // Handle the error response object
+            error => {
+                console.log(error) // Handle the error response object
+                alert("Something went wrong !");
+            }
         );
     }
 
     componentWillMount() {
-        if (this.props.adharObj !== Object(this.props.adharObj))
-            this.props.history.push("/");
+        const {payload, authObj, adharObj, businessObj} = this.props;
+        if (payload !== Object(payload))
+            if (authObj !== Object(authObj))
+                if (adharObj !== Object(adharObj))
+                    if (businessObj !== Object(businessObj))
+                        this.props.history.push("/Token");
 
         this.errorMsgModal = '';
         this.idProofInput = {value: ''};
@@ -150,7 +165,6 @@ class DocsUpload extends Component {
                         <p className="alert-heading">Hi {f_name} {l_name}, Kindly upload the documents in PDF or PNG/JPG
                             format for your ID and Address Proof. </p>
                         <div className="paragraph_styling  text-center">
-
 
                             <div className="input-container text-left">
                                 <input type="file" id="idProofInput" onChange={(e) => this._onChangeFile(e, 'id_proof')}
@@ -220,6 +234,8 @@ class DocsUpload extends Component {
 
 const mapStateToProps = state => ({
     adharObj: state.adharDetail.adharObj,
+    authObj: state.authPayload.authObj,
+    businessObj: state.businessDetail.businessObj,
     payload: state.authPayload.payload,
     token: state.authPayload.token,
     preFlightResp: state.businessDetail.preFlightResp
