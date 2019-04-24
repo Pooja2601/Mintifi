@@ -6,13 +6,19 @@ import {setAdharManual} from "../../actions";
 class ThankYou extends Component {
 
     componentWillMount() {
-        if (this.props.adharObj !== Object(this.props.adharObj))
-            this.props.history.push("/");
+        const {payload, authObj, adharObj, businessObj} = this.props;
+        if (payload !== Object(payload))
+            if (authObj !== Object(authObj))
+                if (adharObj !== Object(adharObj))
+                    if (businessObj !== Object(businessObj))
+                        this.props.history.push("/Token");
     }
 
     render() {
-        if (this.props.adharObj === Object(this.props.adharObj)) {
-            const {f_name, l_name} = this.props.adharObj;
+        const {adharObj, match, preFlightResp} = this.props;
+        if (adharObj === Object(adharObj) && preFlightResp ===Object(preFlightResp)) {
+            const {f_name, l_name} = adharObj;
+            const {loan_application_id, credit_eligibility} = preFlightResp;
             return (
                 <>
                     {/* <button onClick={() => this.props.history.push('/BusinessDetail')} className={"btn btn-link"}>
@@ -37,8 +43,16 @@ class ThankYou extends Component {
                         <table width="100%">
                             <tbody>
                             <tr>
+                                <td>PRODUCT OFFERED</td>
+                                <td>{credit_eligibility.product_offered}</td>
+                            </tr>
+                            <tr>
                                 <td>LOAN ID</td>
-                                <td>342HBJK4H3JKNL2K23J</td>
+                                <td>{loan_application_id}</td>
+                            </tr>
+                            <tr>
+                                <td>LOAN STATUS</td>
+                                <td>{credit_eligibility.loan_status}</td>
                             </tr>
                             <tr>
                                 <td>LENDER</td>
@@ -46,15 +60,19 @@ class ThankYou extends Component {
                             </tr>
                             <tr>
                                 <td>CREDIT APPROVED</td>
-                                <td>Rs. 4,00,000</td>
+                                <td>Rs. {credit_eligibility.loan_amount_approved}</td>
                             </tr>
                             <tr>
-                                <td>DURATION</td>
-                                <td>12 Months</td>
+                                <td>TENURE</td>
+                                <td>{credit_eligibility.loan_tenor} Months</td>
                             </tr>
                             <tr>
                                 <td>EMI</td>
-                                <td>Rs. 35,000</td>
+                                <td>Rs. {credit_eligibility.emi}</td>
+                            </tr>
+                            <tr>
+                                <td>RATE of INTEREST</td>
+                                <td> {credit_eligibility.roi} %</td>
                             </tr>
                             </tbody>
                         </table>
@@ -76,6 +94,7 @@ class ThankYou extends Component {
 
 const mapStateToProps = state => ({
     adharObj: state.adharDetail.adharObj,
+    preFlightResp: state.businessDetail.preFlightResp
 });
 
 export default withRouter(

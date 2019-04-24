@@ -95,6 +95,7 @@ class ReviewBusinessDetail extends Component {
             this.props.changeLoader(false);
             if (resp.response === Object(resp.response)) {
                 let {loan_status} = resp.response.credit_eligibility;
+                this.props.storeResponse(resp.response);
                 if (loan_status === 'closed' || loan_status === 'decline')
                     this.props.history.push("/AppRejected", {status: 'decline'});
                 else if (loan_status === 'pending') {
@@ -103,7 +104,7 @@ class ReviewBusinessDetail extends Component {
                 else {
                     setTimeout(() => this.props.history.push("/AppApproved", {status: 'approved'}), 500);
                 }
-                this.props.storeResponse(resp.response);
+
             }
             else if (resp.error === Object(resp.error)) {
                 console.log(resp.message);

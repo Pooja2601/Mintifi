@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {Link, withRouter} from "react-router-dom";
 import {baseUrl, loanUrl} from "../../shared/constants";
-import {pan_adhar, setAdharManual, setBusinessDetail} from "../../actions";
+import {pan_adhar, setAdharManual, setBusinessDetail, changeLoader} from "../../actions";
 
 const file_msg = "Select a file to upload";
 
@@ -29,7 +29,7 @@ class DocsUpload extends Component {
                                 </button>
                             </div>
                             <div className="modal-body">
-                                <p>Please upload file having extensions .jpeg , .jpg , .png , .gif only.</p>
+                                <p>Please upload file having extensions .jpeg .jpg .png .gif and .pdf only.</p>
                             </div>
                             <div className="modal-footer">
                                 {/*<button type="button" className="btn btn-primary">Save changes</button>*/}
@@ -43,9 +43,8 @@ class DocsUpload extends Component {
 
     _onChangeFile(e, targetMsg) {
 
-        // let modalBackface = document.querySelector('.modal-backdrop');
         let {value, files} = e.target;
-        var allowedExt = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+        var allowedExt = /(\.jpg|\.jpeg|\.png|\.gif|\.pdf)$/i;
 
 
         if (!allowedExt.exec(value)) {
@@ -81,13 +80,13 @@ class DocsUpload extends Component {
     formSubmit() {
 
         let {payload, token, preFlightResp} = this.props;
+        this.props.changeLoader(true);
 
-        // let token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozNiwidHlwZSI6ImFuY2hvciIsImV4cCI6MTU1NTUxMDEyMn0.yP258grzzA5aQUadZFl6BIvV29s2KFz9mq4V3849mO4";
-        // preFlightResp = {loan_application_id: '1780'};
+        preFlightResp = {loan_application_id: '1780'};
 
         let doc_type = ['pan', 'aadhaar', 'cheque'];
         let doc_cat = ['kyc', 'kyc', 'payment_type'];
-        let ctr = 0;
+        let ctr = 0, documents = {};
 
         const inputFiles = document.querySelectorAll('input[type="file"]');
         const formData = new FormData();
@@ -97,44 +96,51 @@ class DocsUpload extends Component {
         formData.append("loan_application_id", preFlightResp.loan_application_id);
 
         for (const file of inputFiles) {
-            formData.append('documents[][doc_type]', doc_type[ctr]);
-            formData.append('documents[][doc_category]', doc_cat[ctr]);
-            formData.append('documents[][file]', file.files[0]);
+            // documents[ctr] = {doc_type: doc_type[ctr], doc_category:doc_cat[ctr], file: file.files[0]};
+            // documents[ctr].append('doc_type', doc_type[ctr]);
+            // documents[ctr].append('doc_category', doc_cat[ctr]);
+            // documents[ctr].append('file', file.files[0]);
+            // formData.append(`documents`, documents);
+            formData.append(`documents[][doc_type]`, doc_type[ctr]); //
+            formData.append(`documents[][doc_category]`, doc_cat[ctr]); //
+            formData.append(`documents[][file]`, file.files[0]);
             ctr++;
         }
         // console.log(formData);
 
         fetch(`${baseUrl}/documents`, {
             method: 'POST',
-            mode: 'cors',
+            // mode: 'cors',
             headers: {
                 // "Authorization": 'Bearer:'+token,
-                "Content-Type": "",
+                // "Content-Type": "",
                 "token": token,
-                // 'App_Id' : "3"
                 "cache": "no-cache",
-                'Accept': 'application/json',
+                // 'Accept': 'application/json',
             },
             body: formData // This is your file object
         })
-        .then(resp => resp.json())
+            .then(resp => resp.json())
             .then(
                 resp => {
+                    this.props.changeLoader(false);
                     console.log(resp); // Handle the success response object
                     if (resp.error === Object(resp.error))
-                        alert("Something went wrong !");
+                        alert("We couldn't upload the files, Kindly try again !");
                     else if (resp.response === Object(resp.response))
                         this.props.history.push('/ThankYou');
                 }
             ).catch(
             error => {
-                console.log(error) // Handle the error response object
+                this.props.changeLoader(false);
+                console.log(error); // Handle the error response object
                 alert("Something went wrong !");
             }
         );
     }
 
     componentWillMount() {
+        this.props.changeLoader(false);
         const {payload, authObj, adharObj, businessObj} = this.props;
         if (payload !== Object(payload))
             if (authObj !== Object(authObj))
@@ -219,7 +225,7 @@ class DocsUpload extends Component {
                     <div className="mt-5 mb-5 text-center ">
                         <button
                             type="button"
-                            disabled={(this.idProofInput.value.length == 0 && this.addProofInput.value.length == 0 && this.bankProofInput.value.length == 0)}
+                            disabled={(this.idProofInput.value === undefined && this.addProofInput.value === undefined && this.bankProofInput.value === undefined)}
                             onClick={e => this.formSubmit(e)}
                             className="form-submit btn btn-raised greenButton"
                         >Process Loan
@@ -244,6 +250,6 @@ const mapStateToProps = state => ({
 export default withRouter(
     connect(
         mapStateToProps,
-        {setBusinessDetail, pan_adhar, setAdharManual}
+        {setBusinessDetail, pan_adhar, setAdharManual, changeLoader}
     )(DocsUpload)
 );

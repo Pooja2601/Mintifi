@@ -17,11 +17,11 @@ class AppRejected extends Component {
     }
 
     render() {
-        const {adharObj, match} = this.props;
+        const {adharObj, match, preFlightResp} = this.props;
 
-        if (adharObj === Object(adharObj)) {
+        if (adharObj === Object(adharObj) && preFlightResp ===Object(preFlightResp)) {
             const {f_name, l_name} = adharObj;
-            const {loan_application_id, credit_eligibility} = this.props.preFlightResp;
+            const {loan_application_id, credit_eligibility} = preFlightResp;
             return (
                 <>
                     {/* <button onClick={() => this.props.history.push('/BusinessDetail')} className={"btn btn-link"}>
@@ -56,6 +56,10 @@ class AppRejected extends Component {
                                 <td>{loan_application_id}</td>
                             </tr>
                             <tr>
+                                <td>LOAN STATUS</td>
+                                <td>{credit_eligibility.loan_status}</td>
+                            </tr>
+                            <tr>
                                 <td>LENDER</td>
                                 <td>FULLERTON</td>
                             </tr>
@@ -63,14 +67,18 @@ class AppRejected extends Component {
                                 <td>CREDIT APPROVED</td>
                                 <td>Rs. {credit_eligibility.loan_amount_approved}</td>
                             </tr>
-                            {/*<tr>
-                                <td>DURATION</td>
-                                <td>12 Months</td>
-                            </tr>*/}
-                            {/*<tr>
+                            <tr>
+                                <td>TENURE</td>
+                                <td>{credit_eligibility.loan_tenor} Months</td>
+                            </tr>
+                            <tr>
                                 <td>EMI</td>
-                                <td>Rs. 35,000</td>
-                            </tr>*/}
+                                <td>Rs. {credit_eligibility.emi}</td>
+                            </tr>
+                            <tr>
+                                <td>RATE of INTEREST</td>
+                                <td> {credit_eligibility.roi} %</td>
+                            </tr>
                             </tbody>
                         </table>
 
