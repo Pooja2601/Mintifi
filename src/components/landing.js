@@ -11,10 +11,10 @@ class Login extends Component {
 
     componentDidMount() {
         this.props.changeLoader(false);
-        const {setToken, match} = this.props;
+        const {setToken, match, payload} = this.props;
         let base64_decode = (match.params.payload !== undefined) ? JSON.parse(new Buffer(match.params.payload, 'base64').toString('ascii')) : {};
         setToken(match.params.token, base64_decode);
-        if (match.params.token !== undefined && this.props.payload !== Object(this.props.payload))
+        if (match.params.token !== undefined && payload !== Object(payload))
             alert("You cannot access this page directly without Credential Payload!! ");
         // console.log(base64_decode);
     }

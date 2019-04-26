@@ -16,9 +16,9 @@ class ThankYou extends Component {
 
     render() {
         const {adharObj, match, preFlightResp} = this.props;
-        if (adharObj === Object(adharObj) && preFlightResp ===Object(preFlightResp)) {
+        if (adharObj === Object(adharObj)) {
             const {f_name, l_name} = adharObj;
-            const {loan_application_id, credit_eligibility} = preFlightResp;
+            // const {loan_application_id, credit_eligibility} = preFlightResp;
             return (
                 <>
                     {/* <button onClick={() => this.props.history.push('/BusinessDetail')} className={"btn btn-link"}>
@@ -40,19 +40,19 @@ class ThankYou extends Component {
 
                     <div className="paragraph_styling text-left alert alert-success" role="alert">
 
-                        <table width="100%">
+                        {(preFlightResp === Object(preFlightResp)) ? (<table width="100%">
                             <tbody>
                             <tr>
                                 <td>PRODUCT OFFERED</td>
-                                <td>{credit_eligibility.product_offered}</td>
+                                <td>{preFlightResp.credit_eligibility.product_offered}</td>
                             </tr>
                             <tr>
                                 <td>LOAN ID</td>
-                                <td>{loan_application_id}</td>
+                                <td>{preFlightResp.loan_application_id}</td>
                             </tr>
                             <tr>
                                 <td>LOAN STATUS</td>
-                                <td>{credit_eligibility.loan_status}</td>
+                                <td>{preFlightResp.credit_eligibility.loan_status}</td>
                             </tr>
                             <tr>
                                 <td>LENDER</td>
@@ -60,22 +60,22 @@ class ThankYou extends Component {
                             </tr>
                             <tr>
                                 <td>CREDIT APPROVED</td>
-                                <td>Rs. {credit_eligibility.loan_amount_approved}</td>
+                                <td>Rs. {preFlightResp.credit_eligibility.loan_amount_approved}</td>
                             </tr>
                             <tr>
                                 <td>TENURE</td>
-                                <td>{credit_eligibility.loan_tenor} Months</td>
+                                <td>{preFlightResp.credit_eligibility.loan_tenor} Months</td>
                             </tr>
                             <tr>
                                 <td>EMI</td>
-                                <td>Rs. {credit_eligibility.emi}</td>
+                                <td>Rs. {preFlightResp.credit_eligibility.emi}</td>
                             </tr>
                             <tr>
                                 <td>RATE of INTEREST</td>
-                                <td> {credit_eligibility.roi} %</td>
+                                <td> {preFlightResp.credit_eligibility.roi} %</td>
                             </tr>
                             </tbody>
-                        </table>
+                        </table>) : <></>}
 
                     </div>
                     <div className="mt-5 mb-5 text-center ">
@@ -89,6 +89,7 @@ class ThankYou extends Component {
                 </>
             )
         }
+        else return (<></>)
     }
 }
 

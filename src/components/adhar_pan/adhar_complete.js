@@ -48,7 +48,7 @@ class AdharPan extends Component {
                 if (adharObj !== Object(adharObj))
                     this.props.history.push("/Token");
 
-        let state = this.props.adharObj;
+        let state = adharObj;
         if (state === Object(state))
             this.setState(state, () => {
                 Object.keys(this.state).map((val, key) => {

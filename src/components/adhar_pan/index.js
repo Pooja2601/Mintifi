@@ -96,8 +96,10 @@ class AdharPan extends Component {
 
     componentDidMount() {
         // console.log(this.props.pan.length);
-        if (this.props.pan.length == 10)
-            this.setState({pan_correct: true});
+        const {pan} = this.props;
+        if (pan === Object(pan))
+            if (pan.length === 10)
+                this.setState({pan_correct: true});
     }
 
     render() {

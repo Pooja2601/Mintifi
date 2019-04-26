@@ -90,17 +90,19 @@ class Auth extends Component {
 
 //authObj
     _setMobile = (e) => {
-        if (e.target.value.length <= 10) {
-            this.setState({mobile: e.target.value, mobile_correct: true}, () => this.props.setAuth(this.state));
+        const {value} = e.target;
+        if (value.length <= 10) {
+            this.setState({mobile: value, mobile_correct: (value.length !== 10)}, () => this.props.setAuth(this.state));
         }
-        else this.setState({mobile_correct: false}, () => this.props.setAuth(this.state));
     }
 
     componentDidMount() {
-        const {authObj} = this.props;
+
+        const {authObj, changeLoader, setAuth} = this.props;
+        changeLoader(false);
         if (authObj === Object(authObj))
             this.setState({mobile: authObj.mobile, verified: authObj.verified});
-        else this.props.setAuth(this.state);
+        else setAuth(this.state);
     }
 
     render() {
@@ -225,5 +227,5 @@ const mapStateToProps = state => ({
 
 export default withRouter(connect(
     mapStateToProps,
-    {setAuth, sendOTP, changeLoader }
+    {setAuth, sendOTP, changeLoader}
 )(Auth));

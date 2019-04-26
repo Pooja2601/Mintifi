@@ -74,6 +74,10 @@ class BusinessDetail extends Component {
         }
         // console.log(this.props.gstProfile)
         this.props.changeLoader(false);
+
+    }
+
+    componentDidMount(){
         this.handleValidation();
     }
 
@@ -211,12 +215,12 @@ class BusinessDetail extends Component {
 
                         <button
                             type="submit"
-                            disabled={this.state.missed_fields}
+
                             onClick={e => this._formSubmit(e)}
                             className="form-submit btn btn-raised greenButton"
                         >Proceed
                         </button>
-
+                        {/*// disabled={this.state.missed_fields}*/}
                     </div>
                 </form>
             </>

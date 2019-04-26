@@ -22,6 +22,7 @@ import AppRejected from "./components/ip_approval/app_rejected";
 import AppApproved from "./components/ip_approval/app_approved";
 import DocsUpload from "./components/ip_approval/docs_upload";
 import ThankYou from "./components/ip_approval/thank_you";
+import Drawdown from "./components/drawdown";
 
 import configureStore from "./store";
 import {PersistGate} from 'redux-persist/integration/react';
@@ -91,6 +92,7 @@ class App extends Component {
                                                 <Route path="/DocsUpload" component={DocsUpload}/>
                                                 <Route path="/ThankYou" component={ThankYou}/>
                                                 <Route path="/Privacy" component={Privacy}/>
+                                                <Route path="/Drawdown/:token?/:payload?" component={Drawdown}/>
                                                 <Route component={Error}/>
                                             </Switch>
                                             {/*</CSSTransition>*/}

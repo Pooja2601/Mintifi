@@ -13,10 +13,11 @@ export const types = {
     SEND_OTP_SUCCESS: "SEND_OTP_SUCCESS",
     RECEIVE_OTP: "RECEIVE_OTP",
     RECEIVE_OTP_SUCCESS: "RECEIVE_OTP_SUCCESS",
-    FETCH_POSTS: "FETCH_POSTS",
-    FETCH_POSTS_SUCCESS: "FETCH_POSTS_SUCCESS",
     SORT_UPCOMING: "SORT_UPCOMING",
-    FILTER_UPCOMING: "FILTER_UPCOMING"
+    FILTER_UPCOMING: "FILTER_UPCOMING",
+//    Drawdown Section
+    D_SET_AUTH: "D_SET_AUTH",
+    D_SET_TOKEN: "D_SET_TOKEN",
 };
 
 export const changeLoader = loader => ({
@@ -47,7 +48,7 @@ export const pan_adhar = (pan, adhar) => ({
     pan, adhar
 });
 
-export const setAuth = (authObj) => ({
+export const setAuth = authObj => ({
     type: types.FETCH_AUTH, authObj
 });
 
@@ -55,19 +56,26 @@ export const sendOTP = number => ({
     type: types.SEND_OTP, number
 });
 
-export const fetchUpcoming = () => ({type: types.FETCH_UPCOMING});
+// Drawdown Section
 
-export const filterUpcoming = query => ({type: types.FILTER_UPCOMING, query});
+export const DrawsetAuth = authObj => ({
+    type: types.D_SET_AUTH, authObj
+});
+
+export const DrawsetToken = (token, payload) => ({
+    type: types.D_SET_TOKEN,
+    token, payload
+});
+
+
+/*
+export const fetchUpcoming = () => ({type: types.FETCH_UPCOMING});
 
 export const sortUpcoming = (method, order) => ({
     type: types.SORT_UPCOMING,
     method,
     order
 });
-
-export const fetchPosts = query => ({type: types.FETCH_POSTS, query});
-
-export const fetchPost = id => ({type: types.FETCH_POST, id});
 
 export const sortArr = (action, state) => {
     let tempArr = [...state.upcome];
@@ -103,3 +111,4 @@ export const filterArr = (action, state) => {
         return titleStr.includes(action.query) || yearStr.includes(action.query);
     });
 };
+*/

@@ -2,8 +2,8 @@ import React, {Component} from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
 import {baseUrl, otpUrl} from "../../shared/constants";
 import {connect} from "react-redux";
-import {setAuth, sendOTP, changeLoader} from "../../actions";
-import {Link, withRouter} from "react-router-dom";
+import {DrawsetAuth, DrawsetToken, changeLoader} from "../../actions";
+import {withRouter} from "react-router-dom";
 
 const Timer = 120;
 
@@ -15,24 +15,50 @@ class MobileOtp extends Component {
         timer: Timer,
         mobile: '',
         otp: '',
-        otp_reference_id: '',
+        otp_reference_code: '',
         verified: false,
         mobile_correct: false
     };
 
-    // obj = {mobile_correct: false};
+    _generateToken() {
+        this.props.changeLoader(true);
+        let payload = {
+            "anchor_id": "uyh65t",
+            "distributor_dealer_code": "R1T89563",
+            "sales_agent_mobile_number": "9876543210",
+            "anchor_transaction_id": "hy76515",
+            "retailer_onboarding_date": "2006-09-19",
+            "loan_amount": "500000"
+        };
+        fetch('https://test.mintifi.com/api/v1/auth', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                user_id: "uyh65t",
+                secret_key: "3f147e1bf610b5f3",
+                app_id: "3",
+                type: "anchor"
+            })
+        }).then(resp => resp.json()).then(resp => {
+            this.props.changeLoader(false);
+            if (resp.response === Object(resp.response))
+                if (resp.response.status === 'success')
+                    this.props.DrawsetToken(resp.response.auth.token, payload);
+        });
+    }
 
     _formSubmit(e) {
 
         e.preventDefault();
         clearInterval(this.interval);
-        this.props.changeLoader(true);
+        const {changeLoader, authObj, token, DrawsetAuth} = this.props;
+        changeLoader(true);
 
         this.setState({loading: true, submitted: true, timer: Timer});
 
         fetch(`${otpUrl}/send_otp`, {
             method: "POST",
-            headers: {'Content-Type': 'application/json', 'token': this.props.token},
+            headers: {'Content-Type': 'application/json', 'token': token},
             body: JSON.stringify({
                 "app_id": 3,
                 "otp_type": "send_otp",
@@ -41,12 +67,12 @@ class MobileOtp extends Component {
             })
         }).then(resp => resp.json()).then(resp => {
             // console.log(JSON.stringify(resp));
-            this.props.changeLoader(false);
+            changeLoader(false);
             if (resp.error === Object(resp.error))
                 alert(resp.error.message);
             else if (resp.response === Object(resp.response) && resp.response.status === 'success') {
                 // alert(resp.success.message);
-                this.setState({otp_reference_id: resp.response.otp_reference_code}, () => this.props.setAuth(this.state));
+                this.setState({otp_reference_code: resp.response.otp_reference_code}, () => DrawsetAuth(this.state));
                 this.interval = setInterval(e => {
                     this.setState({timer: this.state.timer - 1}, () => {
                         if (this.state.timer === 0) {
@@ -65,66 +91,75 @@ class MobileOtp extends Component {
 
     _verifyOTP(e) {
         e.preventDefault();
-        this.props.changeLoader(true);
+        const {changeLoader, authObj, token, DrawsetAuth} = this.props;
+        changeLoader(true);
         fetch(`${otpUrl}/verify_otp`, {
             method: "POST",
-            headers: {'Content-Type': 'application/json', token: this.props.token},
+            headers: {'Content-Type': 'application/json', token: token},
             body: JSON.stringify({
                 "app_id": 3,
-                "otp_reference_number": this.props.authObj.otp_reference_id,
-                "mobile_number": this.props.authObj.mobile,
+                "otp_reference_number": authObj.otp_reference_code,
+                "mobile_number": authObj.mobile,
                 "otp": this.state.otp,
                 "timestamp": new Date()
             })
         }).then(resp => resp.json()).then(resp => {
-            this.props.changeLoader(false);
+            changeLoader(false);
             if (resp.error === Object(resp.error))
                 alert(resp.error.message);
             else if (resp.response === Object(resp.response)) {
                 this.setState({verified: resp.response.is_otp_verified}, () => {
-                    this.props.setAuth(this.state)
+                    DrawsetAuth(this.state);
                 });
                 if (resp.response.is_otp_verified)
+                // Goes to New Page
                     setTimeout(() => {
-                        this.props.history.push('/BusinessDetail');
+                        // this.props.history.push('/Offers');
                     }, 500);
-// Goes to New Page
             }
         }, resp => {
             console.log('Looks like a connectivity issue..!');
-            this.props.changeLoader(false);
+            changeLoader(false);
         })
     }
 
 //authObj
     _setMobile = (e) => {
         const {value} = e.target;
+        const {DrawsetAuth} = this.props;
+
         if (value.length <= 10) {
-            this.setState({
-                mobile: value,
-                mobile_correct: (value.length !== 10)
-            }, () => this.props.setAuth(this.state));
+            console.log(value.length);
+            this.setState({mobile: value, mobile_correct: (value.length !== 10)}, () => DrawsetAuth(this.state));
         }
     };
 
-    componentDidMount() {
-        /*        const {adharObj, payload,} = this.props;
-                if (adharObj === Object(adharObj))
-                    this.setState({mobile: adharObj.mobile});
-                else this.props.setAuth(this.state);
+    componentWillMount() {
+        const {DrawsetToken, match, changeLoader, payload} = this.props;
+        changeLoader(false);
+        let base64_decode = (match.params.payload !== undefined) ? JSON.parse(new Buffer(match.params.payload, 'base64').toString('ascii')) : {};
+        DrawsetToken(match.params.token, base64_decode);
+        if (match.params.token !== undefined && payload !== Object(payload))
+            alert("You cannot access this page directly without Credential Payload!! ");
+    }
 
-                if (payload !== Object(payload))
-                    if (adharObj !== Object(adharObj))
-                        this.props.history.push("/Token");*/
+    componentDidMount() {
+        const {payload, authObj, DrawsetAuth} = this.props;
+        if (authObj === Object(authObj))
+            this.setState({mobile: authObj.mobile, mobile_correct: (authObj.mobile.length !== 10)});
+        else DrawsetAuth(this.state);
     }
 
     render() {
+        const {payload, match} = this.props;
         return (
             <>
-                <Link to={'/AdharComplete'} className={"btn btn-link"}>Go Back </Link>
+                {/*<Link to={'/AdharComplete'} className={"btn btn-link"}>Go Back </Link>*/}
+                <h4 className={"text-center"}>Drawdown Portal</h4>
                 <p className="paragraph_styling text-center">
-                    <b> Existing Customer?</b><br/>
-                    Let us verify your Number.
+                    
+                    Glad to see you back !<br/>
+                    Let us verify your phone number first.
                 </p>
                 <form
                     id="serverless-contact-form"
@@ -144,7 +179,7 @@ class MobileOtp extends Component {
                                 className="form-control font_weight"
                                 // placeholder="10 digit Mobile Number"
                                 name="url"
-                                disabled={true}
+                                disabled={this.state.submitted}
                                 min={1000000000}
                                 max={9999999999}
                                 maxLength={10}
@@ -159,7 +194,6 @@ class MobileOtp extends Component {
                                     paddingLeft: '10px'
                                 }}
                                 required={true}
-                                readOnly={true}
                                 value={this.state.mobile}
                                 // ref={ref => (this.obj.number = ref)}
                                 onChange={(e) => this._setMobile(e)}
@@ -224,21 +258,37 @@ class MobileOtp extends Component {
                                     <button className="btn greenButton" disabled>
                                         <span className="spinner-border spinner-border-sm"/>
                                         Resend OTP.. {this.state.timer} Sec
-                                    </button>*/}
+                                    </button>
+                         */}
 
                     </div>
+
                 </form>
+                <button
+                    onClick={() => this._generateToken()}
+                    style={{visibility: (payload !== Object(payload) && !match.params.token) ? 'visible' : 'hidden'}}
+                    style={{
+                        padding: "5px 35px", width: '100%',
+                        margin: '50px 0%'
+                    }}
+                    className="form-submit btn greenButton text-center"
+                >
+                    Create TOKEN and PAYLOAD
+                </button>
+                <br/>
+                <small>(above button is for development use only)</small>
             </>
         );
     }
 }
 
-
 const mapStateToProps = state => ({
-    token: state.authPayload.token
+    token: state.drawdownReducer.token,
+    payload: state.drawdownReducer.payload,
+    authObj: state.drawdownReducer.authObj
 });
 
 export default withRouter(connect(
     mapStateToProps,
-    {setAuth, sendOTP, changeLoader}
+    {DrawsetAuth, DrawsetToken, changeLoader}
 )(MobileOtp));

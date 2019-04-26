@@ -96,11 +96,7 @@ class DocsUpload extends Component {
         formData.append("loan_application_id", preFlightResp.loan_application_id);
 
         for (const file of inputFiles) {
-            // documents[ctr] = {doc_type: doc_type[ctr], doc_category:doc_cat[ctr], file: file.files[0]};
-            // documents[ctr].append('doc_type', doc_type[ctr]);
-            // documents[ctr].append('doc_category', doc_cat[ctr]);
-            // documents[ctr].append('file', file.files[0]);
-            // formData.append(`documents`, documents);
+
             formData.append(`documents[][doc_type]`, doc_type[ctr]); //
             formData.append(`documents[][doc_category]`, doc_cat[ctr]); //
             formData.append(`documents[][file]`, file.files[0]);
@@ -116,7 +112,6 @@ class DocsUpload extends Component {
                 // "Content-Type": "",
                 "token": token,
                 "cache": "no-cache",
-                // 'Accept': 'application/json',
             },
             body: formData // This is your file object
         })
