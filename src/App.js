@@ -22,10 +22,16 @@ import AppRejected from "./components/ip_approval/app_rejected";
 import AppApproved from "./components/ip_approval/app_approved";
 import DocsUpload from "./components/ip_approval/docs_upload";
 import ThankYou from "./components/ip_approval/thank_you";
+
+
+//Offers
 import Drawdown from "./components/drawdown";
+import Offers from "./components/drawdown/offers";
+import DrawThankYou from "./components/drawdown/thankyou";
 
 import configureStore from "./store";
 import {PersistGate} from 'redux-persist/integration/react';
+// import { withSnackbar } from 'material-ui-snackbar-provider';
 
 const {store, persistor} = configureStore();
 
@@ -42,36 +48,42 @@ class App extends Component {
                         <Route
                             render={({location}) => (<>
                                 <ScrollToTop/>
+                                <button style={{visibility: 'hidden'}} type={"button"}
+                                        ref={ref => this.showSnackbary = ref}
+                                        data-toggle='snackbar'
+                                        data-content={''}>.
+                                </button>
+                                <header>
+                                    <div className="mt-3 text-center">
+                                        <div className="mb-4">
+                                            <img style={{position: 'absolute', left: '24.4%', top: '14px'}}
+                                                 src="/images/Mintifi-Logo-white_2.png"
+                                                 className={"logoHeader"}
+                                            />
+                                        </div>
+                                    </div>
+                                    {/*<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"
+                                         preserveAspectRatio="none">
+                                        <polygon className="svg--sm" fill="white"
+                                                 points="0,0 30,100 65,21 90,100 100,75 100,100 0,100"/>
+                                        <polygon className="svg--lg" fill="white"
+                                                 points="0,0 15,100 33,21 45,100 50,75 55,100 72,20 85,100 95,50 100,80 100,100 0,100"/>
+                                    </svg>*/}
+                                </header>
                                 <div
                                     className="row justify-content-center background-color"
-                                    style={{marginTop: "100px", marginLeft: 0, marginRight: 0}}
+                                    style={{marginTop: "150px", marginLeft: 0, marginRight: 0}}
                                 >
-                                    <div className="col-11 col-md-7 ml-5 mr-5 partner_section"
+                                    <div className="col-11 col-md-6 ml-5 mr-5 mb-3 partner_section"
                                          style={{
-                                             /*background: "url('/images/bg_textures/21617450.jpg')",*/
                                              backgroundColor: '#fff',
-                                             border: '0px'
+                                             border: '0px',
+                                             paddingLeft: '1%',
+                                             paddingRight: '1%'
                                          }}>
-                                        <header>
-                                            <div className="mt-4 text-center">
-                                                <div className="mt-4 mb-4">
-                                                    <img
-                                                        src="/images/Mintifi-Logo-white_2.png"
-                                                        className={"logoHeader"}
-                                                    />
-                                                </div>
-                                            </div>
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"
-                                                 preserveAspectRatio="none">
-                                                <polygon className="svg--sm" fill="white"
-                                                         points="0,0 30,100 65,21 90,100 100,75 100,100 0,100"/>
-                                                <polygon className="svg--lg" fill="white"
-                                                         points="0,0 15,100 33,21 45,100 50,75 55,100 72,20 85,100 95,50 100,80 100,100 0,100"/>
-                                            </svg>
-                                        </header>
+
                                         <Loader/>
                                         <div className="ml-2" style={{marginTop: '30px'}}>
-
 
                                             {/*<TransitionGroup>*/}
                                             {/* <CSSTransition
@@ -92,7 +104,9 @@ class App extends Component {
                                                 <Route path="/DocsUpload" component={DocsUpload}/>
                                                 <Route path="/ThankYou" component={ThankYou}/>
                                                 <Route path="/Privacy" component={Privacy}/>
-                                                <Route path="/Drawdown/:token?/:payload?" component={Drawdown}/>
+                                                <Route path="/Drawdown/Auth/:token?/:payload?" component={Drawdown}/>
+                                                <Route path="/Drawdown/Offers/" component={Offers}/>
+                                                <Route path="/Drawdown/ThankYou/" component={DrawThankYou}/>
                                                 <Route component={Error}/>
                                             </Switch>
                                             {/*</CSSTransition>*/}

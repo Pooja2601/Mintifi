@@ -19,93 +19,123 @@ class AppRejected extends Component {
     render() {
         const {adharObj, match, preFlightResp} = this.props;
 
-        if (adharObj === Object(adharObj) && preFlightResp ===Object(preFlightResp)) {
+        if (adharObj === Object(adharObj))
+        // if(preFlightResp ===Object(preFlightResp))
+        {
             const {f_name, l_name} = adharObj;
-            const {loan_application_id, credit_eligibility} = preFlightResp;
+            const load_status = 'approved';  // pending // approved
+            // const {loan_application_id, credit_eligibility} = preFlightResp;
+
+            let credit_eligibility = {
+                product_offered: 'LoC',
+                loan_status: load_status,
+                loan_amount_approved: '500000',
+                loan_tenor: '16',
+                roi: '7',
+                emi: '33440'
+            };
+            let loan_application_id = 1740;
+            let match = {params: {status: load_status}};
+            let iconCss = 'fa checkCircle ';
             return (
                 <>
                     {/* <button onClick={() => this.props.history.push('/BusinessDetail')} className={"btn btn-link"}>
                     Go Back
                 </button>*/}
-                    <br/>
-                    <i className={"fa fa-check-circle checkCircle"}></i>
-                    <h3 className={"text-center"}> Application {(match.params === 'pending') ? 'Pending' : 'Approved'} !</h3>
+                    <h4 className={"text-center"}>Credit Eligibility</h4>
                     <br/>
 
-                    <div className={(match.params === 'pending') ? 'alert alert-warning' : 'alert alert-success'}
+                    <i className={(match.params.status === 'pending') ? iconCss + 'fa-hourglass-half' : iconCss + 'fa-check-circle'}
+                       style={{color: (match.params.status === 'pending') ? '#02587F' : ''}}></i>
+                    <h5 className={"text-center"}> Application {(match.params.status === 'pending') ? 'Pending...' : 'Approved !'}</h5>
+
+                    <div className={'alert text-center'}
                          role="alert">
-                        <h4 className="alert-heading">Congratulations {f_name} {l_name}</h4>
-                        <p className="paragraph_styling  text-center">
-                            We're happy to inform you about the loan you're requesting.
-                            As your informations aligned with our
-                            norms, {(match.params === 'pending') ? 'It is under pending state.' : 'It got approved by our Team.'}
-                            <br/> One of our representative will be in touch with you soon.
+                        <p className="alert-heading">{(match.params.status === 'pending') ? 'Hello' : 'Congratulation'} {f_name} {l_name}</p>
+                        <p className="paragraph_styling " style={{fontSize: '14px'}}>
+                            Thank you for completing the Loan Application process.<br/>
+                            {(match.params.status === 'pending') ? <>However, we need more information for
+                                    processing your loan application .<br/> We will get in touch with you in next 24
+                                    hours.</> :
+                                <b><br/>Your Application is approved for a credit line of
+                                    <b style={{fontWeight: '700'}}> Rs. {credit_eligibility.loan_amount_approved}/-</b>.</b>}
+                            <br/>
                         </p>
                     </div>
+                    <br/>
 
-                    <div className="paragraph_styling text-left alert alert-success" role="alert">
 
-                        <table width="100%">
-                            <tbody>
-                            <tr>
-                                <td>PRODUCT OFFERED</td>
-                                <td>{credit_eligibility.product_offered}</td>
-                            </tr>
-                            <tr>
-                                <td>LOAN ID</td>
-                                <td>{loan_application_id}</td>
-                            </tr>
-                            <tr>
-                                <td>LOAN STATUS</td>
-                                <td>{credit_eligibility.loan_status}</td>
-                            </tr>
-                            <tr>
-                                <td>LENDER</td>
-                                <td>FULLERTON</td>
-                            </tr>
-                            <tr>
-                                <td>CREDIT APPROVED</td>
-                                <td>Rs. {credit_eligibility.loan_amount_approved}</td>
-                            </tr>
-                            <tr>
-                                <td>TENURE</td>
-                                <td>{credit_eligibility.loan_tenor} Months</td>
-                            </tr>
-                            <tr>
-                                <td>EMI</td>
-                                <td>Rs. {credit_eligibility.emi}</td>
-                            </tr>
-                            <tr>
-                                <td>RATE of INTEREST</td>
-                                <td> {credit_eligibility.roi} %</td>
-                            </tr>
-                            </tbody>
-                        </table>
+                    <div className="paragraph_styling text-left" role="alert" style={{margin: 'auto 5%'}}>
+                        <b className={"text-center"}> Your Credit Line details are as below:</b><br/>
+                        <div
+                            className={(match.params.status === 'pending') ? 'alert alert-info' : 'alert alert-success'}>
 
+                            <table width="100%" style={{margin: 'auto 10%'}}>
+                                <tbody>
+                                {/*<tr>
+                                    <td>PRODUCT OFFERED</td>
+                                    <td>{credit_eligibility.product_offered}</td>
+                                </tr>*/}
+                                <tr>
+                                    <td className={"tableDataRight"}>Loan ID</td>
+                                    <td>{loan_application_id}</td>
+                                </tr>
+                                <tr>
+                                    <td className={"tableDataRight"}>Application Status</td>
+                                    <td>{credit_eligibility.loan_status}</td>
+                                </tr>
+                                <tr>
+                                    <td className={"tableDataRight"}>Lender</td>
+                                    <td>Fullerton India Private Limited</td>
+                                </tr>
+                                <tr>
+                                    <td className={"tableDataRight"}>Credit Approved</td>
+                                    <td>Rs. {credit_eligibility.loan_amount_approved}</td>
+                                </tr>
+                                <tr>
+                                    <td className={"tableDataRight"}>Tenure</td>
+                                    <td>{credit_eligibility.loan_tenor} Months</td>
+                                </tr>
+                                <tr>
+                                    <td className={"tableDataRight"}>EMI</td>
+                                    <td>Rs. {credit_eligibility.emi}</td>
+                                </tr>
+                                <tr>
+                                    <td className={"tableDataRight"}>Interest Rate</td>
+                                    <td> {credit_eligibility.roi} % p.a.</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                     <br/>
-                    {(match.params !== 'pending') ?
+                    {(match.params.status !== 'pending') ?
                         (<>
-                            <div className="checkbox">
-                                <label>
-
+                            <div className="checkbox " style={{marginLeft: '2.3rem'}}>
+                                <label style={{color: 'black'}}>
                                     <input type="checkbox" checked={this.state.confirmed}
                                            onChange={(e) =>
                                                this.setState(prevState => ({confirmed: !prevState.confirmed}))
-                                           }/> I confirm the Loan Amount and ready to proceed with the above Credit
-                                    details.
+                                           }/> I accept the terms of the credit eligibility as given above.
                                 </label>
                             </div>
-                            <div className="mt-5 mb-5 text-center ">
+                            <div className="mt-5 mb-3 text-center ">
                                 <button
                                     type="button"
                                     disabled={!this.state.confirmed}
                                     onClick={e => this.props.history.push('/DocsUpload')}
                                     className="form-submit btn btn-raised greenButton"
-                                >Process Loan
+                                >Proceed
                                 </button>
                             </div>
-                        </>) : <></>
+                        </>) : <>
+                            <div className={"blockquote-footer mb-5 text-center"}>
+                                In case of any query, please contact us at <a
+                                href={"mailto:support@mintifi.com"}>support@mintifi.com</a> or <a
+                                href={"tel:+919999999999"}>+91 9999999999</a>. <br/>Please
+                                mention your ( loan application id ) in the request.
+                            </div>
+                        </>
                     }
                 </>
             )

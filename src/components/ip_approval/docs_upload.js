@@ -4,23 +4,52 @@ import {Link, withRouter} from "react-router-dom";
 import {baseUrl, loanUrl} from "../../shared/constants";
 import {pan_adhar, setAdharManual, setBusinessDetail, changeLoader} from "../../actions";
 
-const file_msg = "Select a file to upload";
+const file_msg = "Select a file";
+
+const file_catalog = {
+    id_proof: ['pan', 'aadhaar', 'passport', 'driving_license', 'voterid'],
+    add_proof: ['aadhaar', 'driving_license', 'electricity_bill', 'gas_bill', 'passport', 'rent_agreement', 'property_tax', 'voterid'],
+    entity_proof: ['ghumasta_license', 'gst_certificate', 'other_govt_reg', 'st_vat_cst_registration'],
+    caddr_proof: ['electricity_bill', 'rent_agreement']
+};
+
+
+const doc_att = [
+    {doc_type: 'pan', doc_category: 'kyc', doc_owner: 'user'},
+    {doc_type: 'electricity_bill', doc_category: 'address', doc_owner: 'user'},
+    {doc_type: 'gst_certificate', doc_category: 'entity_proof', doc_owner: 'company'},
+    {doc_type: 'rent_agreement', doc_category: 'address', doc_owner: 'company'},
+];
 
 class DocsUpload extends Component {
 
-    state = {id_proof_msg: file_msg, add_proof_msg: file_msg, bank_proof_msg: file_msg, validated: false};
+    state = {
+        id_proof_msg: file_msg,
+        add_proof_msg: file_msg,
+        // bank_proof_msg: file_msg,
+        entity_proof_msg: file_msg,
+        caddr_proof_msg: file_msg,
+        validated: false,
+        active_modal: 'add_proof',
+        checked: {
+            id_proof: 'pan',
+            add_proof: 'electricity_bill',
+            entity_proof: 'gst_certificate',
+            caddr_proof: 'rent_agreement'
+        }
+    };
 
     RenderModalMessage = () => {
         return (
             <>
-                <button type="button" style={{visibilty: 'hidden'}} ref={ref => this.triggerModal = ref}
+                <button type="button" style={{visibility: 'hidden'}} ref={ref => this.triggerModal = ref}
                         id={"triggerModal"} data-toggle="modal"
                         data-target="#errorMsgModal">
                 </button>
 
                 <div className="modal fade" id={"errorMsgModal"} ref={ref => this.errorMsgModal = ref} tabIndex="-1"
                      role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div className="modal-dialog" role="document">
+                    <div className="modal-dialog" role="document" style={{margin: '5.75rem auto'}}>
                         <div className="modal-content">
                             <div className="modal-header">
                                 <h5 className="modal-title">Invalid Filetype</h5>
@@ -33,7 +62,82 @@ class DocsUpload extends Component {
                             </div>
                             <div className="modal-footer">
                                 {/*<button type="button" className="btn btn-primary">Save changes</button>*/}
-                                <button type="button" className="btn btn-primary" data-dismiss="modal">Close</button>
+                                <button type="button" className="btn btn-primary" ref={ref => this.closeModal = ref}
+                                        data-dismiss="modal">Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </>);
+    };
+
+    uploadFiles = targetVal => {
+
+        switch (targetVal) {
+
+            case 'id_proof':
+                this.idProofInput.click();
+                break;
+            case 'add_proof':
+                this.addProofInput.click();
+                break;
+            case 'entity_proof':
+                this.entityProofInput.click();
+                break;
+            case 'caddr_proof':
+                this.cAddressProofInput.click();
+                break;
+        }
+    }
+
+    RenderModalUpload = () => {
+
+        return (
+            <>
+                <button type="button" style={{visibility: 'hidden'}} ref={ref => this.triggerModalUpload = ref}
+                        id={"triggerModalUpload"} data-toggle="modal"
+                        data-target="#docsSelModal">
+                </button>
+
+                <div className="modal fade" id={"docsSelModal"} ref={ref => this.docsSelModal = ref} tabIndex="-1"
+                     role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog" role="document" style={{margin: '5.75rem auto'}}>
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">Select the Document Type</h5>
+                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                                <div className="checkbox">
+                                    {file_catalog[this.state.active_modal].map((val, key) => (
+                                        <div key={val}><label>
+                                            <input type="radio" name={this.state.active_modal}
+                                                   checked={(this.state.checked[this.state.active_modal] === val)}
+                                                   onChange={(e) => {
+                                                       this.setState(prevState => ({
+                                                           checked: {
+                                                               ...this.state.checked,
+                                                               [this.state.active_modal]: val
+                                                           }
+                                                       }));
+                                                   }
+                                                   }/> <b
+                                            style={{marginLeft: "20px", fontSize: '12px'}}>{val.toUpperCase()}</b>
+                                        </label><br/></div>))}
+                                </div>
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="btn greenButton btn-raised align-left"
+                                        onClick={() => this.uploadFiles(this.state.active_modal)}
+                                        style={{padding: '7px 11px 8px 11px'}}
+                                        data-dismiss="modal">Upload File
+                                </button>
+                                <button type="button" className="btn btn-primary pull-right"
+                                        data-dismiss="modal">Close
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -41,21 +145,35 @@ class DocsUpload extends Component {
             </>);
     }
 
+
+    _multiDimDocsUpload = (target) => {
+        this.setState({
+            active_modal: target
+        }, () => this.triggerModalUpload.click());
+
+        // if (target === 'add_proof')
+        //     this.addProofInput.click();
+    };
+
+
     _onChangeFile(e, targetMsg) {
 
         let {value, files} = e.target;
         var allowedExt = /(\.jpg|\.jpeg|\.png|\.gif|\.pdf)$/i;
 
-
         if (!allowedExt.exec(value)) {
             // jQuery('#errorMsgModal').modal('show');
             this.triggerModal.click();
-            // modalBackface.style.position = 'initial';
             if (targetMsg === 'id_proof')
                 this.idProofInput.value = '';
             else if (targetMsg === 'add_proof')
                 this.addProofInput.value = '';
-            else this.bankProofInput.value = '';
+            /*else if (targetMsg === 'bank_proof')
+                this.bankProofInput.value = '';*/
+            else if (targetMsg === 'reg_proof')
+                this.entityProofInput.value = '';
+            else if (targetMsg === 'caddr_proof')
+                this.cAddressProofInput.value = '';
             return false;
         }
 
@@ -71,9 +189,15 @@ class DocsUpload extends Component {
             case 'add_proof':
                 this.setState({add_proof_msg: truncated});
                 break;
-            case 'bank_proof':
-                this.setState({bank_proof_msg: truncated});
+            case 'entity_proof':
+                this.setState({entity_proof_msg: truncated});
                 break;
+            case 'caddr_proof':
+                this.setState({caddr_proof_msg: truncated});
+                break;
+            /*            case 'bank_proof':
+                            this.setState({bank_proof_msg: truncated});
+                            break;*/
         }
     }
 
@@ -84,8 +208,6 @@ class DocsUpload extends Component {
 
         preFlightResp = {loan_application_id: '1780'};
 
-        let doc_type = ['pan', 'aadhaar', 'cheque'];
-        let doc_cat = ['kyc', 'kyc', 'payment_type'];
         let ctr = 0, documents = {};
 
         const inputFiles = document.querySelectorAll('input[type="file"]');
@@ -97,8 +219,9 @@ class DocsUpload extends Component {
 
         for (const file of inputFiles) {
 
-            formData.append(`documents[][doc_type]`, doc_type[ctr]); //
-            formData.append(`documents[][doc_category]`, doc_cat[ctr]); //
+            formData.append(`documents[][doc_type]`, this.state.checked[ctr]);
+            formData.append(`documents[][doc_category]`, doc_att[ctr].doc_category);
+            formData.append(`documents[][doc_owner]`, doc_att[ctr].doc_owner);
             formData.append(`documents[][file]`, file.files[0]);
             ctr++;
         }
@@ -106,9 +229,7 @@ class DocsUpload extends Component {
 
         fetch(`${baseUrl}/documents`, {
             method: 'POST',
-            // mode: 'cors',
             headers: {
-                // "Authorization": 'Bearer:'+token,
                 // "Content-Type": "",
                 "token": token,
                 "cache": "no-cache",
@@ -138,15 +259,16 @@ class DocsUpload extends Component {
         this.props.changeLoader(false);
         const {payload, authObj, adharObj, businessObj} = this.props;
         if (payload !== Object(payload))
-            if (authObj !== Object(authObj))
-                if (adharObj !== Object(adharObj))
-                    if (businessObj !== Object(businessObj))
-                        this.props.history.push("/Token");
+            if (adharObj !== Object(adharObj))
+                if (businessObj !== Object(businessObj))
+                    this.props.history.push("/Token");
 
         this.errorMsgModal = '';
         this.idProofInput = {value: ''};
         this.addProofInput = {value: ''};
-        this.bankProofInput = {value: ''};
+        this.entityProofInput = {value: ''};
+        this.cAddressProofInput = {value: ''};
+        // this.bankProofInput = {value: ''};
     }
 
     render() {
@@ -158,75 +280,129 @@ class DocsUpload extends Component {
                     Go Back
                 </button>*/}
                     <br/>
-                    <i className={"fa fa-file-pdf checkCircle"} style={{color: 'cadetblue'}}></i>
-                    <h3 className={"text-center"}> Documents Upload !</h3>
+                    {/*<i className={"fa fa-file-pdf checkCircle"} style={{color: 'cadetblue'}}></i>*/}
+                    <h3 className={"text-center"}> KYC Documents !</h3>
                     <br/>
 
-                    <div className="alert alert-info" role="alert">
-                        <p className="alert-heading">Hi {f_name} {l_name}, Kindly upload the documents in PDF or PNG/JPG
-                            format for your ID and Address Proof. </p>
+                    <div className="alert " role="alert">
+                        <p className="alert-heading text-center">Hi {f_name} {l_name}, Kindly upload the documents in
+                            PDF or PNG/JPG
+                            format. </p>
                         <div className="paragraph_styling  text-center">
 
-                            <div className="input-container text-left">
-                                <input type="file" id="idProofInput" onChange={(e) => this._onChangeFile(e, 'id_proof')}
-                                       ref={ref => this.idProofInput = ref}/>
-                                <button className="btn btn-raised greenButton inputFilebutton"
-                                        style={{padding: '8px', marginBottom: '0px', textTransform: 'capitalize'}}
-                                        onClick={() => this.idProofInput.click()}
-                                        id={"idProofBtn"}>
-                                    ID Proof
-                                </button>
-                                <span className="file-infoId"
-                                      style={{paddingLeft: '10px'}}>{this.state.id_proof_msg}</span>
-                            </div>
-                            <small className="text-muted">Upload a Aadhar, VoterCard, PAN or Passport.</small>
-                            <br/>
-                            <div className="input-container text-left">
-                                <input type="file" id="addressProofInput"
-                                       onChange={(e) => this._onChangeFile(e, 'add_proof')}
-                                       ref={ref => this.addProofInput = ref}/>
-                                <button className="btn btn-raised greenButton inputFilebutton"
-                                        onClick={() => this.addProofInput.click()}
-                                        style={{padding: '8px', marginBottom: '0px', textTransform: 'capitalize'}}
-                                        id={"addressProofBtn"}>
-                                    Address Proof
-                                </button>
-                                <span className="file-infoAddress"
-                                      style={{paddingLeft: '10px'}}>{this.state.add_proof_msg}</span>
-                            </div>
-                            <small className="text-muted">Upload Aadhar, Driving License or Ration Card or Passport..
-                            </small>
+                            <div className={"row mb-4 mt-4"}>
+                                <div className={"col-md-6 col-sm-12"}>
+                                    <div className="input-container text-left">
+                                        <input type="file" id="idProofInput"
+                                               onChange={(e) => this._onChangeFile(e, 'id_proof')}
+                                               ref={ref => this.idProofInput = ref}/>
+                                        <button className="btn btn-raised uploadButton inputFilebutton"
 
-                            <br/>
-                            <div className="input-container text-left">
-                                <input type="file" id="addressProofInput"
-                                       onChange={(e) => this._onChangeFile(e, 'bank_proof')}
-                                       ref={ref => this.bankProofInput = ref}/>
-                                <button className="btn btn-raised greenButton inputFilebutton"
-                                        onClick={() => this.bankProofInput.click()}
-                                        style={{padding: '8px', marginBottom: '0px', textTransform: 'capitalize'}}
-                                        id={"addressProofBtn"}>
-                                    Bank Proof
-                                </button>
-                                <span className="file-infoAddress"
-                                      style={{paddingLeft: '10px'}}>{this.state.bank_proof_msg}</span>
-                            </div>
-                            <small className="text-muted">Upload cancelled Cheque or a Bank statement.
-                            </small>
+                                                onClick={() => this._multiDimDocsUpload('id_proof')}
+                                                id={"idProofBtn"}>
+                                            ID Proof
+                                        </button>
+                                        <span className="helperUploadTxt">{this.state.id_proof_msg}</span>
+                                    </div>
+                                    <small className="text-muted" style={{fontSize: 'x-small'}}>Upload a Aadhaar,
+                                        VoterCard, PAN or Passport.
+                                    </small>
+                                </div>
+                                <div className={"col-md-6 col-sm-12"}>
+                                    <div className="input-container text-left">
+                                        <input type="file" id="addressProofInput"
+                                               onChange={(e) => this._onChangeFile(e, 'add_proof')}
+                                               ref={ref => this.addProofInput = ref}/>
+                                        <button className="btn btn-raised uploadButton inputFilebutton"
+                                                onClick={() => this._multiDimDocsUpload('add_proof')}
 
+                                                id={"addressProofBtn"}>
+                                            Address Proof
+                                        </button>
+                                        <span className="helperUploadTxt"
+                                        >{this.state.add_proof_msg}</span>
+                                    </div>
+                                    <small className="text-muted" style={{fontSize: 'x-small'}}>Upload Aadhaar, Driving
+                                        License or Ration Card or
+                                        Passport..
+                                    </small>
+                                </div>
+                            </div>
+
+                            {/*    <div className={"row"}>
+                                <div className={"col-md-6 col-sm-12"}>
+                                    <div className="input-container text-left">
+                                        <input type="file" id="addressProofInput"
+                                               onChange={(e) => this._onChangeFile(e, 'bank_proof')}
+                                               ref={ref => this.bankProofInput = ref}/>
+                                        <button className="btn btn-raised uploadButton inputFilebutton "
+                                                onClick={() => this.bankProofInput.click()}
+
+                                                id={"addressProofBtn"}>
+                                            Bank Proof
+                                        </button>
+                                        <span className="helperUploadTxt"
+                                        >{this.state.bank_proof_msg}</span>
+                                    </div>
+                                    <small className="text-muted">Upload cancelled Cheque or a Bank statement.
+                                    </small>
+                                </div>
+                                <div className={"col-md-6 col-sm-12"}></div>
+                            </div>*/}
+
+                            <div className={"row"}>
+                                <div className={"col-md-6 col-sm-12"}>
+                                    <div className="input-container text-left">
+                                        <input type="file" id="addressProofInput"
+                                               onChange={(e) => this._onChangeFile(e, 'entity_proof')}
+                                               ref={ref => this.entityProofInput = ref}/>
+                                        <button className="btn btn-raised uploadButton inputFilebutton "
+                                                onClick={() => this._multiDimDocsUpload('entity_proof')}
+                                                id={"addressProofBtn"}>
+                                            Shop Registration
+                                        </button>
+                                        <span className="helperUploadTxt"
+                                        >{this.state.entity_proof_msg}</span>
+                                    </div>
+                                    <small className="text-muted" style={{fontSize: 'x-small'}}>Upload Shop &
+                                        Establishment Certificate or GST
+                                        Registration Certificate.
+                                    </small>
+                                </div>
+                                <div className={"col-md-6 col-sm-12"}>
+                                    <div className="input-container text-left">
+                                        <input type="file" id="addressProofInput"
+                                               onChange={(e) => this._onChangeFile(e, 'caddr_proof')}
+                                               ref={ref => this.cAddressProofInput = ref}/>
+                                        <button className="btn btn-raised uploadButton inputFilebutton "
+                                                onClick={() => this._multiDimDocsUpload('caddr_proof')}
+                                                id={"addressProofBtn"}>
+                                            Shop Address
+                                        </button>
+                                        <span className="helperUploadTxt"
+                                        >{this.state.caddr_proof_msg}</span>
+                                    </div>
+                                    <small className="text-muted" style={{fontSize: 'x-small'}}>Upload Company's
+                                        Electricity Bill or Rent Agreement.
+                                    </small>
+                                </div>
+                            </div>
+                            <br/>
+                            <br/>
                         </div>
                     </div>
 
-                    <div className="mt-5 mb-5 text-center ">
+                    <div className="mt-3 mb-3 text-center ">
                         <button
                             type="button"
-                            disabled={(this.idProofInput.value === undefined && this.addProofInput.value === undefined && this.bankProofInput.value === undefined)}
+                            disabled={(this.idProofInput.value === undefined && this.addProofInput.value === undefined && this.entityProofInput.value === undefined && this.cAddressProofInput.value === undefined)}
                             onClick={e => this.formSubmit(e)}
                             className="form-submit btn btn-raised greenButton"
                         >Process Loan
                         </button>
                     </div>
                     {this.RenderModalMessage()}
+                    {this.RenderModalUpload()}
                 </>
             )
         }

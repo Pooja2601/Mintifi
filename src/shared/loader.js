@@ -10,6 +10,7 @@ const Loader = (props) => {
              style={{display: (props.loader) ? 'block' : 'none'}}>
             <div className="lds-hourglass"></div>
         </div>
+       
     </>);
 };
 

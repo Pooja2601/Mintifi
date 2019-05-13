@@ -33,15 +33,17 @@ class Auth extends Component {
             headers: {'Content-Type': 'application/json', token: this.props.token},
             body: JSON.stringify({
                 "app_id": 3,
-                "otp_type": "send_otp",
+                "otp_type": "one_time_password",
                 "mobile_number": this.state.mobile,
                 "timestamp": new Date()
             })
         }).then(resp => resp.json()).then(resp => {
             // console.log(JSON.stringify(resp));
             this.props.changeLoader(false);
-            if (resp.error === Object(resp.error))
+            if (resp.error === Object(resp.error)) {
                 alert(resp.error.message);
+                this.setState({loading: false, submitted: false});
+            }
             else if (resp.response === Object(resp.response)) {
                 // alert(resp.success.message);
                 this.setState({otp_reference_id: resp.response.otp_reference_id}, () => this.props.setAuth(this.state));
@@ -94,7 +96,7 @@ class Auth extends Component {
         if (value.length <= 10) {
             this.setState({mobile: value, mobile_correct: (value.length !== 10)}, () => this.props.setAuth(this.state));
         }
-    }
+    };
 
     componentDidMount() {
 
@@ -109,85 +111,95 @@ class Auth extends Component {
         return (
             <>
                 <Link to={'/Token'} className={"btn btn-link"}>Go Back </Link>
-                <p className="paragraph_styling text-center">
-                    <b> Existing Customer?</b><br/>
-                    Let us verify your Number.
-                </p>
+                <h4 className={"text-center"}>
+                    Welcome Back
+                </h4>
+                <h5 className="paragraph_styling text-center">
+                    Please login with your registered mobile number !
+                </h5>
+                <br/>
                 <form
                     id="serverless-contact-form"
                 >
-                    <div className="form-group mb-3">
-                        <label htmlFor="numberMobile" style={{marginLeft: '3rem'}} className={"bmd-label-floating"}>Mobile
-                            Number *</label>
-                        <div className={"input-group"}>
 
-                            <div className="input-group-prepend">
+                    <div className={"row"}>
+                        <div className={"col-sm-11 col-md-8"} style={{margin: 'auto'}}>
+                            <div className="form-group mb-3">
+                                <label htmlFor="numberMobile" className={"bmd-label-floating"}>Mobile
+                                    Number *</label>
+                                <div className={"input-group"}>
+
+                                    <div className="input-group-prepend">
                   <span className="input-group-text" id="basic-addon3">
                     +91
                   </span>
+                                    </div>
+                                    <input
+                                        type="number"
+                                        className="form-control font_weight prependInput"
+                                        // placeholder="10 digit Mobile Number"
+                                        name="url"
+                                        disabled={this.state.submitted}
+                                        min={1000000000}
+                                        max={9999999999}
+                                        maxLength={10}
+                                        minLength={10}
+                                        pattern="^[0-9]{10}$"
+                                        title="This field is required"
+                                        id="numberMobile"
+
+                                        required={true}
+                                        value={this.state.mobile}
+                                        // ref={ref => (this.obj.number = ref)}
+                                        onChange={(e) => this._setMobile(e)}
+                                        aria-describedby="basic-addon3"
+                                    />
+                                </div>
                             </div>
-                            <input
-                                type="number"
-                                className="form-control font_weight"
-                                // placeholder="10 digit Mobile Number"
-                                name="url"
-                                disabled={this.state.submitted}
-                                min={1000000000}
-                                max={9999999999}
-                                maxLength={10}
-                                minLength={10}
-                                pattern="^[0-9]{10}$"
-                                title="This field is required"
-                                id="numberMobile"
-                                style={{
-                                    fontWeight: 600,
-                                    marginLeft: '1rem',
-                                    fontSize: '17px',
-                                    paddingLeft: '10px'
-                                }}
-                                required={true}
-                                value={this.state.mobile}
-                                // ref={ref => (this.obj.number = ref)}
-                                onChange={(e) => this._setMobile(e)}
-                                aria-describedby="basic-addon3"
-                            />
                         </div>
-                    </div>
-                    <div className="form-group mb-3"
-                         style={{visibility: (this.state.submitted) ? 'visible' : 'hidden'}}>
-                        <label htmlFor="otpVerify" className={"bmd-label-floating"}>OTP *</label>
-                        <div className={"input-group"}>
-                            <input
-                                type="number"
-                                className="form-control font_weight"
-                                // placeholder="Enter the OTP"
-                                name="url"
-                                pattern="^[0-9]{6}$"
-                                title="This field is required"
-                                id="otpVerify"
-                                style={{
-                                    fontWeight: 600, marginRight: '5px',
-                                    fontSize: '17px'
-                                }}
-                                value={this.state.otp}
-                                min={100000}
-                                max={999999}
-                                onChange={(e) => {
-                                    if (e.target.value.length <= 6) this.setState({otp: e.target.value})
-                                }}
-                                aria-describedby="otp-area"
-                            />
-                            <div className="input-group-append">
-                                <button className="btn btn-outline-secondary" disabled={this.state.timer}
+                        <div className={"col-sm-11 col-md-8"} style={{margin: 'auto'}}>
+                            <div className="form-group mb-3"
+                                 style={{visibility: (this.state.submitted) ? 'visible' : 'hidden'}}>
+                                <label htmlFor="otpVerify" className={"bmd-label-floating"}>OTP *</label>
+                                <div className={"input-group"}>
+                                    <input
+                                        type="number"
+                                        className="form-control font_weight"
+                                        // placeholder="Enter the OTP"
+                                        name="url"
+                                        pattern="^[0-9]{6}$"
+                                        title="This field is required"
+                                        id="otpVerify"
+                                        style={{
+                                            fontWeight: 600, marginRight: '5px',
+                                            fontSize: '17px'
+                                        }}
+                                        value={this.state.otp}
+                                        min={100000}
+                                        max={999999}
+                                        onChange={(e) => {
+                                            if (e.target.value.length <= 6) this.setState({otp: e.target.value})
+                                        }}
+                                        aria-describedby="otp-area"
+                                    />
+                                    <div className="input-group-append">
+                                        {/*<button className="btn btn-outline-secondary" disabled={this.state.timer}
                                         type="button"
                                         id="otp-area">Resending
                                     in {(this.state.timer) && ` ${this.state.timer} Sec`}
-                                </button>
+                                </button>*/}
+                                        <label style={{
+                                            fontSize: 'small',
+                                            paddingTop: '14px',
+                                            color: '#bbb'
+                                        }}>Next OTP in {(this.state.timer) && ` ${this.state.timer} Sec`}</label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <div className="mt-5 mb-5 text-center ">
+                    <div className="mt-5 text-center ">
 
                         <button
                             type="submit"

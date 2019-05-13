@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
-// import {baseUrl} from "../../shared/constants";
+import {baseUrl, otpUrl} from "../../shared/constants";
 import {connect} from "react-redux";
 import {setAdharManual, changeLoader} from "../../actions";
 import {Link, withRouter} from "react-router-dom";
@@ -22,6 +22,8 @@ class AdharPan extends Component {
         pincode: '',
         address1: '',
         address2: '',
+        city: '',
+        state: '',
         list_posts: '',
         missed_fields: true
     };
@@ -41,12 +43,11 @@ class AdharPan extends Component {
 
     componentWillMount() {
 
-        const {payload, authObj, adharObj} = this.props;
+        const {payload, authObj, adharObj, changeLoader, setAdharManual} = this.props;
 
         if (payload !== Object(payload))
-            if (authObj !== Object(authObj))
-                if (adharObj !== Object(adharObj))
-                    this.props.history.push("/Token");
+            if (adharObj !== Object(adharObj))
+                this.props.history.push("/Token");
 
         let state = adharObj;
         if (state === Object(state))
@@ -57,10 +58,15 @@ class AdharPan extends Component {
                     // console.log(this.validate);
                 });
             });
-        else this.props.setAdharManual(this.state);
-        setTimeout(() => this._loadGstProfile());
-        this.props.changeLoader(false);
-        this.handleValidation();
+        else setAdharManual(this.state);
+
+        setTimeout(() => {
+            this._loadGstProfile();
+            this.handleValidation();
+            console.log(adharObj);
+        }, 1000);
+        changeLoader(false);
+
     }
 
     _loadGstProfile() {
@@ -107,10 +113,36 @@ class AdharPan extends Component {
  */
 
     _pincodeFetch = () => {
-        fetch(`http://postalpincode.in/api/pincode/${this.state.pincode}`, {
-            mode: 'no-cors'
-        })
-        // .then(resp => resp.json())
+        //http://postalpincode.in/api/pincode/
+        //https://test.mintifi.com/api/v2/communications/pincode/400059
+        let city, state;
+        const {setAdharManual, changeLoader} = this.props;
+        if (this.state.pincode) {
+            changeLoader(true);
+
+            fetch(`${otpUrl}/pincode/${this.state.pincode}`)
+                .then(resp => resp.json())
+                .then(resp => {
+
+                    let obj = resp.response;
+                    if (obj !== null && obj === Object(obj)) {
+                        city = obj.city;
+                        state = obj.state;
+                        this.setState({city, state}, () => setAdharManual(this.state));
+                    }
+                    if (resp.error === Object(resp.error)) {
+                        alert(resp.error.message);
+                        this.setState({city:'', state:''});
+                    }
+                    changeLoader(false);
+                }, () => changeLoader(false));
+        }
+    };
+
+    /*_pincodeFetch = () => {
+        //https://test.mintifi.com/api/v2/communications/pincode/400059
+        fetch(`http://postalpincode.in/api/pincode/${this.state.pincode}`)
+            .then(resp => resp.json())
             .then(resp => {
                 let list_posts = resp.PostOffice;
                 console.log(JSON.stringify(resp.PostOffice));
@@ -118,8 +150,7 @@ class AdharPan extends Component {
                     this.setState({list_posts});
                 }
             });
-    };
-
+    };*/
 
     changeDob = (dob) => {
         /*        let date = d.getDate();
@@ -134,10 +165,11 @@ class AdharPan extends Component {
         return (
             <>
                 <Link to={'/AdharPan'} className={"btn btn-link"}>Go Back </Link><br/><br/>
-                <p className="paragraph_styling  text-center">
-
+                <h4 className={"text-center"}>Personal Details </h4>
+                <h5 className="paragraph_styling  text-center" style={{fontSize: '17px'}}>
                     <b> Enter your personal information to proceed.</b>
-                </p>
+                </h5>
+                <br/>
                 <form
                     id="serverless-contact-form"
                     onSubmit={e => this._formSubmit(e)}
@@ -150,7 +182,7 @@ class AdharPan extends Component {
                                     type="text"
                                     className="form-control font_weight"
                                     // placeholder="Full Name"
-                                    style={{textTransform: "uppercase", fontWeight: 600}}
+                                    style={{fontWeight: 600}}
                                     pattern="^[a-zA-Z]+$"
                                     title="Please enter First Name"
                                     autoCapitalize="characters"
@@ -176,7 +208,7 @@ class AdharPan extends Component {
                                     type="text"
                                     className="form-control font_weight"
                                     // placeholder="Full Name"
-                                    style={{textTransform: "uppercase", fontWeight: 600}}
+                                    style={{fontWeight: 600}}
                                     pattern="^[a-zA-Z]+$"
                                     title="Please enter Middle Name"
                                     autoCapitalize="characters"
@@ -196,7 +228,7 @@ class AdharPan extends Component {
                                     type="text"
                                     className="form-control font_weight"
                                     // placeholder="Full Name"
-                                    style={{textTransform: "uppercase", fontWeight: 600}}
+                                    style={{fontWeight: 600}}
                                     pattern="^[a-zA-Z]+$"
                                     title="Please enter Last Name"
                                     autoCapitalize="characters"
@@ -216,59 +248,76 @@ class AdharPan extends Component {
                             </div>
                         </div>
                     </div>
-                    <div className="form-group mb-3">
-                        <label htmlFor="numberMobile" className={"bmd-label-floating"}>Mobile Number *</label>
-                        <input
-                            type="number"
-                            className="form-control font_weight"
-                            // placeholder="Mobile Number"
-                            style={{textTransform: "uppercase", fontWeight: 600}}
-                            pattern="^[0-9]{10}+$"
-                            title="Please enter Mobile Number"
-                            id="numberMobile"
-                            required={true}
-                            value={this.state.mobile}
-                            onBlur={() => {
-                                this.props.setAdharManual(this.state);
-                                this.handleValidation()
-                            }}
-                            // ref={ref => (this.obj.pan = ref)}
-                            onChange={(e) => {
-                                let {value} = e.target;
-                                if (e.target.value.length <= 10)
-                                    this.setState({mobile: value});
-                                this.validate.mobile = (value.length === 10 || value.length === 11) ? true : false;
-                                // console.log(value.length);
-                            }}
-                        />
-                    </div>
-                    <div className="form-group mb-3 ">
-                        <label htmlFor="textEmail" className={"bmd-label-floating"}>Email ID *</label>
-                        <input
-                            type="text"
-                            className="form-control font_weight"
-                            // placeholder="Email"
-                            style={{textTransform: "uppercase", fontWeight: 600}}
-                            pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
-                            title="Please enter Email"
-                            autoCapitalize="characters"
-                            id="textEmail"
-                            required={true}
-                            value={this.state.email}
-                            onBlur={() => {
-                                this.props.setAdharManual(this.state);
-                                this.handleValidation();
-                            }}
-                            // ref={ref => (this.obj.pan = ref)}
-                            onChange={(e) => {
-                                let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-                                this.setState({email: e.target.value});
-                                this.validate.email = (regex.test(e.target.value)) ? true : false;
-                            }}
-                        />
-                    </div>
                     <div className={"row"}>
-                        <div className={"col-sm-12 col-md-6"}>
+                        <div className={"col-md-6 col-sm-12"}>
+                            <div className="form-group mb-3">
+                                <label htmlFor="numberMobile"
+                                       className={"bmd-label-floating"}>Mobile
+                                    Number *</label>
+                                <div className={"input-group"}>
+                                    <div className="input-group-prepend">
+                  <span className="input-group-text" id="basic-addon3">
+                    +91
+                  </span>
+                                    </div>
+                                    <input
+                                        type="number"
+                                        className="form-control font_weight prependInput"
+                                        // placeholder="Mobile Number"
+
+                                        pattern="^[0-9]{10}+$"
+                                        title="Please enter Mobile Number"
+                                        id="numberMobile"
+                                        required={true}
+                                        value={this.state.mobile}
+                                        onBlur={() => {
+                                            this.props.setAdharManual(this.state);
+                                            this.handleValidation()
+                                        }}
+                                        // ref={ref => (this.obj.pan = ref)}
+                                        onChange={(e) => {
+                                            let {value} = e.target;
+                                            if (e.target.value.length <= 10)
+                                                this.setState({mobile: value});
+                                            this.validate.mobile = (value.length === 10 || value.length === 11) ? true : false;
+                                            // console.log(value.length);
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div className={"col-md-6 col-sm-12"}>
+                            <div className="form-group mb-3 ">
+                                <label htmlFor="textEmail" className={"bmd-label-floating"}>Email ID *</label>
+                                <input
+                                    type="text"
+                                    className="form-control font_weight"
+                                    // placeholder="Email"
+                                    style={{fontWeight: 600}}
+                                    pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
+                                    title="Please enter Email"
+                                    autoCapitalize="characters"
+                                    id="textEmail"
+                                    required={true}
+                                    value={this.state.email}
+                                    onBlur={() => {
+                                        this.props.setAdharManual(this.state);
+                                        this.handleValidation();
+                                    }}
+                                    // ref={ref => (this.obj.pan = ref)}
+                                    onChange={(e) => {
+                                        let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+                                        this.setState({email: e.target.value});
+                                        this.validate.email = (regex.test(e.target.value)) ? true : false;
+                                    }}
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div className={"row"}>
+                        <div className={"col-sm-12 col-md-6 text-center"}>
                             {/*<label htmlFor="ResidenceOwnership" className="labelLoan">
                                 Gender
                             </label><br/>*/}
@@ -287,9 +336,8 @@ class AdharPan extends Component {
                                     }}
                                     style={{
                                         width: "105px",
-                                        backgroundColor:
-                                            this.state.gender === "m" && "#00bfa5",
-                                        color: this.state.gender === "m" && "white",
+                                        border:
+                                            this.state.gender === "m" && "2px solid #00bfa5",
                                         borderBottomLeftRadius: '25px',
                                         borderTopLeftRadius: '25px'
                                     }}
@@ -313,9 +361,8 @@ class AdharPan extends Component {
                                     }}
                                     style={{
                                         width: "105px",
-                                        backgroundColor:
-                                            this.state.gender === "f" && "#00bfa5",
-                                        color: this.state.gender === "f" && "white",
+                                        border:
+                                            this.state.gender === "f" && "2px solid #00bfa5",
                                         borderBottomRightRadius: '25px',
                                         borderTopRightRadius: '25px'
                                     }}
@@ -332,7 +379,7 @@ class AdharPan extends Component {
                                 </button>
                             </div>
                         </div>
-                        <div className={"col-sm-12 col-md-6"}>
+                        <div className={"col-sm-12 col-md-6 text-center"}>
                             {/*<label htmlFor="ResidenceOwnership" className="labelLoan">
                                 Gender
                             </label><br/>*/}
@@ -351,9 +398,8 @@ class AdharPan extends Component {
                                     }}
                                     style={{
                                         width: "105px",
-                                        backgroundColor:
-                                            this.state.ownership === "rented" && "#00bfa5",
-                                        color: this.state.ownership === "rented" && "white",
+                                        border:
+                                            this.state.ownership === "rented" && "2px solid #00bfa5",
                                         borderBottomLeftRadius: '25px',
                                         borderTopLeftRadius: '25px'
                                     }}
@@ -377,9 +423,8 @@ class AdharPan extends Component {
                                     }}
                                     style={{
                                         width: "105px",
-                                        backgroundColor:
-                                            this.state.ownership === "owned" && "#00bfa5",
-                                        color: this.state.ownership === "owned" && "white",
+                                        border:
+                                            this.state.ownership === "owned" && "2px solid #00bfa5",
                                         borderBottomRightRadius: '25px',
                                         borderTopRightRadius: '25px'
                                     }}
@@ -399,53 +444,57 @@ class AdharPan extends Component {
                     </div>
 
                     <div className={"row"}>
-                        <div className="form-group mb-3 col-md-6 col-sm-12">
-                            <label htmlFor="numberPincode" className="bmd-label-floating">
-                                Pincode *
-                            </label>
-                            <input
-                                type="number"
-                                className="form-control font_weight"
-                                // placeholder="Pincode"
-                                style={{textTransform: "uppercase", fontWeight: 600}}
-                                pattern="^[0-9]{6}$"
-                                title="Please enter Pincode"
-                                autoCapitalize="characters"
-                                id="numberPincode"
-                                required={true}
-                                value={this.state.pincode}
-                                onBlur={() => {
-                                    this.props.setAdharManual(this.state);
-                                    // this._pincodeFetch();
-                                    this.handleValidation();
-                                }}
-                                // ref={ref => (this.obj.pan = ref)}
-                                onChange={(e) => {
-                                    let regex = /^[0-9]{6,7}$/;
-                                    if (e.target.value.length <= 6) this.setState({pincode: e.target.value});
-                                    this.validate.pincode = (regex.test(e.target.value));
-                                }}
-                            />
+                        <div className={"col-md-6 col-sm-12"}>
+                            <div className="form-group mb-3">
+                                <label htmlFor="numberPincode" className="bmd-label-floating">
+                                    Pincode *
+                                </label>
+                                <input
+                                    type="number"
+                                    className="form-control font_weight"
+                                    // placeholder="Pincode"
+                                    style={{fontWeight: 600}}
+                                    pattern="^[0-9]{6}$"
+                                    title="Please enter Pincode"
+                                    autoCapitalize="characters"
+                                    id="numberPincode"
+                                    required={true}
+                                    value={this.state.pincode}
+                                    onBlur={() => {
+                                        this.props.setAdharManual(this.state);
+                                        this._pincodeFetch();
+                                        this.handleValidation();
+                                    }}
+                                    // ref={ref => (this.obj.pan = ref)}
+                                    onChange={(e) => {
+                                        let regex = /^[0-9]{6,7}$/;
+                                        if (e.target.value.length <= 6) this.setState({pincode: e.target.value});
+                                        this.validate.pincode = (regex.test(e.target.value));
+                                    }}
+                                />
+                            </div>
                         </div>
-                        <div className="form-group mb-3 col-md-6 col-sm-12">
-                            <label htmlFor="dobDate" className="bmd-label-floating">
-                                Date of Birth
-                            </label>
-                            <DatePicker
-                                className="form-control font_weight"
-                                // placeholderText={"Date of Birth"}
-                                selected={this.state.dob}
-                                id={"dobDate"}
-                                pattern={"^[0-9]{2}/[0-9]{2}/[0-9]{4}$"}
-                                scrollableYearDropdown
-                                showMonthDropdown
-                                required={true}
-                                showYearDropdown
-                                style={{margin: 'auto'}}
-                                dateFormat={'dd/MM/yyyy'}
-                                onChange={(date) => this.changeDob(date)}
+                        <div className={"col-md-6 col-sm-12"}>
+                            <div className="form-group mb-3">
+                                <label htmlFor="dobDate" className="bmd-label-floating">
+                                    Date of Birth
+                                </label>
+                                <DatePicker
+                                    className="form-control font_weight"
+                                    // placeholderText={"Date of Birth"}
+                                    selected={this.state.dob}
+                                    id={"dobDate"}
+                                    pattern={"^[0-9]{2}/[0-9]{2}/[0-9]{4}$"}
+                                    scrollableYearDropdown
+                                    showMonthDropdown
+                                    required={true}
+                                    showYearDropdown
+                                    style={{margin: 'auto'}}
+                                    dateFormat={'dd/MM/yyyy'}
+                                    onChange={(date) => this.changeDob(date)}
 
-                            />
+                                />
+                            </div>
                         </div>
                     </div>
 
@@ -459,8 +508,9 @@ class AdharPan extends Component {
                                     type="text"
                                     className="form-control font_weight"
                                     // placeholder="Pincode"
-                                    style={{textTransform: "uppercase", fontWeight: 600}}
+                                    style={{fontWeight: 600}}
                                     title="Please enter Address 1"
+                                    // pattern={"^[A-Za-z0-9'\\.\\-\\s\\,]{3,}"}
                                     autoCapitalize="characters"
                                     id="textAddress1"
                                     required={true}
@@ -471,8 +521,9 @@ class AdharPan extends Component {
                                     }}
                                     // ref={ref => (this.obj.pan = ref)}
                                     onChange={(e) => {
-                                        this.setState({address1: e.target.value});
-                                        this.validate.address1 = (e.target.value);
+                                        const {value} = e.target;
+                                        this.setState({address1: value});
+                                        this.validate.address1 = (value);
                                     }}
                                 />
                             </div>
@@ -486,9 +537,10 @@ class AdharPan extends Component {
                                     type="text"
                                     className="form-control font_weight"
                                     // placeholder="Pincode"
-                                    style={{textTransform: "uppercase", fontWeight: 600}}
+                                    style={{fontWeight: 600}}
                                     title="Please enter Address 2"
                                     autoCapitalize="characters"
+                                    // pattern={"^.+{3,}"}
                                     id="textAddress2"
                                     required={true}
                                     value={this.state.address2}
@@ -498,18 +550,32 @@ class AdharPan extends Component {
                                     }}
                                     // ref={ref => (this.obj.pan = ref)}
                                     onChange={(e) => {
-                                        this.setState({address2: e.target.value});
-                                        this.validate.address2 = (e.target.value);
+                                        const {value} = e.target;
+                                        this.setState({address2: value});
+                                        this.validate.address2 = (value);
                                     }}
                                 />
                             </div>
                         </div>
                     </div>
-
+                    <div className={"row"}
+                         style={{
+                             marginTop: '26px',
+                             visibility: (this.state.city && this.state.state) ? 'visible' : 'hidden'
+                         }}>
+                        <div className={"col-md-6 col-sm-12 "}>
+                            <label className={"form-control font_weight"}
+                                   style={{fontWeight: 600}}>{this.state.city}</label>
+                        </div>
+                        <div className={"col-md-6 col-sm-12"}>
+                            <label className={"form-control font_weight"}
+                                   style={{fontWeight: 600}}>{this.state.state}</label>
+                        </div>
+                    </div>
                     {/*  <div className="form-group mb-3">
                         <label htmlFor="textAddress2" className="bmd-label-floating"> Select Your Locality *</label>
                         <select className="form-control font_weight"
-                                style={{textTransform: "uppercase", fontWeight: 600}}
+                                style={{ fontWeight: 600}}
                                 onBlur={() => {
                                     this.props.setAdharManual(this.state);
                                     this.handleValidation()

@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
 import {baseUrl, loanUrl, BusinessType} from "../../shared/constants";
+import {PrivacyPolicy, TnCPolicy} from "../../shared/policy";
 import {connect} from "react-redux";
 import {setBusinessDetail, setAdharManual, pan_adhar, storeResponse, changeLoader} from "../../actions";
 import {Link, withRouter} from "react-router-dom";
@@ -12,7 +13,7 @@ import DatePicker from "react-datepicker/es";
 class ReviewBusinessDetail extends Component {
     obj = {pan_correct: '', adhar_correct: ''};
     state = {
-        authObj: {mobile: '', verified: ''},
+        // authObj: {mobile: '', verified: ''},
         pan_adhar: {pan: '', adhar: ''},
         businessDetail: {
             companytype: "", gst: "", bpan: "",
@@ -23,29 +24,70 @@ class ReviewBusinessDetail extends Component {
             m_name: '',
             l_name: '',
             mobile: '',
+            verified: '',
             email: '',
             dob: new Date(),
             gender: 'm',
             pincode: '',
             address1: '',
             address2: ''
-        }
+        },
+        tnc_consent: false,
+        tncModal: false,
     };
+
+
+    RenderModalTnC = () => {
+        return (
+            <>
+                <button type="button" style={{visibility: 'hidden'}} ref={ref => this.triggerTnCModal = ref}
+                        id={"triggerTnCModal"} data-toggle="modal"
+                        data-target="#TnCMsgModal">
+                </button>
+
+                <div className="modal fade" id={"TnCMsgModal"} tabIndex="-1"
+                     role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog modal-lg" role="document" style={{margin: '5.75rem auto'}}>
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">{(this.state.tncModal) ? 'Terms and Conditions' : 'Privacy policy'}</h5>
+                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                                {(this.state.tncModal) ? TnCPolicy({fontSize: 13}) : PrivacyPolicy({
+                                    fontSize: 13,
+                                    headSize: 1.5
+                                })}
+                                {/*{PrivacyPolicy({fontSize: 13, headSize: 1.5})}*/}
+                            </div>
+                            <div className="modal-footer">
+                                {/*<button type="button" className="btn btn-primary">Save changes</button>*/}
+                                <button type="button" className="btn btn-primary" ref={ref => this.closeModal = ref}
+                                        data-dismiss="modal">Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </>);
+    };
+
 
     componentWillMount() {
         const {payload, authObj, adharObj, businessObj} = this.props;
         if (payload !== Object(payload))
-            if (authObj !== Object(authObj))
-                if (adharObj !== Object(adharObj))
-                    if (businessObj !== Object(businessObj))
-                        if (authObj.verified)
-                            this.props.history.push("/Token");
+            if (adharObj !== Object(adharObj))
+                if (businessObj !== Object(businessObj))
+                    if (adharObj.verified)
+                        this.props.history.push("/Token");
     }
 
     _formSubmit(e) {
         e.preventDefault();
         this.props.changeLoader(true);
-        const {payload, gstProfile, businessObj, adharObj, pan, adhar, authObj} = this.props;
+        const {payload, gstProfile, businessObj, adharObj, pan, adhar} = this.props;
         let dob = adharObj.dob.substr(0, 10);
         /*
                 let date = (adharObj.dob).getDate();
@@ -71,7 +113,7 @@ class ReviewBusinessDetail extends Component {
                     "pan": pan,
                     "gstin": businessObj.gst,
                     "dob": dob,
-                    "mobile_number": (authObj.mobile) ? authObj.mobile : adharObj.mobile,
+                    "mobile_number": adharObj.mobile,
                     "email": adharObj.email,
                     "gender": adharObj.gender,
                     "residence_address": {
@@ -151,11 +193,13 @@ class ReviewBusinessDetail extends Component {
     //ToDo : Fetching info of the Business Information and Credit Line Check
     componentDidMount() {
 
+        const {adharObj, adhar, pan, businessObj} = this.props;
         this.setState({
-            adharDetail: this.props.adharObj,
-            pan_adhar: {pan: this.props.pan, adhar: this.props.adhar},
-            businessDetail: this.props.businessObj,
+            adharDetail: adharObj,
+            pan_adhar: {pan: pan, adhar: adhar},
+            businessDetail: businessObj,
         });
+        console.log(adharObj);
         // console.log(this.changeDob(this.state.adharDetail.dob));
     }
 
@@ -170,7 +214,7 @@ class ReviewBusinessDetail extends Component {
     };
 
     render() {
-        const gstProfile = this.props.gstProfile;
+        const {gstProfile} = this.props;
         return (
             <>
                 {/*<Link to={'/AdharPan'} className={"btn btn-link"}>Go Back </Link>*/}
@@ -179,13 +223,13 @@ class ReviewBusinessDetail extends Component {
                 </button>
                 <br/>
                 <br/>
-                <h4 className={"text-center"}>{(gstProfile === Object(gstProfile)) ? gstProfile.lgnm : ''}</h4>
-                <p className="paragraph_styling  text-center">
+                {/*<h4 className={"text-center"}>{(gstProfile === Object(gstProfile)) ? gstProfile.lgnm : ''}</h4>*/}
+                <h5 className=" text-center">
                     <b> Kindly Review your Information.</b>
-                </p>
+                </h5>
                 <form id="serverless-contact-form" onSubmit={e => this._formSubmit(e)}>
                     <p className="paragraph_styling  text-center">
-                        <b> Personal Detail.</b>
+                        <b> Personal Details</b>
                     </p>
                     {(this.state.adharDetail === Object(this.state.adharDetail)) ?
                         (<div className={"row"}>
@@ -196,12 +240,13 @@ class ReviewBusinessDetail extends Component {
                                         type="text"
                                         className="form-control font_weight"
                                         // placeholder="Full Name"
-                                        style={{textTransform: "uppercase", fontWeight: 600}}
+                                        style={{fontWeight: 600}}
                                         pattern="^[a-zA-Z]+$"
                                         title="Please enter First Name"
                                         autoCapitalize="characters"
                                         id="firstName"
                                         required={true}
+                                        disabled={true}
                                         value={this.state.adharDetail.f_name}
                                         onBlur={() => this.props.setAdharManual(this.state.adharDetail)}
                                         // ref={ref => (this.obj.pan = ref)}
@@ -221,12 +266,13 @@ class ReviewBusinessDetail extends Component {
                                         type="text"
                                         className="form-control font_weight"
                                         // placeholder="Full Name"
-                                        style={{textTransform: "uppercase", fontWeight: 600}}
+                                        style={{fontWeight: 600}}
                                         pattern="^[a-zA-Z]+$"
                                         title="Please enter Middle Name"
                                         autoCapitalize="characters"
                                         id="middleName"
                                         required={true}
+                                        disabled={true}
                                         value={this.state.adharDetail.m_name}
                                         onBlur={() => this.props.setAdharManual(this.state.adharDetail)}
                                         // ref={ref => (this.obj.pan = ref)}
@@ -246,12 +292,13 @@ class ReviewBusinessDetail extends Component {
                                         type="text"
                                         className="form-control font_weight"
                                         // placeholder="Full Name"
-                                        style={{textTransform: "uppercase", fontWeight: 600}}
+                                        style={{fontWeight: 600}}
                                         pattern="^[a-zA-Z]+$"
                                         title="Please enter Last Name"
                                         autoCapitalize="characters"
                                         id="lastName"
                                         required={true}
+                                        disabled={true}
                                         value={this.state.adharDetail.l_name}
                                         onBlur={() => this.props.setAdharManual(this.state.adharDetail)}
                                         // ref={ref => (this.obj.pan = ref)}
@@ -268,27 +315,36 @@ class ReviewBusinessDetail extends Component {
 
                     <div className={"row"}>
                         <div className={"col-md-6 col-sm-12"}>
-                            {(this.props.authObj === Object(this.props.authObj)) ?
+                            {(this.props.adharObj === Object(this.props.adharObj)) ?
                                 (<div className="form-group mb-3">
-                                    <label htmlFor="numberMobile" className={"bmd-label-floating"}>Mobile Number
+                                    <label htmlFor="numberMobile"
+                                           className={"bmd-label-floating"}>Mobile Number
                                         *</label>
-                                    <input
-                                        type="number"
-                                        className="form-control font_weight"
-                                        // placeholder="Mobile Number"
-                                        style={{textTransform: "uppercase", fontWeight: 600}}
-                                        pattern="^[0-9]{10}+$"
-                                        title="Please enter Mobile Number"
-                                        id="numberMobile"
-                                        required={true}
-                                        value={this.props.authObj.mobile}
-                                        disabled={true}
-                                        // onBlur={() => this.props.setAdharManual(this.state)}
-                                        // ref={ref => (this.obj.pan = ref)}
-                                        /*onChange={(e) => {
-                                            if (e.target.value.length <= 10) this.setState({mobile: e.target.value})
-                                        }}*/
-                                    />
+                                    <div className={"input-group"}>
+                                        <div className="input-group-prepend">
+                  <span className="input-group-text" id="basic-addon3">
+                    +91
+                  </span>
+                                        </div>
+                                        <input
+                                            type="number"
+                                            className="form-control font_weight prependInput"
+                                            // placeholder="Mobile Number"
+
+                                            pattern="^[0-9]{10}+$"
+                                            title="Please enter Mobile Number"
+                                            id="numberMobile"
+                                            required={true}
+                                            disabled={true}
+                                            value={this.state.adharDetail.mobile}
+                                            disabled={true}
+                                            // onBlur={() => this.props.setAdharManual(this.state)}
+                                            // ref={ref => (this.obj.pan = ref)}
+                                            /*onChange={(e) => {
+                                                if (e.target.value.length <= 10) this.setState({mobile: e.target.value})
+                                            }}*/
+                                        />
+                                    </div>
                                 </div>) : <></>}
                         </div>
                         <div className={"col-md-6 col-sm-12"}>
@@ -300,12 +356,13 @@ class ReviewBusinessDetail extends Component {
                                         type="text"
                                         className="form-control font_weight"
                                         // placeholder="Email"
-                                        style={{textTransform: "uppercase", fontWeight: 600}}
+                                        style={{fontWeight: 600}}
                                         pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
                                         title="Please enter Email"
                                         autoCapitalize="characters"
                                         id="textEmail"
                                         required={true}
+                                        disabled={true}
                                         value={this.state.adharDetail.email}
                                         onBlur={() => this.props.setAdharManual(this.state.adharDetail)}
                                         // ref={ref => (this.obj.pan = ref)}
@@ -337,6 +394,7 @@ class ReviewBusinessDetail extends Component {
                                             pattern={"^[0-9]{2}/[0-9]{2}/[0-9]{4}$"}
                                             scrollableYearDropdown
                                             showMonthDropdown
+                                            disabled={true}
                                             showYearDropdown
                                             style={{margin: 'auto'}}
                                             dateFormat={'dd/MM/yyyy'}
@@ -354,12 +412,13 @@ class ReviewBusinessDetail extends Component {
                                             type="number"
                                             className="form-control font_weight"
                                             // placeholder="Pincode"
-                                            style={{textTransform: "uppercase", fontWeight: 600}}
+                                            style={{fontWeight: 600}}
                                             pattern="^[0-9]{6}$"
                                             title="Please enter Pincode"
                                             autoCapitalize="characters"
                                             id="numberPincode"
                                             required={true}
+                                            disabled={true}
                                             value={this.state.adharDetail.pincode}
                                             onBlur={() => this.props.setAdharManual(this.state.adharDetail)}
                                             // ref={ref => (this.obj.pan = ref)}
@@ -377,7 +436,7 @@ class ReviewBusinessDetail extends Component {
                             </>) : <></>}
                     </div>
 
-                    <div className={'row'}>
+                    <div className={'row'} style={{marginBottom: '-20px'}}>
                         {(this.state.pan_adhar === Object(this.state.pan_adhar)) ?
                             (<>
                                 <div className={"col-md-6 col-sm-12"}>
@@ -393,12 +452,13 @@ class ReviewBusinessDetail extends Component {
                                             name="url"
                                             maxLength={10}
                                             minLength={10}
-                                            style={{textTransform: "uppercase", fontWeight: 600}}
+                                            style={{fontWeight: 600}}
                                             pattern="^[a-zA-Z]{5}([0-9]){4}[a-zA-Z]{1}?$"
                                             title="Please enter valid PAN number. E.g. AAAAA9999A"
                                             autoCapitalize="characters"
                                             id="numberPAN"
                                             required={true}
+                                            disabled={true}
                                             value={this.state.pan_adhar.pan}
                                             // ref={ref => (this.obj.pan = ref)}
                                             onBlur={() => {
@@ -430,6 +490,7 @@ class ReviewBusinessDetail extends Component {
                                             id="numberAdhar"
                                             maxLength={12}
                                             minLength={12}
+                                            disabled={true}
                                             value={this.state.pan_adhar.adhar}
                                             min={100000000000}
                                             max={999999999999}
@@ -458,11 +519,12 @@ class ReviewBusinessDetail extends Component {
                                     type="text"
                                     className="form-control font_weight"
                                     // placeholder="Pincode"
-                                    style={{textTransform: "uppercase", fontWeight: 600}}
+                                    style={{fontWeight: 600}}
                                     title="Please enter Address 1"
                                     autoCapitalize="characters"
                                     id="textAddress1"
                                     required={true}
+                                    disabled={true}
                                     value={this.state.adharDetail.address1}
                                     onBlur={() => {
                                         this.props.setAdharManual(this.state.adharDetail);
@@ -488,11 +550,12 @@ class ReviewBusinessDetail extends Component {
                                     type="text"
                                     className="form-control font_weight"
                                     // placeholder="Pincode"
-                                    style={{textTransform: "uppercase", fontWeight: 600}}
+                                    style={{fontWeight: 600}}
                                     title="Please enter Address 2"
                                     autoCapitalize="characters"
                                     id="textAddress2"
                                     required={true}
+                                    disabled={true}
                                     value={this.state.adharDetail.address2}
                                     onBlur={() => {
                                         this.props.setAdharManual(this.state.adharDetail);
@@ -512,61 +575,71 @@ class ReviewBusinessDetail extends Component {
                     </div>
                     <br/>
                     <p className="paragraph_styling  text-center">
-                        <b> Company Detail.</b>
+                        <b> Company Details</b>
                     </p>
-                    <div className="form-group mb-3">
-                        <label htmlFor="companyType" className={"bmd-label-floating"}>
-                            Company Type *
-                        </label>
+                    <h5 className={"text-center"}>{(gstProfile === Object(gstProfile)) ? gstProfile.lgnm : ''}</h5>
 
-                        <select
-                            style={{textTransform: "uppercase", fontWeight: 600}}
-                            title="Please select Company Type"
-                            value={this.state.businessDetail.companytype}
-                            required={true}
-                            onChange={e => this.setState({
-                                businessDetail: {
-                                    ...this.state.businessDetail,
-                                    companytype: e.target.value
-                                }
-                            })}
-                            onBlur={() => {
-                                this.props.setBusinessDetail(this.state.businessDetail)
-                            }}
-                            className="form-control font_weight"
-                            id="companyType"
-                        >
-                            <option value={''}>Select Company Type</option>
-                            {
-                                Object.keys(BusinessType).map((key, index) =>
-                                    (<option key={index} value={key}>{BusinessType[key]}</option>)
-                                )
-                            }
-                        </select>
+                    <div className={"row"}>
+                        <div className={"col-md-6 col-sm-12"}>
+                            <div className="form-group mb-3">
+                                <label htmlFor="companyType" className={"bmd-label-floating"}>
+                                    Company Type *
+                                </label>
+
+                                <select
+                                    style={{fontWeight: 600,}}
+                                    title="Please select Company Type"
+                                    value={this.state.businessDetail.companytype}
+                                    required={true}
+                                    disabled={true}
+                                    onChange={e => this.setState({
+                                        businessDetail: {
+                                            ...this.state.businessDetail,
+                                            companytype: e.target.value
+                                        }
+                                    })}
+                                    onBlur={() => {
+                                        this.props.setBusinessDetail(this.state.businessDetail)
+                                    }}
+                                    className="form-control font_weight"
+                                    id="companyType"
+                                >
+                                    <option value={''}>Select Company Type</option>
+                                    {
+                                        Object.keys(BusinessType).map((key, index) =>
+                                            (<option key={index} value={key}>{BusinessType[key]}</option>)
+                                        )
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div className={"col-md-6 col-sm-12"}>
+                            <div className="form-group mb-3">
+                                <label htmlFor="numberGST" className={"bmd-label-floating"}>
+                                    GST Number *
+                                </label>
+                                <input
+                                    type="text"
+                                    className="form-control font_weight"
+                                    // placeholder="Mobile Number"
+                                    style={{fontWeight: 600}}
+                                    pattern="^\d{2}[A-Z]{5}\d{4}[A-Z]{1}[A-Z\d]{1}[Z]{1}[A-Z\d]{1}$"
+                                    title="Please enter GST Number"
+                                    autoCapitalize="characters"
+                                    id="numberGST"
+                                    required={true}
+                                    disabled={true}
+                                    value={this.state.businessDetail.gst}
+                                    onBlur={() => {
+                                        this.props.setBusinessDetail(this.state.businessDetail)
+                                    }}
+                                    // ref={ref => (this.obj.pan = ref)}
+                                    onChange={e => this.businessGst(e)}
+                                />
+                            </div>
+                        </div>
                     </div>
 
-                    <div className="form-group mb-3">
-                        <label htmlFor="numberGST" className={"bmd-label-floating"}>
-                            GST Number *
-                        </label>
-                        <input
-                            type="text"
-                            className="form-control font_weight"
-                            // placeholder="Mobile Number"
-                            style={{textTransform: "uppercase", fontWeight: 600}}
-                            pattern="^\d{2}[A-Z]{5}\d{4}[A-Z]{1}[A-Z\d]{1}[Z]{1}[A-Z\d]{1}$"
-                            title="Please enter GST Number"
-                            autoCapitalize="characters"
-                            id="numberGST"
-                            required={true}
-                            value={this.state.businessDetail.gst}
-                            onBlur={() => {
-                                this.props.setBusinessDetail(this.state.businessDetail)
-                            }}
-                            // ref={ref => (this.obj.pan = ref)}
-                            onChange={e => this.businessGst(e)}
-                        />
-                    </div>
                     {this.state.businessDetail.companytype !== "proprietorship" &&
                     this.state.businessDetail.companytype !== "" ? (
                         <div className="form-group mb-3 ">
@@ -577,7 +650,7 @@ class ReviewBusinessDetail extends Component {
                                 type="text"
                                 className="form-control font_weight"
                                 // placeholder="Email"
-                                style={{textTransform: "uppercase", fontWeight: 600}}
+                                style={{fontWeight: 600, padding: '10px'}}
                                 pattern="^[a-zA-Z]{5}([0-9]){4}[a-zA-Z]{1}?$"
                                 title="Please enter Business PAN"
                                 autoCapitalize="characters"
@@ -599,7 +672,7 @@ class ReviewBusinessDetail extends Component {
                                 <label
                                     htmlFor="avgTrans"
                                     className="bmd-label-floating"
-                                    style={{marginLeft: "2rem"}}
+
                                 >
                                     Average Monthly Transactions *
                                 </label>
@@ -611,18 +684,17 @@ class ReviewBusinessDetail extends Component {
                                     </div>
                                     <input
                                         type="number"
-                                        className="form-control font_weight"
-                                        // placeholder="Pincode"
+                                        className="form-control font_weight prependInput"
+
                                         style={{
-                                            textTransform: "uppercase",
-                                            fontWeight: 600,
-                                            marginLeft: "1rem"
+                                            marginLeft: "-5px"
                                         }}
                                         pattern="^[0-9]{10}$"
                                         title="Enter Average monthly Transactions"
                                         autoCapitalize="characters"
                                         id="avgTrans"
                                         required={true}
+                                        disabled={true}
                                         value={this.state.businessDetail.avgtrans}
                                         onBlur={() => {
                                             this.props.setBusinessDetail(this.state.businessDetail)
@@ -654,18 +726,16 @@ class ReviewBusinessDetail extends Component {
                                     </div>
                                     <input
                                         type="text"
-                                        className="form-control font_weight"
+                                        className="form-control font_weight prependInput"
+
                                         style={{
-                                            textTransform: "uppercase",
-                                            fontWeight: 600,
-                                            paddingLeft: '5px',
-                                            marginLeft: '1rem'
+                                            marginLeft: "-5px"
                                         }}
-                                        pattern="^[0-9]+$"
+                                        // pattern="^[0-9]+$"
                                         title="Loan Amount"
                                         autoCapitalize="characters"
                                         id="loanAmount"
-                                        required={true}
+                                        // required={true}
                                         disabled={true}
                                         value={this.props.payload.loan_amount}
                                         // onBlur={() => this.props.setBusinessDetail(this.state.businessDetail)}
@@ -682,12 +752,13 @@ class ReviewBusinessDetail extends Component {
                         <input
                             type="text"
                             className="form-control font_weight"
-                            style={{textTransform: "uppercase", fontWeight: 600}}
+                            style={{fontWeight: 600}}
                             pattern="^[0-9A-Za-z]+$"
                             title="Enter Dealer Code"
                             autoCapitalize="characters"
                             id="dealerCode"
                             required={true}
+                            disabled={true}
                             value={this.state.businessDetail.dealercode}
                             onBlur={() => this.props.setBusinessDetail(this.state.businessDetail)}
                             // ref={ref => (this.obj.pan = ref)}
@@ -702,8 +773,30 @@ class ReviewBusinessDetail extends Component {
                             }}
                         />
                     </div>
-                    <div className="mt-5 mb-5 text-center ">
+                    <br/>
+                    <div className="checkbox">
+                        <label style={{color: 'black'}}>
+                            <input type="checkbox" checked={this.state.tnc_consent}
+                                   onChange={(e) =>
+                                       this.setState(prevState => ({tnc_consent: !prevState.tnc_consent}))
+                                   }/> I accept the <a href={'#'} onClick={(e) => {
+                            e.preventDefault();
+                            this.setState({tncModal: false}, () => this.triggerTnCModal.click());
+
+                        }}>Terms &
+                            Condition</a>, <a href={'#'} onClick={(e) => {
+                            e.preventDefault();
+                            this.setState({tncModal: true}, () => this.triggerTnCModal.click());
+
+                        }}
+                                              href={"#"}>Privacy
+                            Policy</a> of the Mintifi and provide the
+                            consent to retrieve the Bureau information for checking my Credit worthiness .
+                        </label>
+                    </div>
+                    <div className="mt-5 mb-5 text-center">
                         <button
+                            disabled={!this.state.tnc_consent}
                             type="submit"
                             onClick={e => this._formSubmit(e)}
                             className="form-submit btn btn-raised greenButton"
@@ -711,6 +804,7 @@ class ReviewBusinessDetail extends Component {
                         </button>
                     </div>
                 </form>
+                {this.RenderModalTnC()}
             </>
         );
     }
@@ -722,7 +816,7 @@ const mapStateToProps = state => ({
     gstProfile: state.businessDetail.gstProfile,
     pan: state.adharDetail.pan,
     adhar: state.adharDetail.adhar,
-    authObj: state.authPayload.authObj,
+    // authObj: state.authPayload.authObj,
     token: state.authPayload.token,
     payload: state.authPayload.payload,
     preFlightResp: state.businessDetail.preFlightResp

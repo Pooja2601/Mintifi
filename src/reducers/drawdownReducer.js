@@ -18,6 +18,12 @@ export default (state = {}, action) => {
         case types.CHANGE_LOADER:
             return {...state, loader: action.loader};
 
+        case types.D_SET_PREFLIGHT:
+            return {...state, preFlightResp: action.preFlightResp};
+
+        case types.D_SET_LOAN_PAYLOAD:
+            return {...state, loanPayload: action.loanPayload};
+
         default:
             return state;
     }

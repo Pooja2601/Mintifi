@@ -25,7 +25,7 @@ class Login extends Component {
             "anchor_id": "uyh65t",
             "distributor_dealer_code": "R1T89563",
             "sales_agent_mobile_number": "9876543210",
-            "anchor_transaction_id": "hy76515",
+            "anchor_transaction_id": "hy76520",
             "retailer_onboarding_date": "2006-09-19",
             "loan_amount": "500000"
         };
@@ -65,30 +65,29 @@ class Login extends Component {
         return (
             <>
                 {/*<Link to={'/'} >Go Back </Link>*/}
-                <h5 align="center">User Registration</h5>
+                <h5 align="center">Mintifi Pay</h5>
                 <p className="paragraph_styling text-center">
-                    Find out how our platform can help you climb the ladder to
-                    another level of success today.
+                    Get a credit line of upto Rs. 5 lacs instantly and pay for your purchases.
                     {/*{token} , {trans_id}*/}
                 </p>
                 <div className="mt-5 mb-5 text-center row">
-                    <div className={"col-sm-12 col-md-6"}><img
+                    <div className={"col-sm-12 col-md-6 text-right"}><img
                         src="/images/supply_chain/new.png"
                         style={{
-                            width: "150px", boxShadow: '0 0 8px #cccccc', cursor: 'pointer', padding: '10px',
+                            width: "150px", border: (existing === 'new') &&'1px solid #00bfa5', cursor: 'pointer', padding: '10px',
                             borderRadius: '15%', opacity: (existing === 'new') ? '1.0' : '0.4'
                         }}
                         onClick={() => this._newCustomer()}
-                    /><br/> New Customer
+                    /><br/> <p style={{paddingRight: '10%'}}>New User</p>
                     </div>
-                    <div className={"col-sm-12 col-md-6"}><img
+                    <div className={"col-sm-12 col-md-6 text-left"}><img
                         src="/images/supply_chain/existing.png"
                         style={{
-                            width: "150px", boxShadow: '0 0 8px #cccccc', cursor: 'pointer', padding: '10px',
+                            width: "150px", border: (existing === 'exist') &&'1px solid #00bfa5', cursor: 'pointer', padding: '10px',
                             borderRadius: '15%', opacity: (existing === 'exist') ? '1.0' : '0.4'
                         }}
                         onClick={() => this._existCustomer()}
-                    /> <br/>Existing Customer
+                    /> <br/> <p style={{paddingLeft: '8%'}}>Existing User</p>
                     </div>
                     <br/>
                     <br/>

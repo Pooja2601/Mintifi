@@ -18,6 +18,8 @@ export const types = {
 //    Drawdown Section
     D_SET_AUTH: "D_SET_AUTH",
     D_SET_TOKEN: "D_SET_TOKEN",
+    D_SET_PREFLIGHT: "D_SET_PREFLIGHT",
+    D_SET_LOAN_PAYLOAD: "D_SET_LOAN_PAYLOAD",
 };
 
 export const changeLoader = loader => ({
@@ -67,48 +69,10 @@ export const DrawsetToken = (token, payload) => ({
     token, payload
 });
 
-
-/*
-export const fetchUpcoming = () => ({type: types.FETCH_UPCOMING});
-
-export const sortUpcoming = (method, order) => ({
-    type: types.SORT_UPCOMING,
-    method,
-    order
+export const DrawsetPreflight = preFlightResp => ({
+    type: types.D_SET_PREFLIGHT, preFlightResp
 });
 
-export const sortArr = (action, state) => {
-    let tempArr = [...state.upcome];
-    let {method, order} = action;
-
-    if (method === "alpha")
-        if (order === "asc")
-            tempArr.sort((a, b) => (a.title > b.title) - (a.title < b.title));
-        else tempArr.sort((a, b) => (a.title < b.title) - (a.title > b.title));
-
-    if (method === "year")
-        if (order === "asc")
-            tempArr.sort((a, b) => {
-                return (
-                    (a.release_date > b.release_date) - (a.release_date < b.release_date)
-                );
-            });
-        else
-            tempArr.sort((a, b) => {
-                return (
-                    (a.release_date < b.release_date) - (a.release_date > b.release_date)
-                );
-            });
-    // console.log(tempArr);
-    return tempArr;
-};
-
-export const filterArr = (action, state) => {
-    let titleStr, yearStr;
-    return state.upcome.filter(val => {
-        titleStr = val.title.toLowerCase();
-        yearStr = val.release_date.toLowerCase();
-        return titleStr.includes(action.query) || yearStr.includes(action.query);
-    });
-};
-*/
+export const DrawsetLoanPayload = loanPayload => ({
+    type: types.D_SET_LOAN_PAYLOAD, loanPayload
+});
