@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {Link, withRouter} from "react-router-dom";
 import {setAdharManual} from "../../actions";
+import {defaultLender} from '../../shared/constants';
 
 class AppRejected extends Component {
 
@@ -23,7 +24,7 @@ class AppRejected extends Component {
         // if(preFlightResp ===Object(preFlightResp))
         {
             const {f_name, l_name} = adharObj;
-            const load_status = 'approved';  // pending // approved
+            const load_status = 'pending';  // pending // approved
             // const {loan_application_id, credit_eligibility} = preFlightResp;
 
             let credit_eligibility = {
@@ -46,13 +47,18 @@ class AppRejected extends Component {
                     <br/>
 
                     <i className={(match.params.status === 'pending') ? iconCss + 'fa-hourglass-half' : iconCss + 'fa-check-circle'}
-                       style={{color: (match.params.status === 'pending') ? '#02587F' : ''}}></i>
+                       style={{color: (match.params.status === 'pending') ? '#02587F' : '', fontSize: '60px'}}></i>
                     <h5 className={"text-center"}> Application {(match.params.status === 'pending') ? 'Pending...' : 'Approved !'}</h5>
 
                     <div className={'alert text-center'}
                          role="alert">
-                        <p className="alert-heading">{(match.params.status === 'pending') ? 'Hello' : 'Congratulation'} {f_name} {l_name}</p>
-                        <p className="paragraph_styling " style={{fontSize: '14px'}}>
+                        <p className="paragraph_styling">{(match.params.status === 'pending') ? <>Thank you {f_name} for
+                            completing the Loan Application process <br/>However, we need more information for
+                            processing your loan application .<br/> We will get in touch with you in next 24
+                            hours.</> : <> Dear {f_name} {l_name}, Congratulations. You are eligible for a credit limit
+                            of <b
+                                style={{fontWeight: '700'}}> Rs. {credit_eligibility.loan_amount_approved}/-</b></>} </p>
+                        {/*<p className="paragraph_styling " style={{fontSize: '14px'}}>
                             Thank you for completing the Loan Application process.<br/>
                             {(match.params.status === 'pending') ? <>However, we need more information for
                                     processing your loan application .<br/> We will get in touch with you in next 24
@@ -60,7 +66,7 @@ class AppRejected extends Component {
                                 <b><br/>Your Application is approved for a credit line of
                                     <b style={{fontWeight: '700'}}> Rs. {credit_eligibility.loan_amount_approved}/-</b>.</b>}
                             <br/>
-                        </p>
+                        </p>*/}
                     </div>
                     <br/>
 
@@ -86,7 +92,7 @@ class AppRejected extends Component {
                                 </tr>
                                 <tr>
                                     <td className={"tableDataRight"}>Lender</td>
-                                    <td>Fullerton India Private Limited</td>
+                                    <td>{defaultLender}</td>
                                 </tr>
                                 <tr>
                                     <td className={"tableDataRight"}>Credit Approved</td>
@@ -125,7 +131,7 @@ class AppRejected extends Component {
                                     disabled={!this.state.confirmed}
                                     onClick={e => this.props.history.push('/DocsUpload')}
                                     className="form-submit btn btn-raised greenButton"
-                                >Proceed
+                                >Complete Your KYC
                                 </button>
                             </div>
                         </>) : <>
@@ -134,6 +140,17 @@ class AppRejected extends Component {
                                 href={"mailto:support@mintifi.com"}>support@mintifi.com</a> or <a
                                 href={"tel:+919999999999"}>+91 9999999999</a>. <br/>Please
                                 mention your ( loan application id ) in the request.
+                            </div>
+                            <div className="mt-5 mb-5 text-center ">
+                                {/*
+                    ToDo : Applying the name of the anchor
+                    */}
+                                <button
+                                    type="button"
+                                    onClick={e => this.props.history.push('/')}
+                                    className="form-submit btn btn-raised greenButton"
+                                >Back to Yatra
+                                </button>
                             </div>
                         </>
                     }

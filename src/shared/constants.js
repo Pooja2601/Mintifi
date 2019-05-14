@@ -12,5 +12,7 @@ module.exports = {
         "llp": "Limited Liability Partnership",
         "trust": "Trust",
         "others": "Others"
-    }
+    },
+    defaultLender: "Mintifi Finserv Private Limited", // Fullerton India Private Limtited
+    OTP_Timer: 60,
 };

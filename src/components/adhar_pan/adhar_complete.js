@@ -132,7 +132,7 @@ class AdharPan extends Component {
                     }
                     if (resp.error === Object(resp.error)) {
                         alert(resp.error.message);
-                        this.setState({city:'', state:''});
+                        this.setState({city: '', state: ''});
                     }
                     changeLoader(false);
                 }, () => changeLoader(false));
@@ -318,9 +318,9 @@ class AdharPan extends Component {
 
                     <div className={"row"}>
                         <div className={"col-sm-12 col-md-6 text-center"}>
-                            {/*<label htmlFor="ResidenceOwnership" className="labelLoan">
-                                Gender
-                            </label><br/>*/}
+                            <label htmlFor="ResidenceOwnership" className="labelLoan bmd-label">
+                                Gender *
+                            </label><br/>
                             <div
                                 style={{marginBottom: '20px'}}
                                 className="btn-group"
@@ -380,9 +380,9 @@ class AdharPan extends Component {
                             </div>
                         </div>
                         <div className={"col-sm-12 col-md-6 text-center"}>
-                            {/*<label htmlFor="ResidenceOwnership" className="labelLoan">
-                                Gender
-                            </label><br/>*/}
+                            <label htmlFor="ResidenceOwnership" className="labelLoan bmd-label">
+                                Ownership *
+                            </label><br/>
                             <div
                                 style={{marginBottom: '20px'}}
                                 className="btn-group"
@@ -390,6 +390,7 @@ class AdharPan extends Component {
                                 role="groupProperty"
                                 aria-label="..."
                             >
+
                                 <button
                                     type="button"
                                     className="btn btn-default"

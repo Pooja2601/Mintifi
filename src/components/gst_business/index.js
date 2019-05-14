@@ -10,7 +10,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 class BusinessDetail extends Component {
 
-    state = {companytype: '', gst: '', bpan: '', avgtrans: '', dealercode: '', missed_fields: true, lgnm: ''};
+    state = {companytype: '', gst: '', bpan: '', avgtrans: '', dealercode: '', missed_fields: true, lgnm: '', tnc_consent: false};
 
     validate = {companytype: false, gst: false, avgtrans: false, dealercode: false};
 
@@ -18,7 +18,7 @@ class BusinessDetail extends Component {
         e.preventDefault();
         // this.props.setBusinessDetail(this.state);
         setTimeout(() => {
-            this.props.history.push('/ReviewChanges')
+            this.props.history.push('/Finalize');
         });
     }
 
@@ -101,7 +101,7 @@ class BusinessDetail extends Component {
                 <br/><br/>
                 <h4 className={"text-center"}>Business Details</h4>
                 <p className="paragraph_styling  text-center">
-                    <b> And the last Step, your Business Information.</b>
+                    <b> Please submit your business details to complete the loan application.</b>
                 </p>
                 <h5 className={"text-center"}>{(gstProfile === Object(gstProfile)) ? gstProfile.lgnm : ''}</h5>
 
@@ -243,7 +243,7 @@ class BusinessDetail extends Component {
                             </div>
                         </div>
                     </div>
-                    {/* <div className="checkbox mt-5">
+                    { <div className="checkbox mt-5">
                         <label style={{color: 'black'}}>
                             <input type="checkbox" checked={this.state.tnc_consent}
                                    onChange={(e) =>
@@ -252,15 +252,15 @@ class BusinessDetail extends Component {
                             Policy</a> of the Mintifi and provide the
                             consent to retrieve the Bureau information for checking my Credit worthiness .
                         </label>
-                    </div>*/}
+                    </div>}
 
                     <div className="mt-5 mb-5 text-center">
                         <button
                             type="submit"
-                            disabled={this.state.missed_fields}
+                            disabled={this.state.missed_fields || !this.state.tnc_consent}
                             onClick={e => this._formSubmit(e)}
                             className="form-submit btn btn-raised greenButton"
-                        >Proceed
+                        >Check your eligibility
                         </button>
                     </div>
                 </form>

@@ -125,7 +125,12 @@ class DocsUpload extends Component {
                                                        }));
                                                    }
                                                    }/> <b
-                                            style={{marginLeft: "20px", fontSize: '12px'}}>{val.toUpperCase()}</b>
+                                            style={{
+                                                marginLeft: "20px",
+                                                fontSize: '12px',
+                                                color: 'black',
+                                                cursor: 'pointer'
+                                            }}>{val.toUpperCase()}</b>
                                         </label><br/></div>))}
                                 </div>
                             </div>
@@ -281,18 +286,19 @@ class DocsUpload extends Component {
                 </button>*/}
                     <br/>
                     {/*<i className={"fa fa-file-pdf checkCircle"} style={{color: 'cadetblue'}}></i>*/}
-                    <h3 className={"text-center"}> KYC Documents !</h3>
+                    <h3 className={"text-center"}> KYC Documents </h3>
                     <br/>
 
                     <div className="alert " role="alert">
-                        <p className="alert-heading text-center">Hi {f_name} {l_name}, Kindly upload the documents in
-                            PDF or PNG/JPG
+                        <p className="alert-heading text-center">Hi {f_name} {l_name}, Please upload following documents in
+                            pdf or png/jpg
                             format. </p>
                         <div className="paragraph_styling  text-center">
 
                             <div className={"row mb-4 mt-4"}>
                                 <div className={"col-md-6 col-sm-12"}>
-                                    <div className="input-container text-left">
+                                    <div className="input-container text-left" style={{cursor: 'pointer'}}
+                                         onClick={() => this._multiDimDocsUpload('id_proof')}>
                                         <input type="file" id="idProofInput"
                                                onChange={(e) => this._onChangeFile(e, 'id_proof')}
                                                ref={ref => this.idProofInput = ref}/>
@@ -309,7 +315,8 @@ class DocsUpload extends Component {
                                     </small>
                                 </div>
                                 <div className={"col-md-6 col-sm-12"}>
-                                    <div className="input-container text-left">
+                                    <div className="input-container text-left" style={{cursor: 'pointer'}}
+                                         onClick={() => this._multiDimDocsUpload('add_proof')}>
                                         <input type="file" id="addressProofInput"
                                                onChange={(e) => this._onChangeFile(e, 'add_proof')}
                                                ref={ref => this.addProofInput = ref}/>
@@ -352,7 +359,8 @@ class DocsUpload extends Component {
 
                             <div className={"row"}>
                                 <div className={"col-md-6 col-sm-12"}>
-                                    <div className="input-container text-left">
+                                    <div className="input-container text-left" style={{cursor: 'pointer'}}
+                                         onClick={() => this._multiDimDocsUpload('entity_proof')}>
                                         <input type="file" id="addressProofInput"
                                                onChange={(e) => this._onChangeFile(e, 'entity_proof')}
                                                ref={ref => this.entityProofInput = ref}/>
@@ -370,7 +378,8 @@ class DocsUpload extends Component {
                                     </small>
                                 </div>
                                 <div className={"col-md-6 col-sm-12"}>
-                                    <div className="input-container text-left">
+                                    <div className="input-container text-left" style={{cursor: 'pointer'}}
+                                         onClick={() => this._multiDimDocsUpload('caddr_proof')}>
                                         <input type="file" id="addressProofInput"
                                                onChange={(e) => this._onChangeFile(e, 'caddr_proof')}
                                                ref={ref => this.cAddressProofInput = ref}/>
@@ -392,13 +401,13 @@ class DocsUpload extends Component {
                         </div>
                     </div>
 
-                    <div className="mt-3 mb-3 text-center ">
+                    <div className="mb-3 text-center ">
                         <button
                             type="button"
                             disabled={(this.idProofInput.value === undefined && this.addProofInput.value === undefined && this.entityProofInput.value === undefined && this.cAddressProofInput.value === undefined)}
                             onClick={e => this.formSubmit(e)}
                             className="form-submit btn btn-raised greenButton"
-                        >Process Loan
+                        >Complete Loan Application
                         </button>
                     </div>
                     {this.RenderModalMessage()}

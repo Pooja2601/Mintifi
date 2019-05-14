@@ -1,11 +1,11 @@
 import React, {Component} from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
-import {baseUrl, otpUrl} from "../../shared/constants";
+import {baseUrl, otpUrl, OTP_Timer} from "../../shared/constants";
 import {connect} from "react-redux";
 import {setAuth, sendOTP, changeLoader} from "../../actions";
 import {Link, withRouter} from "react-router-dom";
 
-const Timer = 120;
+const Timer = OTP_Timer;
 
 class Auth extends Component {
     state = {
@@ -188,18 +188,27 @@ class Auth extends Component {
                                         id="otp-area">Resending
                                     in {(this.state.timer) && ` ${this.state.timer} Sec`}
                                 </button>*/}
-                                        <label style={{
+                                      {/*  <label style={{
                                             fontSize: 'small',
                                             paddingTop: '14px',
                                             color: '#bbb'
-                                        }}>Next OTP in {(this.state.timer) && ` ${this.state.timer} Sec`}</label>
+                                        }}>Next OTP in {(this.state.timer) && ` ${this.state.timer} Sec`}</label>*/}
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div className="mt-5 text-center ">
+                    <div className={"text-center"}>
+                        <label style={{
+                            fontSize: 'small',
+                            paddingTop: '14px',
+                            color: '#bbb',
+                            visibility: (this.state.submitted) ? 'visible' : 'hidden'
+                        }}>You can resend OTP after {(this.state.timer) && ` ${this.state.timer} Sec`}</label>
+                    </div>
+
+                    <div className="mt-3 text-center ">
 
                         <button
                             type="submit"

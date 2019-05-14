@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {Link, withRouter} from "react-router-dom";
 import {changeLoader, setAdharManual} from "../../actions";
+import {defaultLender} from '../../shared/constants';
 
 class ThankYou extends Component {
 
@@ -27,16 +28,15 @@ class ThankYou extends Component {
                 {/* <button onClick={() => this.props.history.push('/BusinessDetail')} className={"btn btn-link"}>
                     Go Back
                 </button>*/}
-                <i className={"fa fa-check-circle checkCircle"}></i>
+                <i style={{fontSize: '60px'}} className={"fa fa-check-circle checkCircle"}></i>
                 <h3 className={"text-center"}> Processing Application ...</h3>
                 <br/>
 
                 <div className="alert  text-center" role="alert">
-                    <h5 className="alert-heading">Thank you {f_name} {l_name}</h5>
+                    <h5 className="alert-heading">Dear {f_name} {l_name}</h5>
                     <p className="paragraph_styling ">
-                        We're processing the application based on the EMI Tenure selected,<br/> Loan will be disbursed
-                        within 24 hours.<br/>
-                        Below are the detailed information of your EMI.
+                        Your payment request has been processed successfully.<br/> Your payment request details are as
+                        below :
                     </p>
                 </div>
 
@@ -65,7 +65,7 @@ class ThankYou extends Component {
                             </tr>
                             <tr>
                                 <td className={"tableDataRight"}>Lender</td>
-                                <td>Fullerton India Private Limited</td>
+                                <td>{defaultLender}</td>
                             </tr>
                             <tr>
                                 <td className={"tableDataRight"}>Credit Balance</td>

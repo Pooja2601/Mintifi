@@ -37,17 +37,17 @@ const loanOffers = {
             "product_type": "term_loan",
             "roi": 18,
             "tenor": 6,
-            "emi": 11333
+            "emi": 9833
+        }, {
+            "product_type": "term_loan",
+            "roi": 18,
+            "tenor": 9,
+            "emi": 6555
         }, {
             "product_type": "term_loan",
             "roi": 18,
             "tenor": 12,
-            "emi": 7166
-        }, {
-            "product_type": "term_loan",
-            "roi": 18,
-            "tenor": 12,
-            "emi": 7166
+            "emi": 4916
         }]
     },
     "timestamp": "2019-09-09T06:42:12.000Z"
@@ -155,129 +155,84 @@ class Offers extends Component {
 
         let cardBox = 'card card-body mt-1 ml-1 list-group-item list-group-item-action flex-column align-items-start';
         return (<>
-            <h4 className={"text-center"}>Offers Section</h4>
+            <h4 className={"text-center"}>Loan Offers</h4>
             <br/>
-            <div className="row justify-content-center mt-3 mb-3" style={{minHeight: '300px'}}>
-                <div className={"col-md-6 col-sm-11"} style={{borderRight: '1px dashed black'}}>
-                    <h5 className={"text-center"}>Welcome Mahesh</h5>
-                    <br/>
-                    <div className="card" style={{borderRadius: '5px', boxShadow: '0px 0px 0px 0px'}}>
-                        <div className="card-header">
-                            Credit Status
-                        </div>
+            {/*<h5 className={"text-center"}></h5>*/}
+            <div className="row justify-content-center mt-3 mb-3">
 
-                        <div className="row mb-1 mt-3 " style={{padding: '0.5rem', flexWrap: 'inherit'}}>
-                            <div className="col-sm-6">
-                                Credit Approved :
-                            </div>
-                            <div className="col-sm-6">
-                                Rs {creditLimit.approved_credit_limit}
-                            </div>
-                        </div>
+                <p className={"text-center"} style={{padding: '0 12px'}}>Dear Mahesh, glad to see you back !<br/>Select
+                    the below available EMI
+                    option that best suits your needs</p>
 
-                        <div className="row mb-1" style={{padding: '0.5rem', flexWrap: 'inherit'}}>
-                            <div className="col-sm-6">
-                                Balance Credit Limit :
-                            </div>
-                            <div className="col-sm-6">
-                                Rs {creditLimit.balance_credit_limit}
-                            </div>
-                        </div>
-                        <div className="row mb-1" style={{padding: '0.5rem', flexWrap: 'inherit'}}>
-                            <div className="col-sm-6">
-                                Loan Status :
-                            </div>
-                            <div className="col-sm-6">
-                                {loanStatus.loan_status.toUpperCase()}
-                            </div>
-                        </div>
-                        <div className="row mb-1" style={{padding: '0.5rem', flexWrap: 'inherit'}}>
-                            <div className="col-sm-6">
-                                Loan Approval Date :
-                            </div>
-                            <div className="col-sm-6">
-                                {loanStatus.loan_status_date.substr(0, 10)}
-                            </div>
-                        </div>
+            </div>
+            <div className="col-sm-12">
 
+                <div className="card alert leftFixedCard" role="alert"
+                >
+                    <div className="card-header">
+                        <b> Transaction ID : # {preFlightResp.anchor_drawdown_id}</b>
                     </div>
+
+                    <div className="row mb-1 mt-3 "
+                         style={{padding: '0.5rem', flexWrap: 'inherit', fontSize: '13px'}}>
+                        <div className="col-sm-7">
+                            Anchor ID
+                        </div>
+                        <div className="col-sm-5">
+                            # 15425
+                        </div>
+                    </div>
+
+                    <div className="row mb-1" style={{padding: '0.5rem', flexWrap: 'inherit', fontSize: '13px'}}>
+                        <div className="col-sm-7">
+                            Drawdown Amount
+                        </div>
+                        <div className="col-sm-5">
+                            Rs {loanOffers.amount}
+                        </div>
+                    </div>
+
                 </div>
-                <div className="col-md-6 col-sm-11 mt-3">
 
-                    <p className={"text-center"}>Select the best offers suitable for your needs</p>
-                    <div className="alert alert-primary" role="alert" style={{fontSize: '14px'}}>
-                        <div className={"row"}>
-                            <div className={"col-sm-7"}>Loan Application Id :</div>
-                            <div className={"col-sm-5"}>{loanOffers.loan.loan_application_id}</div>
+                <div className="card alert leftFixedCard2" role="alert"
+                >
+                    <div className="row mb-1" style={{padding: '0.5rem', flexWrap: 'inherit', fontSize: '13px'}}>
+                        <div className="col-sm-7">
+                            Application ID
                         </div>
-                        <div className={"row"}>
-                            <div className={"col-sm-7"}>Loan Amount :</div>
-                            <div className={"col-sm-5"}> Rs {loanOffers.amount}</div>
+                        <div className="col-sm-5">
+                            # {loanOffers.loan.loan_application_id}
                         </div>
+                    </div>
+                    <div className="row mb-1 " style={{padding: '0.5rem', flexWrap: 'inherit', fontSize: '13px'}}>
+                        <div className="col-sm-7">
+                            Credit Approved
+                        </div>
+                        <div className="col-sm-5">
+                            Rs {creditLimit.approved_credit_limit}
+                        </div>
+                    </div>
 
-                    </div>
-                    <br/>
-                    <div className="alert alert-primary" role="alert"
-                         style={{display: (this.state.selected.product_type !== undefined) ? 'block' : 'none'}}>
-                        You have selected <strong
-                        className="text-primary text-capitalize">`{(this.state.selected.product_type)} - {this.state.selected.tenor} Months`</strong>
-                    </div>
-                    <br/>
-                    {/* {<div id="carouselExampleSlidesOnly" data-interval="3000" className="carousel slide"
-                         data-ride="carousel" style={{padding: '10px'}}>
-                        <div className="carousel-inner" style={{minHeight: '230px'}}>
-                            <div className="carousel-item active">
-                                <div className="card p-3 text-right" style={{background: '#6eb9c2'}}>
-                                    <blockquote className="blockquote mb-0">
-                                        <p style={{color: 'white'}}>
-                                            Offer are best calculated according to your Credit history and Bureau
-                                            report.</p>
-                                        <footer className="blockquote-footer">
-                                            <small className="text-muted" style={{color: 'white'}}>
-                                                Someone famous in <cite title="Source Title">Source Title</cite>
-                                            </small>
-                                        </footer>
-                                    </blockquote>
-                                </div>
-                            </div>
-                            {loanOffers.loan.offers.map((val, key) => (
-                                <div key={key} className="carousel-item">
-                                    <div className="card mb-3" style={{background: '#eee'}}>
-                                        <div className="card-header text-white text-capitalize"
-                                             style={{backgroundColor: '#00bfa5',
-                                                 opacity: '0.7555'}}>
-                                            {val.product_type} - {val.tenor} Months
-                                        </div>
-                                        <div className="card-body text-secondary">
-                                            <div className="card-title">
-                                                <ul>
-                                                    <li>Rate of Interest : {val.roi}%</li>
-                                                    <li>Tenor : {val.tenor} Months</li>
-                                                    <li>EMI : Rs {val.emi} </li>
-                                                </ul>
-                                            </div>
-                                            <a href="#" className="btn btn-primary ml-3" onClick={(e) => {
-                                                e.preventDefault();
-                                                this.setState({selected: val});
-                                            }}>Select</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))
-                            }
-                            <a className="carousel-control-prev" href="#carouselExampleSlidesOnly" role="button"
-                               data-slide="prev">
-                                <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span className="sr-only">Previous</span>
-                            </a>
-                            <a className="carousel-control-next" href="#carouselExampleSlidesOnly" role="button"
-                               data-slide="next">
-                                <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span className="sr-only">Next</span>
-                            </a>
+                    <div className="row mb-1" style={{padding: '0.5rem', flexWrap: 'inherit', fontSize: '13px'}}>
+                        <div className="col-sm-7">
+                            Balance Credit
                         </div>
-                    </div>}*/}
+                        <div className="col-sm-5">
+                            Rs {creditLimit.balance_credit_limit}
+                        </div>
+                    </div>
+
+
                 </div>
+
+            </div>
+            <div className="alert alert-primary" role="alert"
+                 style={{
+                     display: (this.state.selected.product_type !== undefined) ? 'block' : 'none',
+                     margin: '2% 5%'
+                 }}>
+                You have selected <strong
+                className="text-primary text-capitalize">`{(this.state.selected.product_type)} - {this.state.selected.tenor} Months`</strong>
             </div>
             <div className="row" style={{overflowY: 'auto', width: '90%', margin: 'auto'}}>
                 {<div className="list-group flex-row" style={{padding: '0.2rem 5px'}}>
@@ -318,7 +273,7 @@ class Offers extends Component {
 
             <div className="checkbox mt-4 ml-5 mr-3"
                  style={{visibility: (this.state.selected.product_type !== undefined) ? 'visible' : 'hidden'}}>
-                <label style={{color: 'black'}}>
+                <label style={{color: 'black', cursor: 'pointer'}}>
                     <input type="checkbox" checked={this.state.tnc_consent}
                            onChange={(e) =>
                                this.setState(prevState => ({tnc_consent: !prevState.tnc_consent}), () => console.log(this.state.tnc_consent))

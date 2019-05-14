@@ -1,11 +1,11 @@
 import React, {Component} from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
-import {baseUrl, otpUrl} from "../../shared/constants";
+import {baseUrl, otpUrl, OTP_Timer} from "../../shared/constants";
 import {connect} from "react-redux";
 import {DrawsetAuth, DrawsetToken, changeLoader} from "../../actions";
 import {withRouter} from "react-router-dom";
 
-const Timer = 120;
+const Timer = OTP_Timer;
 
 class MobileOtp extends Component {
     state = {
@@ -30,7 +30,7 @@ class MobileOtp extends Component {
             "retailer_onboarding_date": "2006-09-19",
             "loan_amount": "500000"
         };
-        fetch('https://test.mintifi.com/api/v1/auth', {
+        fetch(`${baseUrl}/auth`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -44,6 +44,8 @@ class MobileOtp extends Component {
             if (resp.response === Object(resp.response))
                 if (resp.response.status === 'success')
                     this.props.DrawsetToken(resp.response.auth.token, payload);
+
+            // setTimeout(() => console.log(this.props.token),2000)
         });
     }
 
@@ -61,15 +63,17 @@ class MobileOtp extends Component {
             headers: {'Content-Type': 'application/json', 'token': token},
             body: JSON.stringify({
                 "app_id": 3,
-                "otp_type": "send_otp",
+                "otp_type": "one_time_password",
                 "mobile_number": this.state.mobile,
                 "timestamp": new Date()
             })
         }).then(resp => resp.json()).then(resp => {
             // console.log(JSON.stringify(resp));
             changeLoader(false);
-            if (resp.error === Object(resp.error))
+            if (resp.error === Object(resp.error)) {
                 alert(resp.error.message);
+                this.setState({loading: false, submitted: false});
+            }
             else if (resp.response === Object(resp.response) && resp.response.status === 'success') {
                 // alert(resp.success.message);
                 this.setState({otp_reference_code: resp.response.otp_reference_code}, () => DrawsetAuth(this.state));
@@ -111,10 +115,10 @@ class MobileOtp extends Component {
                 this.setState({verified: resp.response.is_otp_verified}, () => {
                     DrawsetAuth(this.state);
                 });
-                if (resp.response.is_otp_verified)
                 // Goes to New Page
+                if (resp.response.is_otp_verified)
                     setTimeout(() => {
-                        // this.props.history.push('/Offers');
+                        this.props.history.push('/Drawdown/Offers');
                     }, 500);
             }
         }, resp => {
@@ -155,10 +159,10 @@ class MobileOtp extends Component {
         return (
             <>
                 {/*<Link to={'/AdharComplete'} className={"btn btn-link"}>Go Back </Link>*/}
-                <h4 className={"text-center"}>Drawdown Portal</h4>
+                <h4 className={"text-center"}>Pay with Mintifi</h4>
                 <p className="paragraph_styling text-center">
-                    Glad to see you back !<br/>
-                    Let us verify your phone number first.
+                    {/*<br/>*/}
+                    Please verify your mobile number.
                 </p>
                 <form
                     id="serverless-contact-form"
@@ -221,16 +225,24 @@ class MobileOtp extends Component {
                                         }}
                                         aria-describedby="otp-area"
                                     />
-                                    <div className="input-group-append">
+                                    {/* <div className="input-group-append">
                                         <label style={{
                                             fontSize: 'small',
                                             paddingTop: '14px',
                                             color: '#bbb'
                                         }}>Next OTP in {(this.state.timer) && ` ${this.state.timer} Sec`}</label>
-                                    </div>
+                                    </div>*/}
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div className={"text-center"}>
+                        <label style={{
+                            fontSize: 'small',
+                            paddingTop: '14px',
+                            color: '#bbb',
+                            visibility: (this.state.submitted) ? 'visible' : 'hidden'
+                        }}>You can resend OTP after {(this.state.timer) && ` ${this.state.timer} Sec`}</label>
                     </div>
 
                     <div className="mt-3 mb-2 text-center ">

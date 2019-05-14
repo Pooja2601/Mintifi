@@ -16,19 +16,18 @@ class AppRejected extends Component {
                 <h4 className={"text-center"}>Credit Eligibility</h4>
                 <br/>
                 {/*fa-exclamation-circle*/}
-                <i className={"fa fa-exclamation-triangle closeCircle"}></i>
-                <h5 className={"text-center"}> Application {(match.params.status === 'decline') ? 'Rejected' : 'Error'}</h5>
+                <i style={{fontSize:'60px'}} className={"fa fa-exclamation-triangle closeCircle"}></i>
+                {/*<h5 className={"text-center"}> Application {(match.params.status === 'decline') ? 'Rejected' : 'Error'}</h5>*/}
                 <br/>
                 <div className="paragraph_styling  text-center" style={{margin: 'auto 5%'}}>
 
                     <div className={(match.params.status === 'decline') ? 'alert alert-danger' : 'alert alert-warning'}
                          role="alert">
-                        <h4 className="alert-heading">{(match.params.status === 'decline') ? 'Insufficient Credit Line/CIBIL' : 'Something went wrong !'}</h4>
-                        We're sorry for the inconvenience
-                        caused <b><i> {adharObj.f_name} {adharObj.l_name}</i></b>,<br/> we cannot move
-                        ahead with your application as of now.
+                        <h5 className="alert-heading">{(match.params.status === 'decline') ? <> Dear <b><i> {adharObj.f_name} {adharObj.l_name}</i></b></> : 'Something went wrong !'}</h5>
+                        We regret to inform you that your application can not be approved at this point of time.
+
                         <br/>
-                        <b>{(match.params.status === 'decline') ? 'Kindly try again after 3 months' : 'Kindly try again after some time'}</b>
+                        <b>{(match.params.status === 'decline') ? 'You can try again with us after 6 months' : 'Kindly try again after some time'}</b>
                     </div>
                     <div className={"blockquote-footer"}>
                         In case of any query, please contact us at <a
@@ -39,11 +38,14 @@ class AppRejected extends Component {
 
                 </div>
                 <div className="mt-5 mb-5 text-center ">
+                    {/*
+                    ToDo : Applying the name of the anchor
+                    */}
                     <button
                         type="button"
                         onClick={e => this.props.history.push('/')}
                         className="form-submit btn btn-raised greenButton"
-                    >Exit Application
+                    >Back to Yatra
                     </button>
                 </div>
             </>

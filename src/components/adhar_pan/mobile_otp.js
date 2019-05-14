@@ -1,12 +1,12 @@
 import React, {Component} from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
-import {baseUrl, otpUrl} from "../../shared/constants";
+import {baseUrl, otpUrl, OTP_Timer} from "../../shared/constants";
 import {connect} from "react-redux";
 import {setAuth, sendOTP, changeLoader, setAdharManual} from "../../actions";
 import {Link, withRouter} from "react-router-dom";
 import {showSnackbar} from "../../shared/CacheLogic";
 
-const Timer = 120;
+const Timer = OTP_Timer;
 
 class MobileOtp extends Component {
     state = {
@@ -135,8 +135,8 @@ class MobileOtp extends Component {
                 <Link to={'/AdharComplete'} className={"btn btn-link"}>Go Back </Link>
 
                 <h5 className="paragraph_styling text-center">
-                    <b> Done with your personal Info. </b><br/>
-                    Now, Let us verify the Number.
+
+                    Please verify your mobile number
                 </h5>
                 <form
                     id="serverless-contact-form"
@@ -208,11 +208,11 @@ class MobileOtp extends Component {
                                         aria-describedby="otp-area"
                                     />
                                     <div className="input-group-append">
-                                        <label style={{
+                                       {/* <label style={{
                                             fontSize: 'small',
                                             paddingTop: '14px',
                                             color: '#bbb'
-                                        }}>Next OTP in {(this.state.timer) && ` ${this.state.timer} Sec`}</label>
+                                        }}>Next OTP in {(this.state.timer) && ` ${this.state.timer} Sec`}</label>*/}
                                         {/*<button className="btn btn-outline-secondary" disabled={this.state.timer}
                                         type="button"
                                         id="otp-area">Resending
@@ -224,8 +224,16 @@ class MobileOtp extends Component {
                         </div>
                     </div>
 
-                    <div className="mt-5 text-center ">
+                    <div className={"text-center"}>
+                        <label style={{
+                            fontSize: 'small',
+                            paddingTop: '14px',
+                            color: '#bbb',
+                            visibility: (this.state.submitted) ? 'visible' : 'hidden'
+                        }}>You can resend OTP after {(this.state.timer) && ` ${this.state.timer} Sec`}</label>
+                    </div>
 
+                    <div className="mt-2 text-center ">
                         <button
                             type="submit"
                             name="submit"
@@ -243,7 +251,6 @@ class MobileOtp extends Component {
                             className="btn btn-raised greenButton text-center">
                             Verify OTP
                         </button>
-
                     </div>
                 </form>
 

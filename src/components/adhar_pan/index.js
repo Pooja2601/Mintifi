@@ -97,8 +97,9 @@ class AdharPan extends Component {
     }
 
     componentDidMount() {
-        console.log(this.props.pan.length);
+        // console.log(this.props.pan.length);
         const {pan} = this.props;
+        if(pan )
         if (pan.length === 10)
             this.setState({pan_correct: true});
     }
@@ -107,7 +108,7 @@ class AdharPan extends Component {
         return (
             <>
                 <Link to={'/Token'} className={"btn btn-link"}>Go Back </Link>
-                <h4 className={"text-center"}>New Customer?</h4>
+                {/*<h4 className={"text-center"}>New Customer?</h4>*/}
                 <h5 className="paragraph_styling  text-center">
                     <b>
                         Let us fetch some information for you.
@@ -174,17 +175,17 @@ class AdharPan extends Component {
                                     /><br/>
 
 
-                                    <div className="input-group-append">
+                                   {/* <div className="input-group-append">
                                         <button
                                             className={(this.state.adhar_skip) ? 'btn btn-secondary' : 'btn btn-default'}
                                             style={{fontSize: '13px'}}
                                             type="button" onClick={() => this.adharSkipped()}
                                             id="adhar-area">Skip Aadhaar
                                         </button>
-                                    </div>
+                                    </div>*/}
                                 </div>
                                 <span className="bmd-help">Don't have mobile linked with Aadhaar ?</span>
-                                <span className="bmd-help">No problem, skip it on the right side.</span>
+                                <span className="bmd-help">No problem, you may skip it {/*on the right side*/}.</span>
                             </div>
 
                         </div>

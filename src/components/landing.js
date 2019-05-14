@@ -71,25 +71,36 @@ class Login extends Component {
                     {/*{token} , {trans_id}*/}
                 </p>
                 <div className="mt-5 mb-5 text-center row">
-                    <div className={"col-sm-12 col-md-6 text-right"}><img
+                    <div className={"col-sm-12 col-md-2"}></div>
+                    <div className={"col-sm-12 col-md-4 text-center"}><img
                         src="/images/supply_chain/new.png"
                         style={{
-                            width: "150px", border: (existing === 'new') &&'1px solid #00bfa5', cursor: 'pointer', padding: '10px',
-                            borderRadius: '15%', opacity: (existing === 'new') ? '1.0' : '0.4'
+                            width: "150px",
+                            border: (existing === 'new') && '1px solid #00bfa5',
+                            cursor: 'pointer',
+                            padding: '10px',
+                            borderRadius: '15%',
+                            opacity: (existing === 'new') ? '1.0' : '0.4'
                         }}
                         onClick={() => this._newCustomer()}
-                    /><br/> <p style={{paddingRight: '10%'}}>New User</p>
+                    /><br/> <p style={{paddingRight: '0%'}}>New User</p>
                     </div>
-                    <div className={"col-sm-12 col-md-6 text-left"}><img
+                    <div className={"col-sm-12 col-md-4 text-center"}><img
                         src="/images/supply_chain/existing.png"
                         style={{
-                            width: "150px", border: (existing === 'exist') &&'1px solid #00bfa5', cursor: 'pointer', padding: '10px',
-                            borderRadius: '15%', opacity: (existing === 'exist') ? '1.0' : '0.4'
+                            width: "150px",
+                            border: (existing === 'exist') && '1px solid #00bfa5',
+                            cursor: 'pointer',
+                            padding: '10px',
+                            borderRadius: '15%',
+                            opacity: (existing === 'exist') ? '1.0' : '0.4'
                         }}
                         onClick={() => this._existCustomer()}
-                    /> <br/> <p style={{paddingLeft: '8%'}}>Existing User</p>
+                    /> <br/> <p style={{paddingLeft: '0%'}}>Existing User</p>
                     </div>
-                    <br/>
+
+                    <div className={"col-sm-12 col-md-2"}></div>
+
                     <br/>
                     <button
                         onClick={() => this._generateToken()}

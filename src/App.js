@@ -18,6 +18,7 @@ import AdharComplete from "./components/adhar_pan/adhar_complete";
 import MobileOTP from "./components/adhar_pan/mobile_otp";
 import BusinessDetail from "./components/gst_business";
 import ReviewChanges from "./components/gst_business/review_changes";
+import Finalize from "./components/gst_business/finalize";
 import AppRejected from "./components/ip_approval/app_rejected";
 import AppApproved from "./components/ip_approval/app_approved";
 import DocsUpload from "./components/ip_approval/docs_upload";
@@ -56,9 +57,17 @@ class App extends Component {
                                 <header>
                                     <div className="mt-3 text-center">
                                         <div className="mb-4">
-                                            <img style={{position: 'absolute', left: '24.4%', top: '14px'}}
+                                            <img
                                                  src="/images/Mintifi-Logo-white_2.png"
                                                  className={"logoHeader"}
+                                            />
+                                            {/*<b className={"anchorText"}>Anchor Merchant</b>*/}
+                                            <img style={{
+                                                position: 'absolute', right: '24.4%', top: "18px",
+                                                width: '85px'
+                                            }}
+                                                 src="/images/company/yatra.png"
+                                                 className={"anchorLogo"}
                                             />
                                         </div>
                                     </div>
@@ -98,7 +107,8 @@ class App extends Component {
                                                 <Route path="/AdharComplete" component={AdharComplete}/>
                                                 <Route path="/MobileOTP" component={MobileOTP}/>
                                                 <Route path="/BusinessDetail" component={BusinessDetail}/>
-                                                <Route path="/ReviewChanges" component={ReviewChanges}/>
+                                                <Route path="/Finalize" component={Finalize}/>
+                                                {/*<Route path="/ReviewChanges" component={ReviewChanges}/>*/}
                                                 <Route path="/AppRejected" component={AppRejected}/>
                                                 <Route path="/AppApproved" component={AppApproved}/>
                                                 <Route path="/DocsUpload" component={DocsUpload}/>

@@ -1,6 +1,6 @@
 body {
     font-family: "Roboto", sans-serif;
-    background-color: #ddd;
+    background-color: #eee;
     /*background: url(/images/bg_textures/22452202.jpg);*/
     background-attachment: fixed;
 }
@@ -32,8 +32,38 @@ header {
     width: 180px;
     padding-left: 10px;
     padding-right: 10px;
-    /*background: white;*/
-    /*border-radius: 25%;*/
+    position: absolute;
+    left: 24.4%;
+    top: 14px;
+}
+
+.anchorText {
+    position: absolute;
+    right: 24.4%;
+    top: 10px;
+    color: white !important;
+    fontSize: 13px;
+}
+
+.anchorLogo {
+    position: absolute;
+    right: 24.4%;
+    top: 30px;
+    width: 120px;
+}
+
+@media (max-width: 768px) {
+    .anchorLogo {
+        right: 2% !important;
+    }
+
+    .anchorText {
+        right: 2% !important;
+    }
+
+    .logoHeader {
+        left: 2%;
+    }
 }
 
 .h1 {
@@ -2406,6 +2436,44 @@ input[type="radio"]:after {
     }
 }
 
+.leftFixedCard, .leftFixedCard2 {
+    border-radius: 5px;
+    box-shadow: 0px 0px 0px 0px;
+    margin: auto 0;
+
+}
+
+@media (min-width: 1440px) {
+    .leftFixedCard {
+        top: 15.3%;
+        left: 7% !important;
+    }
+
+    .leftFixedCard2 {
+        top: 43.3%;
+        left: 7% !important;
+    }
+}
+
+@media (min-width: 1024px) {
+    .leftFixedCard, .leftFixedCard2 {
+        box-shadow: 0 0 8px #cccccc;
+        left: 1%;
+        position: fixed;
+        min-width: 240px !important;
+    }
+}
+
+@media (min-width: 1024px) and (max-width: 1439px) {
+    .leftFixedCard {
+        top: 15.3%;
+    }
+
+    .leftFixedCard2 {
+        top: 43%;
+    }
+}
+
 @media (min-width: 768px) and (max-width: 1366px) {
     .image_size_expansion_capital {
         height: 98%;
@@ -2718,6 +2786,71 @@ input[type=number]::-webkit-outer-spin-button {
 .tableDataRight {
     text-align: right;
     padding-right: 20px;
+}
+
+/* Spinner */
+.lds-ellipsis {
+    display: inline-block;
+    position: relative;
+    width: 64px;
+    height: 64px;
+}
+
+.lds-ellipsis div {
+    position: absolute;
+    top: 27px;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: #00bfa5;
+    animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+
+.lds-ellipsis div:nth-child(1) {
+    left: 6px;
+    animation: lds-ellipsis1 0.6s infinite;
+}
+
+.lds-ellipsis div:nth-child(2) {
+    left: 6px;
+    animation: lds-ellipsis2 0.6s infinite;
+}
+
+.lds-ellipsis div:nth-child(3) {
+    left: 26px;
+    animation: lds-ellipsis2 0.6s infinite;
+}
+
+.lds-ellipsis div:nth-child(4) {
+    left: 45px;
+    animation: lds-ellipsis3 0.6s infinite;
+}
+
+@keyframes lds-ellipsis1 {
+    0% {
+        transform: scale(0);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes lds-ellipsis3 {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(0);
+    }
+}
+
+@keyframes lds-ellipsis2 {
+    0% {
+        transform: translate(0, 0);
+    }
+    100% {
+        transform: translate(19px, 0);
+    }
 }
 
 /*@media (min-width: 769px) and (max-width: 1024px){
