@@ -1,4 +1,8 @@
+import React from "react";
+
 const CACHE_NAME = "MOVIEDB_CACHE";
+
+let showSnackbary = '';
 
 export function getUrlCache() {
     return sessionStorage.getItem(CACHE_NAME !== null)
@@ -60,3 +64,15 @@ export function setObject(name, data) {
         return false;
     }
 }
+
+/*
+
+export const showSnackbar = (message) => {
+
+    let html = (<button style={{visibility: 'hidden'}} type={"button"} ref={ref => showSnackbary = ref}
+                        data-toggle='snackbar'
+                        data-content={message}>.</button>);
+    // showSnackbary.click();
+    console.log(showSnackbary);
+    return html;
+};*/

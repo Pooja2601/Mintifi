@@ -1,10 +1,14 @@
 import { combineReducers } from "redux";
-import PostsReducer from "./PostsReducer";
-// import UpcomingReducer from "./UpcomingReducer";
+import AuthReducer from "./authReducer";
+import AdharReducer from "./adharReducer";
+import BusinessReducer from "./businessReducer";
+import DrawdownReducer from "./drawdownReducer";
 
 const rootReducer = combineReducers({
-    authPayload: PostsReducer,
-    // upcoming: UpcomingReducer
+    authPayload: AuthReducer,
+    adharDetail: AdharReducer,
+    businessDetail: BusinessReducer,
+    drawdownReducer: DrawdownReducer,
 });
 
 export default rootReducer;
