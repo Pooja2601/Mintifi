@@ -24,15 +24,17 @@ import AppApproved from "./components/ip_approval/app_approved";
 import DocsUpload from "./components/ip_approval/docs_upload";
 import ThankYou from "./components/ip_approval/thank_you";
 
-
 //Offers
 import Drawdown from "./components/drawdown";
+import DrawAuth from "./components/drawdown/auth";
 import Offers from "./components/drawdown/offers";
 import DrawThankYou from "./components/drawdown/thankyou";
 
 import configureStore from "./store";
 import {PersistGate} from 'redux-persist/integration/react';
 // import { withSnackbar } from 'material-ui-snackbar-provider';
+import {ToastContainer, toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const {store, persistor} = configureStore();
 
@@ -58,8 +60,8 @@ class App extends Component {
                                     <div className="mt-3 text-center">
                                         <div className="mb-4">
                                             <img
-                                                 src="/images/Mintifi-Logo-white_2.png"
-                                                 className={"logoHeader"}
+                                                src="/images/Mintifi-Logo-white_2.png"
+                                                className={"logoHeader"}
                                             />
                                             {/*<b className={"anchorText"}>Anchor Merchant</b>*/}
                                             <img style={{
@@ -114,7 +116,8 @@ class App extends Component {
                                                 <Route path="/DocsUpload" component={DocsUpload}/>
                                                 <Route path="/ThankYou" component={ThankYou}/>
                                                 <Route path="/Privacy" component={Privacy}/>
-                                                <Route path="/Drawdown/Auth/:token?/:payload?" component={Drawdown}/>
+                                                <Route path="/Drawdown/:token?/:payload?" component={Drawdown}/>
+                                                <Route path="/Drawdown/Auth/" component={DrawAuth}/>
                                                 <Route path="/Drawdown/Offers/" component={Offers}/>
                                                 <Route path="/Drawdown/ThankYou/" component={DrawThankYou}/>
                                                 <Route component={Error}/>
@@ -124,6 +127,7 @@ class App extends Component {
                                         </div>
                                     </div>
                                 </div>
+                                <ToastContainer style={{marginBottom:'100px'}} autoClose={8000} position={toast.POSITION.BOTTOM_RIGHT}/>
                             </>)}/>
 
                     </BrowserRouter>

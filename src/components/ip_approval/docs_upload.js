@@ -303,8 +303,8 @@ class DocsUpload extends Component {
                                                onChange={(e) => this._onChangeFile(e, 'id_proof')}
                                                ref={ref => this.idProofInput = ref}/>
                                         <button className="btn btn-raised uploadButton inputFilebutton"
-
                                                 onClick={() => this._multiDimDocsUpload('id_proof')}
+                                                style={{minWidth: '111px'}}
                                                 id={"idProofBtn"}>
                                             ID Proof
                                         </button>
@@ -322,7 +322,7 @@ class DocsUpload extends Component {
                                                ref={ref => this.addProofInput = ref}/>
                                         <button className="btn btn-raised uploadButton inputFilebutton"
                                                 onClick={() => this._multiDimDocsUpload('add_proof')}
-
+                                                style={{minWidth: '111px'}}
                                                 id={"addressProofBtn"}>
                                             Address Proof
                                         </button>
@@ -366,8 +366,10 @@ class DocsUpload extends Component {
                                                ref={ref => this.entityProofInput = ref}/>
                                         <button className="btn btn-raised uploadButton inputFilebutton "
                                                 onClick={() => this._multiDimDocsUpload('entity_proof')}
-                                                id={"addressProofBtn"}>
+                                                style={{minWidth: '111px'}}
+                                                id={"addressProofBtn"} >
                                             Shop Registration
+
                                         </button>
                                         <span className="helperUploadTxt"
                                         >{this.state.entity_proof_msg}</span>
@@ -385,6 +387,7 @@ class DocsUpload extends Component {
                                                ref={ref => this.cAddressProofInput = ref}/>
                                         <button className="btn btn-raised uploadButton inputFilebutton "
                                                 onClick={() => this._multiDimDocsUpload('caddr_proof')}
+                                                style={{minWidth: '111px'}}
                                                 id={"addressProofBtn"}>
                                             Shop Address
                                         </button>

@@ -24,7 +24,7 @@ class AppRejected extends Component {
         // if(preFlightResp ===Object(preFlightResp))
         {
             const {f_name, l_name} = adharObj;
-            const load_status = 'pending';  // pending // approved
+            const load_status = 'approved';  // pending // approved
             // const {loan_application_id, credit_eligibility} = preFlightResp;
 
             let credit_eligibility = {
@@ -115,6 +115,7 @@ class AppRejected extends Component {
                         </div>
                     </div>
                     <br/>
+
                     {(match.params.status !== 'pending') ?
                         (<>
                             <div className="checkbox " style={{marginLeft: '2.3rem'}}>

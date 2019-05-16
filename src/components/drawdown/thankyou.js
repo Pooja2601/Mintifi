@@ -7,22 +7,26 @@ import {defaultLender} from '../../shared/constants';
 class ThankYou extends Component {
 
     componentWillMount() {
-        const {payload, authObj,} = this.props;
+
+        const {payload, authObj, changeLoader} = this.props;
         if (payload !== Object(payload))
             if (authObj !== Object(authObj))
                 this.props.history.push("/Drawdown/Auth");
+        changeLoader(false);
     }
 
     render() {
         let {payload, match, preFlightResp, loanPayload, authObj} = this.props;
         // if (payload === Object(payload)) {
+
+        // ToDo : Comment the below code in production
         let {f_name, l_name} = payload;
         f_name = 'Mahesh';
         l_name = 'Pai';
 
+        // ToDo : make it const in prod.
         let {creditLimit, loanStatus, loanOffers} = loanPayload;
 
-        // const {loan_application_id, credit_eligibility} = preFlightResp;
         return (
             <>
                 {/* <button onClick={() => this.props.history.push('/BusinessDetail')} className={"btn btn-link"}>
@@ -51,14 +55,14 @@ class ThankYou extends Component {
                                 <td className={"tableDataRight"}>Product Selected</td>
                                 <td className={'text-capitalize'}>{preFlightResp.offer.product_type}</td>
                             </tr>
-                            <tr>
+                            {/*<tr>
                                 <td className={"tableDataRight"}>Loan ID</td>
                                 <td>{loanOffers.loan.loan_application_id}</td>
-                            </tr>
-                            <tr>
+                            </tr>*/}
+                            {/*<tr>
                                 <td className={"tableDataRight"}>DrawDown ID</td>
                                 <td>{preFlightResp.anchor_drawdown_id}</td>
-                            </tr>
+                            </tr>*/}
                             <tr>
                                 <td className={"tableDataRight"}>Loan Status</td>
                                 <td>{loanStatus.loan_status}</td>

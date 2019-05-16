@@ -1,3 +1,5 @@
+// import React from 'react';
+
 module.exports = {
     baseUrl: "https://test.mintifi.com/api/v1",
     loanUrl: "https://test.mintifi.com/api/loan/v1",
