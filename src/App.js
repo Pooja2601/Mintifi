@@ -3,6 +3,12 @@ import {Provider} from "react-redux";
 import {BrowserRouter, Route, Switch, Link, withRouter} from "react-router-dom";
 import ScrollToTop from "./shared/scrollhack";
 
+import configureStore from "./store";
+import {PersistGate} from 'redux-persist/integration/react';
+// import { withSnackbar } from 'material-ui-snackbar-provider';
+import {ToastContainer, toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import {TransitionGroup, CSSTransition} from "react-transition-group";
 
 // import Header from "./shared/header";
@@ -14,10 +20,10 @@ import Index from "./components/";
 import Login from "./components/landing";
 import Auth from "./components/auth";
 import AdharPan from "./components/adhar_pan";
-import AdharComplete from "./components/adhar_pan/adhar_complete";
+import PersonalDetails from "./components/adhar_pan/personal_details";
 import MobileOTP from "./components/adhar_pan/mobile_otp";
 import BusinessDetail from "./components/gst_business";
-import ReviewChanges from "./components/gst_business/review_changes";
+// import ReviewChanges from "./components/gst_business/review_changes";
 import Finalize from "./components/gst_business/finalize";
 import AppRejected from "./components/ip_approval/app_rejected";
 import AppApproved from "./components/ip_approval/app_approved";
@@ -30,11 +36,9 @@ import DrawAuth from "./components/drawdown/auth";
 import Offers from "./components/drawdown/offers";
 import DrawThankYou from "./components/drawdown/thankyou";
 
-import configureStore from "./store";
-import {PersistGate} from 'redux-persist/integration/react';
-// import { withSnackbar } from 'material-ui-snackbar-provider';
-import {ToastContainer, toast} from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+//E-NACH
+import ENach from "./components/e_nach";
+
 
 const {store, persistor} = configureStore();
 
@@ -106,7 +110,7 @@ class App extends Component {
                                                 <Route exact path="/Token/:token?/:payload?" component={Login}/>
                                                 <Route path="/Auth/" component={Auth}/>
                                                 <Route path="/AdharPan" component={AdharPan}/>
-                                                <Route path="/AdharComplete" component={AdharComplete}/>
+                                                <Route path="/PersonalDetails" component={PersonalDetails}/>
                                                 <Route path="/MobileOTP" component={MobileOTP}/>
                                                 <Route path="/BusinessDetail" component={BusinessDetail}/>
                                                 <Route path="/Finalize" component={Finalize}/>
@@ -120,6 +124,7 @@ class App extends Component {
                                                 <Route path="/Drawdown/Auth/" component={DrawAuth}/>
                                                 <Route path="/Drawdown/Offers/" component={Offers}/>
                                                 <Route path="/Drawdown/ThankYou/" component={DrawThankYou}/>
+                                                <Route path="/ENach/:payload?" component={ENach}/>
                                                 <Route component={Error}/>
                                             </Switch>
                                             {/*</CSSTransition>*/}
@@ -127,7 +132,8 @@ class App extends Component {
                                         </div>
                                     </div>
                                 </div>
-                                <ToastContainer style={{marginBottom:'100px'}} autoClose={8000} position={toast.POSITION.BOTTOM_RIGHT}/>
+                                <ToastContainer style={{marginBottom: '100px'}} autoClose={8000}
+                                                position={toast.POSITION.BOTTOM_RIGHT}/>
                             </>)}/>
 
                     </BrowserRouter>

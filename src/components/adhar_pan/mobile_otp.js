@@ -4,7 +4,7 @@ import {baseUrl, otpUrl, OTP_Timer} from "../../shared/constants";
 import {connect} from "react-redux";
 import {setAuth, sendOTP, changeLoader, setAdharManual} from "../../actions";
 import {Link, withRouter} from "react-router-dom";
-import {showSnackbar} from "../../shared/CacheLogic";
+import {alertModule} from "../../shared/commonLogic";
 
 const Timer = OTP_Timer;
 
@@ -27,14 +27,15 @@ class MobileOtp extends Component {
 
         e.preventDefault();
         clearInterval(this.interval);
-        this.props.changeLoader(true);
+        const {changeLoader, token, setAdharManual} = this.props;
+        changeLoader(true);
 
 
         this.setState({loading: true, submitted: true, timer: Timer});
 
         fetch(`${otpUrl}/send_otp`, {
             method: "POST",
-            headers: {'Content-Type': 'application/json', 'token': this.props.token},
+            headers: {'Content-Type': 'application/json', 'token': token},
             body: JSON.stringify({
                 "app_id": 3,
                 "otp_type": "one_time_password",
@@ -43,17 +44,17 @@ class MobileOtp extends Component {
             })
         }).then(resp => resp.json()).then(resp => {
             // console.log(JSON.stringify(resp));
-            this.props.changeLoader(false);
+            changeLoader(false);
             if (resp.error === Object(resp.error)) {
-                alert(resp.error.message);
+                alertModule(resp.error.message, 'warn');
                 this.setState({loading: false, submitted: false});
             }
             //     this.showSnackbary.click();
             // showSnackbar(resp.error.message);
 
             else if (resp.response === Object(resp.response) && resp.response.status === 'success') {
-                // alert(resp.success.message);
-                this.setState({otp_reference_id: resp.response.otp_reference_code}, () => this.props.setAdharManual(this.state));
+                // alertModule(resp.success.message,'success');
+                this.setState({otp_reference_id: resp.response.otp_reference_code}, () => setAdharManual(this.state));
                 this.interval = setInterval(e => {
                     this.setState({timer: this.state.timer - 1}, () => {
                         if (this.state.timer === 0) {
@@ -64,16 +65,16 @@ class MobileOtp extends Component {
                 }, 1000);
             }
         }, resp => {
-            console.log('Looks like a connectivity issue..!');
-            this.props.changeLoader(false);
+            alertModule();
+            changeLoader(false);
         });
         // this.props.sendOTP(this.state.mobile);
     }
 
     _verifyOTP(e) {
-        const {adharObj, payload, token, changeLoader, setAdharManual} = this.props;
+        const {adharObj, payload, token, changeLoader, setAdharManual, history} = this.props;
         e.preventDefault();
-        this.props.changeLoader(true);
+        changeLoader(true);
         fetch(`${otpUrl}/verify_otp`, {
             method: "POST",
             headers: {'Content-Type': 'application/json', token: token},
@@ -87,20 +88,19 @@ class MobileOtp extends Component {
         }).then(resp => resp.json()).then(resp => {
             changeLoader(false);
             if (resp.error === Object(resp.error))
-                alert(resp.error.message);
+                alertModule(resp.error.message, 'warn');
             else if (resp.response === Object(resp.response)) {
                 this.setState({verified: resp.response.is_otp_verified}, () => {
                     setAdharManual(this.state);
                 });
                 if (resp.response.is_otp_verified)
                     setTimeout(() => {
-                        this.props.history.push('/BusinessDetail');
+                        history.push('/BusinessDetail');
                     }, 500);
 // Goes to New Page
             }
         }, resp => {
-            console.log('Looks like a connectivity issue..!');
-
+            alertModule();
             changeLoader(false);
         })
     }
@@ -117,16 +117,16 @@ class MobileOtp extends Component {
     };
 
     componentDidMount() {
-        const {adharObj, payload, changeLoader} = this.props;
+        const {adharObj, payload, changeLoader, setAuth, history} = this.props;
         if (adharObj === Object(adharObj))
             this.setState({mobile: adharObj.mobile});
-        else this.props.setAuth(this.state);
+        else setAuth(this.state);
 
         changeLoader(false);
 
         if (payload !== Object(payload))
             if (adharObj !== Object(adharObj))
-                this.props.history.push("/AdharComplete");
+                history.push("/AdharComplete");
     }
 
     render() {
@@ -208,7 +208,7 @@ class MobileOtp extends Component {
                                         aria-describedby="otp-area"
                                     />
                                     <div className="input-group-append">
-                                       {/* <label style={{
+                                        {/* <label style={{
                                             fontSize: 'small',
                                             paddingTop: '14px',
                                             color: '#bbb'

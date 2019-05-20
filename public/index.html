@@ -59,6 +59,7 @@
             integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9"
             crossorigin="anonymous"
     ></script>
+
     <script>
         $(document).ready(function () {
             $("body").bootstrapMaterialDesign();
@@ -77,6 +78,7 @@
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTBw1chO16AKGKymfChZSTfR6XBx0cHAg"
             type="text/javascript"
     ></script>-->
+    <script src="%PUBLIC_URL%/includes/js/digio.js"></script>
 </head>
 <body
         data-spy="scroll"
@@ -133,6 +135,29 @@ To create a production bundle, use `npm run build` or `yarn build`.
                 .fadeOut(500);
         }
     );
+</script>
+<script>
+
+    document.addEventListener("dispatchDigio", function (obj) {
+        let {document_id, mobile_number} = obj.detail;
+        let options = {
+            //default environment stage (sandbox)
+            //for production include:
+            environment: "stage", //production , stage
+            callback: function (t) {
+                if (t.error_code != undefined)
+                    alert("Failed to register with error :" + t.message);
+                else
+                    alert("Register successful for " + t.digio_doc_id);
+            },
+            logo: "https://mintifi.com/images/logo.png", //Pass Logo URL here
+            is_iframe: true //open in iframe
+        };
+        let digio = new Digio(options);
+        digio.init();  // Call init on user action (eg.button press and proceed to asynchronous upload)
+        digio.submit(document_id, mobile_number);
+    });
+
 </script>
 
 <script type="text/javascript">

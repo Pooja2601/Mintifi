@@ -5,6 +5,7 @@ import {connect} from "react-redux";
 import {setBusinessDetail, setAdharManual, pan_adhar, storeResponse, changeLoader} from "../../actions";
 import {Link, withRouter} from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
+import {alertModule} from "../../shared/commonLogic";
 
 class ReviewBusinessDetail extends Component {
     obj = {pan_correct: '', adhar_correct: ''};
@@ -32,7 +33,6 @@ class ReviewBusinessDetail extends Component {
         tncModal: false,
     };
 
-
     componentWillMount() {
         const {payload, authObj, adharObj, businessObj} = this.props;
         if (payload !== Object(payload))
@@ -43,9 +43,10 @@ class ReviewBusinessDetail extends Component {
     }
 
     _formSubmit(e) {
-        e.preventDefault();
-        this.props.changeLoader(true);
-        const {payload, gstProfile, businessObj, adharObj, pan, adhar} = this.props;
+        // e.preventDefault();
+
+        const {payload, gstProfile, businessObj, adharObj, pan, adhar, token, changeLoader, history, storeResponse} = this.props;
+        changeLoader(true);
         let dob = adharObj.dob.substr(0, 10);
         /*
                 let date = (adharObj.dob).getDate();
@@ -56,7 +57,7 @@ class ReviewBusinessDetail extends Component {
 
         fetch(`${loanUrl}/application/instant`, {
             method: "POST",
-            headers: {"Content-Type": "application/json", "token": this.props.token},
+            headers: {"Content-Type": "application/json", "token": token},
             body: JSON.stringify({
                 "app_id": "3",
                 "anchor_id": payload.anchor_id,
@@ -92,28 +93,27 @@ class ReviewBusinessDetail extends Component {
                 "timestamp": new Date()
             })
         }).then(resp => resp.json()).then(resp => {
-            this.props.changeLoader(false);
+            changeLoader(false);
             if (resp.response === Object(resp.response)) {
                 let {loan_status} = resp.response.credit_eligibility;
-                this.props.storeResponse(resp.response);
+                storeResponse(resp.response);
                 if (loan_status === 'closed' || loan_status === 'decline')
-                    this.props.history.push("/AppRejected", {status: 'decline'});
+                    history.push("/AppRejected", {status: 'decline'});
                 else if (loan_status === 'pending') {
-                    setTimeout(() => this.props.history.push("/AppApproved", {status: 'pending'}), 500);
+                    setTimeout(() => history.push("/AppApproved", {status: 'pending'}), 500);
                 }
                 else {
-                    setTimeout(() => this.props.history.push("/AppApproved", {status: 'approved'}), 500);
+                    setTimeout(() => history.push("/AppApproved", {status: 'approved'}), 500);
                 }
 
             }
             else if (resp.error === Object(resp.error)) {
-                console.log(resp.message);
-                this.props.history.push("/AppRejected", {status: 'error'});
+                alertModule(resp.message, 'warn');
+                history.push("/AppRejected", {status: 'error'});
             }
         }, (resp) => {
-            this.props.changeLoader(false);
-            // console.log("Application Rejected");
-            console.log("Internet Connectivity Issue");
+            changeLoader(false);
+            alertModule();
             //        this.props.history.push("/AppRejected);
         });
     }
@@ -128,7 +128,7 @@ class ReviewBusinessDetail extends Component {
             businessDetail: businessObj,
         });
         console.log(adharObj);
-        // console.log(this.changeDob(this.state.adharDetail.dob));
+        this._formSubmit();
     }
 
 
@@ -139,7 +139,6 @@ class ReviewBusinessDetail extends Component {
                 <div className="justify-content-center text-center">
                     <i className={"fa fa-clipboard-list"} style={{fontSize: '60px'}}></i>
                     <br/>
-
 
                     <div className="lds-ellipsis" style={{
                         marginTop: "-10px",

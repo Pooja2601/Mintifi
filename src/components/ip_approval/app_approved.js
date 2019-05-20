@@ -4,25 +4,25 @@ import {Link, withRouter} from "react-router-dom";
 import {setAdharManual} from "../../actions";
 import {defaultLender} from '../../shared/constants';
 
-class AppRejected extends Component {
+class AppApproved extends Component {
 
     state = {confirmed: false};
 
     componentWillMount() {
-        const {payload, authObj, adharObj, businessObj} = this.props;
+        const {payload, authObj, adharObj, businessObj, history} = this.props;
         if (payload !== Object(payload))
-            if (authObj !== Object(authObj))
-                if (adharObj !== Object(adharObj))
-                    if (businessObj !== Object(businessObj))
-                        this.props.history.push("/Token");
+        // if (authObj !== Object(authObj))
+            if (adharObj !== Object(adharObj))
+                if (businessObj !== Object(businessObj))
+                    history.push("/Token");
     }
 
     render() {
-        const {adharObj, match, preFlightResp} = this.props;
+        let {adharObj, match, preFlightResp} = this.props;
 
-        if (adharObj === Object(adharObj))
+        // if (adharObj === Object(adharObj))
         // if(preFlightResp ===Object(preFlightResp))
-        {
+        // {
             const {f_name, l_name} = adharObj;
             const load_status = 'approved';  // pending // approved
             // const {loan_application_id, credit_eligibility} = preFlightResp;
@@ -36,7 +36,7 @@ class AppRejected extends Component {
                 emi: '33440'
             };
             let loan_application_id = 1740;
-            let match = {params: {status: load_status}};
+             match = {params: {status: load_status}};
             let iconCss = 'fa checkCircle ';
             return (
                 <>
@@ -116,27 +116,31 @@ class AppRejected extends Component {
                     </div>
                     <br/>
 
-                    {(match.params.status !== 'pending') ?
+
+                    <div className="checkbox " style={{
+                        marginLeft: '2.3rem',
+                        visibility: (match.params.status !== 'pending') ? 'visible' : 'hidden'
+                    }}>
+                        <label style={{color: 'black'}}>
+                            <input type="checkbox" checked={this.state.confirmed}
+                                   onChange={(e) =>
+                                       this.setState(prevState => ({confirmed: !prevState.confirmed}))
+                                   }/> I accept the terms of the credit eligibility as given above.
+                        </label>
+                    </div>
+                    <div className="mt-5 mb-3 text-center"
+                         style={{visibility: (match.params.status !== 'pending') ? 'visible' : 'hidden'}}>
+                        <button
+                            type="button"
+                            disabled={!this.state.confirmed}
+                            onClick={e => this.props.history.push('/DocsUpload')}
+                            className="form-submit btn btn-raised greenButton"
+                        >Complete Your KYC
+                        </button>
+                    </div>
+                    {(match.params.status === 'pending') ?
                         (<>
-                            <div className="checkbox " style={{marginLeft: '2.3rem'}}>
-                                <label style={{color: 'black'}}>
-                                    <input type="checkbox" checked={this.state.confirmed}
-                                           onChange={(e) =>
-                                               this.setState(prevState => ({confirmed: !prevState.confirmed}))
-                                           }/> I accept the terms of the credit eligibility as given above.
-                                </label>
-                            </div>
-                            <div className="mt-5 mb-3 text-center ">
-                                <button
-                                    type="button"
-                                    disabled={!this.state.confirmed}
-                                    onClick={e => this.props.history.push('/DocsUpload')}
-                                    className="form-submit btn btn-raised greenButton"
-                                >Complete Your KYC
-                                </button>
-                            </div>
-                        </>) : <>
-                            <div className={"blockquote-footer mb-5 text-center"}>
+                            <div className={"blockquote-footer mb-5 text-center"} style={{marginTop: '-120px'}}>
                                 In case of any query, please contact us at <a
                                 href={"mailto:support@mintifi.com"}>support@mintifi.com</a> or <a
                                 href={"tel:+919999999999"}>+91 9999999999</a>. <br/>Please
@@ -153,11 +157,11 @@ class AppRejected extends Component {
                                 >Back to Yatra
                                 </button>
                             </div>
-                        </>
-                    }
+
+                        </>) : <></>}
                 </>
             )
-        }
+        // }
     }
 }
 
@@ -173,5 +177,5 @@ export default withRouter(
     connect(
         mapStateToProps,
         {setAdharManual}
-    )(AppRejected)
+    )(AppApproved)
 );

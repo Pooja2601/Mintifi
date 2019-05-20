@@ -9,9 +9,9 @@ export default (state = {}, action) => {
         case types.D_SET_AUTH:
             return {...state, authObj: action.authObj};
 
-        /* case types.D_CHECK_USER_EXISTS:
-             return {...state, existing: action.existing};
- */
+         case types.D_ANCHOR_PAYLOAD:
+             return {...state, anchorPayload: action.anchorPayload};
+
         case types.D_SET_TOKEN:
             return {...state, token: action.token, payload: action.payload};
 

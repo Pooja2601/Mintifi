@@ -4,13 +4,14 @@ import {baseUrl, gst_karza} from "../../shared/constants";
 import {connect} from "react-redux";
 import {pan_adhar, changeLoader, setGstProfile} from "../../actions";
 import {Link, withRouter} from "react-router-dom";
+import {alertModule} from "../../shared/commonLogic";
 
 class AdharPan extends Component {
     state = {pan: '', adhar: '', pan_correct: false, adhar_skip: false, adhar_correct: false};
 
     //ToDo : Check the PAN with the backend AP for Confirmation of new user
     _formSubmit(e) {
-        // alert('hi')
+        // alertModule('hi')
         e.preventDefault();
         this.adharSkipped();
     }
@@ -41,7 +42,8 @@ class AdharPan extends Component {
     };
 
     _gstFetch = (gstPayload) => {
-        this.props.changeLoader(true);
+        const {changeLoader, history, setGstProfile} = this.props;
+        changeLoader(true);
         fetch(`https://testapi.kscan.in/v1/gst/profile`, {
             method: 'POST',
             headers: {'Content-Type': "application/json", 'x-karza-key': "jdughfoP51majvjAUW6W"},
@@ -51,23 +53,25 @@ class AdharPan extends Component {
         })
             .then(resp => resp.json())
             .then(resp => {
-                this.props.changeLoader(false);
+                changeLoader(false);
                 //  ADDPA8664N -prop // AAKCM7569B -pvt
                 if (resp.result === Object(resp.result)) {
                     console.log("Could Not fetch GST Info"); // status 103
-                    this.props.history.push('/AdharComplete');
+                    history.push('/AdharComplete');
                 }
                 else {
-                    this.props.setGstProfile(resp.result);
-                    setTimeout(() => this.props.history.push('/AdharComplete'), 500);
+                    setGstProfile(resp.result);
+                    setTimeout(() => history.push('/AdharComplete'), 500);
                     //  console.log(JSON.stringify(resp)); // status 101
                 }
             }, () => {
-                this.props.changeLoader(false)
+                changeLoader(false);
+                alertModule();
             });
     };
 
     _panFetch = () => {
+        const {changeLoader, history} = this.props;
         fetch(`${gst_karza}/search`, {
             method: 'POST',
             headers: {'Content-Type': "application/json", 'x-karza-key': "jdughfoP51majvjAUW6W"},
@@ -75,17 +79,18 @@ class AdharPan extends Component {
         })
             .then(resp => resp.json())
             .then(resp => {
-                this.props.changeLoader(false);
+                changeLoader(false);
                 //  ADDPA8664N -prop // AAKCM7569B -pvt
                 if (resp.result !== Object(resp.result)) {
                     console.log("Not a Company"); // status 103
-                    this.props.history.push('/AdharComplete');
+                    history.push('/AdharComplete');
                 }
                 else {
                     this._gstFetch(resp.result[0].gstinId);  // status 101
                 }
             }, () => {
-                this.props.changeLoader(false)
+                changeLoader(false);
+                alertModule();
             });
     };
 
@@ -99,9 +104,9 @@ class AdharPan extends Component {
     componentDidMount() {
         // console.log(this.props.pan.length);
         const {pan} = this.props;
-        if(pan )
-        if (pan.length === 10)
-            this.setState({pan_correct: true});
+        if (pan)
+            if (pan.length === 10)
+                this.setState({pan_correct: true});
     }
 
     render() {
@@ -118,7 +123,6 @@ class AdharPan extends Component {
                     id="serverless-contact-form"
                     onSubmit={e => this._formSubmit(e)}
                 >
-
 
                     <div className={"row"}>
                         <div className={"col-sm-11 col-md-8"} style={{margin: 'auto'}}>
@@ -175,7 +179,7 @@ class AdharPan extends Component {
                                     /><br/>
 
 
-                                   {/* <div className="input-group-append">
+                                    {/* <div className="input-group-append">
                                         <button
                                             className={(this.state.adhar_skip) ? 'btn btn-secondary' : 'btn btn-default'}
                                             style={{fontSize: '13px'}}

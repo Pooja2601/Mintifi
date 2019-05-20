@@ -3,7 +3,7 @@ import React, {Component} from "react";
 import {baseUrl, otpUrl, OTP_Timer} from "../../shared/constants";
 import {connect} from "react-redux";
 import {withRouter} from "react-router-dom";
-import {DrawsetAuth, DrawsetToken, changeLoader} from "../../actions";
+import {DrawsetAuth, DrawsetToken, changeLoader, DrawAnchorPayload} from "../../actions";
 import {alertModule} from "../../shared/commonLogic";
 
 
@@ -23,20 +23,21 @@ class MobileOtp extends Component {
     };
 
     _generateToken() {
-        this.props.changeLoader(true);
-        let payload = {
-            "anchor_id": "uyh65t",
-            "distributor_dealer_code": "R1T89563",
-            "sales_agent_mobile_number": "9876543210",
-            // "anchor_transaction_id": "hy76515",
-            "retailer_onboarding_date": "2006-09-19",
-            "loan_amount": "500000",
-            "anchor_drawdown_id ": "s65d7f8",
-            "loan_application_id": "8456",
-            "company_id": "629",
-            "drawdown_amount": "20000",
-            "disbursement_account_code": "sdtf78",
-        };
+        const {changeLoader, DrawsetToken, match} = this.props;
+        changeLoader(true);
+        /*        let payload = {
+                    "anchor_id": "uyh65t",
+                    "distributor_dealer_code": "R1T89563",
+                    "sales_agent_mobile_number": "9876543210",
+                    // "anchor_transaction_id": "hy76515",
+                    "retailer_onboarding_date": "2006-09-19",
+                    "loan_amount": "500000",
+                    "anchor_drawdown_id ": "s65d7f8",
+                    "loan_application_id": "8456",
+                    "company_id": "629",
+                    "drawdown_amount": "20000",
+                    "disbursement_account_code": "sdtf78",
+                };*/
         fetch(`${baseUrl}/auth`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -47,10 +48,10 @@ class MobileOtp extends Component {
                 type: "anchor"
             })
         }).then(resp => resp.json()).then(resp => {
-            this.props.changeLoader(false);
+            changeLoader(false);
             if (resp.response === Object(resp.response))
                 if (resp.response.status === 'success')
-                    this.props.DrawsetToken(resp.response.auth.token, payload);
+                    DrawsetToken(resp.response.auth.token, match.params.payload);
             // setTimeout(() => console.log(this.props.token),2000)
         });
     }
@@ -124,13 +125,38 @@ class MobileOtp extends Component {
                 // Goes to New Page
                 if (resp.response.is_otp_verified)
                     setTimeout(() => {
-                        this.props.history.push('/Drawdown/Offers');
+                        this._fetchAnchorInfo();
                     }, 500);
             }
         }, resp => {
             alertModule();
-            this.props.changeLoader(false);
+            changeLoader(false);
         })
+    }
+
+    _fetchAnchorInfo = () => {
+        const {changeLoader, authObj, token, payload, DrawAnchorPayload} = this.props;
+        changeLoader(true);
+        fetch(`${baseUrl}/loans/${payload.company_id}/details`, {
+            method: "GET",
+            headers: {'Content-Type': 'application/json', token: token},
+            body: JSON.stringify({
+                "app_id": 3,
+                "anchor_id": payload.anchor_id,
+                "mobile_number": authObj.mobile,
+            })
+        }).then(resp => resp.json()).then(resp => {
+            changeLoader(false);
+            if (resp.error === Object(resp.error))
+                alertModule(resp.error.message, 'error');
+            if (resp.response === Object(resp.response)) {
+                DrawAnchorPayload(resp.response);
+                setTimeout(() => this.props.history.push('/Drawdown/Offers'));
+            }
+        }, resp => {
+            alertModule();
+            changeLoader(false);
+        });
     }
 
 //authObj
@@ -305,5 +331,5 @@ const mapStateToProps = state => ({
 
 export default withRouter(connect(
     mapStateToProps,
-    {DrawsetAuth, DrawsetToken, changeLoader}
+    {DrawsetAuth, DrawsetToken, changeLoader, DrawAnchorPayload}
 )(MobileOtp));

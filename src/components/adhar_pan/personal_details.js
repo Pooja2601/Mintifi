@@ -4,10 +4,9 @@ import {baseUrl, otpUrl} from "../../shared/constants";
 import {connect} from "react-redux";
 import {setAdharManual, changeLoader} from "../../actions";
 import {Link, withRouter} from "react-router-dom";
-
 import DatePicker from "react-datepicker";
-
 import "react-datepicker/dist/react-datepicker.css";
+import {alertModule} from "../../shared/commonLogic";
 
 class AdharPan extends Component {
     state = {
@@ -131,11 +130,14 @@ class AdharPan extends Component {
                         this.setState({city, state}, () => setAdharManual(this.state));
                     }
                     if (resp.error === Object(resp.error)) {
-                        alert(resp.error.message);
+                        alertModule(resp.error.message, 'warn');
                         this.setState({city: '', state: ''});
                     }
                     changeLoader(false);
-                }, () => changeLoader(false));
+                }, () => {
+                    changeLoader(false);
+                    alertModule();
+                });
         }
     };
 
@@ -335,7 +337,7 @@ class AdharPan extends Component {
                                         this.setState({gender: 'm'}, () => this.props.setAdharManual(this.state));
                                     }}
                                     style={{
-                                        width: "105px",
+                                        width: "90px",
                                         border:
                                             this.state.gender === "m" && "2px solid #00bfa5",
                                         borderBottomLeftRadius: '25px',
@@ -360,7 +362,7 @@ class AdharPan extends Component {
 
                                     }}
                                     style={{
-                                        width: "105px",
+                                        width: "90px",
                                         border:
                                             this.state.gender === "f" && "2px solid #00bfa5",
                                         borderBottomRightRadius: '25px',
@@ -398,7 +400,7 @@ class AdharPan extends Component {
                                         this.setState({ownership: 'rented'}, () => this.props.setAdharManual(this.state));
                                     }}
                                     style={{
-                                        width: "105px",
+                                        width: "90px",
                                         border:
                                             this.state.ownership === "rented" && "2px solid #00bfa5",
                                         borderBottomLeftRadius: '25px',
@@ -423,7 +425,7 @@ class AdharPan extends Component {
 
                                     }}
                                     style={{
-                                        width: "105px",
+                                        width: "90px",
                                         border:
                                             this.state.ownership === "owned" && "2px solid #00bfa5",
                                         borderBottomRightRadius: '25px',
@@ -440,61 +442,6 @@ class AdharPan extends Component {
                                     />
                                     <small style={{fontSize: "75%"}}>Owned</small>
                                 </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className={"row"}>
-                        <div className={"col-md-6 col-sm-12"}>
-                            <div className="form-group mb-3">
-                                <label htmlFor="numberPincode" className="bmd-label-floating">
-                                    Pincode *
-                                </label>
-                                <input
-                                    type="number"
-                                    className="form-control font_weight"
-                                    // placeholder="Pincode"
-                                    style={{fontWeight: 600}}
-                                    pattern="^[0-9]{6}$"
-                                    title="Please enter Pincode"
-                                    autoCapitalize="characters"
-                                    id="numberPincode"
-                                    required={true}
-                                    value={this.state.pincode}
-                                    onBlur={() => {
-                                        this.props.setAdharManual(this.state);
-                                        this._pincodeFetch();
-                                        this.handleValidation();
-                                    }}
-                                    // ref={ref => (this.obj.pan = ref)}
-                                    onChange={(e) => {
-                                        let regex = /^[0-9]{6,7}$/;
-                                        if (e.target.value.length <= 6) this.setState({pincode: e.target.value});
-                                        this.validate.pincode = (regex.test(e.target.value));
-                                    }}
-                                />
-                            </div>
-                        </div>
-                        <div className={"col-md-6 col-sm-12"}>
-                            <div className="form-group mb-3">
-                                <label htmlFor="dobDate" className="bmd-label-floating">
-                                    Date of Birth
-                                </label>
-                                <DatePicker
-                                    className="form-control font_weight"
-                                    // placeholderText={"Date of Birth"}
-                                    selected={this.state.dob}
-                                    id={"dobDate"}
-                                    pattern={"^[0-9]{2}/[0-9]{2}/[0-9]{4}$"}
-                                    scrollableYearDropdown
-                                    showMonthDropdown
-                                    required={true}
-                                    showYearDropdown
-                                    style={{margin: 'auto'}}
-                                    dateFormat={'dd/MM/yyyy'}
-                                    onChange={(date) => this.changeDob(date)}
-
-                                />
                             </div>
                         </div>
                     </div>
@@ -530,6 +477,31 @@ class AdharPan extends Component {
                             </div>
                         </div>
                         <div className={"col-md-6 col-sm-12"}>
+                            <div className="form-group mb-3">
+                                <label htmlFor="dobDate" className="bmd-label-floating">
+                                    Date of Birth
+                                </label>
+                                <DatePicker
+                                    className="form-control font_weight"
+                                    // placeholderText={"Date of Birth"}
+                                    selected={this.state.dob}
+                                    id={"dobDate"}
+                                    pattern={"^[0-9]{2}/[0-9]{2}/[0-9]{4}$"}
+                                    scrollableYearDropdown
+                                    showMonthDropdown
+                                    required={true}
+                                    showYearDropdown
+                                    style={{margin: 'auto'}}
+                                    dateFormat={'dd/MM/yyyy'}
+                                    onChange={(date) => this.changeDob(date)}
+
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className={"row"}>
+                        <div className={"col-md-6 col-sm-12"}>
                             <div className="form-group mb-3 ">
                                 <label htmlFor="textAddress2" className="bmd-label-floating">
                                     Address 2
@@ -557,6 +529,38 @@ class AdharPan extends Component {
                                     }}
                                 />
                             </div>
+
+                        </div>
+                        <div className={"col-md-6 col-sm-12"}>
+                            <div className="form-group mb-3">
+                                <label htmlFor="numberPincode" className="bmd-label-floating">
+                                    Pincode *
+                                </label>
+                                <input
+                                    type="number"
+                                    className="form-control font_weight"
+                                    // placeholder="Pincode"
+                                    style={{fontWeight: 600}}
+                                    pattern="^[0-9]{6}$"
+                                    title="Please enter Pincode"
+                                    autoCapitalize="characters"
+                                    id="numberPincode"
+                                    required={true}
+                                    value={this.state.pincode}
+                                    onBlur={() => {
+                                        this.props.setAdharManual(this.state);
+                                        this._pincodeFetch();
+                                        this.handleValidation();
+                                    }}
+                                    // ref={ref => (this.obj.pan = ref)}
+                                    onChange={(e) => {
+                                        let regex = /^[0-9]{6,7}$/;
+                                        if (e.target.value.length <= 6) this.setState({pincode: e.target.value});
+                                        this.validate.pincode = (regex.test(e.target.value));
+                                    }}
+                                />
+                            </div>
+
                         </div>
                     </div>
                     <div className={"row"}

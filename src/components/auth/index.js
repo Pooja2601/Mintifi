@@ -4,6 +4,7 @@ import {baseUrl, otpUrl, OTP_Timer} from "../../shared/constants";
 import {connect} from "react-redux";
 import {setAuth, sendOTP, changeLoader} from "../../actions";
 import {Link, withRouter} from "react-router-dom";
+import {alertModule} from "../../shared/commonLogic";
 
 const Timer = OTP_Timer;
 
@@ -26,11 +27,13 @@ class Auth extends Component {
 
         e.preventDefault();
         clearInterval(this.interval);
-        this.props.changeLoader(true);
+
+        const {changeLoader, token, setAuth} = this.props;
+        changeLoader(true);
         this.setState({loading: true, submitted: true, timer: Timer});
         fetch(`${otpUrl}/send_otp`, {
             method: "POST",
-            headers: {'Content-Type': 'application/json', token: this.props.token},
+            headers: {'Content-Type': 'application/json', token: token},
             body: JSON.stringify({
                 "app_id": 3,
                 "otp_type": "one_time_password",
@@ -39,14 +42,14 @@ class Auth extends Component {
             })
         }).then(resp => resp.json()).then(resp => {
             // console.log(JSON.stringify(resp));
-            this.props.changeLoader(false);
+            changeLoader(false);
             if (resp.error === Object(resp.error)) {
-                alert(resp.error.message);
+                alertModule(resp.error.message, 'warn');
                 this.setState({loading: false, submitted: false});
             }
             else if (resp.response === Object(resp.response)) {
                 // alert(resp.success.message);
-                this.setState({otp_reference_id: resp.response.otp_reference_id}, () => this.props.setAuth(this.state));
+                this.setState({otp_reference_id: resp.response.otp_reference_code}, () => setAuth(this.state));
                 this.interval = setInterval(e => {
                     this.setState({timer: this.state.timer - 1}, () => {
                         if (this.state.timer === 0) {
@@ -57,35 +60,36 @@ class Auth extends Component {
                 }, 1000);
             }
         }, resp => {
-            console.log('Looks like a connectivity issue..!');
-            this.props.changeLoader(false);
+            alertModule();
+            changeLoader(false);
         });
         // this.props.sendOTP(this.state.mobile);
     }
 
     _verifyOTP(e) {
-        this.props.changeLoader(true);
+        const {changeLoader, token, authObj} = this.props;
+        changeLoader(true);
         fetch(otpUrl + '/verify_otp ', {
             method: "POST",
-            headers: {'Content-Type': 'application/json', token: this.props.token},
+            headers: {'Content-Type': 'application/json', token: token},
             body: JSON.stringify({
                 "app_id": 3,
-                "otp_reference_number": this.props.authObj.otp_reference_id,
-                "mobile_number": this.props.authObj.mobile,
+                "otp_reference_number": authObj.otp_reference_id,
+                "mobile_number": authObj.mobile,
                 "otp": this.state.otp,
                 "timestamp": new Date()
             })
         }).then(resp => resp.json()).then(resp => {
-            this.props.changeLoader(false);
+            changeLoader(false);
             if (resp.error === Object(resp.error))
-                alert(resp.error.message);
+                alertModule(resp.error.message, 'warn');
             else if (resp.response === Object(resp.response)) {
                 this.setState({verified: resp.response.is_otp_verified});
 // Goes to New Page
             }
         }, resp => {
-            console.log('Looks like a connectivity issue..!');
-            this.props.changeLoader(false);
+            alertModule();
+            changeLoader(false);
         })
     }
 
@@ -188,7 +192,7 @@ class Auth extends Component {
                                         id="otp-area">Resending
                                     in {(this.state.timer) && ` ${this.state.timer} Sec`}
                                 </button>*/}
-                                      {/*  <label style={{
+                                        {/*  <label style={{
                                             fontSize: 'small',
                                             paddingTop: '14px',
                                             color: '#bbb'

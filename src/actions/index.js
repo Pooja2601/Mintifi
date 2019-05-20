@@ -20,6 +20,7 @@ export const types = {
     D_SET_TOKEN: "D_SET_TOKEN",
     D_SET_PREFLIGHT: "D_SET_PREFLIGHT",
     D_SET_LOAN_PAYLOAD: "D_SET_LOAN_PAYLOAD",
+    D_ANCHOR_PAYLOAD: "D_ANCHOR_PAYLOAD"
 };
 
 export const changeLoader = loader => ({
@@ -75,4 +76,14 @@ export const DrawsetPreflight = preFlightResp => ({
 
 export const DrawsetLoanPayload = loanPayload => ({
     type: types.D_SET_LOAN_PAYLOAD, loanPayload
+});
+
+export const DrawAnchorPayload = loanPayload => ({
+    type: types.D_SET_LOAN_PAYLOAD, loanPayload
+});
+
+
+// E-NACH
+export const EnachsetPayload = loanPayload => ({
+    type: types.ENACH_PAYLOAD, loanPayload
 });

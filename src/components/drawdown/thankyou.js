@@ -59,10 +59,10 @@ class ThankYou extends Component {
                                 <td className={"tableDataRight"}>Loan ID</td>
                                 <td>{loanOffers.loan.loan_application_id}</td>
                             </tr>*/}
-                            {/*<tr>
+                            <tr>
                                 <td className={"tableDataRight"}>DrawDown ID</td>
-                                <td>{preFlightResp.anchor_drawdown_id}</td>
-                            </tr>*/}
+                                <td>{preFlightResp.drawdown_id}</td>
+                            </tr>
                             <tr>
                                 <td className={"tableDataRight"}>Loan Status</td>
                                 <td>{loanStatus.loan_status}</td>

@@ -57,21 +57,18 @@ const loanOffers = {
 
 // Before submitting the drawdown Form , Its a Request Object
 const preFlightResp = {
-    "app_id": 2,
-    "anchor_id": "6iu89o",
-    "anchor_drawdown_id": "hy76543",
-    "drawdown_amount": 67000,
-    "otp_reference_id": 87699,
-    "otp": "9876",
-    "offer": {
-        "product_type": "term_loan",
-        "roi": 18,
-        "tenor": 3,
-        "emi": 2000
-    },
-    "disbursement_account_code": "98jhy6",
-    "timestamp": "2019-09-12T00:00:00.000Z"
-};
+        "status": "success",
+        "error_code": "E000",
+        "drawdown_id": 23879879,
+        "offer": {
+            "product_type": "term_loan",
+            "roi": 18,
+            "tenor": 3,
+            "emi": 2000
+        },
+        "timestamp": "2019-09-09T06:42:12.000Z"
+    }
+;
 
 
 class Offers extends Component {

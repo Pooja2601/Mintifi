@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import {Link, withRouter} from "react-router-dom";
 import {baseUrl, loanUrl} from "../../shared/constants";
 import {pan_adhar, setAdharManual, setBusinessDetail, changeLoader} from "../../actions";
+import {alertModule} from "../../shared/commonLogic";
 
 const file_msg = "Select a file";
 
@@ -12,7 +13,6 @@ const file_catalog = {
     entity_proof: ['ghumasta_license', 'gst_certificate', 'other_govt_reg', 'st_vat_cst_registration'],
     caddr_proof: ['electricity_bill', 'rent_agreement']
 };
-
 
 const doc_att = [
     {doc_type: 'pan', doc_category: 'kyc', doc_owner: 'user'},
@@ -89,7 +89,7 @@ class DocsUpload extends Component {
                 this.cAddressProofInput.click();
                 break;
         }
-    }
+    };
 
     RenderModalUpload = () => {
 
@@ -208,8 +208,8 @@ class DocsUpload extends Component {
 
     formSubmit() {
 
-        let {payload, token, preFlightResp} = this.props;
-        this.props.changeLoader(true);
+        let {payload, token, preFlightResp, changeLoader, history} = this.props;
+        changeLoader(true);
 
         preFlightResp = {loan_application_id: '1780'};
 
@@ -247,15 +247,16 @@ class DocsUpload extends Component {
                     this.props.changeLoader(false);
                     console.log(resp); // Handle the success response object
                     if (resp.error === Object(resp.error))
-                        alert("We couldn't upload the files, Kindly try again !");
+                        alertModule("We couldn't upload the files, Kindly try again !", 'warn');
                     else if (resp.response === Object(resp.response))
-                        this.props.history.push('/ThankYou');
+                        history.push('/ThankYou');
                 }
             ).catch(
             error => {
-                this.props.changeLoader(false);
+                changeLoader(false);
                 console.log(error); // Handle the error response object
-                alert("Something went wrong !");
+                alertModule("Something went wrong !", 'error');
+                alertModule();
             }
         );
     }
@@ -290,7 +291,8 @@ class DocsUpload extends Component {
                     <br/>
 
                     <div className="alert " role="alert">
-                        <p className="alert-heading text-center">Hi {f_name} {l_name}, Please upload following documents in
+                        <p className="alert-heading text-center">Hi {f_name} {l_name}, Please upload following documents
+                            in
                             pdf or png/jpg
                             format. </p>
                         <div className="paragraph_styling  text-center">
@@ -367,7 +369,7 @@ class DocsUpload extends Component {
                                         <button className="btn btn-raised uploadButton inputFilebutton "
                                                 onClick={() => this._multiDimDocsUpload('entity_proof')}
                                                 style={{minWidth: '111px'}}
-                                                id={"addressProofBtn"} >
+                                                id={"addressProofBtn"}>
                                             Shop Registration
 
                                         </button>
