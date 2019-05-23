@@ -11,13 +11,13 @@ class ThankYou extends Component {
         const {payload, authObj, changeLoader} = this.props;
         if (payload !== Object(payload))
             if (authObj !== Object(authObj))
-                this.props.history.push("/Drawdown/Auth");
+                this.props.history.push("/Drawdown/");
         changeLoader(false);
     }
 
     render() {
         let {payload, match, preFlightResp, loanPayload, authObj} = this.props;
-        // if (payload === Object(payload)) {
+        if (payload === Object(payload)) {
 
         // ToDo : Comment the below code in production
         let {f_name, l_name} = payload;
@@ -101,8 +101,8 @@ class ThankYou extends Component {
                 </div>
             </>
         )
-        // }
-        // else return (<></>)
+        }
+        else return (<></>)
     }
 }
 

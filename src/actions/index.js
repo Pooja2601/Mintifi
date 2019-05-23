@@ -3,10 +3,11 @@ export const types = {
     CHANGE_LOADER: "CHANGE_LOADER",
     CHECK_USER_EXISTS: "CHECK_USER_EXISTS",
     PAN_ADHAR: "PAN_ADHAR",
-    ADHAR_COMPLETE: "ADHAR_COMPLETE",
+    PERSONAL_DETAIL: "PERSONAL_DETAIL",
     GST_PROFILE: "GST_PROFILE",
     PREFLIGHT_RESPONSE: "PREFLIGHT_RESPONSE",
     BUSINESS_DETAIL: "BUSINESS_DETAIL",
+    BANK_DETAIL: "BANK_DETAIL",
     FETCH_AUTH: "FETCH_AUTH",
     FETCH_AUTH_SUCCESS: "FETCH_AUTH_SUCCESS",
     SEND_OTP: "SEND_OTP",
@@ -15,12 +16,15 @@ export const types = {
     RECEIVE_OTP_SUCCESS: "RECEIVE_OTP_SUCCESS",
     SORT_UPCOMING: "SORT_UPCOMING",
     FILTER_UPCOMING: "FILTER_UPCOMING",
-//    Drawdown Section
+    //...................................    Drawdown Section
     D_SET_AUTH: "D_SET_AUTH",
     D_SET_TOKEN: "D_SET_TOKEN",
     D_SET_PREFLIGHT: "D_SET_PREFLIGHT",
     D_SET_LOAN_PAYLOAD: "D_SET_LOAN_PAYLOAD",
-    D_ANCHOR_PAYLOAD: "D_ANCHOR_PAYLOAD"
+    D_ANCHOR_PAYLOAD: "D_ANCHOR_PAYLOAD",
+    //...................................    Enach Section
+    ENACH_PAYLOAD: 'ENACH_PAYLOAD',
+    ENACH_ATTEMPT: 'ENACH_ATTEMPT'
 };
 
 export const changeLoader = loader => ({
@@ -38,9 +42,11 @@ export const checkExists = existing => ({
     existing
 });
 
-export const setAdharManual = adharObj => ({type: types.ADHAR_COMPLETE, adharObj});
+export const setAdharManual = adharObj => ({type: types.PERSONAL_DETAIL, adharObj});
 
 export const setBusinessDetail = businessObj => ({type: types.BUSINESS_DETAIL, businessObj});
+
+export const setBankDetail = bankObj => ({type: types.BANK_DETAIL, bankObj});
 
 export const setGstProfile = gstProfile => ({type: types.GST_PROFILE, gstProfile});
 
@@ -59,7 +65,7 @@ export const sendOTP = number => ({
     type: types.SEND_OTP, number
 });
 
-// Drawdown Section
+//.................................... Drawdown Section
 
 export const DrawsetAuth = authObj => ({
     type: types.D_SET_AUTH, authObj
@@ -82,8 +88,11 @@ export const DrawAnchorPayload = loanPayload => ({
     type: types.D_SET_LOAN_PAYLOAD, loanPayload
 });
 
+//..................................... E-NACH
+export const EnachsetPayload = eNachPayload => ({
+    type: types.ENACH_PAYLOAD, eNachPayload
+});
 
-// E-NACH
-export const EnachsetPayload = loanPayload => ({
-    type: types.ENACH_PAYLOAD, loanPayload
+export const EnachsetAttempt = eNachAttempt => ({
+    type: types.ENACH_ATTEMPT, eNachAttempt
 });

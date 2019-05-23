@@ -2665,13 +2665,14 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 #numberPAN:valid, #numberMobile:valid, #numberAdhar:valid, #fullName:valid,
-#textEmail:valid, #numberPincode:valid, #dobDate:valid, #otpVerify:valid, #firstName:valid, #middleName:valid, #lastName:valid, #numberGST:valid, #avgTrans:valid, #textAddress1:valid, #textAddress2:valid {
+#textEmail:valid, #numberPincode:valid, #dobDate:valid, #otpVerify:valid, #firstName:valid, #middleName:valid, #lastName:valid, #numberGST:valid, #avgTrans:valid, #textAddress1:valid, #textAddress2:valid, #dealerCode:valid, #ifscCode:valid, #numberAccount:valid,
+#micrCode:valid {
     color: black !important;
     border-color: black !important;
 }
 
 #numberPAN:invalid, #numberMobile:invalid, #numberAdhar:invalid,
-#fullName:invalid, #textEmail:invalid, #numberPincode:invalid, #dobDate:invalid, #otpVerify:invalid, #firstName:invalid, #middleName:invalid, #lastName:invalid, #numberGST:invalid, #avgTrans:invalid, #textAddress1:invalid, #textAddress2:invalid {
+#fullName:invalid, #textEmail:invalid, #numberPincode:invalid, #dobDate:invalid, #otpVerify:invalid, #firstName:invalid, #middleName:invalid, #lastName:invalid, #numberGST:invalid, #avgTrans:invalid, #textAddress1:invalid, #textAddress2:invalid, #dealerCode:invalid, #ifscCode:invalid, #numberAccount:invalid, #micrCode:invalid {
     color: crimson !important; /* indianred */
     border-color: crimson !important;
 }

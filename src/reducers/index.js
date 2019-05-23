@@ -10,7 +10,7 @@ const rootReducer = combineReducers({
     adharDetail: AdharReducer,
     businessDetail: BusinessReducer,
     drawdownReducer: DrawdownReducer,
-    EnachReducer: EnachReducer,
+    eNachReducer: EnachReducer,
 });
 
 export default rootReducer;

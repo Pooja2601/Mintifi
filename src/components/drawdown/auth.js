@@ -22,40 +22,6 @@ class MobileOtp extends Component {
         mobile_correct: false
     };
 
-    _generateToken() {
-        const {changeLoader, DrawsetToken, match} = this.props;
-        changeLoader(true);
-        /*        let payload = {
-                    "anchor_id": "uyh65t",
-                    "distributor_dealer_code": "R1T89563",
-                    "sales_agent_mobile_number": "9876543210",
-                    // "anchor_transaction_id": "hy76515",
-                    "retailer_onboarding_date": "2006-09-19",
-                    "loan_amount": "500000",
-                    "anchor_drawdown_id ": "s65d7f8",
-                    "loan_application_id": "8456",
-                    "company_id": "629",
-                    "drawdown_amount": "20000",
-                    "disbursement_account_code": "sdtf78",
-                };*/
-        fetch(`${baseUrl}/auth`, {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                user_id: "uyh65t",
-                secret_key: "3f147e1bf610b5f3",
-                app_id: "3",
-                type: "anchor"
-            })
-        }).then(resp => resp.json()).then(resp => {
-            changeLoader(false);
-            if (resp.response === Object(resp.response))
-                if (resp.response.status === 'success')
-                    DrawsetToken(resp.response.auth.token, match.params.payload);
-            // setTimeout(() => console.log(this.props.token),2000)
-        });
-    }
-
     _formSubmit(e) {
 
         e.preventDefault();
@@ -70,7 +36,7 @@ class MobileOtp extends Component {
             headers: {'Content-Type': 'application/json', 'token': token},
             body: JSON.stringify({
                 "app_id": 3,
-                "otp_type": "one_time_password",
+                "otp_type": "drawdown",
                 "mobile_number": this.state.mobile,
                 "timestamp": new Date()
             })
@@ -95,7 +61,7 @@ class MobileOtp extends Component {
             }
         }, resp => {
             alertModule();
-            this.props.changeLoader(false);
+            changeLoader(false);
         });
         // this.props.sendOTP(this.state.mobile);
     }
@@ -157,7 +123,7 @@ class MobileOtp extends Component {
             alertModule();
             changeLoader(false);
         });
-    }
+    };
 
 //authObj
     _setMobile = (e) => {
@@ -171,18 +137,13 @@ class MobileOtp extends Component {
     };
 
     componentWillMount() {
-        /*        const {DrawsetToken, match, changeLoader, payload} = this.props;
-                changeLoader(false);
-                let base64_decode = (match.params.payload !== undefined) ? JSON.parse(new Buffer(match.params.payload, 'base64').toString('ascii')) : {};
-                DrawsetToken(match.params.token, base64_decode);
-                if (match.params.token !== undefined && payload !== Object(payload))
-                    toast.error("You cannot access this page directly without Authorised session!! ");*/
-        const {changeLoader, match, DrawsetToken} = this.props;
+
+        /*const {changeLoader, match, DrawsetToken} = this.props;
         changeLoader(false);
         const {token, payload} = match.params;
         if (token === undefined && payload === Object(payload))
             alertModule("You cannot access this page directly without Authorised session!! ", 'error');
-        else DrawsetToken(token, payload);
+        else DrawsetToken(token, payload);*/
     }
 
     componentDidMount() {
@@ -196,7 +157,7 @@ class MobileOtp extends Component {
         const {payload, match} = this.props;
         return (
             <>
-                {/*<Link to={'/AdharComplete'} className={"btn btn-link"}>Go Back </Link>*/}
+                {/*<Link to={'/PersonalDetails'} className={"btn btn-link"}>Go Back </Link>*/}
                 <h4 className={"text-center"}>Pay with Mintifi</h4>
                 <p className="paragraph_styling text-center">
                     {/*<br/>*/}
@@ -305,19 +266,7 @@ class MobileOtp extends Component {
                     </div>
 
                 </form>
-                <button
-                    onClick={() => this._generateToken()}
-                    style={{visibility: (payload !== Object(payload) && !match.params.token) ? 'visible' : 'hidden'}}
-                    style={{
-                        padding: "5px 35px", width: '100%',
-                        margin: '50px 0%'
-                    }}
-                    className="form-submit btn greenButton text-center"
-                >
-                    Create TOKEN and PAYLOAD
-                </button>
-                <br/>
-                <small>(above button is for development use only)</small>
+
             </>
         );
     }

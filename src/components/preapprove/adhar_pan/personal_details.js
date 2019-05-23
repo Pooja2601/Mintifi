@@ -1,12 +1,12 @@
 import React, {Component} from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
-import {baseUrl, otpUrl} from "../../shared/constants";
+import {baseUrl, otpUrl} from "../../../shared/constants";
 import {connect} from "react-redux";
-import {setAdharManual, changeLoader} from "../../actions";
+import {setAdharManual, changeLoader} from "../../../actions/index";
 import {Link, withRouter} from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import {alertModule} from "../../shared/commonLogic";
+import {alertModule} from "../../../shared/commonLogic";
 
 class AdharPan extends Component {
     state = {
@@ -46,7 +46,7 @@ class AdharPan extends Component {
 
         if (payload !== Object(payload))
             if (adharObj !== Object(adharObj))
-                this.props.history.push("/Token");
+                this.props.history.push("/preapprove/token");
 
         let state = adharObj;
         if (state === Object(state))
@@ -85,7 +85,7 @@ class AdharPan extends Component {
     _formSubmit(e) {
         e.preventDefault();
         setTimeout(() => {
-            this.props.history.push('/MobileOTP');
+            this.props.history.push('/preapprove/mobileotp');
         }, 500);
     }
 

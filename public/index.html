@@ -139,23 +139,24 @@ To create a production bundle, use `npm run build` or `yarn build`.
 <script>
 
     document.addEventListener("dispatchDigio", function (obj) {
-        let {document_id, mobile_number} = obj.detail;
+        let {mandate_id, user_mobile, user_email} = obj.detail;
+
         let options = {
             //default environment stage (sandbox)
-            //for production include:
-            environment: "stage", //production , stage
+            environment: "stage", // production , stage
             callback: function (t) {
-                if (t.error_code != undefined)
-                    alert("Failed to register with error :" + t.message);
-                else
-                    alert("Register successful for " + t.digio_doc_id);
+                let event = new CustomEvent("responseDigio", {
+                    detail: t
+                });
+                    document.dispatchEvent(event);
             },
             logo: "https://mintifi.com/images/logo.png", //Pass Logo URL here
             is_iframe: true //open in iframe
         };
         let digio = new Digio(options);
         digio.init();  // Call init on user action (eg.button press and proceed to asynchronous upload)
-        digio.submit(document_id, mobile_number);
+        let mobile = (user_mobile !== undefined) ? user_mobile : user_email;
+        digio.submit(mandate_id, mobile);
     });
 
 </script>

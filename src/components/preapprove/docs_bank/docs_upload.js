@@ -1,9 +1,9 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {Link, withRouter} from "react-router-dom";
-import {baseUrl, loanUrl} from "../../shared/constants";
-import {pan_adhar, setAdharManual, setBusinessDetail, changeLoader} from "../../actions";
-import {alertModule} from "../../shared/commonLogic";
+import {baseUrl, loanUrl} from "../../../shared/constants";
+import {pan_adhar, setAdharManual, setBusinessDetail, changeLoader} from "../../../actions/index";
+import {alertModule} from "../../../shared/commonLogic";
 
 const file_msg = "Select a file";
 
@@ -249,7 +249,7 @@ class DocsUpload extends Component {
                     if (resp.error === Object(resp.error))
                         alertModule("We couldn't upload the files, Kindly try again !", 'warn');
                     else if (resp.response === Object(resp.response))
-                        history.push('/ThankYou');
+                        history.push('/preapprove/thankYou');
                 }
             ).catch(
             error => {
@@ -262,13 +262,17 @@ class DocsUpload extends Component {
     }
 
     componentWillMount() {
-        this.props.changeLoader(false);
-        const {payload, authObj, adharObj, businessObj} = this.props;
+
+        const {payload, authObj, adharObj, businessObj, changeLoader} = this.props;
+        changeLoader(false);
         if (payload !== Object(payload))
             if (adharObj !== Object(adharObj))
                 if (businessObj !== Object(businessObj))
-                    this.props.history.push("/Token");
+                    this.props.history.push("/preapprove/token");
 
+        // console.log(adharObj);
+        // console.log(payload);
+        // console.log(businessObj);
         this.errorMsgModal = '';
         this.idProofInput = {value: ''};
         this.addProofInput = {value: ''};
@@ -282,7 +286,7 @@ class DocsUpload extends Component {
             const {f_name, l_name} = this.props.adharObj;
             return (
                 <>
-                    {/* <button onClick={() => this.props.history.push('/BusinessDetail')} className={"btn btn-link"}>
+                    {/* <button onClick={() => this.props.history.push('/preapprove/businessdetail')} className={"btn btn-link"}>
                     Go Back
                 </button>*/}
                     <br/>
@@ -415,8 +419,10 @@ class DocsUpload extends Component {
                         >Complete Loan Application
                         </button>
                     </div>
-                    {this.RenderModalMessage()}
-                    {this.RenderModalUpload()}
+                    <div>
+                        {this.RenderModalMessage()}
+                        {this.RenderModalUpload()}
+                    </div>
                 </>
             )
         }

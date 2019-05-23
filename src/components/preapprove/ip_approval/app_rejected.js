@@ -1,22 +1,25 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {Link, withRouter} from "react-router-dom";
-import {pan_adhar, setAdharManual, setBusinessDetail} from "../../actions";
+import {landingPayload} from "../../../shared/constants";
+import {pan_adhar, setAdharManual, setBusinessDetail} from "../../../actions/index";
 
 class AppRejected extends Component {
 
     render() {
-        let {match, adharObj} = this.props;
-        match = {params: {status: 'decline'}};
+        let {match, adharObj, preFlightResp} = this.props;
+        // ToDo :  Hide it in Prod
+        // match = {params: {status: 'decline'}};
+
         return (
             <>
-                {/* <button onClick={() => this.props.history.push('/BusinessDetail')} className={"btn btn-link"}>
+                {/* <button onClick={() => this.props.history.push('/preapprove/businessdetail')} className={"btn btn-link"}>
                     Go Back
                 </button>*/}
                 <h4 className={"text-center"}>Credit Eligibility</h4>
                 <br/>
                 {/*fa-exclamation-circle*/}
-                <i style={{fontSize:'60px'}} className={"fa fa-exclamation-triangle closeCircle"}></i>
+                <i style={{fontSize: '60px'}} className={"fa fa-exclamation-triangle closeCircle"}></i>
                 {/*<h5 className={"text-center"}> Application {(match.params.status === 'decline') ? 'Rejected' : 'Error'}</h5>*/}
                 <br/>
                 <div className="paragraph_styling  text-center" style={{margin: 'auto 5%'}}>
@@ -33,7 +36,8 @@ class AppRejected extends Component {
                         In case of any query, please contact us at <a
                         href={"mailto:support@mintifi.com"}>support@mintifi.com</a> or <a href={"tel:+919999999999"}>+91
                         9999999999</a>. <br/>Please
-                        mention your ( loan application id ) in the request.
+                        mention your <b>( loan application id : {preFlightResp.loan_application_id} )</b> in the
+                        request.
                     </div>
 
                 </div>
@@ -43,7 +47,7 @@ class AppRejected extends Component {
                     */}
                     <button
                         type="button"
-                        onClick={e => this.props.history.push('/')}
+                        onClick={e => this.props.history.push(`/${landingPayload.error_url}`)}
                         className="form-submit btn btn-raised greenButton"
                     >Back to Yatra
                     </button>
@@ -55,6 +59,7 @@ class AppRejected extends Component {
 
 const mapStateToProps = state => ({
     adharObj: state.adharDetail.adharObj,
+    preFlightResp: state.businessDetail.preFlightResp
 });
 
 export default withRouter(

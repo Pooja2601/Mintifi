@@ -1,9 +1,10 @@
 import React, {Component} from "react";
 import {Link, withRouter} from 'react-router-dom';
 // import {GetinTouch} from "../../shared/getin_touch";
-// import {baseUrl} from "../shared/constants";
+import {baseUrl, landingPayload} from "../shared/constants";
 import {connect} from "react-redux";
 import {checkExists, setToken, changeLoader} from "../actions";
+import {alertModule} from "../shared/commonLogic";
 
 const Timer = 10;
 
@@ -15,48 +16,50 @@ class Login extends Component {
         let base64_decode = (match.params.payload !== undefined) ? JSON.parse(new Buffer(match.params.payload, 'base64').toString('ascii')) : {};
         setToken(match.params.token, base64_decode);
         if (match.params.token !== undefined && payload !== Object(payload))
-            alert("You cannot access this page directly without Credential Payload!! ");
+            alertModule("You cannot access this page directly without Appropriate Permission!!", 'warn');
         // console.log(base64_decode);
     }
 
+    // ToDo : Not useful in Prod
     _generateToken() {
-        this.props.changeLoader(true);
-        let payload = {
-            "anchor_id": "uyh65t",
-            "distributor_dealer_code": "R1T89563",
-            "sales_agent_mobile_number": "9876543210",
-            "anchor_transaction_id": "hy76520",
-            "retailer_onboarding_date": "2006-09-19",
-            "loan_amount": "500000"
-        };
+        // ToDo : make it const in Prod
+        let {changeLoader, setToken, payload} = this.props;
+        changeLoader(true);
+
+        // ToDo : hide it in Prod
+        payload = landingPayload;
+
         fetch('https://test.mintifi.com/api/v1/auth', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
-                user_id: "uyh65t",
+                user_id: payload.anchor_id,
                 secret_key: "3f147e1bf610b5f3",
                 app_id: "3",
                 type: "anchor"
             })
         }).then(resp => resp.json()).then(resp => {
-            this.props.changeLoader(false);
+            changeLoader(false);
             if (resp.response === Object(resp.response))
                 if (resp.response.status === 'success')
-                    this.props.setToken(resp.response.auth.token, payload);
+                    setToken(resp.response.auth.token, payload);
+        }, () => {
+            alertModule();
+            changeLoader(false);
         });
     }
 
     _existCustomer = () => {
         this.props.checkExists("exist");
         setTimeout(() => {
-            this.props.history.push('/Auth')
+            this.props.history.push('/preapprove/auth')
         }, 500);
     };
 
     _newCustomer = () => {
         this.props.checkExists("new");
         setTimeout(() => {
-            this.props.history.push('/AdharPan')
+            this.props.history.push('/preapprove/adharpan')
         }, 500);
     };
 

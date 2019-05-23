@@ -1,9 +1,9 @@
 import React, {Component} from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
-import {baseUrl, loanUrl, BusinessType} from "../../shared/constants";
-import {PrivacyPolicy, TnCPolicy} from "../../shared/policy";
+import {baseUrl, loanUrl, BusinessType} from "../../../shared/constants";
+import {PrivacyPolicy, TnCPolicy} from "../../../shared/policy";
 import {connect} from "react-redux";
-import {setBusinessDetail, setAdharManual, pan_adhar, storeResponse, changeLoader} from "../../actions";
+import {setBusinessDetail, setAdharManual, pan_adhar, storeResponse, changeLoader} from "../../../actions/index";
 import {Link, withRouter} from "react-router-dom";
 // import DatePicker from "react-datepicker";
 
@@ -81,7 +81,7 @@ class ReviewBusinessDetail extends Component {
             if (adharObj !== Object(adharObj))
                 if (businessObj !== Object(businessObj))
                     if (adharObj.verified)
-                        this.props.history.push("/Token");
+                        this.props.history.push("/preapprove/token");
     }
 
     _formSubmit(e) {
@@ -139,24 +139,24 @@ class ReviewBusinessDetail extends Component {
                 let {loan_status} = resp.response.credit_eligibility;
                 this.props.storeResponse(resp.response);
                 if (loan_status === 'closed' || loan_status === 'decline')
-                    this.props.history.push("/AppRejected", {status: 'decline'});
+                    this.props.history.push("/preapprove/apprejected", {status: 'decline'});
                 else if (loan_status === 'pending') {
-                    setTimeout(() => this.props.history.push("/AppApproved", {status: 'pending'}), 500);
+                    setTimeout(() => this.props.history.push("/preapprove/appapproved", {status: 'pending'}), 500);
                 }
                 else {
-                    setTimeout(() => this.props.history.push("/AppApproved", {status: 'approved'}), 500);
+                    setTimeout(() => this.props.history.push("/preapprove/appapproved", {status: 'approved'}), 500);
                 }
 
             }
             else if (resp.error === Object(resp.error)) {
                 console.log(resp.message);
-                this.props.history.push("/AppRejected", {status: 'error'});
+                this.props.history.push("/preapprove/apprejected", {status: 'error'});
             }
         }, (resp) => {
             this.props.changeLoader(false);
             // console.log("Application Rejected");
             console.log("Internet Connectivity Issue");
-            //        this.props.history.push("/AppRejected);
+            //        this.props.history.push("/preapprove/apprejected);
         });
 
     }
@@ -218,7 +218,7 @@ class ReviewBusinessDetail extends Component {
         return (
             <>
                 {/*<Link to={'/AdharPan'} className={"btn btn-link"}>Go Back </Link>*/}
-                <button onClick={() => this.props.history.push('/BusinessDetail')} className={"btn btn-link"}>
+                <button onClick={() => this.props.history.push('/preapprove/businessdetail')} className={"btn btn-link"}>
                     Go Back
                 </button>
                 <br/>

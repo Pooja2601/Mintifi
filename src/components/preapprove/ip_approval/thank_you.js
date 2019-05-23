@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {Link, withRouter} from "react-router-dom";
-import {setAdharManual} from "../../actions";
+import {setAdharManual} from "../../../actions/index";
 
 class ThankYou extends Component {
 
@@ -11,7 +11,7 @@ class ThankYou extends Component {
             if (authObj !== Object(authObj))
                 if (adharObj !== Object(adharObj))
                     if (businessObj !== Object(businessObj))
-                        this.props.history.push("/Token");
+                        this.props.history.push("/preapprove/token");
     }
 
     render() {
@@ -21,7 +21,7 @@ class ThankYou extends Component {
             // const {loan_application_id, credit_eligibility} = preFlightResp;
             return (
                 <>
-                    {/* <button onClick={() => this.props.history.push('/BusinessDetail')} className={"btn btn-link"}>
+                    {/* <button onClick={() => this.props.history.push('/preapprove/businessdetail')} className={"btn btn-link"}>
                     Go Back
                 </button>*/}
                     <br/>
@@ -81,7 +81,7 @@ class ThankYou extends Component {
                     <div className="mt-5 mb-5 text-center ">
                         <button
                             type="button"
-                            onClick={e => this.props.history.push('/')}
+                            onClick={e => this.props.history.push('/preapprove/')}
                             className="form-submit btn btn-raised greenButton"
                         >Alright
                         </button>

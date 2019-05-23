@@ -10,7 +10,7 @@ export default (state = {}, action) => {
         case types.PAN_ADHAR:
             return {...state, pan: action.pan, adhar: action.adhar};
 
-        case types.ADHAR_COMPLETE:
+        case types.PERSONAL_DETAIL:
             return {...state, adharObj: action.adharObj};
 
         default:

@@ -1,11 +1,11 @@
 import React, {Component} from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
-import {baseUrl, loanUrl, BusinessType} from "../../shared/constants";
+import {baseUrl, loanUrl, BusinessType} from "../../../shared/constants";
 import {connect} from "react-redux";
-import {setBusinessDetail, setAdharManual, pan_adhar, storeResponse, changeLoader} from "../../actions";
+import {setBusinessDetail, setAdharManual, pan_adhar, storeResponse, changeLoader} from "../../../actions/index";
 import {Link, withRouter} from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
-import {alertModule} from "../../shared/commonLogic";
+import {alertModule} from "../../../shared/commonLogic";
 
 class ReviewBusinessDetail extends Component {
     obj = {pan_correct: '', adhar_correct: ''};
@@ -39,7 +39,7 @@ class ReviewBusinessDetail extends Component {
             if (adharObj !== Object(adharObj))
                 if (businessObj !== Object(businessObj))
                     if (adharObj.verified)
-                        this.props.history.push("/Token");
+                        this.props.history.push("/preapprove/token");
     }
 
     _formSubmit(e) {
@@ -78,7 +78,6 @@ class ReviewBusinessDetail extends Component {
                     "residence_address": {
                         "address_1": adharObj.address1,
                         "address_2": adharObj.address2 ? adharObj.address2 : " ",
-                        "address_3": " ",
                         "ownership_type": adharObj.ownership,
                         "pincode": adharObj.pincode
                     }
@@ -89,6 +88,7 @@ class ReviewBusinessDetail extends Component {
                     "retailer_onboarding_date": payload.retailer_onboarding_date,
                     "vintage": 60
                 },
+                "tnc_accepted": true,
                 "is_credit_decision": true,
                 "timestamp": new Date()
             })
@@ -98,18 +98,18 @@ class ReviewBusinessDetail extends Component {
                 let {loan_status} = resp.response.credit_eligibility;
                 storeResponse(resp.response);
                 if (loan_status === 'closed' || loan_status === 'decline')
-                    history.push("/AppRejected", {status: 'decline'});
+                    history.push("/preapprove/apprejected", {status: 'decline'});
                 else if (loan_status === 'pending') {
-                    setTimeout(() => history.push("/AppApproved", {status: 'pending'}), 500);
+                    setTimeout(() => history.push("/preapprove/appapproved", {status: 'pending'}), 500);
                 }
                 else {
-                    setTimeout(() => history.push("/AppApproved", {status: 'approved'}), 500);
+                    setTimeout(() => history.push("/preapprove/appapproved", {status: 'approved'}), 500);
                 }
 
             }
             else if (resp.error === Object(resp.error)) {
                 alertModule(resp.message, 'warn');
-                history.push("/AppRejected", {status: 'error'});
+                history.push("/preapprove/apprejected", {status: 'error'});
             }
         }, (resp) => {
             changeLoader(false);

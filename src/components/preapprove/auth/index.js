@@ -1,14 +1,14 @@
 import React, {Component} from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
-import {baseUrl, otpUrl, OTP_Timer} from "../../shared/constants";
+import {baseUrl, otpUrl, OTP_Timer} from "../../../shared/constants";
 import {connect} from "react-redux";
-import {setAuth, sendOTP, changeLoader, setAdharManual} from "../../actions";
+import {setAuth, sendOTP, changeLoader} from "../../../actions/index";
 import {Link, withRouter} from "react-router-dom";
-import {alertModule} from "../../shared/commonLogic";
+import {alertModule} from "../../../shared/commonLogic";
 
 const Timer = OTP_Timer;
 
-class MobileOtp extends Component {
+class Auth extends Component {
     state = {
         submitted: false,
         loading: false,
@@ -27,15 +27,13 @@ class MobileOtp extends Component {
 
         e.preventDefault();
         clearInterval(this.interval);
-        const {changeLoader, token, setAdharManual} = this.props;
+
+        const {changeLoader, token, setAuth} = this.props;
         changeLoader(true);
-
-
         this.setState({loading: true, submitted: true, timer: Timer});
-
         fetch(`${otpUrl}/send_otp`, {
             method: "POST",
-            headers: {'Content-Type': 'application/json', 'token': token},
+            headers: {'Content-Type': 'application/json', token: token},
             body: JSON.stringify({
                 "app_id": 3,
                 "otp_type": "one_time_password",
@@ -49,12 +47,9 @@ class MobileOtp extends Component {
                 alertModule(resp.error.message, 'warn');
                 this.setState({loading: false, submitted: false});
             }
-            //     this.showSnackbary.click();
-            // showSnackbar(resp.error.message);
-
-            else if (resp.response === Object(resp.response) && resp.response.status === 'success') {
-                // alertModule(resp.success.message,'success');
-                this.setState({otp_reference_id: resp.response.otp_reference_code}, () => setAdharManual(this.state));
+            else if (resp.response === Object(resp.response)) {
+                // alert(resp.success.message);
+                this.setState({otp_reference_id: resp.response.otp_reference_code}, () => setAuth(this.state));
                 this.interval = setInterval(e => {
                     this.setState({timer: this.state.timer - 1}, () => {
                         if (this.state.timer === 0) {
@@ -72,16 +67,15 @@ class MobileOtp extends Component {
     }
 
     _verifyOTP(e) {
-        const {adharObj, payload, token, changeLoader, setAdharManual, history} = this.props;
-        e.preventDefault();
+        const {changeLoader, token, authObj} = this.props;
         changeLoader(true);
-        fetch(`${otpUrl}/verify_otp`, {
+        fetch(otpUrl + '/verify_otp ', {
             method: "POST",
             headers: {'Content-Type': 'application/json', token: token},
             body: JSON.stringify({
                 "app_id": 3,
-                "otp_reference_number": adharObj.otp_reference_id,
-                "mobile_number": adharObj.mobile,
+                "otp_reference_number": authObj.otp_reference_id,
+                "mobile_number": authObj.mobile,
                 "otp": this.state.otp,
                 "timestamp": new Date()
             })
@@ -90,13 +84,7 @@ class MobileOtp extends Component {
             if (resp.error === Object(resp.error))
                 alertModule(resp.error.message, 'warn');
             else if (resp.response === Object(resp.response)) {
-                this.setState({verified: resp.response.is_otp_verified}, () => {
-                    setAdharManual(this.state);
-                });
-                if (resp.response.is_otp_verified)
-                    setTimeout(() => {
-                        history.push('/BusinessDetail');
-                    }, 500);
+                this.setState({verified: resp.response.is_otp_verified});
 // Goes to New Page
             }
         }, resp => {
@@ -105,39 +93,35 @@ class MobileOtp extends Component {
         })
     }
 
+
 //authObj
     _setMobile = (e) => {
         const {value} = e.target;
         if (value.length <= 10) {
-            this.setState({
-                mobile: value,
-                mobile_correct: (value.length !== 10)
-            }, () => this.props.setAdharManual(this.state));
+            this.setState({mobile: value, mobile_correct: (value.length !== 10)}, () => this.props.setAuth(this.state));
         }
     };
 
     componentDidMount() {
-        const {adharObj, payload, changeLoader, setAuth, history} = this.props;
-        if (adharObj === Object(adharObj))
-            this.setState({mobile: adharObj.mobile});
-        else setAuth(this.state);
 
+        const {authObj, changeLoader, setAuth} = this.props;
         changeLoader(false);
-
-        if (payload !== Object(payload))
-            if (adharObj !== Object(adharObj))
-                history.push("/AdharComplete");
+        if (authObj === Object(authObj))
+            this.setState({mobile: authObj.mobile, verified: authObj.verified});
+        else setAuth(this.state);
     }
 
     render() {
         return (
             <>
-                <Link to={'/AdharComplete'} className={"btn btn-link"}>Go Back </Link>
-
+                <Link to={'/Token'} className={"btn btn-link"}>Go Back </Link>
+                <h4 className={"text-center"}>
+                    Welcome Back
+                </h4>
                 <h5 className="paragraph_styling text-center">
-
-                    Please verify your mobile number
+                    Please login with your registered mobile number !
                 </h5>
+                <br/>
                 <form
                     id="serverless-contact-form"
                 >
@@ -145,8 +129,7 @@ class MobileOtp extends Component {
                     <div className={"row"}>
                         <div className={"col-sm-11 col-md-8"} style={{margin: 'auto'}}>
                             <div className="form-group mb-3">
-                                <label htmlFor="numberMobile"
-                                       className={"bmd-label-floating"}>Mobile
+                                <label htmlFor="numberMobile" className={"bmd-label-floating"}>Mobile
                                     Number *</label>
                                 <div className={"input-group"}>
 
@@ -160,7 +143,7 @@ class MobileOtp extends Component {
                                         className="form-control font_weight prependInput"
                                         // placeholder="10 digit Mobile Number"
                                         name="url"
-                                        disabled={true}
+                                        disabled={this.state.submitted}
                                         min={1000000000}
                                         max={9999999999}
                                         maxLength={10}
@@ -170,10 +153,9 @@ class MobileOtp extends Component {
                                         id="numberMobile"
 
                                         required={true}
-                                        readOnly={true}
                                         value={this.state.mobile}
                                         // ref={ref => (this.obj.number = ref)}
-                                        // onChange={(e) => this._setMobile(e)}
+                                        onChange={(e) => this._setMobile(e)}
                                         aria-describedby="basic-addon3"
                                     />
                                 </div>
@@ -181,10 +163,7 @@ class MobileOtp extends Component {
                         </div>
                         <div className={"col-sm-11 col-md-8"} style={{margin: 'auto'}}>
                             <div className="form-group mb-3"
-                                 style={{
-                                     visibility: (this.state.submitted) ? 'visible' : 'hidden',
-                                     marginTop: '-15px'
-                                 }}>
+                                 style={{visibility: (this.state.submitted) ? 'visible' : 'hidden'}}>
                                 <label htmlFor="otpVerify" className={"bmd-label-floating"}>OTP *</label>
                                 <div className={"input-group"}>
                                     <input
@@ -208,16 +187,16 @@ class MobileOtp extends Component {
                                         aria-describedby="otp-area"
                                     />
                                     <div className="input-group-append">
-                                        {/* <label style={{
-                                            fontSize: 'small',
-                                            paddingTop: '14px',
-                                            color: '#bbb'
-                                        }}>Next OTP in {(this.state.timer) && ` ${this.state.timer} Sec`}</label>*/}
                                         {/*<button className="btn btn-outline-secondary" disabled={this.state.timer}
                                         type="button"
                                         id="otp-area">Resending
                                     in {(this.state.timer) && ` ${this.state.timer} Sec`}
                                 </button>*/}
+                                        {/*  <label style={{
+                                            fontSize: 'small',
+                                            paddingTop: '14px',
+                                            color: '#bbb'
+                                        }}>Next OTP in {(this.state.timer) && ` ${this.state.timer} Sec`}</label>*/}
                                     </div>
                                 </div>
                             </div>
@@ -233,7 +212,8 @@ class MobileOtp extends Component {
                         }}>You can resend OTP after {(this.state.timer) && ` ${this.state.timer} Sec`}</label>
                     </div>
 
-                    <div className="mt-2 text-center ">
+                    <div className="mt-3 text-center ">
+
                         <button
                             type="submit"
                             name="submit"
@@ -246,14 +226,19 @@ class MobileOtp extends Component {
                         <br/>
 
                         <button
-                            style={{visibility: (this.state.loading && (this.state.otp !== '')) ? 'visible' : 'hidden'}}
+                            style={{visibility: (this.state.loading && (this.state.otp.length === 6)) ? 'visible' : 'hidden'}}
                             onClick={e => this._verifyOTP(e)}
                             className="btn btn-raised greenButton text-center">
                             Verify OTP
                         </button>
+                        {/*<br/>
+                                    <button className="btn greenButton" disabled>
+                                        <span className="spinner-border spinner-border-sm"/>
+                                        Resend OTP.. {this.state.timer} Sec
+                                    </button>*/}
+
                     </div>
                 </form>
-
             </>
         );
     }
@@ -261,12 +246,11 @@ class MobileOtp extends Component {
 
 
 const mapStateToProps = state => ({
-    token: state.authPayload.token,
-    adharObj: state.adharDetail.adharObj,
-    payload: state.authPayload.payload
+    authObj: state.authPayload.authObj,
+    token: state.authPayload.token
 });
 
 export default withRouter(connect(
     mapStateToProps,
-    {setAuth, sendOTP, changeLoader, setAdharManual}
-)(MobileOtp));
+    {setAuth, sendOTP, changeLoader}
+)(Auth));

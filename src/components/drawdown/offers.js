@@ -227,6 +227,11 @@ class Offers extends Component {
     componentWillMount() {
         // ToDo : comment this developement
         // this._fetchInformation();
+        const {payload, authObj, changeLoader} = this.props;
+        if (payload !== Object(payload))
+            if (authObj !== Object(authObj))
+                this.props.history.push("/Drawdown/");
+        changeLoader(false);
     }
 
     componentDidMount() {
@@ -245,155 +250,159 @@ class Offers extends Component {
         // ToDo :  uncomment in prod make it prod.
         // let {loanOffers, loanStatus, creditLimit} = loanPayload;
 
-        // ToDo :  comment this  line in prod.
-        let {f_name, l_name} = payload;
+        if (payload === Object(payload)) {
+            // ToDo :  comment this  line in prod.
+            let {f_name, l_name} = payload;
 
-        // ToDo :  comment this 2 line in prod.
-        f_name = 'Mahesh';
-        l_name = 'Pai';
+            // ToDo :  comment this 2 line in prod.
+            f_name = 'Mahesh';
+            l_name = 'Pai';
 
-        return (<>
-            <h4 className={"text-center"}>Loan Offers</h4>
-            <br/>
-            {/*<h5 className={"text-center"}></h5>*/}
-            <div className="row justify-content-center mt-3 mb-3">
+            return (<>
+                <h4 className={"text-center"}>Loan Offers</h4>
+                <br/>
+                {/*<h5 className={"text-center"}></h5>*/}
+                <div className="row justify-content-center mt-3 mb-3">
 
-                <p className={"text-center"} style={{padding: '0 12px'}}>Dear {f_name} {l_name}, glad to see you back
-                    !<br/>Select
-                    the below available EMI
-                    option that best suits your needs</p>
-            </div>
-            <div className="col-sm-12">
-
-                <div className="card alert leftFixedCard" role="alert"
-                >
-                    <div className="card-header">
-                        <b> Transaction ID : # {payload.anchor_drawdown_id}</b>
-                    </div>
-
-                    <div className="row mb-1 mt-3 "
-                         style={{padding: '0.5rem', flexWrap: 'inherit', fontSize: '13px'}}>
-                        <div className="col-sm-7">
-                            Anchor ID
-                        </div>
-                        <div className="col-sm-5">
-                            # {payload.anchor_id}
-                        </div>
-                    </div>
-
-                    <div className="row mb-1" style={{padding: '0.5rem', flexWrap: 'inherit', fontSize: '13px'}}>
-                        <div className="col-sm-7">
-                            Drawdown Amount
-                        </div>
-                        <div className="col-sm-5">
-                            Rs {payload.drawdown_amount}
-                        </div>
-                    </div>
-
+                    <p className={"text-center"} style={{padding: '0 12px'}}>Dear {f_name} {l_name}, glad to see you
+                        back
+                        !<br/>Select
+                        the below available EMI
+                        option that best suits your needs</p>
                 </div>
+                <div className="col-sm-12">
 
-                <div className="card alert leftFixedCard2" role="alert"
-                >
-                    <div className="row mb-1" style={{padding: '0.5rem', flexWrap: 'inherit', fontSize: '13px'}}>
-                        <div className="col-sm-7">
-                            Application ID
+                    <div className="card alert leftFixedCard" role="alert"
+                    >
+                        <div className="card-header">
+                            <b> Transaction ID : # {payload.anchor_drawdown_id}</b>
                         </div>
-                        <div className="col-sm-5">
-                            # {payload.loan_application_id}
-                        </div>
-                    </div>
-                    <div className="row mb-1 " style={{padding: '0.5rem', flexWrap: 'inherit', fontSize: '13px'}}>
-                        <div className="col-sm-7">
-                            Credit Approved
-                        </div>
-                        <div className="col-sm-5">
-                            Rs {creditLimit.approved_credit_limit}
-                        </div>
-                    </div>
 
-                    <div className="row mb-1" style={{padding: '0.5rem', flexWrap: 'inherit', fontSize: '13px'}}>
-                        <div className="col-sm-7">
-                            Balance Credit
-                        </div>
-                        <div className="col-sm-5">
-                            Rs {creditLimit.balance_credit_limit}
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-            <div className="alert alert-primary" role="alert"
-                 style={{
-                     display: (this.state.selected.product_type !== undefined) ? 'block' : 'none',
-                     margin: '2% 5%'
-                 }}>
-                You have selected <strong
-                className="text-primary text-capitalize">`{(this.state.selected.product_type)} - {this.state.selected.tenor} Months`</strong>
-            </div>
-            <div className="row" style={{overflowY: 'auto', width: '90%', margin: 'auto'}}>
-                {<div className="list-group flex-row" style={{padding: '0.2rem 5px'}}>
-                    {loanOffers.loan.offers.map((val, key) => (
-                        <a href="#" key={key} onClick={e => {
-                            e.preventDefault();
-                            this.setState({selected: val});
-                        }}
-                           className={(this.state.selected.tenor === val.tenor) ? cardBox + ' active' : cardBox}
-                           style={{borderRadius: '5px', minWidth: '185px'}}>
-                            <div className="d-flex w-100 justify-content-between">
-                                <h5 className="mb-1 text-capitalize"
-                                    style={{marginRight: '0rem'}}> {val.product_type} - {val.tenor} M</h5>
-                                {/*<small>3 days ago</small>*/}
+                        <div className="row mb-1 mt-3 "
+                             style={{padding: '0.5rem', flexWrap: 'inherit', fontSize: '13px'}}>
+                            <div className="col-sm-7">
+                                Anchor ID
                             </div>
-                            <ul className="mb-1 list-group" style={{width: '100%'}}>
-                                <li className="mt-3  d-flex justify-content-between align-items-center"
-                                    style={{padding: '0.5rem', marginRight: 0}}>
-                                    <div className={""}>Interest :</div>
-                                    <div className={""}> {val.roi}%</div>
-                                </li>
-                                <li className="mt-1  d-flex justify-content-between align-items-center"
-                                    style={{padding: '0.5rem'}}>
-                                    <div className={""}>Tenor :</div>
-                                    <div className={""}>{val.tenor} Months</div>
-                                </li>
-                                <li className="mt-1 d-flex justify-content-between align-items-center"
-                                    style={{padding: '0.5rem'}}>
-                                    <div className={""}>EMI :</div>
-                                    <div className={""}> Rs {val.emi} </div>
-                                </li>
-                            </ul>
-                        </a>
-                    ))}
-                </div>}
-            </div>
+                            <div className="col-sm-5">
+                                # {payload.anchor_id}
+                            </div>
+                        </div>
+
+                        <div className="row mb-1" style={{padding: '0.5rem', flexWrap: 'inherit', fontSize: '13px'}}>
+                            <div className="col-sm-7">
+                                Drawdown Amount
+                            </div>
+                            <div className="col-sm-5">
+                                Rs {payload.drawdown_amount}
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div className="card alert leftFixedCard2" role="alert"
+                    >
+                        <div className="row mb-1" style={{padding: '0.5rem', flexWrap: 'inherit', fontSize: '13px'}}>
+                            <div className="col-sm-7">
+                                Application ID
+                            </div>
+                            <div className="col-sm-5">
+                                # {payload.loan_application_id}
+                            </div>
+                        </div>
+                        <div className="row mb-1 " style={{padding: '0.5rem', flexWrap: 'inherit', fontSize: '13px'}}>
+                            <div className="col-sm-7">
+                                Credit Approved
+                            </div>
+                            <div className="col-sm-5">
+                                Rs {creditLimit.approved_credit_limit}
+                            </div>
+                        </div>
+
+                        <div className="row mb-1" style={{padding: '0.5rem', flexWrap: 'inherit', fontSize: '13px'}}>
+                            <div className="col-sm-7">
+                                Balance Credit
+                            </div>
+                            <div className="col-sm-5">
+                                Rs {creditLimit.balance_credit_limit}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div className="alert alert-primary" role="alert"
+                     style={{
+                         display: (this.state.selected.product_type !== undefined) ? 'block' : 'none',
+                         margin: '2% 5%'
+                     }}>
+                    You have selected <strong
+                    className="text-primary text-capitalize">`{(this.state.selected.product_type)} - {this.state.selected.tenor} Months`</strong>
+                </div>
+                <div className="row" style={{overflowY: 'auto', width: '90%', margin: 'auto'}}>
+                    {<div className="list-group flex-row" style={{padding: '0.2rem 5px'}}>
+                        {loanOffers.loan.offers.map((val, key) => (
+                            <a href="#" key={key} onClick={e => {
+                                e.preventDefault();
+                                this.setState({selected: val});
+                            }}
+                               className={(this.state.selected.tenor === val.tenor) ? cardBox + ' active' : cardBox}
+                               style={{borderRadius: '5px', minWidth: '185px'}}>
+                                <div className="d-flex w-100 justify-content-between">
+                                    <h5 className="mb-1 text-capitalize"
+                                        style={{marginRight: '0rem'}}> {val.product_type} - {val.tenor} M</h5>
+                                    {/*<small>3 days ago</small>*/}
+                                </div>
+                                <ul className="mb-1 list-group" style={{width: '100%'}}>
+                                    <li className="mt-3  d-flex justify-content-between align-items-center"
+                                        style={{padding: '0.5rem', marginRight: 0}}>
+                                        <div className={""}>Interest :</div>
+                                        <div className={""}> {val.roi}%</div>
+                                    </li>
+                                    <li className="mt-1  d-flex justify-content-between align-items-center"
+                                        style={{padding: '0.5rem'}}>
+                                        <div className={""}>Tenor :</div>
+                                        <div className={""}>{val.tenor} Months</div>
+                                    </li>
+                                    <li className="mt-1 d-flex justify-content-between align-items-center"
+                                        style={{padding: '0.5rem'}}>
+                                        <div className={""}>EMI :</div>
+                                        <div className={""}> Rs {val.emi} </div>
+                                    </li>
+                                </ul>
+                            </a>
+                        ))}
+                    </div>}
+                </div>
 
 
-            <div className="checkbox mt-4 ml-5 mr-3"
-                 style={{visibility: (this.state.selected.product_type !== undefined) ? 'visible' : 'hidden'}}>
-                <label style={{color: 'black', cursor: 'pointer'}}>
-                    <input type="checkbox" checked={this.state.tnc_consent}
-                           onChange={(e) =>
-                               this.setState(prevState => ({tnc_consent: !prevState.tnc_consent}), () => console.log(this.state.tnc_consent))
-                           }/> I accept the <a href={'#'} onClick={(e) => {
-                    e.preventDefault();
-                    this.setState({tncModal: false}, () => this.triggerTnCModal.click());
-                }}>Terms &
-                    Condition</a>, <a href={'#'} onClick={(e) => {
-                    e.preventDefault();
-                    this.setState({tncModal: true}, () => this.triggerTnCModal.click());
-                }}
-                                      href={"#"}>Privacy
-                    Policy</a> of the Mintifi and agree upon the selected the EMI Tenure .
-                </label>
-            </div>
+                <div className="checkbox mt-4 ml-5 mr-3"
+                     style={{visibility: (this.state.selected.product_type !== undefined) ? 'visible' : 'hidden'}}>
+                    <label style={{color: 'black', cursor: 'pointer'}}>
+                        <input type="checkbox" checked={this.state.tnc_consent}
+                               onChange={(e) =>
+                                   this.setState(prevState => ({tnc_consent: !prevState.tnc_consent}), () => console.log(this.state.tnc_consent))
+                               }/> I accept the <a href={'#'} onClick={(e) => {
+                        e.preventDefault();
+                        this.setState({tncModal: false}, () => this.triggerTnCModal.click());
+                    }}>Terms &
+                        Condition</a>, <a href={'#'} onClick={(e) => {
+                        e.preventDefault();
+                        this.setState({tncModal: true}, () => this.triggerTnCModal.click());
+                    }}
+                                          href={"#"}>Privacy
+                        Policy</a> of the Mintifi and agree upon the selected the EMI Tenure .
+                    </label>
+                </div>
 
-            <div className={"row justify-content-center text-center mb-3 mt-3 "}
-                 style={{display: (this.state.selected.product_type !== undefined) ? 'block' : 'none'}}>
-                <button className={"greenButton btn btn-raised"} onClick={(e) => this._submitForm(e)}
-                        disabled={!this.state.tnc_consent}>Proceed
-                </button>
-            </div>
-            {this.RenderModalTnC()}
-        </>)
+                <div className={"row justify-content-center text-center mb-3 mt-3 "}
+                     style={{display: (this.state.selected.product_type !== undefined) ? 'block' : 'none'}}>
+                    <button className={"greenButton btn btn-raised"} onClick={(e) => this._submitForm(e)}
+                            disabled={!this.state.tnc_consent}>Proceed
+                    </button>
+                </div>
+                {this.RenderModalTnC()}
+            </>)
+        }
+        else return (<></>)
     }
 }
 

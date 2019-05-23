@@ -9,7 +9,7 @@ import {PersistGate} from 'redux-persist/integration/react';
 import {ToastContainer, toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import {TransitionGroup, CSSTransition} from "react-transition-group";
+// import {TransitionGroup, CSSTransition} from "react-transition-group";
 
 // import Header from "./shared/header";
 // import Footer from "./shared/footer";
@@ -18,27 +18,27 @@ import Error from "./shared/error";
 import Privacy from "./shared/privacy_policy";
 import Index from "./components/";
 import Login from "./components/landing";
-import Auth from "./components/auth";
-import AdharPan from "./components/adhar_pan";
-import PersonalDetails from "./components/adhar_pan/personal_details";
-import MobileOTP from "./components/adhar_pan/mobile_otp";
-import BusinessDetail from "./components/gst_business";
-// import ReviewChanges from "./components/gst_business/review_changes";
-import Finalize from "./components/gst_business/finalize";
-import AppRejected from "./components/ip_approval/app_rejected";
-import AppApproved from "./components/ip_approval/app_approved";
-import DocsUpload from "./components/ip_approval/docs_upload";
-import ThankYou from "./components/ip_approval/thank_you";
+import Auth from "./components/preapprove/auth";
+import AdharPan from "./components/preapprove/adhar_pan";
+import PersonalDetail from "./components/preapprove/adhar_pan/personal_details";
+import MobileOTP from "./components/preapprove/adhar_pan/mobile_otp";
+import BusinessDetail from "./components/preapprove/gst_business";
+import Finalize from "./components/preapprove/gst_business/finalize";
+import AppRejected from "./components/preapprove/ip_approval/app_rejected";
+import AppApproved from "./components/preapprove/ip_approval/app_approved";
+import DocsUpload from "./components/preapprove/docs_bank/docs_upload";
+import BankDetail from "./components/preapprove/docs_bank/bank_details";
+import ThankYou from "./components/preapprove/ip_approval/thank_you";
 
-//Offers
-import Drawdown from "./components/drawdown";
+//Drawdown
+import DrawIndex from "./components/drawdown/";
+import Drawdown from "./components/drawdown/token";
 import DrawAuth from "./components/drawdown/auth";
 import Offers from "./components/drawdown/offers";
 import DrawThankYou from "./components/drawdown/thankyou";
 
 //E-NACH
 import ENach from "./components/e_nach";
-
 
 const {store, persistor} = configureStore();
 
@@ -55,11 +55,11 @@ class App extends Component {
                         <Route
                             render={({location}) => (<>
                                 <ScrollToTop/>
-                                <button style={{visibility: 'hidden'}} type={"button"}
+                                {/*<button style={{visibility: 'hidden'}} type={"button"}
                                         ref={ref => this.showSnackbary = ref}
                                         data-toggle='snackbar'
                                         data-content={''}>.
-                                </button>
+                                </button>*/}
                                 <header>
                                     <div className="mt-3 text-center">
                                         <div className="mb-4">
@@ -87,7 +87,7 @@ class App extends Component {
                                 </header>
                                 <div
                                     className="row justify-content-center background-color"
-                                    style={{marginTop: "150px", marginLeft: 0, marginRight: 0}}
+                                    style={{marginTop: "180px", marginLeft: 0, marginRight: 0}}
                                 >
                                     <div className="col-11 col-md-6 ml-5 mr-5 mb-3 partner_section"
                                          style={{
@@ -106,25 +106,30 @@ class App extends Component {
                                                 classNames="fade"
                                                 timeout={50}>*/}
                                             <Switch location={location}>
-                                                <Route exact path="/" component={Index}/>
-                                                <Route exact path="/Token/:token?/:payload?" component={Login}/>
-                                                <Route path="/Auth/" component={Auth}/>
-                                                <Route path="/AdharPan" component={AdharPan}/>
-                                                <Route path="/PersonalDetails" component={PersonalDetails}/>
-                                                <Route path="/MobileOTP" component={MobileOTP}/>
-                                                <Route path="/BusinessDetail" component={BusinessDetail}/>
-                                                <Route path="/Finalize" component={Finalize}/>
+                                                <Route exact path="/preapprove/" component={Index}/>
+                                                <Route exact path="/preapprove/token/:token?/:payload?"
+                                                       component={Login}/>
+                                                <Route path="/preapprove/auth/" component={Auth}/>
+                                                <Route path="/preapprove/adharpan" component={AdharPan}/>
+                                                <Route path="/preapprove/personaldetail" component={PersonalDetail}/>
+                                                <Route path="/preapprove/mobileotp" component={MobileOTP}/>
+                                                <Route path="/preapprove/businessdetail" component={BusinessDetail}/>
+                                                <Route path="/preapprove/finalize" component={Finalize}/>
                                                 {/*<Route path="/ReviewChanges" component={ReviewChanges}/>*/}
-                                                <Route path="/AppRejected" component={AppRejected}/>
-                                                <Route path="/AppApproved" component={AppApproved}/>
-                                                <Route path="/DocsUpload" component={DocsUpload}/>
-                                                <Route path="/ThankYou" component={ThankYou}/>
-                                                <Route path="/Privacy" component={Privacy}/>
-                                                <Route path="/Drawdown/:token?/:payload?" component={Drawdown}/>
-                                                <Route path="/Drawdown/Auth/" component={DrawAuth}/>
-                                                <Route path="/Drawdown/Offers/" component={Offers}/>
-                                                <Route path="/Drawdown/ThankYou/" component={DrawThankYou}/>
-                                                <Route path="/ENach/:payload?" component={ENach}/>
+                                                <Route path="/preapprove/apprejected" component={AppRejected}/>
+                                                <Route path="/preapprove/appapproved" component={AppApproved}/>
+                                                <Route path="/preapprove/docsupload" component={DocsUpload}/>
+                                                <Route path="/preapprove/bankdetail" component={BankDetail}/>
+                                                <Route path="/preapprove/thankyou" component={ThankYou}/>
+                                                <Route path="/preapprove/privacy" component={Privacy}/>
+
+                                                <Route exact path="/drawdown" component={DrawIndex}/>
+                                                <Route exact path="/drawdown/token/:token?/:payload?"
+                                                       component={Drawdown}/>
+                                                <Route path="/drawdown/auth" component={DrawAuth}/>
+                                                <Route path="/drawdown/offers" component={Offers}/>
+                                                <Route path="/drawdown/thankyou" component={DrawThankYou}/>
+                                                <Route exact path="/enach/token/:token?/:payload?" component={ENach}/>
                                                 <Route component={Error}/>
                                             </Switch>
                                             {/*</CSSTransition>*/}

@@ -2,7 +2,9 @@ import React, {Component} from "react";
 import {withRouter} from "react-router-dom";
 
 const Landing = (props) => {
-    props.history.push("/Token/");
+
+    const {token, payload} = props.match.params;
+    props.history.push("/preapprove/token/", {token: token, payload: payload});
 
     return (<> </>);
 };

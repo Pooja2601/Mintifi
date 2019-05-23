@@ -16,6 +16,9 @@ export default (state = {}, action) => {
         case types.PREFLIGHT_RESPONSE:
             return {...state, preFlightResp: action.preFlightResp};
 
+        case types.BANK_DETAIL:
+            return {...state, bankObj: action.bankObj};
+
         default:
             return state;
     }

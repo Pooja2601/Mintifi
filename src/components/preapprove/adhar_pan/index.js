@@ -1,19 +1,104 @@
 import React, {Component} from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
-import {baseUrl, gst_karza} from "../../shared/constants";
+import {baseUrl, gst_karza} from "../../../shared/constants";
 import {connect} from "react-redux";
-import {pan_adhar, changeLoader, setGstProfile} from "../../actions";
+import {pan_adhar, changeLoader, setGstProfile, setBusinessDetail} from "../../../actions/index";
 import {Link, withRouter} from "react-router-dom";
-import {alertModule} from "../../shared/commonLogic";
+import {alertModule} from "../../../shared/commonLogic";
 
 class AdharPan extends Component {
-    state = {pan: '', adhar: '', pan_correct: false, adhar_skip: false, adhar_correct: false};
+    state = {
+        pan: '',
+        adhar: '',
+        pan_correct: false,
+        adhar_skip: false,
+        adhar_correct: false,
+        gst_details: {},
+        checked: {}
+    };
+    gstDetails = {
+        companytype: '',
+        gst: '',
+        bpan: '',
+        avgtrans: '',
+        dealercode: '',
+        lgnm: '',
+        tnc_consent: false
+    };
+    // gst_profile = {};
+
+    RenderModalGST = () => {
+
+        return (
+            <>
+                <button type="button" style={{visibility: 'hidden'}} ref={ref => this.triggerModalGST = ref}
+                        id={"triggerModalGST"} data-toggle="modal"
+                        data-target="#GSTSelModal">
+                </button>
+
+                <div className="modal fade" id={"GSTSelModal"} ref={ref => this.docsSelModal = ref} tabIndex="-1"
+                     role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog" role="document" style={{margin: '5.75rem auto'}}>
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">Select the GST for which you need loan</h5>
+                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                                <div className="checkbox">
+                                    <div className={"row"}>
+                                        {(this.state.gst_details === Object(this.state.gst_details) && this.state.gst_details.length) ? this.state.gst_details.map((val, key) => (
+                                            <div key={key} className={"col-sm-6"}>
+
+                                                <label>
+                                                    <input type="radio" name={"gst_details"}
+                                                           checked={(this.state.checked[key])}
+                                                           onChange={(e) => {
+                                                               this.setState(prevState => ({
+                                                                   checked: {
+                                                                       [key]: true
+                                                                   }
+                                                               }));
+                                                           }
+                                                           }/> <b
+                                                    style={{
+                                                        marginLeft: "20px",
+                                                        fontSize: '13.5px',
+                                                        color: 'black',
+                                                        cursor: 'pointer',
+                                                        textTransform: 'capitalize'
+                                                    }}>{val.gstinId}</b>
+                                                </label>
+
+
+                                            </div>)) : <></>}
+                                        <br/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="btn greenButton btn-raised align-left"
+                                        onClick={() => this._setGST()}
+                                        style={{padding: '7px 11px 8px 11px'}}
+                                        data-dismiss="modal">Select GST
+                                </button>
+                                <button type="button" className="btn btn-primary pull-right"
+                                        data-dismiss="modal">Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </>);
+    };
 
     //ToDo : Check the PAN with the backend AP for Confirmation of new user
     _formSubmit(e) {
-        // alertModule('hi')
         e.preventDefault();
-        this.adharSkipped();
+        this._panFetch();
+
     }
 
     _PANEnter = e => {
@@ -34,11 +119,19 @@ class AdharPan extends Component {
         }
     };
 
+    _setGST = () => {
+        Object.keys(this.state.checked).map((val) => {
+            this.gstDetails.gst = this.state.gst_details[val].gstinId;
+        });
+        this.props.setBusinessDetail(this.gstDetails);
+        console.log(this.gstDetails);
+        setTimeout(() => console.log(JSON.stringify(this.props.businessObj)), 1000);
+        // setTimeout(() => this.adharSkipped(), 500);
+    };
+
     adharSkipped = () => {
         this.setState({adhar_skip: !this.state.adhar_skip});
-        // this.props.changeLoader(true);
-        this.props.history.push('/AdharComplete'); // comment to allow PAN/GST request
-        // this._panFetch();  // uncomment to allow PAN/GST request
+        this.props.history.push('/preapprove/personaldetail');
     };
 
     _gstFetch = (gstPayload) => {
@@ -57,11 +150,11 @@ class AdharPan extends Component {
                 //  ADDPA8664N -prop // AAKCM7569B -pvt
                 if (resp.result === Object(resp.result)) {
                     console.log("Could Not fetch GST Info"); // status 103
-                    history.push('/AdharComplete');
+                    history.push('/preapprove/personaldetail');
                 }
                 else {
                     setGstProfile(resp.result);
-                    setTimeout(() => history.push('/AdharComplete'), 500);
+                    setTimeout(() => history.push('/preapprove/personaldetail'), 500);
                     //  console.log(JSON.stringify(resp)); // status 101
                 }
             }, () => {
@@ -69,24 +162,36 @@ class AdharPan extends Component {
                 alertModule();
             });
     };
-
+    /*
+        body: JSON.stringify({
+        app_id: '3',
+        anchor_id: '8186bc', //8186bc
+        pan: pan
+    })*/
     _panFetch = () => {
-        const {changeLoader, history} = this.props;
-        fetch(`${gst_karza}/search`, {
-            method: 'POST',
-            headers: {'Content-Type': "application/json", 'x-karza-key': "jdughfoP51majvjAUW6W"},
-            body: JSON.stringify({consent: 'Y', pan: (this.state.pan).toUpperCase()})
+        let checked = {};
+        const {changeLoader, history, payload, pan, token} = this.props;
+        changeLoader(true);
+        fetch(`${baseUrl}/companies/get_gst_details?app_id=3&anchor_id=8186bc&pan=${pan}`, {
+            method: 'GET',
+            headers: {'Content-Type': "application/json", token: token},
         })
             .then(resp => resp.json())
             .then(resp => {
                 changeLoader(false);
                 //  ADDPA8664N -prop // AAKCM7569B -pvt
-                if (resp.result !== Object(resp.result)) {
-                    console.log("Not a Company"); // status 103
-                    history.push('/AdharComplete');
+                if (resp.response === Object(resp.response)) {
+
+                    resp.response.gst_details.map((val, key) => {
+                        checked[key] = false;
+                    });
+                    this.setState({checked, gst_details: resp.response.gst_details});
+                    this.triggerModalGST.click();
+                    // console.log(this.state.gst_details);
                 }
                 else {
-                    this._gstFetch(resp.result[0].gstinId);  // status 101
+                    alertModule(resp.error.message, 'error');
+                    // this._gstFetch(resp.result[0].gstinId);  // status 101
                 }
             }, () => {
                 changeLoader(false);
@@ -97,7 +202,7 @@ class AdharPan extends Component {
     componentWillMount() {
         const {payload, changeLoader} = this.props;
         if (payload !== Object(payload))
-            this.props.history.push("/Token");
+            this.props.history.push("/preapprove/token");
         changeLoader(false);
     }
 
@@ -208,6 +313,7 @@ class AdharPan extends Component {
                         )}
                     </div>
                 </form>
+                {this.RenderModalGST()}
             </>
         );
     }
@@ -216,10 +322,12 @@ class AdharPan extends Component {
 const mapStateToProps = state => ({
     pan: state.adharDetail.pan,
     adhar: state.adharDetail.adhar,
-    payload: state.authPayload.authObj
+    payload: state.authPayload.payload,
+    token: state.authPayload.token,
+    businessObj: state.businessDetail.businessObj
 });
 
 export default withRouter(connect(
     mapStateToProps,
-    {pan_adhar, changeLoader, setGstProfile}
+    {pan_adhar, changeLoader, setGstProfile, setBusinessDetail}
 )(AdharPan));

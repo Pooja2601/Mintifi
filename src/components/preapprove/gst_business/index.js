@@ -1,16 +1,25 @@
 import React, {Component} from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
-import {baseUrl, BusinessType} from "../../shared/constants";
+import {baseUrl, BusinessType} from "../../../shared/constants";
 import {connect} from "react-redux";
-import {setBusinessDetail, setAdharManual, changeLoader} from "../../actions";
+import {setBusinessDetail, setAdharManual, changeLoader} from "../../../actions/index";
 import {Link, withRouter} from "react-router-dom";
+import {alertModule} from "../../../shared/commonLogic";
 // import DatePicker from "react-datepicker";
-
-import "react-datepicker/dist/react-datepicker.css";
+// import "react-datepicker/dist/react-datepicker.css";
 
 class BusinessDetail extends Component {
 
-    state = {companytype: '', gst: '', bpan: '', avgtrans: '', dealercode: '', missed_fields: true, lgnm: '', tnc_consent: false};
+    state = {
+        companytype: '',
+        gst: '',
+        bpan: '',
+        avgtrans: '',
+        dealercode: '',
+        missed_fields: true,
+        lgnm: '',
+        tnc_consent: false
+    };
 
     validate = {companytype: false, gst: false, avgtrans: false, dealercode: false};
 
@@ -18,8 +27,21 @@ class BusinessDetail extends Component {
         e.preventDefault();
         // this.props.setBusinessDetail(this.state);
         setTimeout(() => {
-            this.props.history.push('/Finalize');
+            this.props.history.push('/preapprove/finalize');
         });
+    }
+
+    validationErrorMsg = () => {
+        let ctrerror = 4, fieldTxt;
+        Object.values(this.validate).map((val, key) => {
+            if (!val)
+                ++ctrerror;
+            else --ctrerror;
+        });
+        if (ctrerror !== 0) {
+            fieldTxt = (ctrerror > 1) ? 'field is ' : 'fields are ';
+            alertModule(`Kindly check the form again, ${ctrerror / 2} ${fieldTxt} still having some issue !`, 'warn');
+        }
     }
 
     handleValidation = () => {
@@ -31,9 +53,10 @@ class BusinessDetail extends Component {
             else --ctrerror;
             // console.log(val);
         });
-        console.log(ctrerror);
+        // console.log(ctrerror);
         missed_fields = (ctrerror !== 0);
         this.setState({missed_fields}, () => console.log('All Fields Validated : ' + this.state.missed_fields));
+
     };
 
     businessGst(e) {
@@ -52,7 +75,7 @@ class BusinessDetail extends Component {
         if (payload !== Object(payload))
             if (adharObj !== Object(adharObj))
                 if (adharObj.verified)
-                    this.props.history.push("/Token");
+                    this.props.history.push("/preapprove/token");
 
         if (businessObj === Object(businessObj))
             this.setState(businessObj, () => {
@@ -96,8 +119,7 @@ class BusinessDetail extends Component {
         const gstProfile = this.props.gstProfile;
         return (
             <>
-                <Link to={'/AdharComplete'} className={"btn btn-link"}>Go Back </Link>
-                {/*<button onClick={() => this.props.history.goBack()} className={"btn btn-link"}>Go Back</button>*/}
+                {/*<Link to={'/preapprove/personaldetails'} className={"btn btn-link"}>Go Back </Link>*/}
                 <br/><br/>
                 <h4 className={"text-center"}>Business Details</h4>
                 <p className="paragraph_styling  text-center">
@@ -123,7 +145,7 @@ class BusinessDetail extends Component {
                                             this.validate.companytype = (value.length > 0);
                                             this.handleValidation();
                                         }}
-                                    // onBlur={() => this.handleValidation()}
+                                        onBlur={() => this.validationErrorMsg()}
                                         className="form-control font_weight" id="companyType">
                                     <option value={''}>Select Company Type</option>
                                     {
@@ -149,7 +171,7 @@ class BusinessDetail extends Component {
                                     id="numberGST"
                                     required={true}
                                     value={this.state.gst}
-                                    // onBlur={() => this.handleValidation()}
+                                    onBlur={() => this.validationErrorMsg()}
                                     // ref={ref => (this.obj.pan = ref)}
                                     onChange={(e) => this.businessGst(e)}
                                 />
@@ -172,7 +194,7 @@ class BusinessDetail extends Component {
                                 id="numberPAN"
                                 required={true}
                                 value={this.state.bpan}
-                                // onBlur={() => this.handleValidation()}
+                                onBlur={() => this.validationErrorMsg()}
                                 readOnly={true}
                                 disabled={true}
                                 // ref={ref => (this.obj.pan = ref)}
@@ -205,7 +227,7 @@ class BusinessDetail extends Component {
                                         value={this.state.avgtrans}
                                         style={{marginLeft: '-0.5rem'}}
                                         // ref={ref => (this.obj.pan = ref)}
-                                        // onBlur={() => this.handleValidation()}
+                                        onBlur={() => this.validationErrorMsg()}
                                         onChange={(e) => {
                                             let {value} = e.target;
                                             if (value.length <= 10 && !isNaN(value)) this.setState({avgtrans: value}, () => this.props.setBusinessDetail(this.state));
@@ -225,14 +247,14 @@ class BusinessDetail extends Component {
                                     type="text"
                                     className="form-control font_weight"
                                     style={{fontWeight: 600}}
-                                    pattern="^[0-9A-Za-z]+$"
+                                    pattern="^[0-9A-Za-z]{4,}$"
                                     title="Enter Dealer Code"
                                     autoCapitalize="characters"
                                     id="dealerCode"
                                     required={true}
                                     value={this.state.dealercode}
                                     // ref={ref => (this.obj.pan = ref)}
-                                    // onBlur={() => this.handleValidation()}
+                                    onBlur={() => this.validationErrorMsg()}
                                     onChange={(e) => {
                                         let {value} = e.target;
                                         if (value.length <= 10) this.setState({dealercode: value}, () => this.props.setBusinessDetail(this.state));
@@ -243,7 +265,7 @@ class BusinessDetail extends Component {
                             </div>
                         </div>
                     </div>
-                    { <div className="checkbox mt-5">
+                    {<div className="checkbox mt-5">
                         <label style={{color: 'black'}}>
                             <input type="checkbox" checked={this.state.tnc_consent}
                                    onChange={(e) =>
