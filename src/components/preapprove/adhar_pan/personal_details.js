@@ -70,15 +70,22 @@ class AdharPan extends Component {
 
     _loadGstProfile() {
         const {gstProfile} = this.props;
+        let tempName;
         if (gstProfile === Object(gstProfile)) {
-            let tempName = gstProfile.mbr[0].split(' ');
-            this.setState({
-                f_name: tempName[0],
-                m_name: (tempName[2]) ? tempName[1] : '',
-                l_name: (tempName[2]) ? tempName[2] : '',
-                mobile: gstProfile.pradr.mb,
-                email: gstProfile.pradr.em
-            }, () => this.props.setAdharManual(this.state));
+            if (gstProfile.mbr.length > 0) {
+                tempName = gstProfile.mbr[0].split(' ');
+                this.setState({
+                    f_name: tempName[0],
+                    m_name: (tempName[2]) ? tempName[1] : '',
+                    l_name: (tempName[2]) ? tempName[2] : ''
+                }, () => this.props.setAdharManual(this.state));
+            }
+            if (gstProfile.pradr.length > 0) {
+                this.setState({
+                    mobile: gstProfile.pradr.mb,
+                    email: gstProfile.pradr.em
+                }, () => this.props.setAdharManual(this.state));
+            }
         }
     }
 
@@ -101,15 +108,6 @@ class AdharPan extends Component {
         missed_fields = (ctrerror !== 0);
         this.setState({missed_fields}, () => console.log('All Fields Validated : ' + this.state.missed_fields));
     }
-
-    /* _PANEnter = e => {
-         let regex = /^[a-zA-Z]{5}([0-9]){4}[a-zA-Z]{1}?$/;
-         if (e.target.value.length <= 10) {
-             // this.obj.pan_correct = regex.test(e.target.value);
-             // this.props.pan_adhar(e.target.value, '');
-         }
-     }
- */
 
     _pincodeFetch = () => {
         //http://postalpincode.in/api/pincode/
@@ -166,7 +164,7 @@ class AdharPan extends Component {
     render() {
         return (
             <>
-                <Link to={'/AdharPan'} className={"btn btn-link"}>Go Back </Link><br/><br/>
+                <Link to={'/preapprove/adharpan'} className={"btn btn-link"}>Go Back </Link><br/><br/>
                 <h4 className={"text-center"}>Personal Details </h4>
                 <h5 className="paragraph_styling  text-center" style={{fontSize: '17px'}}>
                     <b> Enter your personal information to proceed.</b>

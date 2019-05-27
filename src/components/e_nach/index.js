@@ -3,57 +3,113 @@ import {connect} from "react-redux";
 import {Link, withRouter} from "react-router-dom";
 import {changeLoader, EnachsetPayload, EnachsetAttempt} from "../../actions";
 import {alertModule} from "../../shared/commonLogic";
-import {eNachPayload} from "../../shared/constants";
+import {eNachPayload, baseUrl} from "../../shared/constants";
 
 
 class ENach extends Component {
 
     state = {ctr: 0};
+    _updateBackend = (result) => {
+        const {token, changeLoader, eNachPayload} = this.props;
+        changeLoader(false);
+        fetch(`${baseUrl}/loans/enach_status`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json', token: token},
+            body: JSON.stringify({
+                app_id: '3',
+                status: result.status,
+                mandate_id: result.mandate_id,
+                anchor_id: eNachPayload.anchor_id,
+                loan_application_id: eNachPayload.loan_application_id,
+                company_id: eNachPayload.company_id
+            })
+        }).then((resp) => {
+            alertModule(resp.status);
+            changeLoader(false);
+
+            if (resp.response.status === 'success')
+                setTimeout(() => {
+                    // ToDo : Uncomment the below line in Prod
+                    // window.location.href = eNachPayload.success_url;
+                }, 1000);
+
+            if (resp.error === Object(resp.error))
+                alertModule(resp.error.message, 'warn');
+
+        }, (resp) => {
+            alertModule();
+            changeLoader(false);
+        });
+    };
+
+    _triggerDigio = () => {
+        // console.log(this.props.eNachPayload);
+
+        if (this.state.ctr < 2) {
+            let event = new CustomEvent("dispatchDigio", {
+                detail: this.props.eNachPayload
+            });
+            document.dispatchEvent(event);
+        }
+        else {
+            alertModule("You can not try eNACH more than twice", 'warn');
+            alertModule("Redirecting you back to Anchor portal..", 'info');
+
+            setTimeout(() => {
+                // ToDo : Uncomment this line in Prod
+                // window.location.href = this.props.payload.error_url;
+            }, 1000);
+        }
+    };
 
     componentWillMount() {
 
         const {match, changeLoader, EnachsetPayload} = this.props;
         changeLoader(false);
-        const {payload} = match.params;
+        const {payload, token} = match.params;
         let base64_decode = (payload !== undefined) ? JSON.parse(new Buffer(payload, 'base64').toString('ascii')) : {};
-        // ToDo : hide this in prod
+
+        // ToDo : hide the 2 lines in prod
         eNachPayload.document_id = eNachPayload.mandate_id;
         Object.assign(base64_decode, eNachPayload);
 
+
         if (base64_decode !== Object(base64_decode))
             alertModule('You cannot access this page directly without Authorised Session !!', 'error');
-        else EnachsetPayload(base64_decode);
+        else EnachsetPayload(token, base64_decode);
+
 
     }
 
     componentDidMount() {
         let that = this;
 
+        const {eNachAttempt, eNachPayload} = this.props;
+        if (eNachAttempt)
+            this.setState({ctr: eNachAttempt});
         document.addEventListener("responseDigio", function (obj) {
             // console.log(JSON.stringify(obj.detail));
-            if (obj.detail.error_code !== undefined && that.state.ctr < 3) {
+            if (obj.detail.error_code !== undefined) {
                 alertModule(`Failed to register with error :  ${obj.detail.message}`, 'error');
-                this.setState((prevState) => ({
+                that.setState((prevState) => ({
                     ctr: prevState.ctr + 1
-                }, () => EnachsetAttempt(that.state.ctr)))
-                // that.props.history();
+                }), () => EnachsetAttempt(that.state.ctr));
+                setTimeout(() => {
+                    // ToDo : uncomment in prod
+                    // window.location.href = eNachPayload.error_url;
+                }, 1000);
             }
             else {
-                // that.props.history();
                 alertModule("Register successful for " + obj.detail.digio_doc_id, 'success');
+                this._updateBackend(obj.detail);
             }
         });
+
+
+        // ToDo : uncomment in prod
+        // setTimeout(() => this._triggerDigio(), 1000);
     }
 
-    _triggerDigio = () => {
-        // console.log(this.props.eNachPayload);
-// Create the event
-        let event = new CustomEvent("dispatchDigio", {
-            detail: this.props.eNachPayload
-        });
-// Dispatch/Trigger/Fire the event
-        document.dispatchEvent(event);
-    };
 
     render() {
         // let {payload, match} = this.props;
@@ -85,6 +141,7 @@ class ENach extends Component {
 }
 
 const mapStateToProps = state => ({
+    token: state.eNachReducer.token,
     eNachPayload: state.eNachReducer.eNachPayload,
 });
 

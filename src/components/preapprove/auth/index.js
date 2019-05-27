@@ -93,7 +93,6 @@ class Auth extends Component {
         })
     }
 
-
 //authObj
     _setMobile = (e) => {
         const {value} = e.target;
@@ -114,7 +113,7 @@ class Auth extends Component {
     render() {
         return (
             <>
-                <Link to={'/Token'} className={"btn btn-link"}>Go Back </Link>
+                <Link to={'/preapprove/token'} className={"btn btn-link"}>Go Back </Link>
                 <h4 className={"text-center"}>
                     Welcome Back
                 </h4>

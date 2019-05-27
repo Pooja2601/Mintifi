@@ -129,7 +129,7 @@ class App extends Component {
                                                 <Route path="/drawdown/auth" component={DrawAuth}/>
                                                 <Route path="/drawdown/offers" component={Offers}/>
                                                 <Route path="/drawdown/thankyou" component={DrawThankYou}/>
-                                                <Route exact path="/enach/token/:token?/:payload?" component={ENach}/>
+                                                <Route exact path="/enach/:token?/:payload?" component={ENach}/>
                                                 <Route component={Error}/>
                                             </Switch>
                                             {/*</CSSTransition>*/}

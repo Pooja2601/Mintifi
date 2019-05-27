@@ -14,10 +14,14 @@ class Login extends Component {
         this.props.changeLoader(false);
         const {setToken, match, payload} = this.props;
         let base64_decode = (match.params.payload !== undefined) ? JSON.parse(new Buffer(match.params.payload, 'base64').toString('ascii')) : {};
-        setToken(match.params.token, base64_decode);
+
+        // ToDo : hide it in Prod
+        base64_decode = landingPayload;
+
         if (match.params.token !== undefined && payload !== Object(payload))
             alertModule("You cannot access this page directly without Appropriate Permission!!", 'warn');
-        // console.log(base64_decode);
+        else setToken(match.params.token, base64_decode);
+        // console.log(this.props.token);
     }
 
     // ToDo : Not useful in Prod
@@ -25,9 +29,6 @@ class Login extends Component {
         // ToDo : make it const in Prod
         let {changeLoader, setToken, payload} = this.props;
         changeLoader(true);
-
-        // ToDo : hide it in Prod
-        payload = landingPayload;
 
         fetch('https://test.mintifi.com/api/v1/auth', {
             method: 'POST',
@@ -43,6 +44,7 @@ class Login extends Component {
             if (resp.response === Object(resp.response))
                 if (resp.response.status === 'success')
                     setToken(resp.response.auth.token, payload);
+            // console.log(this.props.token);
         }, () => {
             alertModule();
             changeLoader(false);

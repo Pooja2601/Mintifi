@@ -7,7 +7,7 @@ export default (state = {}, action) => {
     switch (action.type) {
 
         case types.ENACH_PAYLOAD:
-            return {...state, eNachPayload: action.eNachPayload};
+            return {...state, token: action.token, eNachPayload: action.eNachPayload};
 
         case types.ENACH_ATTEMPT:
             return {...state, eNachAttempt: action.eNachAttempt};

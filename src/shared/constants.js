@@ -9,7 +9,7 @@ module.exports = {
     karza_key: "jdughfoP51majvjAUW6W",
     digio: "",
     BusinessType: {
-        "proprietorship": "Sole Proprietorship",
+        "proprietorship": "Proprietorship",
         "private_limited": "Private Limited Company",
         "partnership": "Partnership",
         "llp": "Limited Liability Partnership",
@@ -35,10 +35,13 @@ module.exports = {
         "cancel_url": 'http://localhost',
     },
     eNachPayload: {
-        "mandate_id": "ENA190412174540465E7NFYCKAC5GYPH",
+        "mandate_id": "ENA1905241743051373W7G6CY5YAFMAP",
         "user_name": "Mohan Das",
-        "user_mobile": "6789766789",
+        "user_mobile": "7892517116",
         "user_email": "mohan.das@gmail.com",
+        "loan_application_id": '1005',
+        "company_id": '940',
+        "anchor_id": "uyh65t",
         "success_url": "https://success_url",
         "cancel_url": "https://cancel_url",
         "error_url": "https://error_url"

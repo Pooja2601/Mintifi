@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
-import {baseUrl, gst_karza} from "../../../shared/constants";
+import {baseUrl, gst_karza, BusinessType} from "../../../shared/constants";
 import {connect} from "react-redux";
 import {pan_adhar, changeLoader, setGstProfile, setBusinessDetail} from "../../../actions/index";
 import {Link, withRouter} from "react-router-dom";
@@ -72,7 +72,6 @@ class AdharPan extends Component {
                                                     }}>{val.gstinId}</b>
                                                 </label>
 
-
                                             </div>)) : <></>}
                                         <br/>
                                     </div>
@@ -98,7 +97,6 @@ class AdharPan extends Component {
     _formSubmit(e) {
         e.preventDefault();
         this._panFetch();
-
     }
 
     _PANEnter = e => {
@@ -122,10 +120,10 @@ class AdharPan extends Component {
     _setGST = () => {
         Object.keys(this.state.checked).map((val) => {
             this.gstDetails.gst = this.state.gst_details[val].gstinId;
-        });
+        })
         this.props.setBusinessDetail(this.gstDetails);
-        console.log(this.gstDetails);
-        setTimeout(() => console.log(JSON.stringify(this.props.businessObj)), 1000);
+        this._gstFetch(this.gstDetails.gst);
+        // setTimeout(() => console.log(JSON.stringify(this.props.businessObj)), 1000);
         // setTimeout(() => this.adharSkipped(), 500);
     };
 
@@ -134,29 +132,35 @@ class AdharPan extends Component {
         this.props.history.push('/preapprove/personaldetail');
     };
 
-    _gstFetch = (gstPayload) => {
-        const {changeLoader, history, setGstProfile} = this.props;
+    _gstFetch = (gstSelected) => {
+        const {changeLoader, history, setGstProfile, token, payload, setBusinessDetail} = this.props;
         changeLoader(true);
-        fetch(`https://testapi.kscan.in/v1/gst/profile`, {
-            method: 'POST',
-            headers: {'Content-Type': "application/json", 'x-karza-key': "jdughfoP51majvjAUW6W"},
-            body: JSON.stringify({
-                consent: 'Y', gstin: gstPayload
-            })
+        fetch(`${baseUrl}/companies/get_company_details_by_gstin?app_id=3&anchor_id=${payload.anchor_id}&gstin=${gstSelected}`, {
+            method: 'GET',
+            headers: {'Content-Type': "application/json", token: token},
         })
             .then(resp => resp.json())
             .then(resp => {
                 changeLoader(false);
                 //  ADDPA8664N -prop // AAKCM7569B -pvt
-                if (resp.result === Object(resp.result)) {
-                    console.log("Could Not fetch GST Info"); // status 103
-                    history.push('/preapprove/personaldetail');
+                if (resp.response !== Object(resp.response)) {
+                    // console.log("Could Not fetch GST Info"); // status 103
+                    alertModule('Could Not fetch GST information, Something went wrong !', 'warn');
                 }
                 else {
-                    setGstProfile(resp.result);
-                    setTimeout(() => history.push('/preapprove/personaldetail'), 500);
-                    //  console.log(JSON.stringify(resp)); // status 101
+                    const {company_details} = resp.response;
+                    setGstProfile(company_details);
+                    Object.keys(BusinessType).map((val, key) => {
+                        if (BusinessType[val].localeCompare(company_details.ctb) === 0)
+                            this.gstDetails.companytype = val;
+                    });
+
+                    this.gstDetails.lgnm = company_details.lgnm;
+                    setBusinessDetail(this.gstDetails);
+
+                    console.log(JSON.stringify(this.gstDetails)); // status 101
                 }
+                setTimeout(() => this.adharSkipped(), 500);
             }, () => {
                 changeLoader(false);
                 alertModule();
@@ -171,8 +175,9 @@ class AdharPan extends Component {
     _panFetch = () => {
         let checked = {};
         const {changeLoader, history, payload, pan, token} = this.props;
+        console.log(token);
         changeLoader(true);
-        fetch(`${baseUrl}/companies/get_gst_details?app_id=3&anchor_id=8186bc&pan=${pan}`, {
+        fetch(`${baseUrl}/companies/get_gst_details?app_id=3&anchor_id=${payload.anchor_id}&pan=${pan}`, {
             method: 'GET',
             headers: {'Content-Type': "application/json", token: token},
         })
@@ -212,12 +217,13 @@ class AdharPan extends Component {
         if (pan)
             if (pan.length === 10)
                 this.setState({pan_correct: true});
+        // console.log(this.props.token)
     }
 
     render() {
         return (
             <>
-                <Link to={'/Token'} className={"btn btn-link"}>Go Back </Link>
+                <Link to={'/preapprove/token'} className={"btn btn-link"}>Go Back </Link>
                 {/*<h4 className={"text-center"}>New Customer?</h4>*/}
                 <h5 className="paragraph_styling  text-center">
                     <b>

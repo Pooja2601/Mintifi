@@ -89,8 +89,8 @@ export const DrawAnchorPayload = loanPayload => ({
 });
 
 //..................................... E-NACH
-export const EnachsetPayload = eNachPayload => ({
-    type: types.ENACH_PAYLOAD, eNachPayload
+export const EnachsetPayload = (token, eNachPayload) => ({
+    type: types.ENACH_PAYLOAD, token, eNachPayload
 });
 
 export const EnachsetAttempt = eNachAttempt => ({

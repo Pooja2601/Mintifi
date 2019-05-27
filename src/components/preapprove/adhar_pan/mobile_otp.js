@@ -132,7 +132,7 @@ class MobileOtp extends Component {
     render() {
         return (
             <>
-                <Link to={'/PersonalDetails'} className={"btn btn-link"}>Go Back </Link>
+                <Link to={'/preapprove/personaldetails'} className={"btn btn-link"}>Go Back </Link>
 
                 <h5 className="paragraph_styling text-center">
 

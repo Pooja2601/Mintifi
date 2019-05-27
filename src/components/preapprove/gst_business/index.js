@@ -88,13 +88,13 @@ class BusinessDetail extends Component {
         else setBusinessDetail(this.state);
 
         try {
-            if (gstProfile === Object(gstProfile))
-                if (gstProfile.length) {
-                    BusinessType.map((val, key) => {
-                        (`/${val}/gi`).test(gstProfile.ctb);
-                    });
-                    this.setState({gst: gstProfile.gstin, lgnm: gstProfile.lgnm});
-                }
+            /*  if (gstProfile === Object(gstProfile))
+                  if (gstProfile.length) {
+                      BusinessType.map((val, key) => {
+                          (`/${val}/gi`).test(gstProfile.ctb);
+                      });
+                      this.setState({gst: gstProfile.gstin, lgnm: gstProfile.lgnm});
+                  }*/
 // console.log(payload.length);
             if (payload === Object(payload) && payload.length) {
                 this.setState({dealercode: payload.distributor_dealer_code}, () => setBusinessDetail(this.state));
@@ -178,7 +178,6 @@ class BusinessDetail extends Component {
                             </div>
                         </div>
                     </div>
-
 
                     {(this.state.companytype !== "proprietorship" && this.state.companytype !== "") ? (
                         <div className="form-group mb-3 ">

@@ -39,7 +39,7 @@ class BankDetail extends Component {
             fieldTxt = (ctrerror > 1) ? 'field is ' : 'fields are ';
             alertModule(`Kindly check the form again, ${ctrerror / 2} ${fieldTxt} still having some issue !`, 'warn');
         }
-    }
+    };
 
     handleValidation = () => {
         let ctrerror = 6, missed_fields;
@@ -50,21 +50,21 @@ class BankDetail extends Component {
             else --ctrerror;
             // console.log(val);
         });
-        // console.log(ctrerror);
+        console.log(ctrerror);
         missed_fields = (ctrerror !== 0);
         this.setState({missed_fields}, () => console.log('All Fields Validated : ' + this.state.missed_fields));
 
     };
 
-    businessGst(e) {
-        const {value} = e.target;
-        if (value.length <= 15) {
-            let bpan = value.substr(2, 10);
-            this.setState({gst: value, bpan}, () => this.props.setBusinessDetail(this.state))
-        }
-        this.validate.gst = (value.length === 15) ? true : false;
-        this.handleValidation();
-    }
+    /*   businessGst(e) {
+           const {value} = e.target;
+           if (value.length <= 15) {
+               let bpan = value.substr(2, 10);
+               this.setState({gst: value, bpan}, () => this.props.setBusinessDetail(this.state))
+           }
+           this.validate.gst = (value.length === 15) ? true : false;
+           this.handleValidation();
+       }*/
 
     submitForm(e) {
         e.preventDefault();
@@ -87,10 +87,20 @@ class BankDetail extends Component {
                 "account_type": this.state.acc_type,
                 "timestamp": new Date()
             })
-        }).then(() => {
+        }).then((resp) => {
             changeLoader(true);
+            // success
+            if (resp.response === Object(resp.response)) {
+                // resp.response.mandate_id
 
-        }, () => {
+            }
+
+            // error
+            if (resp.error === Object(resp.error)) {
+                alertModule(resp.error.message, 'warn');
+            }
+
+        }, (resp) => {
             alertModule();
             changeLoader(false);
         })
@@ -107,7 +117,7 @@ class BankDetail extends Component {
                     micr_code: resp.MICR
                 });
             }
-            console.log(resp);
+            // console.log(resp);
         }, (resp) => {
             alertModule();
             changeLoader(false);
@@ -176,9 +186,8 @@ class BankDetail extends Component {
                                     // ref={ref => (this.obj.pan = ref)}
                                     onChange={(e) => {
                                         let {value} = e.target;
-
+                                        this.validate.acc_name = (value.length > 5);
                                         this.setState({acc_name: value}, () => this.props.setBankDetail(this.state));
-                                        this.validate.acc_number = (value.length > 5);
                                         this.handleValidation();
                                     }}
                                 />
@@ -203,11 +212,11 @@ class BankDetail extends Component {
                                     onChange={(e) => {
                                         let {value} = e.target;
                                         if (!isNaN(value)) {
+                                            this.validate.acc_number = (value.length >= 9 && value.length <= 18);
                                             if (value.length <= 18) {
                                                 this.setState({acc_number: value}, () => this.props.setBankDetail(this.state));
                                                 this.handleValidation();
                                             }
-                                            this.validate.acc_number = (value.length >= 9 && value.length <= 18);
                                         }
                                     }}
                                 />
@@ -238,11 +247,11 @@ class BankDetail extends Component {
                                     }}
                                     onChange={(e) => {
                                         let {value} = e.target;
+                                        this.validate.ifsc_code = (value.length === 11);
                                         if (value.length <= 11) {
                                             this.setState({ifsc_code: value}, () => this.props.setBankDetail(this.state));
                                             this.handleValidation();
                                         }
-                                        this.validate.ifsc_code = (value.length === 11);
                                     }}
                                 />
 
@@ -319,11 +328,11 @@ class BankDetail extends Component {
                                     onBlur={() => this.validationErrorMsg()}
                                     onChange={(e) => {
                                         let {value} = e.target;
+                                        this.validate.micr_code = (value.length === 9);
                                         if (value.length <= 9 && !isNaN(value)) {
                                             this.setState({micr_code: value}, () => this.props.setBankDetail(this.state));
                                             this.handleValidation();
                                         }
-                                        this.validate.micr_code = (value.length === 9);
 
                                     }}
                                 />
