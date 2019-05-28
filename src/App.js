@@ -64,7 +64,7 @@ class App extends Component {
                                     <div className="mt-3 text-center">
                                         <div className="mb-4">
                                             <img
-                                                src="/images/Mintifi-Logo-white_2.png"
+                                                src="./images/Mintifi-Logo-white_2.png"
                                                 className={"logoHeader"}
                                             />
                                             {/*<b className={"anchorText"}>Anchor Merchant</b>*/}
@@ -72,7 +72,7 @@ class App extends Component {
                                                 position: 'absolute', right: '24.4%', top: "18px",
                                                 width: '85px'
                                             }}
-                                                 src="/images/company/yatra.png"
+                                                 src="./images/company/yatra.png"
                                                  className={"anchorLogo"}
                                             />
                                         </div>
