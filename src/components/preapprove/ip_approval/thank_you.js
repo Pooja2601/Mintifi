@@ -26,11 +26,11 @@ class ThankYou extends Component {
                 </button>*/}
                     <br/>
                     <i className={"fa fa-check-circle checkCircle"}></i>
-                    <h3 className={"text-center"}> Processing Application !</h3>
+                    <h3 className={"text-center"}> Thank you !</h3>
                     <br/>
 
                     <div className="alert alert-success" role="alert">
-                        <h4 className="alert-heading">Awesome {f_name} {l_name}</h4>
+                        <h4 className="alert-heading">Dear {f_name} {l_name}</h4>
                         <p className="paragraph_styling  ">
                             We're processing the application based on the KYC documents submitted, our representatives
                             will get in touch with you soon.<br/>

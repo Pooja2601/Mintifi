@@ -8,18 +8,32 @@ module.exports = {
     test_kscan: "https://testapi.kscan.in/v1/gst/",
     karza_key: "jdughfoP51majvjAUW6W",
     digio: "",
-    BusinessType: {
-        "proprietorship": "Proprietorship",
-        "private_limited": "Private Limited Company",
-        "partnership": "Partnership",
-        "llp": "Limited Liability Partnership",
-        "trust": "Trust",
-        "others": "Others"
-    },
-    accountType: {
-        "sa": "Savings Account",
-        "ca": "Current Account"
-    },
+    /*   BusinessType: {
+           "proprietorship": "Proprietorship",
+           "private_limited": "Private Limited Company",
+           "partnership": "Partnership",
+           "llp": "Limited Liability Partnership",
+           "trust": "Trust",
+           "others": "Others"
+       },*/
+    BusinessType: [
+        {value: "", label: "Select Company type"},
+        {value: "proprietorship", label: "Proprietorship"},
+        {value: "private_limited", label: "Private Limited Company"},
+        {value: "partnership", label: "Partnership"},
+        {value: "llp", label: "Limited Liability Partnership"},
+        {value: "trust", label: "Trust"},
+        {value: "others", label: "Others"},
+    ],
+    /*    accountType: {
+            "sa": "Savings Account",
+            "ca": "Current Account"
+        },*/
+    accountType: [
+        {value: "", label: "Select Account type"},
+        {value: "sa", label: "Savings Account"},
+        {value: "ca", label: "Current Account"}
+    ],
     defaultLender: "Mintifi Finserv Private Limited", // Fullerton India Private Limtited
     OTP_Timer: 60,
     landingPayload: {

@@ -249,7 +249,7 @@ class DocsUpload extends Component {
                     if (resp.error === Object(resp.error))
                         alertModule("We couldn't upload the files, Kindly try again !", 'warn');
                     else if (resp.response === Object(resp.response))
-                        history.push('/preapprove/thankYou');
+                        history.push('/preapprove/bankdetail');
                 }
             ).catch(
             error => {

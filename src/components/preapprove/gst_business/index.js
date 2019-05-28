@@ -1,10 +1,11 @@
 import React, {Component} from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
-import {baseUrl, BusinessType} from "../../../shared/constants";
+import {accountType, baseUrl, BusinessType} from "../../../shared/constants";
 import {connect} from "react-redux";
 import {setBusinessDetail, setAdharManual, changeLoader} from "../../../actions/index";
 import {Link, withRouter} from "react-router-dom";
 import {alertModule} from "../../../shared/commonLogic";
+import Select from "react-select";
 // import DatePicker from "react-datepicker";
 // import "react-datepicker/dist/react-datepicker.css";
 
@@ -135,8 +136,18 @@ class BusinessDetail extends Component {
                         <div className={"col-md-6 col-sm-12"}>
                             <div className="form-group mb-3">
                                 <label htmlFor="companyType" className={"bmd-label-floating"}>Company Type *</label>
-
-                                <select style={{fontWeight: 600}}
+                                <Select options={BusinessType}
+                                        required={true}
+                                        id="companyType"
+                                        inputId={"companyType"}
+                                        onBlur={() => this.validationErrorMsg()}
+                                        onChange={(e) => {
+                                            let {value} = e;
+                                            this.setState({companytype: value}, () => this.props.setBusinessDetail(this.state));
+                                            this.validate.companytype = (value.length > 0);
+                                            this.handleValidation();
+                                        }}/>
+                                {/*<select style={{fontWeight: 600}}
                                         title="Please select Company Type"
                                         value={this.state.companytype} required={true}
                                         onChange={(e) => {
@@ -153,7 +164,7 @@ class BusinessDetail extends Component {
                                             (<option key={index} value={key}>{BusinessType[key]}</option>)
                                         )
                                     }
-                                </select>
+                                </select>*/}
 
                             </div>
                         </div>

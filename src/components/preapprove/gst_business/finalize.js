@@ -42,9 +42,20 @@ class ReviewBusinessDetail extends Component {
                         this.props.history.push("/preapprove/token");
     }
 
+    // needs to be at the backend
+    /*   _updateAnchor(creditStatus) {
+           const {anchorDomain, payload, changeLoader} = this.props;
+           changeLoader(true);
+           fetch(`${anchorDomain}/credit/${payload.anchor_transaction_id}/status/${creditStatus}`).then((resp) => {
+               changeLoader(false);
+           }, (resp) => {
+               alertModule();
+               changeLoader(false);
+           })
+       }*/
+
     _formSubmit(e) {
         // e.preventDefault();
-
         const {payload, gstProfile, businessObj, adharObj, pan, adhar, token, changeLoader, history, storeResponse} = this.props;
         changeLoader(true);
         let dob = adharObj.dob.substr(0, 10);
@@ -54,7 +65,6 @@ class ReviewBusinessDetail extends Component {
                 let year = (adharObj.dob).getFullYear();
                 let dob = `${year}-${month}-${date}`;
         */
-
         fetch(`${loanUrl}/application/instant`, {
             method: "POST",
             headers: {"Content-Type": "application/json", "token": token},
@@ -95,21 +105,23 @@ class ReviewBusinessDetail extends Component {
         }).then(resp => resp.json()).then(resp => {
             changeLoader(false);
             if (resp.response === Object(resp.response)) {
+                //ToDo : POST request to anchor for notifiing the Status
+
                 let {loan_status} = resp.response.credit_eligibility;
+                // this._updateAnchor(loan_status);
                 storeResponse(resp.response);
-                if (loan_status === 'closed' || loan_status === 'decline')
-                    history.push("/preapprove/apprejected", {status: 'decline'});
+                if (loan_status === 'expired' || loan_status === 'declined')
+                    history.push("/preapprove/apprejected", {status: 'declined'});
                 else if (loan_status === 'pending') {
                     setTimeout(() => history.push("/preapprove/appapproved", {status: 'pending'}), 500);
                 }
                 else {
-                    setTimeout(() => history.push("/preapprove/appapproved", {status: 'approved'}), 500);
+                    setTimeout(() => history.push("/preapprove/appapproved", {status: 'aip'}), 500);
                 }
-
             }
             else if (resp.error === Object(resp.error)) {
                 alertModule(resp.message, 'warn');
-                history.push("/preapprove/apprejected", {status: 'error'});
+                history.push("/preapprove/apprejected", {status: 'expired'});
             }
         }, (resp) => {
             changeLoader(false);

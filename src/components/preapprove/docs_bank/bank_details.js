@@ -7,6 +7,7 @@ import {Link, withRouter} from "react-router-dom";
 import {alertModule} from "../../../shared/commonLogic";
 // import DatePicker from "react-datepicker";
 // import "react-datepicker/dist/react-datepicker.css";
+import Select from 'react-select'
 
 class BankDetail extends Component {
 
@@ -29,7 +30,7 @@ class BankDetail extends Component {
     };
 
     validationErrorMsg = () => {
-        let ctrerror = 6, fieldTxt;
+        let ctrerror = 4, fieldTxt;
         Object.values(this.validate).map((val, key) => {
             if (!val)
                 ++ctrerror;
@@ -42,7 +43,7 @@ class BankDetail extends Component {
     };
 
     handleValidation = () => {
-        let ctrerror = 6, missed_fields;
+        let ctrerror = 4, missed_fields;
         // let missed_fields = Object.keys(this.validate).some(x => this.validate[x]);
         Object.values(this.validate).map((val, key) => {
             if (!val)
@@ -94,7 +95,6 @@ class BankDetail extends Component {
                 // resp.response.mandate_id
 
             }
-
             // error
             if (resp.error === Object(resp.error)) {
                 alertModule(resp.error.message, 'warn');
@@ -260,8 +260,18 @@ class BankDetail extends Component {
                         <div className={"col-md-6 col-sm-12"}>
                             <div className="form-group mb-3">
                                 <label htmlFor="accountType" className={"bmd-label-floating"}>Account Type *</label>
-
-                                <select style={{fontWeight: 600}}
+                                <Select options={accountType}
+                                         required={true}
+                                        id="accountType"
+                                        inputId={"accountType"}
+                                        onBlur={() => this.validationErrorMsg()}
+                                        onChange={(e) => {
+                                            let {value} = e;
+                                            this.setState({acc_type: value}, () => this.props.setBankDetail(this.state));
+                                            this.validate.acc_type = (value.length > 0);
+                                            this.handleValidation();
+                                        }}/>
+                                {/*<select style={{fontWeight: 600}}
                                         title="Please select Company Type"
                                         value={this.state.acc_type} required={true}
                                         onChange={(e) => {
@@ -278,7 +288,7 @@ class BankDetail extends Component {
                                             (<option key={index} value={key}>{accountType[key]}</option>)
                                         )
                                     }
-                                </select>
+                                </select>*/}
                             </div>
 
                         </div>
@@ -312,7 +322,7 @@ class BankDetail extends Component {
                         <div className={"col-md-6 col-sm-12"}>
                             <div className="form-group mb-3">
                                 <label htmlFor="micrCode" className="bmd-label-floating">
-                                    MICR Code *
+                                    MICR Code
                                 </label>
                                 <input
                                     type="text"
@@ -322,16 +332,16 @@ class BankDetail extends Component {
                                     title="Enter MICR Code"
                                     autoCapitalize="characters"
                                     id="micrCode"
-                                    required={true}
+                                    // required={true}
                                     value={this.state.micr_code}
                                     // ref={ref => (this.obj.pan = ref)}
-                                    onBlur={() => this.validationErrorMsg()}
+                                    // onBlur={() => this.validationErrorMsg()}
                                     onChange={(e) => {
                                         let {value} = e.target;
                                         this.validate.micr_code = (value.length === 9);
                                         if (value.length <= 9 && !isNaN(value)) {
                                             this.setState({micr_code: value}, () => this.props.setBankDetail(this.state));
-                                            this.handleValidation();
+                                            // this.handleValidation();
                                         }
 
                                     }}

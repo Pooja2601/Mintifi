@@ -8,7 +8,8 @@ import {eNachPayload, baseUrl} from "../../shared/constants";
 
 class ENach extends Component {
 
-    state = {ctr: 0};
+    state = {ctr: 0, errorMsg: false};
+
     _updateBackend = (result) => {
         const {token, changeLoader, eNachPayload} = this.props;
         changeLoader(false);
@@ -52,9 +53,9 @@ class ENach extends Component {
             document.dispatchEvent(event);
         }
         else {
-            alertModule("You can not try eNACH more than twice", 'warn');
-            alertModule("Redirecting you back to Anchor portal..", 'info');
-
+            // alertModule("You can not try eNACH more than twice", 'warn');
+            // alertModule("Redirecting you back to Anchor portal..", 'info');
+            this.setState({errorMsg: true});
             setTimeout(() => {
                 // ToDo : Uncomment this line in Prod
                 // window.location.href = this.props.payload.error_url;
@@ -78,7 +79,7 @@ class ENach extends Component {
             alertModule('You cannot access this page directly without Authorised Session !!', 'error');
         else EnachsetPayload(token, base64_decode);
 
-
+        this.setState({errorMsg: false});
     }
 
     componentDidMount() {
@@ -110,7 +111,7 @@ class ENach extends Component {
         // setTimeout(() => this._triggerDigio(), 1000);
     }
 
-
+    //, as there are few changes needed to be made after putting it on the server (like changing the resource e.g, css, js location if required)
     render() {
         // let {payload, match} = this.props;
         return (
@@ -119,11 +120,20 @@ class ENach extends Component {
                 <h3 className={"text-center"}> e-NACH Mandate</h3>
                 <br/>
 
-                <div className="paragraph_styling text-left alert alert-success" role="alert"
-                     style={{margin: 'auto 5%'}}
+                <div className=" text-left alert alert-success" role="alert"
+                     style={{margin: 'auto'}}
                 >
                     <p className="paragraph_styling ">
-                        Kindly complete the eNACH procedure by clicking the button below.
+                        Kindly complete the eNACH procedure by clicking the button below. Remember, you may only try
+                        twice.
+                    </p>
+                </div>
+                <br/>
+                <div className=" text-left alert alert-danger" role="alert"
+                     style={{margin: 'auto', display: (this.state.errorMsg) ? 'block' : 'none'}}
+                >
+                    <p className="paragraph_styling">
+                        You have tried more than twice, Redirecting you back to Anchor Portal...
                     </p>
                 </div>
                 <div className="mt-5 mb-5 text-center ">

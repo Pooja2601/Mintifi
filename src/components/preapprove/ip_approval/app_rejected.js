@@ -9,7 +9,7 @@ class AppRejected extends Component {
     render() {
         let {match, adharObj, preFlightResp} = this.props;
         // ToDo :  Hide it in Prod
-        // match = {params: {status: 'decline'}};
+        match = {params: {status: 'declined'}};  // declined  // expired
 
         return (
             <>

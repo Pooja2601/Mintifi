@@ -27,7 +27,7 @@ class AppApproved extends Component {
         // const {loan_application_id, credit_eligibility} = preFlightResp;
 
         // ToDo : Hide Start (in Prod)
-        const load_status = 'approved';  // pending // approved
+        const load_status = 'bank_approved';  // pending // bank_approved
         let credit_eligibility = {
             product_offered: 'LoC',
             loan_status: load_status,
