@@ -29,7 +29,7 @@ class DrawLanding extends Component {
         else {
             DrawsetToken(token, base64_decode);
             // console.log(this.props.payload);
-            setTimeout(() => history.push("/Drawdown/auth/", {token: token, payload: base64_decode}), 500);
+            setTimeout(() => history.push(`${process.env.PUBLIC_URL}/Drawdown/auth/`, {token: token, payload: base64_decode}), 500);
         }
     }
 
@@ -51,7 +51,7 @@ class DrawLanding extends Component {
             if (resp.response === Object(resp.response))
                 if (resp.response.status === 'success') {
                     DrawsetToken(resp.response.auth.token, payload);
-                    setTimeout(() => history.push("/Drawdown/auth/", {
+                    setTimeout(() => history.push(`${process.env.PUBLIC_URL}/Drawdown/auth/`, {
                         token: resp.response.auth.token,
                         payload: payload
                     }), 500);

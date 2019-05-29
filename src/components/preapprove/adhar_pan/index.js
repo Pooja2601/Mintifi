@@ -223,7 +223,7 @@ class AdharPan extends Component {
     render() {
         return (
             <>
-                <Link to={'/preapprove/token'} className={"btn btn-link"}>Go Back </Link>
+                <Link to={`${process.env.PUBLIC_URL}/preapprove/token`} className={"btn btn-link"}>Go Back </Link>
                 {/*<h4 className={"text-center"}>New Customer?</h4>*/}
                 <h5 className="paragraph_styling  text-center">
                     <b>

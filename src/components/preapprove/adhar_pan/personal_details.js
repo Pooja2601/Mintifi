@@ -46,7 +46,7 @@ class AdharPan extends Component {
 
         if (payload !== Object(payload))
             if (adharObj !== Object(adharObj))
-                this.props.history.push("/preapprove/token");
+                this.props.history.push(`${process.env.PUBLIC_URL}/preapprove/token`);
 
         let state = adharObj;
         if (state === Object(state))
@@ -92,7 +92,7 @@ class AdharPan extends Component {
     _formSubmit(e) {
         e.preventDefault();
         setTimeout(() => {
-            this.props.history.push('/preapprove/mobileotp');
+            this.props.history.push(`${process.env.PUBLIC_URL}/preapprove/mobileotp`);
         }, 500);
     }
 
@@ -164,7 +164,8 @@ class AdharPan extends Component {
     render() {
         return (
             <>
-                <Link to={'/preapprove/adharpan'} className={"btn btn-link"}>Go Back </Link><br/><br/>
+                <Link to={`${process.env.PUBLIC_URL}/preapprove/adharpan`} className={"btn btn-link"}>Go
+                    Back </Link><br/><br/>
                 <h4 className={"text-center"}>Personal Details </h4>
                 <h5 className="paragraph_styling  text-center" style={{fontSize: '17px'}}>
                     <b> Enter your personal information to proceed.</b>

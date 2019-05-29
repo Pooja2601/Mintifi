@@ -11,7 +11,7 @@ class ThankYou extends Component {
         const {payload, authObj, changeLoader} = this.props;
         if (payload !== Object(payload))
             if (authObj !== Object(authObj))
-                this.props.history.push("/Drawdown/");
+                this.props.history.push(`${process.env.PUBLIC_URL}/Drawdown/`);
         changeLoader(false);
     }
 
@@ -94,7 +94,7 @@ class ThankYou extends Component {
                 <div className="mt-5 mb-5 text-center ">
                     <button
                         type="button"
-                        onClick={e => this.props.history.push('/Drawdown/Auth')}
+                        onClick={e => this.props.history.push(`${process.env.PUBLIC_URL}/Drawdown/Auth`)}
                         className="form-submit btn btn-raised greenButton"
                     >Alright
                     </button>

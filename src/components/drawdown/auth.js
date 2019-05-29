@@ -117,7 +117,7 @@ class MobileOtp extends Component {
                 alertModule(resp.error.message, 'error');
             if (resp.response === Object(resp.response)) {
                 DrawAnchorPayload(resp.response);
-                setTimeout(() => this.props.history.push('/Drawdown/Offers'));
+                setTimeout(() => this.props.history.push(`${process.env.PUBLIC_URL}/Drawdown/Offers`));
             }
         }, resp => {
             alertModule();

@@ -54,14 +54,14 @@ class Login extends Component {
     _existCustomer = () => {
         this.props.checkExists("exist");
         setTimeout(() => {
-            this.props.history.push('/preapprove/auth')
+            this.props.history.push(`${process.env.PUBLIC_URL}/preapprove/auth`)
         }, 500);
     };
 
     _newCustomer = () => {
         this.props.checkExists("new");
         setTimeout(() => {
-            this.props.history.push('/preapprove/adharpan')
+            this.props.history.push(`${process.env.PUBLIC_URL}/preapprove/adharpan`)
         }, 500);
     };
 

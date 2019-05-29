@@ -113,7 +113,7 @@ class Auth extends Component {
     render() {
         return (
             <>
-                <Link to={'/preapprove/token'} className={"btn btn-link"}>Go Back </Link>
+                <Link to={`${process.env.PUBLIC_URL}/preapprove/token`} className={"btn btn-link"}>Go Back </Link>
                 <h4 className={"text-center"}>
                     Welcome Back
                 </h4>

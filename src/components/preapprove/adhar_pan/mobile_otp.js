@@ -95,7 +95,7 @@ class MobileOtp extends Component {
                 });
                 if (resp.response.is_otp_verified)
                     setTimeout(() => {
-                        history.push('/preapprove/businessdetail');
+                        history.push(`${process.env.PUBLIC_URL}/preapprove/businessdetail`);
                     }, 500);
 // Goes to New Page
             }
@@ -126,13 +126,13 @@ class MobileOtp extends Component {
 
         if (payload !== Object(payload))
             if (adharObj !== Object(adharObj))
-                history.push("/preapprove/personaldetails");
+                history.push(`${process.env.PUBLIC_URL}/preapprove/personaldetails`);
     }
 
     render() {
         return (
             <>
-                <Link to={'/preapprove/personaldetails'} className={"btn btn-link"}>Go Back </Link>
+                <Link to={`${process.env.PUBLIC_URL}/preapprove/personaldetails`} className={"btn btn-link"}>Go Back </Link>
 
                 <h5 className="paragraph_styling text-center">
 

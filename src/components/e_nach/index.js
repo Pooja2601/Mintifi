@@ -101,11 +101,10 @@ class ENach extends Component {
                 }, 1000);
             }
             else {
-                alertModule("Register successful for " + obj.detail.digio_doc_id, 'success');
+                alertModule("Register successful for" + obj.detail.digio_doc_id, 'success');
                 this._updateBackend(obj.detail);
             }
         });
-
 
         // ToDo : uncomment in prod
         // setTimeout(() => this._triggerDigio(), 1000);
@@ -136,11 +135,11 @@ class ENach extends Component {
                         You have tried more than twice, Redirecting you back to Anchor Portal...
                     </p>
                 </div>
-                <div className="mt-5 mb-5 text-center ">
+                <div className="mt-5 mb-5 text-center">
                     <button
                         type="button"
                         onClick={e => this._triggerDigio()}
-                        // onClick={e => this.props.history.push('/Drawdown/Auth')}
+                        // onClick={e => this.props.history.push(`${process.env.PUBLIC_URL}/Drawdown/Auth`)}
                         className="form-submit btn btn-raised greenButton"
                     >Initiate E-NACH
                     </button>

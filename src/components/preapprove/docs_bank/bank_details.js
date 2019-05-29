@@ -131,7 +131,7 @@ class BankDetail extends Component {
         if (payload !== Object(payload))
             if (adharObj !== Object(adharObj))
                 if (adharObj.verified)
-                    this.props.history.push("/preapprove/token");
+                    this.props.history.push(`${process.env.PUBLIC_URL}/preapprove/token`);
 
         if (bankObj === Object(bankObj))
             this.setState(bankObj, () => {

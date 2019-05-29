@@ -4,7 +4,7 @@ import {withRouter} from "react-router-dom";
 const LandingDrawdown = (props) => {
 
     const {token, payload} = props.match.params;
-    props.history.push("/Drawdown/Token/", {token: token, payload: payload});
+    props.history.push(`${process.env.PUBLIC_URL}/Drawdown/Token/`, {token: token, payload: payload});
 
     return (<> </>);
 };

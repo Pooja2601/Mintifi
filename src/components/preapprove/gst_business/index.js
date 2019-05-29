@@ -28,7 +28,7 @@ class BusinessDetail extends Component {
         e.preventDefault();
         // this.props.setBusinessDetail(this.state);
         setTimeout(() => {
-            this.props.history.push('/preapprove/finalize');
+            this.props.history.push(`${process.env.PUBLIC_URL}/preapprove/finalize`);
         });
     }
 
@@ -76,7 +76,7 @@ class BusinessDetail extends Component {
         if (payload !== Object(payload))
             if (adharObj !== Object(adharObj))
                 if (adharObj.verified)
-                    this.props.history.push("/preapprove/token");
+                    this.props.history.push(`${process.env.PUBLIC_URL}/preapprove/token`);
 
         if (businessObj === Object(businessObj))
             this.setState(businessObj, () => {

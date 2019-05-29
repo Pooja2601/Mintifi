@@ -216,7 +216,7 @@ class Offers extends Component {
                 //    setTimeout(() => this.props.history.push('/Drawdown/Thankyou'), 500);
             }
             // ToDo : comment this for production
-            setTimeout(() => this.props.history.push('/Drawdown/Thankyou'), 500);
+            setTimeout(() => this.props.history.push(`${process.env.PUBLIC_URL}/Drawdown/Thankyou`), 500);
 
         }, resp => {
             alertModule();
@@ -230,7 +230,7 @@ class Offers extends Component {
         const {payload, authObj, changeLoader} = this.props;
         if (payload !== Object(payload))
             if (authObj !== Object(authObj))
-                this.props.history.push("/Drawdown/");
+                this.props.history.push(`${process.env.PUBLIC_URL}/Drawdown/`);
         changeLoader(false);
     }
 

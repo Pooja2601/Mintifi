@@ -39,7 +39,7 @@ class ReviewBusinessDetail extends Component {
             if (adharObj !== Object(adharObj))
                 if (businessObj !== Object(businessObj))
                     if (adharObj.verified)
-                        this.props.history.push("/preapprove/token");
+                        this.props.history.push(`${process.env.PUBLIC_URL}/preapprove/token`);
     }
 
     // needs to be at the backend
@@ -111,22 +111,22 @@ class ReviewBusinessDetail extends Component {
                 // this._updateAnchor(loan_status);
                 storeResponse(resp.response);
                 if (loan_status === 'expired' || loan_status === 'declined')
-                    history.push("/preapprove/apprejected", {status: 'declined'});
+                    history.push(`${process.env.PUBLIC_URL}/preapprove/apprejected`, {status: 'declined'});
                 else if (loan_status === 'pending') {
-                    setTimeout(() => history.push("/preapprove/appapproved", {status: 'pending'}), 500);
+                    setTimeout(() => history.push(`${process.env.PUBLIC_URL}/preapprove/appapproved`, {status: 'pending'}), 500);
                 }
                 else {
-                    setTimeout(() => history.push("/preapprove/appapproved", {status: 'aip'}), 500);
+                    setTimeout(() => history.push(`${process.env.PUBLIC_URL}/preapprove/appapproved`, {status: 'aip'}), 500);
                 }
             }
             else if (resp.error === Object(resp.error)) {
                 alertModule(resp.message, 'warn');
-                history.push("/preapprove/apprejected", {status: 'expired'});
+                history.push(`${process.env.PUBLIC_URL}/preapprove/apprejected`, {status: 'expired'});
             }
         }, (resp) => {
             changeLoader(false);
             alertModule();
-            //        this.props.history.push("/AppRejected);
+            //        this.props.history.push(`${process.env.PUBLIC_URL}/AppRejected`);
         });
     }
 
