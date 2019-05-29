@@ -1,7 +1,9 @@
 import React, {Component} from "react";
 
-const Error = () => (
-    <div className="row justify-content-center">
+
+const Error = (props) => {
+    // console.log(props.history);
+    return (<div className="row justify-content-center">
         <div className="col-lg-10" style={{marginTop: "2rem"}}>
             <div className="error_card">
                 <div className="error_image">
@@ -15,6 +17,6 @@ const Error = () => (
                 </div>
             </div>
         </div>
-    </div>
-);
+    </div>)
+};
 export default Error;

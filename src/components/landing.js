@@ -67,6 +67,7 @@ class Login extends Component {
 
     render() {
         const {setToken, match, existing, payload} = this.props;
+        const {PUBLIC_URL} = process.env;
         return (
             <>
                 {/*<Link to={'/'} >Go Back </Link>*/}
@@ -78,7 +79,7 @@ class Login extends Component {
                 <div className="mt-5 mb-5 text-center row">
                     <div className={"col-sm-12 col-md-2"}></div>
                     <div className={"col-sm-12 col-md-4 text-center"}><img
-                        src="/images/supply_chain/new.png"
+                        src={`${PUBLIC_URL}/images/supply_chain/new.png`}
                         style={{
                             width: "150px",
                             border: (existing === 'new') && '1px solid #00bfa5',
@@ -91,7 +92,7 @@ class Login extends Component {
                     /><br/> <p style={{paddingRight: '0%'}}>New User</p>
                     </div>
                     <div className={"col-sm-12 col-md-4 text-center"}><img
-                        src="/images/supply_chain/existing.png"
+                        src={`${PUBLIC_URL}/images/supply_chain/existing.png`}
                         style={{
                             width: "150px",
                             border: (existing === 'exist') && '1px solid #00bfa5',

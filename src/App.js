@@ -47,11 +47,12 @@ const {store, persistor} = configureStore();
 class App extends Component {
 
     render() {
+        const {PUBLIC_URL} = process.env;
         return (
             <Provider store={store}>
                 <PersistGate loading={null} persistor={persistor}>
-                    {/* ToDo : Change in Prod to sub Dir name */}
-                    <BrowserRouter basename={"./"}>
+                    {/* ToDo : Change to sub Dir name in Prod  */}
+                    <BrowserRouter basename={"./pay_mintifi_simple/build"}>
 
                         <Route
                             render={({location}) => (<>
@@ -66,7 +67,7 @@ class App extends Component {
                                         <div className="mb-4">
                                             {/*    ToDo : Swap All $PUBLIC_URL$ to ./ in production */}
                                             <img
-                                                src={`${process.env.PUBLIC_URL}/images/Mintifi-Logo-white_2.png`}
+                                                src={`${PUBLIC_URL}/images/Mintifi-Logo-white_2.png`}
                                                 className={"logoHeader"}
                                             />
                                             {/*<b className={"anchorText"}>Anchor Merchant</b>*/}
@@ -74,7 +75,7 @@ class App extends Component {
                                                 position: 'absolute', right: '24.4%', top: "18px",
                                                 width: '85px'
                                             }}
-                                                 src={`${process.env.PUBLIC_URL}/images/company/yatra.png`}
+                                                 src={`${PUBLIC_URL}/images/company/yatra.png`}
                                                  className={"anchorLogo"}
                                             />
                                         </div>
@@ -108,30 +109,51 @@ class App extends Component {
                                                 classNames="fade"
                                                 timeout={50}>*/}
                                             <Switch location={location}>
-                                                <Route exact path="/preapprove/" component={Index}/>
-                                                <Route exact path="/preapprove/token/:token?/:payload?"
+                                                <Route exact path={`${PUBLIC_URL}/`} component={Index}/>
+                                                <Route exact path={`${PUBLIC_URL}/preapprove/`}
+                                                       component={Index}/>
+                                                <Route exact
+                                                       path={`${PUBLIC_URL}/preapprove/token/:token?/:payload?`}
                                                        component={Login}/>
-                                                <Route path="/preapprove/auth/" component={Auth}/>
-                                                <Route path="/preapprove/adharpan" component={AdharPan}/>
-                                                <Route path="/preapprove/personaldetail" component={PersonalDetail}/>
-                                                <Route path="/preapprove/mobileotp" component={MobileOTP}/>
-                                                <Route path="/preapprove/businessdetail" component={BusinessDetail}/>
-                                                <Route path="/preapprove/finalize" component={Finalize}/>
+                                                <Route path={`${PUBLIC_URL}/preapprove/auth/`}
+                                                       component={Auth}/>
+                                                <Route path={`${PUBLIC_URL}/preapprove/adharpan`}
+                                                       component={AdharPan}/>
+                                                <Route path={`${PUBLIC_URL}/preapprove/personaldetail`}
+                                                       component={PersonalDetail}/>
+                                                <Route path={`${PUBLIC_URL}/preapprove/mobileotp`}
+                                                       component={MobileOTP}/>
+                                                <Route path={`${PUBLIC_URL}/preapprove/businessdetail`}
+                                                       component={BusinessDetail}/>
+                                                <Route path={`${PUBLIC_URL}/preapprove/finalize`}
+                                                       component={Finalize}/>
                                                 {/*<Route path="/ReviewChanges" component={ReviewChanges}/>*/}
-                                                <Route path="/preapprove/apprejected" component={AppRejected}/>
-                                                <Route path="/preapprove/appapproved" component={AppApproved}/>
-                                                <Route path="/preapprove/docsupload" component={DocsUpload}/>
-                                                <Route path="/preapprove/bankdetail" component={BankDetail}/>
-                                                <Route path="/preapprove/thankyou" component={ThankYou}/>
-                                                <Route path="/preapprove/privacy" component={Privacy}/>
+                                                <Route path={`${PUBLIC_URL}/preapprove/apprejected`}
+                                                       component={AppRejected}/>
+                                                <Route path={`${PUBLIC_URL}/preapprove/appapproved`}
+                                                       component={AppApproved}/>
+                                                <Route path={`${PUBLIC_URL}/preapprove/docsupload`}
+                                                       component={DocsUpload}/>
+                                                <Route path={`${PUBLIC_URL}/preapprove/bankdetail`}
+                                                       component={BankDetail}/>
+                                                <Route path={`${PUBLIC_URL}/preapprove/thankyou`}
+                                                       component={ThankYou}/>
+                                                <Route path={`${PUBLIC_URL}/preapprove/privacy`}
+                                                       component={Privacy}/>
 
-                                                <Route exact path="/drawdown" component={DrawIndex}/>
-                                                <Route exact path="/drawdown/token/:token?/:payload?"
+                                                <Route exact path={`${PUBLIC_URL}/drawdown`}
+                                                       component={DrawIndex}/>
+                                                <Route exact
+                                                       path={`${PUBLIC_URL}/drawdown/token/:token?/:payload?`}
                                                        component={Drawdown}/>
-                                                <Route path="/drawdown/auth" component={DrawAuth}/>
-                                                <Route path="/drawdown/offers" component={Offers}/>
-                                                <Route path="/drawdown/thankyou" component={DrawThankYou}/>
-                                                <Route exact path="/enach/:token?/:payload?" component={ENach}/>
+                                                <Route path={`${PUBLIC_URL}/drawdown/auth`}
+                                                       component={DrawAuth}/>
+                                                <Route path={`${PUBLIC_URL}/drawdown/offers`}
+                                                       component={Offers}/>
+                                                <Route path={`${PUBLIC_URL}/drawdown/thankyou`}
+                                                       component={DrawThankYou}/>
+                                                <Route exact path={`${PUBLIC_URL}/enach/:token?/:payload?`}
+                                                       component={ENach}/>
                                                 <Route component={Error}/>
                                             </Switch>
                                             {/*</CSSTransition>*/}

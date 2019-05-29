@@ -22,9 +22,13 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 Builds the app for production to the `build` folder.<br>
 It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.<br>
+The build is minified and the filenames include the hashes. Follow the below procedures for proper build.<br>
 
-Copy the .htaccess in the build folder (rename and copy txt.htaccess file in the root) or the directory where you'll be deploying the Static build files.
+1. Copy the .htaccess in the build folder (rename and copy txt.htaccess file in the root) or the directory where you'll be deploying the Static build files.<br>
+2. Insert Homepage name where the Project will reside in package.json  `homepage:`
+3. Add the subdirectory path in the baseName attribute of `<BrowserRouter \/>`  as the subdirectory `baseName={'./subdirectory'}`
+
+
 Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
