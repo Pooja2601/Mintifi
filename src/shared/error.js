@@ -5,7 +5,7 @@ const Error = () => (
         <div className="col-lg-10" style={{marginTop: "2rem"}}>
             <div className="error_card">
                 <div className="error_image">
-                    <img className="img-fluid" src="./images/404-bg.png"/>
+                    <img className="img-fluid" src={`${process.env.PUBLIC_URL}/images/404-bg.png`}/>
                 </div>
                 <div className="content_div_error" style={{position: 'static'}}>
                     <div className="error_page_not_found">Page not found</div>

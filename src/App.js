@@ -50,7 +50,8 @@ class App extends Component {
         return (
             <Provider store={store}>
                 <PersistGate loading={null} persistor={persistor}>
-                    <BrowserRouter>
+                    {/* ToDo : Change in Prod to sub Dir name */}
+                    <BrowserRouter basename={"./"}>
 
                         <Route
                             render={({location}) => (<>
@@ -63,8 +64,9 @@ class App extends Component {
                                 <header>
                                     <div className="mt-3 text-center">
                                         <div className="mb-4">
+                                            {/*    ToDo : Swap All $PUBLIC_URL$ to ./ in production */}
                                             <img
-                                                src="./images/Mintifi-Logo-white_2.png"
+                                                src={`${process.env.PUBLIC_URL}/images/Mintifi-Logo-white_2.png`}
                                                 className={"logoHeader"}
                                             />
                                             {/*<b className={"anchorText"}>Anchor Merchant</b>*/}
@@ -72,7 +74,7 @@ class App extends Component {
                                                 position: 'absolute', right: '24.4%', top: "18px",
                                                 width: '85px'
                                             }}
-                                                 src="./images/company/yatra.png"
+                                                 src={`${process.env.PUBLIC_URL}/images/company/yatra.png`}
                                                  className={"anchorLogo"}
                                             />
                                         </div>
