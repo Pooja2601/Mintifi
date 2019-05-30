@@ -9,7 +9,7 @@ test:
   stage: test
   script: echo "Running tests"
   only:
-    - deploy 
+    - development 
 
 build:
   stage: build
@@ -22,7 +22,7 @@ build:
     - gcloud config set project $GCP_PROJECT_ID
     - gcloud builds submit . --config=ci/cloudbuild.yml --substitutions _IMAGE_NAME=$CI_PROJECT_NAME,_VERSION=$(echo $CI_COMMIT_SHA | cut -c8-25)
   only:
-    - deploy
+    - development
 
 deploy_stage:
   stage: deploy
@@ -36,7 +36,7 @@ deploy_stage:
     name: qa
     url: https://paywithmintifi-qa.$MY_DOMAIN
   only:
-    - deploy
+    - development
 
 # Custom Functions -------------------------------------------------------
 .custom_functions: &custom_functions |
