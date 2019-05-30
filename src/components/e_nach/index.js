@@ -75,7 +75,6 @@ class ENach extends Component {
         eNachPayload.document_id = eNachPayload.mandate_id;
         Object.assign(base64_decode, eNachPayload);
 
-
         if (base64_decode !== Object(base64_decode))
             alertModule('You cannot access this page directly without Authorised Session !!', 'error');
         else EnachsetPayload(token, base64_decode);

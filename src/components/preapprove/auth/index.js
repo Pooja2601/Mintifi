@@ -1,8 +1,16 @@
 import React, {Component} from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
-import {baseUrl, otpUrl, OTP_Timer} from "../../../shared/constants";
+import {baseUrl, baseUrl2, otpUrl, OTP_Timer, landingPayload} from "../../../shared/constants";
 import {connect} from "react-redux";
-import {setAuth, sendOTP, changeLoader} from "../../../actions/index";
+import {
+    setAuth,
+    sendOTP,
+    changeLoader,
+    setAdharManual,
+    setBusinessDetail,
+    setBankDetail,
+    pan_adhar,
+} from "../../../actions/index";
 import {Link, withRouter} from "react-router-dom";
 import {alertModule} from "../../../shared/commonLogic";
 
@@ -22,7 +30,26 @@ class Auth extends Component {
         mobile_correct: false
     };
 
-    // obj = {mobile_correct: false};
+    // To Redirect the Page to the concerned Pages
+    _existingSection() {
+
+        let {payload, changeLoader} = this.props;
+        // ToDo : uncomment in prod;
+        payload = landingPayload;
+        changeLoader(true);
+        fetch(`${baseUrl2}/agents/${payload.anchor_id}/loan_applications`, {}).then((resp) => {
+            changeLoader(false);
+
+            if (resp.response === Object(resp.response)) {
+
+            }
+
+        }, () => {
+            alertModule();
+            changeLoader(false);
+        })
+
+    }
 
     _formSubmit(e) {
 
@@ -68,7 +95,7 @@ class Auth extends Component {
     }
 
     _verifyOTP(e) {
-        const {changeLoader, token, authObj} = this.props;
+        const {changeLoader, token, authObj, setAuth} = this.props;
         changeLoader(true);
         fetch(otpUrl + '/verify_otp ', {
             method: "POST",
@@ -86,6 +113,9 @@ class Auth extends Component {
                 alertModule(resp.error.message, 'warn');
             else if (resp.response === Object(resp.response)) {
                 this.setState({verified: resp.response.is_otp_verified});
+                setAuth(this.state);
+                if (resp.response.is_otp_verified)
+                    setTimeout(() => this._existingSection(), 500);
 // Goes to New Page
             }
         }, resp => {
@@ -252,5 +282,10 @@ const mapStateToProps = state => ({
 
 export default withRouter(connect(
     mapStateToProps,
-    {setAuth, sendOTP, changeLoader}
+    {
+        setAuth, sendOTP, changeLoader, setAdharManual,
+        setBusinessDetail,
+        setBankDetail,
+        pan_adhar
+    }
 )(Auth));

@@ -14,21 +14,22 @@ const {PUBLIC_URL} = process.env;
 class BankDetail extends Component {
 
     state = {
-        acc_type: "sa",
+        acc_type: "",
         bank_name: '',
         acc_number: '',
         acc_name: '',
         ifsc_code: '',
         micr_code: "",
+        branch_name: ''
     };
 
     validate = {
         acc_type: false,
-        bank_name: false,
+        // bank_name: false,
         acc_number: false,
         acc_name: false,
         ifsc_code: false,
-        micr_code: false,
+        // micr_code: false,
     };
 
     validationErrorMsg = () => {
@@ -71,7 +72,7 @@ class BankDetail extends Component {
 
     submitForm(e) {
         e.preventDefault();
-        const {changeLoader, token, payload, preFlightResp} = this.props;
+        const {changeLoader, token, payload, preFlightResp, adharObj, history} = this.props;
         changeLoader(true);
         fetch(`${baseUrl}/bank_account`, {
             method: "POST",
@@ -79,7 +80,7 @@ class BankDetail extends Component {
             body: JSON.stringify({
                 "app_id": 3,
                 "loan_application_id": preFlightResp.loan_application_id,
-                "company_id": 2,
+                "company_id": preFlightResp.company_id,
                 "anchor_id": payload.anchor_id,
                 "bank_name": this.state.bank_name,
                 "account_number": this.state.acc_number,
@@ -95,7 +96,21 @@ class BankDetail extends Component {
             // success
             if (resp.response === Object(resp.response)) {
                 // resp.response.mandate_id
-
+                // ToDo : make it base64 payload
+                let payloadDecrypt = {
+                    ...payload,
+                    user_name: adharObj.f_name + ' ' + adharObj.l_name,
+                    user_mobile: adharObj.mobile,
+                    user_email: adharObj.email,
+                    mandate_id: resp.response.mandate_id,
+                    loan_application_id: preFlightResp.loan_application_id,
+                    company_id: preFlightResp.company_id
+                };
+                let base64_decode = (payload !== undefined) ? JSON.stringify(new Buffer(payloadDecrypt).toString('base64')) : '';
+                setTimeout(() => history.push(`${PUBLIC_URL}/enach`, {
+                    token: token,
+                    payload: base64_decode
+                }));
             }
             // error
             if (resp.error === Object(resp.error)) {
@@ -109,16 +124,24 @@ class BankDetail extends Component {
     }
 
     _fetchIFSC(ifsc) {
+        let bank_name, micr_code, branch_name;
         changeLoader(true);
         fetch(`https://ifsc.razorpay.com/${ifsc}`).then(resp => resp.json()).then((resp) => {
             changeLoader(false);
             if (resp === Object(resp)) {
-                this.setState({
-                    bank_name: resp.BANK,
-                    ifsc_code: resp.IFSC,
-                    micr_code: resp.MICR
-                });
+                bank_name = resp.BANK;
+                // ifsc_code = resp.IFSC;
+                micr_code = resp.MICR;
+                branch_name = resp.BRANCH;
             }
+            else {
+                bank_name = micr_code = branch_name = '';
+            }
+            this.setState({
+                bank_name,
+                micr_code,
+                branch_name
+            });
             // console.log(resp);
         }, (resp) => {
             alertModule();
@@ -298,7 +321,8 @@ class BankDetail extends Component {
 
                     <div className={"row"}>
                         <div className={"col-md-6 col-sm-12"}>
-                            <div className="form-group mb-3 ">
+                            <div className="form-group mb-3"
+                                 style={{display: (this.state.bank_name) ? 'block' : 'none'}}>
                                 <label htmlFor="nameBank" className={"bmd-label-floating"}>Bank Name *</label>
                                 <input
                                     type="text"
@@ -309,20 +333,22 @@ class BankDetail extends Component {
                                     autoCapitalize="characters"
                                     id="nameBank"
                                     required={true}
+                                    disabled={true}
                                     value={this.state.bank_name}
-                                    onBlur={() => this.validationErrorMsg()}
+                                    // onBlur={() => this.validationErrorMsg()}
                                     // ref={ref => (this.obj.pan = ref)}
-                                    onChange={(e) => {
+                                    /*onChange={(e) => {
                                         let {value} = e.target;
                                         this.setState({bank_name: value}, () => this.props.setBankDetail(this.state));
                                         this.validate.bank_name = (value.length > 0);
                                         this.handleValidation();
-                                    }}
+                                    }}*/
                                 />
                             </div>
                         </div>
                         <div className={"col-md-6 col-sm-12"}>
-                            <div className="form-group mb-3">
+                            <div className="form-group mb-3"
+                                 style={{display: (this.state.micr_code) ? 'block' : 'none'}}>
                                 <label htmlFor="micrCode" className="bmd-label-floating">
                                     MICR Code
                                 </label>
@@ -334,7 +360,7 @@ class BankDetail extends Component {
                                     title="Enter MICR Code"
                                     autoCapitalize="characters"
                                     id="micrCode"
-                                    // required={true}
+                                    disabled={true}
                                     value={this.state.micr_code}
                                     // ref={ref => (this.obj.pan = ref)}
                                     // onBlur={() => this.validationErrorMsg()}
@@ -347,6 +373,24 @@ class BankDetail extends Component {
                                         }
 
                                     }}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <div className={"row"} style={{display: (this.state.branch_name) ? 'block' : 'none'}}>
+                        <div className={"col-sm-12"}>
+                            <div className="form-group mb-3 ">
+                                <label htmlFor="nameBranch" className={"bmd-label-floating"}>Branch Name *</label>
+                                <input
+                                    type="text"
+                                    className="form-control font_weight"
+                                    // placeholder="Email"
+                                    style={{fontWeight: 600}}
+                                    title="Please enter Branch Name"
+                                    id="nameBranch"
+                                    required={true}
+                                    disabled={true}
+                                    value={this.state.branch_name}
                                 />
                             </div>
                         </div>
