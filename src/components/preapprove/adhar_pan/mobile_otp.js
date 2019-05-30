@@ -7,6 +7,7 @@ import {Link, withRouter} from "react-router-dom";
 import {alertModule} from "../../../shared/commonLogic";
 
 const Timer = OTP_Timer;
+const {PUBLIC_URL} = process.env;
 
 class MobileOtp extends Component {
     state = {
@@ -95,7 +96,7 @@ class MobileOtp extends Component {
                 });
                 if (resp.response.is_otp_verified)
                     setTimeout(() => {
-                        history.push(`${process.env.PUBLIC_URL}/preapprove/businessdetail`);
+                        history.push(`${PUBLIC_URL}/preapprove/businessdetail`);
                     }, 500);
 // Goes to New Page
             }
@@ -126,13 +127,13 @@ class MobileOtp extends Component {
 
         if (payload !== Object(payload))
             if (adharObj !== Object(adharObj))
-                history.push(`${process.env.PUBLIC_URL}/preapprove/personaldetails`);
+                history.push(`${PUBLIC_URL}/preapprove/personaldetails`);
     }
 
     render() {
         return (
             <>
-                <Link to={`${process.env.PUBLIC_URL}/preapprove/personaldetails`} className={"btn btn-link"}>Go Back </Link>
+                <Link to={`${PUBLIC_URL}/preapprove/personaldetails`} className={"btn btn-link"}>Go Back </Link>
 
                 <h5 className="paragraph_styling text-center">
 

@@ -7,6 +7,7 @@ import {checkExists, setToken, changeLoader} from "../actions";
 import {alertModule} from "../shared/commonLogic";
 
 const Timer = 10;
+const {PUBLIC_URL} = process.env;
 
 class Login extends Component {
 
@@ -54,20 +55,20 @@ class Login extends Component {
     _existCustomer = () => {
         this.props.checkExists("exist");
         setTimeout(() => {
-            this.props.history.push(`${process.env.PUBLIC_URL}/preapprove/auth`)
+            this.props.history.push(`${PUBLIC_URL}/preapprove/auth`)
         }, 500);
     };
 
     _newCustomer = () => {
         this.props.checkExists("new");
         setTimeout(() => {
-            this.props.history.push(`${process.env.PUBLIC_URL}/preapprove/adharpan`)
+            this.props.history.push(`${PUBLIC_URL}/preapprove/adharpan`)
         }, 500);
     };
 
     render() {
         const {setToken, match, existing, payload} = this.props;
-        const {PUBLIC_URL} = process.env;
+
         return (
             <>
                 {/*<Link to={'/'} >Go Back </Link>*/}

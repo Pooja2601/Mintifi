@@ -8,6 +8,7 @@ import {alertModule} from "../../shared/commonLogic";
 
 
 const Timer = OTP_Timer;
+const {PUBLIC_URL} = process.env;
 
 class MobileOtp extends Component {
     state = {
@@ -117,7 +118,7 @@ class MobileOtp extends Component {
                 alertModule(resp.error.message, 'error');
             if (resp.response === Object(resp.response)) {
                 DrawAnchorPayload(resp.response);
-                setTimeout(() => this.props.history.push(`${process.env.PUBLIC_URL}/Drawdown/Offers`));
+                setTimeout(() => this.props.history.push(`${PUBLIC_URL}/Drawdown/Offers`));
             }
         }, resp => {
             alertModule();
@@ -157,7 +158,7 @@ class MobileOtp extends Component {
         const {payload, match} = this.props;
         return (
             <>
-                {/*<Link to={'/PersonalDetails'} className={"btn btn-link"}>Go Back </Link>*/}
+                {/*<Link to={`${PUBLIC_URL}/PersonalDetails`} className={"btn btn-link"}>Go Back </Link>*/}
                 <h4 className={"text-center"}>Pay with Mintifi</h4>
                 <p className="paragraph_styling text-center">
                     {/*<br/>*/}

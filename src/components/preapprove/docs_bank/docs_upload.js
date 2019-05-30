@@ -6,6 +6,7 @@ import {pan_adhar, setAdharManual, setBusinessDetail, changeLoader} from "../../
 import {alertModule} from "../../../shared/commonLogic";
 
 const file_msg = "Select a file";
+const {PUBLIC_URL} = process.env;
 
 const file_catalog = {
     id_proof: ['pan', 'aadhaar', 'passport', 'driving_license', 'voterid'],
@@ -249,7 +250,7 @@ class DocsUpload extends Component {
                     if (resp.error === Object(resp.error))
                         alertModule("We couldn't upload the files, Kindly try again !", 'warn');
                     else if (resp.response === Object(resp.response))
-                        history.push(`${process.env.PUBLIC_URL}/preapprove/bankdetail`);
+                        history.push(`${PUBLIC_URL}/preapprove/bankdetail`);
                 }
             ).catch(
             error => {
@@ -268,7 +269,7 @@ class DocsUpload extends Component {
         if (payload !== Object(payload))
             if (adharObj !== Object(adharObj))
                 if (businessObj !== Object(businessObj))
-                    this.props.history.push(`${process.env.PUBLIC_URL}/preapprove/token`);
+                    this.props.history.push(`${PUBLIC_URL}/preapprove/token`);
 
         // console.log(adharObj);
         // console.log(payload);
@@ -286,7 +287,7 @@ class DocsUpload extends Component {
             const {f_name, l_name} = this.props.adharObj;
             return (
                 <>
-                    {/* <button onClick={() => this.props.history.push('${process.env.PUBLIC_URL}/preapprove/businessdetail`)} className={"btn btn-link"}>
+                    {/* <button onClick={() => this.props.history.push('${PUBLIC_URL}/preapprove/businessdetail`)} className={"btn btn-link"}>
                     Go Back
                 </button>*/}
                     <br/>

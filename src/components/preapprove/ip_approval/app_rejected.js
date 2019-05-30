@@ -4,16 +4,18 @@ import {Link, withRouter} from "react-router-dom";
 import {landingPayload} from "../../../shared/constants";
 import {pan_adhar, setAdharManual, setBusinessDetail} from "../../../actions/index";
 
+const {PUBLIC_URL} = process.env;
+
 class AppRejected extends Component {
 
     render() {
-        let {match, adharObj, preFlightResp} = this.props;
+        let {match, adharObj, preFlightResp, history} = this.props;
         // ToDo :  Hide it in Prod
         match = {params: {status: 'declined'}};  // declined  // expired
 
         return (
             <>
-                {/* <button onClick={() => this.props.history.push('/preapprove/businessdetail')} className={"btn btn-link"}>
+                {/* <button onClick={() => history.push(`${PUBLIC_URL}/preapprove/businessdetail`)} className={"btn btn-link"}>
                     Go Back
                 </button>*/}
                 <h4 className={"text-center"}>Credit Eligibility</h4>
@@ -47,7 +49,7 @@ class AppRejected extends Component {
                     */}
                     <button
                         type="button"
-                        onClick={e => this.props.history.push(`/${landingPayload.error_url}`)}
+                        onClick={e => history.push(`${PUBLIC_URL}/${landingPayload.error_url}`)}
                         className="form-submit btn btn-raised greenButton"
                     >Back to Yatra
                     </button>

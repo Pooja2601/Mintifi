@@ -1,10 +1,12 @@
 import React, {Component} from "react";
 import {withRouter} from "react-router-dom";
 
+const {PUBLIC_URL} = process.env;
+
 const Landing = (props) => {
 
     const {token, payload} = props.match.params;
-    props.history.push("/preapprove/token/", {token: token, payload: payload});
+    props.history.push(`${PUBLIC_URL}/preapprove/token/`, {token: token, payload: payload});
 
     return (<> </>);
 };

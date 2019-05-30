@@ -6,6 +6,8 @@ import {pan_adhar, changeLoader, setGstProfile, setBusinessDetail} from "../../.
 import {Link, withRouter} from "react-router-dom";
 import {alertModule} from "../../../shared/commonLogic";
 
+const {PUBLIC_URL} = process.env;
+
 class AdharPan extends Component {
     state = {
         pan: '',
@@ -129,7 +131,7 @@ class AdharPan extends Component {
 
     adharSkipped = () => {
         this.setState({adhar_skip: !this.state.adhar_skip});
-        this.props.history.push('/preapprove/personaldetail');
+        this.props.history.push(`${PUBLIC_URL}/preapprove/personaldetail`);
     };
 
     _gstFetch = (gstSelected) => {
@@ -207,7 +209,7 @@ class AdharPan extends Component {
     componentWillMount() {
         const {payload, changeLoader} = this.props;
         if (payload !== Object(payload))
-            this.props.history.push("/preapprove/token");
+            this.props.history.push(`${PUBLIC_URL}/preapprove/token`);
         changeLoader(false);
     }
 
@@ -223,7 +225,7 @@ class AdharPan extends Component {
     render() {
         return (
             <>
-                <Link to={`${process.env.PUBLIC_URL}/preapprove/token`} className={"btn btn-link"}>Go Back </Link>
+                <Link to={`${PUBLIC_URL}/preapprove/token`} className={"btn btn-link"}>Go Back </Link>
                 {/*<h4 className={"text-center"}>New Customer?</h4>*/}
                 <h5 className="paragraph_styling  text-center">
                     <b>

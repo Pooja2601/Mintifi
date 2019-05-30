@@ -8,6 +8,8 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {alertModule} from "../../../shared/commonLogic";
 
+const {PUBLIC_URL} = process.env;
+
 class AdharPan extends Component {
     state = {
         f_name: '',
@@ -42,11 +44,11 @@ class AdharPan extends Component {
 
     componentWillMount() {
 
-        const {payload, authObj, adharObj, changeLoader, setAdharManual} = this.props;
+        const {payload, authObj, adharObj, changeLoader, setAdharManual, history} = this.props;
 
         if (payload !== Object(payload))
             if (adharObj !== Object(adharObj))
-                this.props.history.push(`${process.env.PUBLIC_URL}/preapprove/token`);
+                history.push(`${PUBLIC_URL}/preapprove/token`);
 
         let state = adharObj;
         if (state === Object(state))
@@ -92,7 +94,7 @@ class AdharPan extends Component {
     _formSubmit(e) {
         e.preventDefault();
         setTimeout(() => {
-            this.props.history.push(`${process.env.PUBLIC_URL}/preapprove/mobileotp`);
+            this.props.history.push(`${PUBLIC_URL}/preapprove/mobileotp`);
         }, 500);
     }
 
@@ -164,7 +166,7 @@ class AdharPan extends Component {
     render() {
         return (
             <>
-                <Link to={`${process.env.PUBLIC_URL}/preapprove/adharpan`} className={"btn btn-link"}>Go
+                <Link to={`${PUBLIC_URL}/preapprove/adharpan`} className={"btn btn-link"}>Go
                     Back </Link><br/><br/>
                 <h4 className={"text-center"}>Personal Details </h4>
                 <h5 className="paragraph_styling  text-center" style={{fontSize: '17px'}}>

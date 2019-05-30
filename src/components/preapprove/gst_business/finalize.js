@@ -7,6 +7,8 @@ import {Link, withRouter} from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
 import {alertModule} from "../../../shared/commonLogic";
 
+const {PUBLIC_URL} = process.env;
+
 class ReviewBusinessDetail extends Component {
     obj = {pan_correct: '', adhar_correct: ''};
     state = {
@@ -39,7 +41,7 @@ class ReviewBusinessDetail extends Component {
             if (adharObj !== Object(adharObj))
                 if (businessObj !== Object(businessObj))
                     if (adharObj.verified)
-                        this.props.history.push(`${process.env.PUBLIC_URL}/preapprove/token`);
+                        this.props.history.push(`${PUBLIC_URL}/preapprove/token`);
     }
 
     // needs to be at the backend
@@ -111,17 +113,17 @@ class ReviewBusinessDetail extends Component {
                 // this._updateAnchor(loan_status);
                 storeResponse(resp.response);
                 if (loan_status === 'expired' || loan_status === 'declined')
-                    history.push(`${process.env.PUBLIC_URL}/preapprove/apprejected`, {status: 'declined'});
+                    history.push(`${PUBLIC_URL}/preapprove/apprejected`, {status: 'declined'});
                 else if (loan_status === 'pending') {
-                    setTimeout(() => history.push(`${process.env.PUBLIC_URL}/preapprove/appapproved`, {status: 'pending'}), 500);
+                    setTimeout(() => history.push(`${PUBLIC_URL}/preapprove/appapproved`, {status: 'pending'}), 500);
                 }
                 else {
-                    setTimeout(() => history.push(`${process.env.PUBLIC_URL}/preapprove/appapproved`, {status: 'aip'}), 500);
+                    setTimeout(() => history.push(`${PUBLIC_URL}/preapprove/appapproved`, {status: 'aip'}), 500);
                 }
             }
             else if (resp.error === Object(resp.error)) {
                 alertModule(resp.message, 'warn');
-                history.push(`${process.env.PUBLIC_URL}/preapprove/apprejected`, {status: 'expired'});
+                history.push(`${PUBLIC_URL}/preapprove/apprejected`, {status: 'expired'});
             }
         }, (resp) => {
             changeLoader(false);

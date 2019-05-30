@@ -4,6 +4,8 @@ import {Link, withRouter} from "react-router-dom";
 import {setAdharManual} from "../../../actions/index";
 import {defaultLender, landingPayload} from '../../../shared/constants';
 
+const {PUBLIC_URL} = process.env;
+
 class AppApproved extends Component {
 
     state = {confirmed: false};
@@ -14,11 +16,11 @@ class AppApproved extends Component {
         // if (authObj !== Object(authObj))
             if (adharObj !== Object(adharObj))
                 if (businessObj !== Object(businessObj))
-                    history.push("/preapprove/token");
+                    history.push(`${PUBLIC_URL}/preapprove/token`);
     }
 
     render() {
-        let {adharObj, match, preFlightResp} = this.props;
+        let {adharObj, match, preFlightResp, history} = this.props;
 
         // if (adharObj === Object(adharObj))
         // if(preFlightResp ===Object(preFlightResp))
@@ -43,7 +45,7 @@ class AppApproved extends Component {
         let iconCss = 'fa checkCircle ';
         return (
             <>
-                {/* <button onClick={() => this.props.history.push('/BusinessDetail')} className={"btn btn-link"}>
+                {/* <button onClick={() => history.push(`${PUBLIC_URL}/BusinessDetail`)} className={"btn btn-link"}>
                     Go Back
                 </button>*/}
                 <h4 className={"text-center"}>Credit Eligibility</h4>
@@ -135,7 +137,7 @@ class AppApproved extends Component {
                         type="button"
                         disabled={!this.state.confirmed}
                         onClick={e => {
-                            // this.props.history.push('/preapprove/docsupload');
+                            // history.push(`${PUBLIC_URL}/preapprove/docsupload`);
                             document.location.href = '/preapprove/docsupload';
                         }}
                         className="form-submit btn btn-raised greenButton"
@@ -156,7 +158,7 @@ class AppApproved extends Component {
                     */}
                             <button
                                 type="button"
-                                onClick={e => this.props.history.push(`/${landingPayload.success_url}`)}
+                                onClick={e => history.push(`${PUBLIC_URL}/${landingPayload.success_url}`)}
                                 className="form-submit btn btn-raised greenButton"
                             >Back to Yatra
                             </button>

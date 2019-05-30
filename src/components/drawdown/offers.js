@@ -6,6 +6,8 @@ import {otpUrl, baseUrl} from "../../shared/constants";
 import {PrivacyPolicy, TnCPolicy} from "../../shared/policy";
 import {alertModule} from "../../shared/commonLogic";
 
+const {PUBLIC_URL} = process.env;
+
 const creditLimit = {
     "status": "success",
     "error_code": "E000",
@@ -190,7 +192,7 @@ class Offers extends Component {
     };
 
     _submitForm(e) {
-        const {payload, token, changeLoader, authObj, loanPayload} = this.props;
+        const {payload, token, changeLoader, authObj, loanPayload, history} = this.props;
         // e.preventDefault();
         this.props.changeLoader(true);
         fetch(`${baseUrl}/loans/${loanPayload.loanOffers.loan.loan_application_id}/drawdown/`, {
@@ -213,10 +215,10 @@ class Offers extends Component {
             if (resp.response === Object(resp.response)) {
                 // ToDo : uncomment this 2 lines for production
                 // this.props.DrawsetPreflight(resp.response);
-                //    setTimeout(() => this.props.history.push('/Drawdown/Thankyou'), 500);
+                //    setTimeout(() => history.push(`${PUBLIC_URL}/Drawdown/Thankyou`), 500);
             }
             // ToDo : comment this for production
-            setTimeout(() => this.props.history.push(`${process.env.PUBLIC_URL}/Drawdown/Thankyou`), 500);
+            setTimeout(() => history.push(`${PUBLIC_URL}/Drawdown/Thankyou`), 500);
 
         }, resp => {
             alertModule();
@@ -230,7 +232,7 @@ class Offers extends Component {
         const {payload, authObj, changeLoader} = this.props;
         if (payload !== Object(payload))
             if (authObj !== Object(authObj))
-                this.props.history.push(`${process.env.PUBLIC_URL}/Drawdown/`);
+                this.props.history.push(`${PUBLIC_URL}/Drawdown/`);
         changeLoader(false);
     }
 

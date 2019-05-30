@@ -7,6 +7,7 @@ import {Link, withRouter} from "react-router-dom";
 import {alertModule} from "../../../shared/commonLogic";
 
 const Timer = OTP_Timer;
+const {PUBLIC_URL} = process.env;
 
 class Auth extends Component {
     state = {
@@ -113,7 +114,7 @@ class Auth extends Component {
     render() {
         return (
             <>
-                <Link to={`${process.env.PUBLIC_URL}/preapprove/token`} className={"btn btn-link"}>Go Back </Link>
+                <Link to={`${PUBLIC_URL}/preapprove/token`} className={"btn btn-link"}>Go Back </Link>
                 <h4 className={"text-center"}>
                     Welcome Back
                 </h4>

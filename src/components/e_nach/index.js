@@ -5,6 +5,7 @@ import {changeLoader, EnachsetPayload, EnachsetAttempt} from "../../actions";
 import {alertModule} from "../../shared/commonLogic";
 import {eNachPayload, baseUrl} from "../../shared/constants";
 
+const {PUBLIC_URL} = process.env;
 
 class ENach extends Component {
 
@@ -139,7 +140,7 @@ class ENach extends Component {
                     <button
                         type="button"
                         onClick={e => this._triggerDigio()}
-                        // onClick={e => this.props.history.push(`${process.env.PUBLIC_URL}/Drawdown/Auth`)}
+                        // onClick={e => this.props.history.push(`${PUBLIC_URL}/Drawdown/Auth`)}
                         className="form-submit btn btn-raised greenButton"
                     >Initiate E-NACH
                     </button>

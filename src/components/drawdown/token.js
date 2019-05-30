@@ -5,6 +5,8 @@ import {alertModule} from '../../shared/commonLogic';
 import {connect} from "react-redux";
 import {changeLoader, DrawsetToken} from "../../actions";
 
+const {PUBLIC_URL} = process.env;
+
 class DrawLanding extends Component {
 
     componentDidMount() {
@@ -29,7 +31,7 @@ class DrawLanding extends Component {
         else {
             DrawsetToken(token, base64_decode);
             // console.log(this.props.payload);
-            setTimeout(() => history.push(`${process.env.PUBLIC_URL}/Drawdown/auth/`, {token: token, payload: base64_decode}), 500);
+            setTimeout(() => history.push(`${PUBLIC_URL}/Drawdown/auth/`, {token: token, payload: base64_decode}), 500);
         }
     }
 
@@ -51,7 +53,7 @@ class DrawLanding extends Component {
             if (resp.response === Object(resp.response))
                 if (resp.response.status === 'success') {
                     DrawsetToken(resp.response.auth.token, payload);
-                    setTimeout(() => history.push(`${process.env.PUBLIC_URL}/Drawdown/auth/`, {
+                    setTimeout(() => history.push(`${PUBLIC_URL}/Drawdown/auth/`, {
                         token: resp.response.auth.token,
                         payload: payload
                     }), 500);

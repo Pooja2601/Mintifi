@@ -9,6 +9,8 @@ import Select from "react-select";
 // import DatePicker from "react-datepicker";
 // import "react-datepicker/dist/react-datepicker.css";
 
+const {PUBLIC_URL} = process.env;
+
 class BusinessDetail extends Component {
 
     state = {
@@ -28,7 +30,7 @@ class BusinessDetail extends Component {
         e.preventDefault();
         // this.props.setBusinessDetail(this.state);
         setTimeout(() => {
-            this.props.history.push(`${process.env.PUBLIC_URL}/preapprove/finalize`);
+            this.props.history.push(`${PUBLIC_URL}/preapprove/finalize`);
         });
     }
 
@@ -76,7 +78,7 @@ class BusinessDetail extends Component {
         if (payload !== Object(payload))
             if (adharObj !== Object(adharObj))
                 if (adharObj.verified)
-                    this.props.history.push(`${process.env.PUBLIC_URL}/preapprove/token`);
+                    this.props.history.push(`${PUBLIC_URL}/preapprove/token`);
 
         if (businessObj === Object(businessObj))
             this.setState(businessObj, () => {
@@ -120,7 +122,7 @@ class BusinessDetail extends Component {
         const gstProfile = this.props.gstProfile;
         return (
             <>
-                {/*<Link to={'/preapprove/personaldetails'} className={"btn btn-link"}>Go Back </Link>*/}
+                {/*<Link to={`${PUBLIC_URL}/preapprove/personaldetails`} className={"btn btn-link"}>Go Back </Link>*/}
                 <br/><br/>
                 <h4 className={"text-center"}>Business Details</h4>
                 <p className="paragraph_styling  text-center">

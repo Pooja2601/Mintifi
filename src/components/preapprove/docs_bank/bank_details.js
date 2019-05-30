@@ -9,6 +9,8 @@ import {alertModule} from "../../../shared/commonLogic";
 // import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select'
 
+const {PUBLIC_URL} = process.env;
+
 class BankDetail extends Component {
 
     state = {
@@ -126,12 +128,12 @@ class BankDetail extends Component {
 
 
     componentWillMount() {
-        const {bankObj, gstProfile, payload, adharObj, setBankDetail, changeLoader} = this.props;
+        const {bankObj, gstProfile, payload, adharObj, setBankDetail, changeLoader, history} = this.props;
 
         if (payload !== Object(payload))
             if (adharObj !== Object(adharObj))
                 if (adharObj.verified)
-                    this.props.history.push(`${process.env.PUBLIC_URL}/preapprove/token`);
+                    history.push(`${PUBLIC_URL}/preapprove/token`);
 
         if (bankObj === Object(bankObj))
             this.setState(bankObj, () => {
@@ -156,7 +158,7 @@ class BankDetail extends Component {
         const gstProfile = this.props.gstProfile;
         return (
             <>
-                {/*<Link to={'/preapprove/personaldetails'} className={"btn btn-link"}>Go Back </Link>*/}
+                {/*<Link to={`${PUBLIC_URL}/preapprove/personaldetails`} className={"btn btn-link"}>Go Back </Link>*/}
                 <br/><br/>
                 <h4 className={"text-center"}>Bank Details</h4>
                 <p className="paragraph_styling  text-center">
@@ -261,7 +263,7 @@ class BankDetail extends Component {
                             <div className="form-group mb-3">
                                 <label htmlFor="accountType" className={"bmd-label-floating"}>Account Type *</label>
                                 <Select options={accountType}
-                                         required={true}
+                                        required={true}
                                         id="accountType"
                                         inputId={"accountType"}
                                         onBlur={() => this.validationErrorMsg()}

@@ -43,11 +43,12 @@ import ENach from "./components/e_nach";
 const {store, persistor} = configureStore();
 
 // const store = configureStore();   // without redux-persist
+const {PUBLIC_URL} = process.env;
 
 class App extends Component {
 
     render() {
-        const {PUBLIC_URL} = process.env;
+
         return (
             <Provider store={store}>
                 <PersistGate loading={null} persistor={persistor}>
