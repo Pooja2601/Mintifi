@@ -20,4 +20,4 @@ spec:
       - path: /
         backend:
           serviceName: _APP_NAME_-_CI_ENVIRONMENT_SLUG_-svc
-          servicePort: 8080
+          servicePort: 3000
