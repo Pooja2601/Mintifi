@@ -34,7 +34,7 @@ deploy_stage:
     - apply_and_rollout
   environment:
     name: qa
-    url: https://new-qa.$MY_DOMAIN
+    url: https://paywithmintifi-qa.$MY_DOMAIN
   only:
     - deploy
 
