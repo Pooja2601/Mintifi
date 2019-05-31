@@ -118,22 +118,28 @@ class MobileOtp extends Component {
     };
 
     componentDidMount() {
-        const {adharObj, payload, changeLoader, setAuth, history} = this.props;
+        const {adharObj, payload, changeLoader, setAdharManual, history, authObj} = this.props;
         if (adharObj === Object(adharObj))
             this.setState({mobile: adharObj.mobile});
-        else setAuth(this.state);
+        else setAdharManual(this.state);
 
+        console.log(JSON.stringify(authObj));
         changeLoader(false);
 
-        if (payload !== Object(payload))
+        if (payload === Object(payload)) {
             if (adharObj !== Object(adharObj))
-                history.push(`${PUBLIC_URL}/preapprove/personaldetails`);
+                history.push(`${PUBLIC_URL}/preapprove/personaldetail`);
+            if (authObj.verified)
+                history.push(`${PUBLIC_URL}/preapprove/businessdetail`);
+        }
+        else history.push(`${PUBLIC_URL}/preapprove/token`);
+
     }
 
     render() {
         return (
             <>
-                <Link to={`${PUBLIC_URL}/preapprove/personaldetails`} className={"btn btn-link"}>Go Back </Link>
+                <Link to={`${PUBLIC_URL}/preapprove/personaldetail`} className={"btn btn-link"}>Go Back </Link>
 
                 <h5 className="paragraph_styling text-center">
 
@@ -264,7 +270,8 @@ class MobileOtp extends Component {
 const mapStateToProps = state => ({
     token: state.authPayload.token,
     adharObj: state.adharDetail.adharObj,
-    payload: state.authPayload.payload
+    payload: state.authPayload.payload,
+    authObj: state.authPayload.authObj
 });
 
 export default withRouter(connect(

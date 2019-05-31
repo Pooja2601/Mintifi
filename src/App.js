@@ -53,7 +53,7 @@ class App extends Component {
             <Provider store={store}>
                 <PersistGate loading={null} persistor={persistor}>
                     {/* ToDo : Change to sub Dir name in Prod  */}
-                    <BrowserRouter basename={"./pay_mintifi_simple/build"}>
+                    <BrowserRouter basename={"./"}>
 
                         <Route
                             render={({location}) => (<>

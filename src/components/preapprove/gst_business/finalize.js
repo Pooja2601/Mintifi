@@ -36,12 +36,16 @@ class ReviewBusinessDetail extends Component {
     };
 
     componentWillMount() {
-        const {payload, authObj, adharObj, businessObj} = this.props;
-        if (payload !== Object(payload))
+        const {payload, authObj, adharObj, businessObj, history} = this.props;
+
+        if (payload === Object(payload)) {
             if (adharObj !== Object(adharObj))
-                if (businessObj !== Object(businessObj))
-                    if (adharObj.verified)
-                        this.props.history.push(`${PUBLIC_URL}/preapprove/token`);
+                history.push(`${PUBLIC_URL}/preapprove/personaldetail`);
+
+            if (businessObj !== Object(businessObj))
+                history.push(`${PUBLIC_URL}/preapprove/businessdetail`);
+        }
+        else history.push(`${PUBLIC_URL}/preapprove/token`);
     }
 
     // needs to be at the backend

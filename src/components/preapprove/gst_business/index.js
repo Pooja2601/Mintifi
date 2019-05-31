@@ -5,6 +5,7 @@ import {connect} from "react-redux";
 import {setBusinessDetail, setAdharManual, changeLoader} from "../../../actions/index";
 import {Link, withRouter} from "react-router-dom";
 import {alertModule} from "../../../shared/commonLogic";
+import {PrivacyPolicy, TnCPolicy} from "../../../shared/policy";
 import Select from "react-select";
 // import DatePicker from "react-datepicker";
 // import "react-datepicker/dist/react-datepicker.css";
@@ -21,10 +22,49 @@ class BusinessDetail extends Component {
         dealercode: '',
         missed_fields: true,
         lgnm: '',
-        tnc_consent: false
+        tnc_consent: false,
+        tncModal: false
     };
 
     validate = {companytype: false, gst: false, avgtrans: false, dealercode: false};
+
+
+    RenderModalTnC = () => {
+        return (
+            <>
+                <button type="button" style={{visibility: 'hidden'}} ref={ref => this.triggerTnCModal = ref}
+                        id={"triggerTnCModal"} data-toggle="modal"
+                        data-target="#TnCMsgModal">
+                </button>
+
+                <div className="modal fade" id={"TnCMsgModal"} tabIndex="-1"
+                     role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog modal-lg" role="document" style={{margin: '5.75rem auto'}}>
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">{(this.state.tncModal) ? 'Terms and Conditions' : 'Privacy policy'}</h5>
+                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                                {(this.state.tncModal) ? TnCPolicy({fontSize: 13}) : PrivacyPolicy({
+                                    fontSize: 13,
+                                    headSize: 1.5
+                                })}
+
+                            </div>
+                            <div className="modal-footer">
+                                {/*<button type="button" className="btn btn-primary">Save changes</button>*/}
+                                <button type="button" className="btn btn-primary" ref={ref => this.closeModal = ref}
+                                        data-dismiss="modal">Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </>);
+    };
 
     _formSubmit(e) {
         e.preventDefault();
@@ -63,7 +103,7 @@ class BusinessDetail extends Component {
     };
 
     businessGst(e) {
-        const {value} = e.target;
+        const value = e;
         if (value.length <= 15) {
             let bpan = value.substr(2, 10);
             this.setState({gst: value, bpan}, () => this.props.setBusinessDetail(this.state))
@@ -80,7 +120,8 @@ class BusinessDetail extends Component {
                 if (adharObj.verified)
                     this.props.history.push(`${PUBLIC_URL}/preapprove/token`);
 
-        if (businessObj === Object(businessObj))
+        if (businessObj === Object(businessObj)) {
+            this.businessGst(businessObj.gst);
             this.setState(businessObj, () => {
                 Object.keys(this.state).map((val, key) => {
                     if (this.validate[val] !== undefined)
@@ -88,6 +129,7 @@ class BusinessDetail extends Component {
                     // console.log(this.validate);
                 });
             });
+        }
         else setBusinessDetail(this.state);
 
         try {
@@ -186,7 +228,7 @@ class BusinessDetail extends Component {
                                     value={this.state.gst}
                                     onBlur={() => this.validationErrorMsg()}
                                     // ref={ref => (this.obj.pan = ref)}
-                                    onChange={(e) => this.businessGst(e)}
+                                    onChange={(e) => this.businessGst(e.target.value)}
                                 />
                             </div>
                         </div>
@@ -282,7 +324,15 @@ class BusinessDetail extends Component {
                             <input type="checkbox" checked={this.state.tnc_consent}
                                    onChange={(e) =>
                                        this.setState(prevState => ({tnc_consent: !prevState.tnc_consent}))
-                                   }/> I accept the Terms & Condition, <a href={"https://mintifi.com/privacy_policy"}>Privacy
+                                   }/> I accept the <a href={'#'} onClick={(e) => {
+                            e.preventDefault();
+                            this.setState({tncModal: true}, () => this.triggerTnCModal.click());
+                        }}>Terms &
+                            Condition</a>, <a href={'#'} onClick={(e) => {
+                            e.preventDefault();
+                            this.setState({tncModal: false}, () => this.triggerTnCModal.click());
+                        }}
+                                              href={"#"}>Privacy
                             Policy</a> of the Mintifi and provide the
                             consent to retrieve the Bureau information for checking my Credit worthiness .
                         </label>
@@ -298,6 +348,7 @@ class BusinessDetail extends Component {
                         </button>
                     </div>
                 </form>
+                {this.RenderModalTnC()}
             </>
         );
     }

@@ -2,7 +2,7 @@
   "name": "pay_mintifi",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://localhost/pay_mintifi_simple/build",
+  "homepage": "https://pay.mintifi.com",
   "dependencies": {
     "@material-ui/core": "^3.9.3",
     "axios": "^0.18.0",

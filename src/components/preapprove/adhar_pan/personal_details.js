@@ -44,13 +44,21 @@ class AdharPan extends Component {
 
     componentWillMount() {
 
-        const {payload, authObj, adharObj, changeLoader, setAdharManual, history} = this.props;
+        const {payload, authObj, adharObj, changeLoader, setAdharManual, history, pan} = this.props;
 
-        if (payload !== Object(payload))
-            if (adharObj !== Object(adharObj))
-                history.push(`${PUBLIC_URL}/preapprove/token`);
+        if (payload === Object(payload)) {
+            if (pan !== undefined)
+                history.push(`${PUBLIC_URL}/preapprove/adharpan`);
+        }
+        else
+            history.push(`${PUBLIC_URL}/preapprove/token`);
 
         let state = adharObj;
+
+        if (authObj === Object(authObj))
+            if (authObj.verified)
+                state.mobile = authObj.mobile;
+
         if (state === Object(state))
             this.setState(state, () => {
                 Object.keys(this.state).map((val, key) => {
@@ -619,6 +627,7 @@ class AdharPan extends Component {
 }
 
 const mapStateToProps = state => ({
+    pan: state.adharDetail.pan,
     authObj: state.authPayload.authObj,
     payload: state.authPayload.payload,
     adharObj: state.adharDetail.adharObj,

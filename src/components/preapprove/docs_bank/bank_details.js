@@ -70,7 +70,7 @@ class BankDetail extends Component {
            this.handleValidation();
        }*/
 
-    submitForm(e) {
+    _formSubmit = (e) => {
         e.preventDefault();
         const {changeLoader, token, payload, preFlightResp, adharObj, history} = this.props;
         changeLoader(true);
@@ -151,12 +151,16 @@ class BankDetail extends Component {
 
 
     componentWillMount() {
-        const {bankObj, gstProfile, payload, adharObj, setBankDetail, changeLoader, history} = this.props;
+        const {bankObj, gstProfile, payload, adharObj, setBankDetail, changeLoader, history, businessObj} = this.props;
 
-        if (payload !== Object(payload))
+        if (payload === Object(payload)) {
             if (adharObj !== Object(adharObj))
-                if (adharObj.verified)
-                    history.push(`${PUBLIC_URL}/preapprove/token`);
+                history.push(`${PUBLIC_URL}/preapprove/personaldetail`);
+
+            if (businessObj !== Object(businessObj))
+                history.push(`${PUBLIC_URL}/preapprove/businessdetail`);
+        }
+        else history.push(`${PUBLIC_URL}/preapprove/token`);
 
         if (bankObj === Object(bankObj))
             this.setState(bankObj, () => {

@@ -12,8 +12,9 @@ class ThankYou extends Component {
 
         const {payload, authObj, changeLoader} = this.props;
         if (payload !== Object(payload))
-            if (authObj !== Object(authObj))
-                this.props.history.push(`${PUBLIC_URL}/Drawdown/`);
+            this.props.history.push(`${PUBLIC_URL}/drawdown/`);
+        if (authObj !== Object(authObj))
+            this.props.history.push(`${PUBLIC_URL}/drawdown/auth`);
         changeLoader(false);
     }
 
@@ -31,7 +32,7 @@ class ThankYou extends Component {
 
             return (
                 <>
-                    {/* <button onClick={() => history.push(`${PUBLIC_URL}/BusinessDetail`)} className={"btn btn-link"}>
+                    {/* <button onClick={() => history.push(`${PUBLIC_URL}/businessdetail`)} className={"btn btn-link"}>
                     Go Back
                 </button>*/}
                     <i style={{fontSize: '60px'}} className={"fa fa-check-circle checkCircle"}></i>
@@ -97,7 +98,7 @@ class ThankYou extends Component {
                     <div className="mt-5 mb-5 text-center ">
                         <button
                             type="button"
-                            onClick={e => history.push(`${PUBLIC_URL}/Drawdown/Auth`)}
+                            onClick={e => history.push(`${PUBLIC_URL}/drawdown/auth`)}
                             className="form-submit btn btn-raised greenButton"
                         >Alright
                         </button>

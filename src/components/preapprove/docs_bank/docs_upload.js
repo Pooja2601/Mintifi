@@ -264,12 +264,19 @@ class DocsUpload extends Component {
 
     componentWillMount() {
 
-        const {payload, authObj, adharObj, businessObj, changeLoader} = this.props;
+        const {payload, authObj, adharObj, businessObj, changeLoader, token, history} = this.props;
         changeLoader(false);
-        if (payload !== Object(payload))
+        if (!token)
+            history.push(`${PUBLIC_URL}/preapprove/token`);
+
+        if (payload === Object(payload)) {
             if (adharObj !== Object(adharObj))
-                if (businessObj !== Object(businessObj))
-                    this.props.history.push(`${PUBLIC_URL}/preapprove/token`);
+                history.push(`${PUBLIC_URL}/preapprove/personaldetail`);
+
+            if (businessObj !== Object(businessObj))
+                history.push(`${PUBLIC_URL}/preapprove/businessdetail`);
+        }
+        else history.push(`${PUBLIC_URL}/preapprove/token`);
 
         // console.log(adharObj);
         // console.log(payload);

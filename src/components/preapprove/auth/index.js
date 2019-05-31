@@ -26,6 +26,7 @@ class Auth extends Component {
         mobile: '',
         otp: '',
         otp_reference_id: '',
+        otp_sent: false,
         verified: false,
         mobile_correct: false
     };
@@ -33,15 +34,27 @@ class Auth extends Component {
     // To Redirect the Page to the concerned Pages
     _existingSection() {
 
-        let {payload, changeLoader} = this.props;
+        let {
+            payload, changeLoader, history, setAdharManual,
+            setBusinessDetail,
+            setBankDetail,
+            pan_adhar,
+        } = this.props;
         // ToDo : uncomment in prod;
         payload = landingPayload;
+
         changeLoader(true);
-        fetch(`${baseUrl2}/agents/${payload.anchor_id}/loan_applications`, {}).then((resp) => {
+        fetch(`${baseUrl2}/agents/${payload.anchor_id}/loan_applications`).then((resp) => {
             changeLoader(false);
 
             if (resp.response === Object(resp.response)) {
-
+                //ToDo : Adding responses into States
+                // setAdharManual,
+                // setBusinessDetail,
+                // setBankDetail,
+                // pan_adhar,
+                setTimeout(() => history.push(`${PUBLIC_URL}/preapprove/personaldetail`));
+                // / Goes to New Page
             }
 
         }, () => {
@@ -52,50 +65,51 @@ class Auth extends Component {
     }
 
     _formSubmit(e) {
-
         e.preventDefault();
         clearInterval(this.interval);
 
         const {changeLoader, token, setAuth} = this.props;
         changeLoader(true);
         this.setState({loading: true, submitted: true, timer: Timer});
-        fetch(`${otpUrl}/send_otp`, {
-            method: "POST",
-            headers: {'Content-Type': 'application/json', token: token},
-            body: JSON.stringify({
-                "app_id": 3,
-                "otp_type": "one_time_password",
-                "mobile_number": this.state.mobile,
-                "timestamp": new Date()
-            })
-        }).then(resp => resp.json()).then(resp => {
-            // console.log(JSON.stringify(resp));
-            changeLoader(false);
-            if (resp.error === Object(resp.error)) {
-                alertModule(resp.error.message, 'warn');
-                this.setState({loading: false, submitted: false});
-            }
-            else if (resp.response === Object(resp.response)) {
-                // alert(resp.success.message);
-                this.setState({otp_reference_id: resp.response.otp_reference_code}, () => setAuth(this.state));
-                this.interval = setInterval(e => {
-                    this.setState({timer: this.state.timer - 1}, () => {
-                        if (this.state.timer === 0) {
-                            this.setState({loading: false, submitted: false, timer: Timer});
-                            clearInterval(this.interval);
-                        }
-                    });
-                }, 1000);
-            }
-        }, resp => {
-            alertModule();
-            changeLoader(false);
-        });
+        if (!this.state.otp_sent)
+            fetch(`${otpUrl}/send_otp`, {
+                method: "POST",
+                headers: {'Content-Type': 'application/json', token: token},
+                body: JSON.stringify({
+                    "app_id": 3,
+                    "otp_type": "one_time_password",
+                    "mobile_number": this.state.mobile,
+                    "timestamp": new Date()
+                })
+            }).then(resp => resp.json()).then(resp => {
+                // console.log(JSON.stringify(resp));
+                changeLoader(false);
+                if (resp.error === Object(resp.error)) {
+                    alertModule(resp.error.message, 'warn');
+                    this.setState({loading: false, submitted: false, otp_sent: false});
+                }
+                else if (resp.response === Object(resp.response)) {
+                    // alert(resp.success.message);
+                    this.setState({otp_reference_id: resp.response.otp_reference_code}, () => setAuth(this.state));
+                    this.interval = setInterval(e => {
+                        this.setState({timer: this.state.timer - 1}, () => {
+                            if (this.state.timer === 0) {
+                                this.setState({loading: false, submitted: false, timer: Timer, otp_sent: true});
+                                clearInterval(this.interval);
+                            }
+                        });
+                    }, 1000);
+                }
+            }, resp => {
+                alertModule();
+                changeLoader(false);
+            });
         // this.props.sendOTP(this.state.mobile);
     }
 
     _verifyOTP(e) {
-        const {changeLoader, token, authObj, setAuth} = this.props;
+        e.preventDefault();
+        const {changeLoader, token, authObj, setAuth, history} = this.props;
         changeLoader(true);
         fetch(otpUrl + '/verify_otp ', {
             method: "POST",
@@ -109,14 +123,18 @@ class Auth extends Component {
             })
         }).then(resp => resp.json()).then(resp => {
             changeLoader(false);
+            this.setState({otp_sent: false});
             if (resp.error === Object(resp.error))
                 alertModule(resp.error.message, 'warn');
             else if (resp.response === Object(resp.response)) {
-                this.setState({verified: resp.response.is_otp_verified});
-                setAuth(this.state);
+                this.setState({verified: resp.response.is_otp_verified}, () => setAuth(this.state));
+
                 if (resp.response.is_otp_verified)
-                    setTimeout(() => this._existingSection(), 500);
-// Goes to New Page
+                // Todo : uncomment in prod
+                // setTimeout(() => this._existingSection(), 500);
+                // ToDo : comment in Prod
+                    setTimeout(() => history.push(`${PUBLIC_URL}/preapprove/personaldetail`));
+
             }
         }, resp => {
             alertModule();

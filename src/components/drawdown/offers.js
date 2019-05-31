@@ -230,9 +230,11 @@ class Offers extends Component {
         // ToDo : comment this developement
         // this._fetchInformation();
         const {payload, authObj, changeLoader} = this.props;
+
+        if (authObj !== Object(authObj))
+            this.props.history.push(`${PUBLIC_URL}/drawdown/auth`);
         if (payload !== Object(payload))
-            if (authObj !== Object(authObj))
-                this.props.history.push(`${PUBLIC_URL}/Drawdown/`);
+            this.props.history.push(`${PUBLIC_URL}/drawdown/`);
         changeLoader(false);
     }
 
@@ -384,11 +386,11 @@ class Offers extends Component {
                                    this.setState(prevState => ({tnc_consent: !prevState.tnc_consent}), () => console.log(this.state.tnc_consent))
                                }/> I accept the <a href={'#'} onClick={(e) => {
                         e.preventDefault();
-                        this.setState({tncModal: false}, () => this.triggerTnCModal.click());
+                        this.setState({tncModal: true}, () => this.triggerTnCModal.click());
                     }}>Terms &
                         Condition</a>, <a href={'#'} onClick={(e) => {
                         e.preventDefault();
-                        this.setState({tncModal: true}, () => this.triggerTnCModal.click());
+                        this.setState({tncModal: false}, () => this.triggerTnCModal.click());
                     }}
                                           href={"#"}>Privacy
                         Policy</a> of the Mintifi and agree upon the selected the EMI Tenure .

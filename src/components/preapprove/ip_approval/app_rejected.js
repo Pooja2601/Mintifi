@@ -8,6 +8,19 @@ const {PUBLIC_URL} = process.env;
 
 class AppRejected extends Component {
 
+    componentWillMount() {
+        const {payload, authObj, adharObj, businessObj, history} = this.props;
+
+        if (payload === Object(payload)) {
+            if (adharObj !== Object(adharObj))
+                history.push(`${PUBLIC_URL}/preapprove/personaldetail`);
+
+            if (businessObj !== Object(businessObj))
+                history.push(`${PUBLIC_URL}/preapprove/businessdetail`);
+        }
+        else history.push(`${PUBLIC_URL}/preapprove/token`);
+    }
+
     render() {
         let {match, adharObj, preFlightResp, history} = this.props;
         // ToDo :  Hide it in Prod
