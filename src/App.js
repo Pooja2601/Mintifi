@@ -18,7 +18,6 @@ import Error from "./shared/error";
 import Privacy from "./shared/privacy_policy";
 import Index from "./components/";
 import Login from "./components/landing";
-import Auth from "./components/preapprove/auth";
 import AdharPan from "./components/preapprove/adhar_pan";
 import PersonalDetail from "./components/preapprove/adhar_pan/personal_details";
 import MobileOTP from "./components/preapprove/adhar_pan/mobile_otp";
@@ -29,6 +28,10 @@ import AppApproved from "./components/preapprove/ip_approval/app_approved";
 import DocsUpload from "./components/preapprove/docs_bank/docs_upload";
 import BankDetail from "./components/preapprove/docs_bank/bank_details";
 import ThankYou from "./components/preapprove/ip_approval/thank_you";
+
+//Existing User
+import Auth from "./components/preapprove/exist_user";
+// import Dashboard from "./components/preapprove/exist_user/dashboard";
 
 //Drawdown
 import DrawIndex from "./components/drawdown/";
@@ -118,6 +121,8 @@ class App extends Component {
                                                        component={Login}/>
                                                 <Route path={`${PUBLIC_URL}/preapprove/auth/`}
                                                        component={Auth}/>
+                                                {/*<Route path={`${PUBLIC_URL}/preapprove/dashboard/`}
+                                                       component={Dashboard}/>*/}
                                                 <Route path={`${PUBLIC_URL}/preapprove/adharpan`}
                                                        component={AdharPan}/>
                                                 <Route path={`${PUBLIC_URL}/preapprove/personaldetail`}

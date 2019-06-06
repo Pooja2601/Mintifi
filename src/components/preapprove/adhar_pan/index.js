@@ -122,7 +122,7 @@ class AdharPan extends Component {
     _setGST = () => {
         Object.keys(this.state.checked).map((val) => {
             this.gstDetails.gst = this.state.gst_details[val].gstinId;
-        })
+        });
         this.props.setBusinessDetail(this.gstDetails);
         this._gstFetch(this.gstDetails.gst);
         // setTimeout(() => console.log(JSON.stringify(this.props.businessObj)), 1000);
@@ -130,7 +130,7 @@ class AdharPan extends Component {
     };
 
     adharSkipped = () => {
-        this.setState({adhar_skip: !this.state.adhar_skip});
+        // this.setState({adhar_skip: !this.state.adhar_skip});
         this.props.history.push(`${PUBLIC_URL}/preapprove/personaldetail`);
     };
 
@@ -152,15 +152,17 @@ class AdharPan extends Component {
                 else {
                     const {company_details} = resp.response;
                     setGstProfile(company_details);
-                    Object.keys(BusinessType).map((val, key) => {
-                        if (BusinessType[val].localeCompare(company_details.ctb) === 0)
-                            this.gstDetails.companytype = val;
+                    BusinessType.map((val, key) => {
+                        if (company_details.ctb !== undefined)
+                            if (val.label.localeCompare(company_details.ctb) === 0)
+                                this.gstDetails.companytype = val.value;
                     });
 
                     this.gstDetails.lgnm = company_details.lgnm;
                     setBusinessDetail(this.gstDetails);
 
-                    console.log(JSON.stringify(this.gstDetails)); // status 101
+                    // console.log(this.gstDetails); // status 101
+                    // console.log(JSON.stringify(company_details)); // status 101
                 }
                 setTimeout(() => this.adharSkipped(), 500);
             }, () => {

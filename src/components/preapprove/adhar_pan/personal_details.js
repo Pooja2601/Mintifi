@@ -46,8 +46,9 @@ class AdharPan extends Component {
 
         const {payload, authObj, adharObj, changeLoader, setAdharManual, history, pan} = this.props;
 
+        // console.log(pan)
         if (payload === Object(payload)) {
-            if (pan !== undefined)
+            if (!pan)
                 history.push(`${PUBLIC_URL}/preapprove/adharpan`);
         }
         else
@@ -72,7 +73,7 @@ class AdharPan extends Component {
         setTimeout(() => {
             this._loadGstProfile();
             this.handleValidation();
-            console.log(adharObj);
+            // console.log(adharObj);
         }, 1000);
         changeLoader(false);
 
