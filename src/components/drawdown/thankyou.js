@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {Link, withRouter} from "react-router-dom";
 import {changeLoader, setAdharManual} from "../../actions";
-import {defaultLender} from '../../shared/constants';
+import {defaultLender, environment} from '../../shared/constants';
 
 const {PUBLIC_URL} = process.env;
 
@@ -20,13 +20,16 @@ class ThankYou extends Component {
 
     render() {
         let {payload, match, preFlightResp, loanPayload, authObj, history} = this.props;
+
         if (payload === Object(payload)) {
 
-            // ToDo : Comment the below code in production
             let {f_name, l_name} = payload;
-            f_name = 'Mahesh';
-            l_name = 'Pai';
 
+            // ToDo : Comment the below code in production
+            if (environment === 'dev') {
+                f_name = 'Mahesh';
+                l_name = 'Pai';
+            }
             // ToDo : make it const in prod.
             let {creditLimit, loanStatus, loanOffers} = loanPayload;
 

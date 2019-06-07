@@ -1,6 +1,8 @@
 // import React from 'react';
 
 module.exports = {
+    environment: 'dev', // dev , prod , static,
+    payMintifiUrl: (this.environment === 'prod') ? 'https://pay.mintifi.com' : 'https://pay-test.mintifi.com',
     baseUrl: "https://test.mintifi.com/api/v1",
     baseUrl2: "https://test.mintifi.com/api/v2",
     loanUrl: "https://test.mintifi.com/api/loan/v1",
@@ -50,16 +52,15 @@ module.exports = {
         "cancel_url": 'http://localhost',
     },
     eNachPayload: {
-        "mandate_id": "ENA1905241743051373W7G6CY5YAFMAP",
-        "user_name": "Mohan Das",
-        "user_mobile": "7892517116",
-        "user_email": "mohan.das@gmail.com",
-        "loan_application_id": '1005',
-        "company_id": '940',
+        "mandate_id": "ENA190607121623999YUPG9VAMFRXWAP",
+        "user_name": "Arun Garg",
+        "user_mobile": "9738361083",
+        "loan_application_id": 2314,
+        "company_id": 700,
         "anchor_id": "uyh65t",
-        "success_url": "https://success_url",
-        "cancel_url": "https://cancel_url",
-        "error_url": "https://error_url"
+        "success_url": "http://pay.mintifi.com/",
+        "cancel_url": "http://pay.mintifi.com/",
+        "error_url": "http://pay.mintifi.com/"
     },
     drawdownPayload: {
         "anchor_id": "uyh65t",

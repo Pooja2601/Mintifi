@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {Link, withRouter} from "react-router-dom";
 import {setAdharManual} from "../../../actions/index";
-import {defaultLender, landingPayload} from '../../../shared/constants';
+import {defaultLender, environment, landingPayload} from '../../../shared/constants';
 
 const {PUBLIC_URL} = process.env;
 
@@ -30,20 +30,22 @@ class AppApproved extends Component {
         // if(preFlightResp ===Object(preFlightResp))
         // {
         const {f_name, l_name} = adharObj;
-        // const {loan_application_id, credit_eligibility} = preFlightResp;
+        let {loan_application_id, credit_eligibility} = preFlightResp;
 
         // ToDo : Hide Start (in Prod)
-        const load_status = 'bank_approved';  // pending // bank_approved
-        let credit_eligibility = {
-            product_offered: 'LoC',
-            loan_status: load_status,
-            loan_amount_approved: '500000',
-            // loan_tenor: '16',
-            roi: '7',
-            emi: '33440'
-        };
-        let loan_application_id = 1740;
-        match = {params: {status: load_status}};
+        if (environment === 'dev') {
+            const load_status = 'bank_approved';  // pending // bank_approved
+            credit_eligibility = {
+                product_offered: 'LoC',
+                loan_status: load_status,
+                loan_amount_approved: '500000',
+                loan_tenor: '16',
+                roi: '7',
+                emi: '33440'
+            };
+            loan_application_id = 1740;
+            match = {params: {status: load_status}};
+        }
         // ToDo : Hide Ends here
 
         let iconCss = 'fa checkCircle ';
@@ -83,7 +85,6 @@ class AppApproved extends Component {
                     <b className={"text-center"}> Your Credit Line details are as below:</b><br/>
                     <div
                         className={(match.params.status === 'pending') ? 'alert alert-info' : 'alert alert-success'}>
-
                         <table width="100%" style={{margin: 'auto 10%'}}>
                             <tbody>
                             {/*<tr>

@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import {changeLoader, DrawsetLoanPayload, DrawsetPreflight} from "../../actions";
-import {otpUrl, baseUrl} from "../../shared/constants";
+import {otpUrl, baseUrl, environment} from "../../shared/constants";
 import {PrivacyPolicy, TnCPolicy} from "../../shared/policy";
 import {alertModule} from "../../shared/commonLogic";
 
@@ -192,7 +192,7 @@ class Offers extends Component {
     };
 
     _submitForm(e) {
-        const {payload, token, changeLoader, authObj, loanPayload, history} = this.props;
+        const {payload, token, changeLoader, authObj, loanPayload, history, DrawsetPreflight} = this.props;
         // e.preventDefault();
         this.props.changeLoader(true);
         fetch(`${baseUrl}/loans/${loanPayload.loanOffers.loan.loan_application_id}/drawdown/`, {
@@ -214,11 +214,14 @@ class Offers extends Component {
             changeLoader(false);
             if (resp.response === Object(resp.response)) {
                 // ToDo : uncomment this 2 lines for production
-                // this.props.DrawsetPreflight(resp.response);
-                //    setTimeout(() => history.push(`${PUBLIC_URL}/Drawdown/Thankyou`), 500);
+                if (environment === 'prod') {
+                    DrawsetPreflight(resp.response);
+                    setTimeout(() => history.push(`${PUBLIC_URL}/drawdown/thankyou`), 500);
+                }
             }
             // ToDo : comment this for production
-            setTimeout(() => history.push(`${PUBLIC_URL}/Drawdown/Thankyou`), 500);
+            if (environment === 'dev')
+                setTimeout(() => history.push(`${PUBLIC_URL}/drawdown/thankyou`), 500);
 
         }, resp => {
             alertModule();
@@ -227,23 +230,27 @@ class Offers extends Component {
     }
 
     componentWillMount() {
-        // ToDo : comment this developement
-        // this._fetchInformation();
-        const {payload, authObj, changeLoader} = this.props;
+        // ToDo : comment this development
+        if (environment === 'prod')
+            this._fetchInformation();
+        const {payload, authObj, changeLoader, history} = this.props;
 
         if (authObj !== Object(authObj))
-            this.props.history.push(`${PUBLIC_URL}/drawdown/auth`);
+            history.push(`${PUBLIC_URL}/drawdown/auth`);
         if (payload !== Object(payload))
-            this.props.history.push(`${PUBLIC_URL}/drawdown/`);
+            history.push(`${PUBLIC_URL}/drawdown/`);
         changeLoader(false);
     }
 
     componentDidMount() {
-        this.props.changeLoader(false);
+        const {DrawsetLoanPayload, DrawsetPreflight, changeLoader} = this.props;
+        changeLoader(false);
 
-        // ToDo : uncomment this 2 lines for developement
-        this.props.DrawsetLoanPayload({loanOffers: loanOffers, loanStatus: loanStatus, creditLimit: creditLimit});
-        this.props.DrawsetPreflight(preFlightResp);
+        // ToDo : uncomment this 2 lines for development
+        if (environment === 'dev') {
+            DrawsetLoanPayload({loanOffers: loanOffers, loanStatus: loanStatus, creditLimit: creditLimit});
+            DrawsetPreflight(preFlightResp);
+        }
     }
 
     render() {
@@ -251,16 +258,19 @@ class Offers extends Component {
         let cardBox = 'card card-body mt-1 ml-1 list-group-item list-group-item-action flex-column align-items-start';
         // ToDo :  make the line const in prod.
         let {payload, loanPayload} = this.props;
-        // ToDo :  uncomment in prod make it prod.
-        // let {loanOffers, loanStatus, creditLimit} = loanPayload;
+
+        // ToDo :  uncomment in prod & make it const.
+        let {loanOffers, loanStatus, creditLimit} = loanPayload;
 
         if (payload === Object(payload)) {
-            // ToDo :  comment this  line in prod.
+
             let {f_name, l_name} = payload;
 
             // ToDo :  comment this 2 line in prod.
-            f_name = 'Mahesh';
-            l_name = 'Pai';
+            if (environment === 'dev') {
+                f_name = 'Mahesh';
+                l_name = 'Pai';
+            }
 
             return (<>
                 <h4 className={"text-center"}>Loan Offers</h4>

@@ -1,10 +1,10 @@
 import React, {Component} from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
-import {baseUrl, accountType, loanUrl} from "../../../shared/constants";
+import {baseUrl, accountType, loanUrl, payMintifiUrl} from "../../../shared/constants";
 import {connect} from "react-redux";
 import {setBankDetail, changeLoader} from "../../../actions/index";
 import {Link, withRouter} from "react-router-dom";
-import {alertModule} from "../../../shared/commonLogic";
+import {alertModule, base64Logic} from "../../../shared/commonLogic";
 // import DatePicker from "react-datepicker";
 // import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select'
@@ -57,7 +57,6 @@ class BankDetail extends Component {
         console.log(ctrerror);
         missed_fields = (ctrerror !== 0);
         this.setState({missed_fields}, () => console.log('All Fields Validated : ' + this.state.missed_fields));
-
     };
 
     /*   businessGst(e) {
@@ -73,54 +72,64 @@ class BankDetail extends Component {
     _formSubmit = (e) => {
         e.preventDefault();
         const {changeLoader, token, payload, preFlightResp, adharObj, history} = this.props;
-        changeLoader(true);
-        fetch(`${baseUrl}/bank_account`, {
-            method: "POST",
-            headers: {"Content-Type": "application/json", "token": token},
-            body: JSON.stringify({
-                "app_id": 3,
-                "loan_application_id": preFlightResp.loan_application_id,
-                "company_id": preFlightResp.company_id,
-                "anchor_id": payload.anchor_id,
-                "bank_name": this.state.bank_name,
-                "account_number": this.state.acc_number,
-                "account_name": this.state.acc_name,
-                "ifsc_code": this.state.ifsc_code,
-                "transfer_mode": "nach",
-                "micr_code": this.state.micr_code,
-                "account_type": this.state.acc_type,
-                "timestamp": new Date()
-            })
-        }).then((resp) => {
+        if (preFlightResp === Object(preFlightResp)) {
             changeLoader(true);
-            // success
-            if (resp.response === Object(resp.response)) {
-                // resp.response.mandate_id
-                // ToDo : make it base64 payload
-                let payloadDecrypt = {
-                    ...payload,
-                    user_name: adharObj.f_name + ' ' + adharObj.l_name,
-                    user_mobile: adharObj.mobile,
-                    user_email: adharObj.email,
-                    mandate_id: resp.response.mandate_id,
-                    loan_application_id: preFlightResp.loan_application_id,
-                    company_id: preFlightResp.company_id
-                };
-                let base64_decode = (payload !== undefined) ? JSON.stringify(new Buffer(payloadDecrypt).toString('base64')) : '';
-                setTimeout(() => history.push(`${PUBLIC_URL}/enach`, {
-                    token: token,
-                    payload: base64_decode
-                }));
-            }
-            // error
-            if (resp.error === Object(resp.error)) {
-                alertModule(resp.error.message, 'warn');
-            }
+            fetch(`${baseUrl}/bank_account`, {
+                method: "POST",
+                headers: {"Content-Type": "application/json", "token": token},
+                body: JSON.stringify({
+                    "app_id": 3,
+                    "loan_application_id": preFlightResp.loan_application_id,
+                    "company_id": preFlightResp.company_id,
+                    "anchor_id": payload.anchor_id,
+                    "bank_name": this.state.bank_name,
+                    "account_number": this.state.acc_number,
+                    "account_name": this.state.acc_name,
+                    "ifsc_code": this.state.ifsc_code,
+                    "transfer_mode": "nach",
+                    "micr_code": this.state.micr_code,
+                    "account_type": this.state.acc_type,
+                    "success_url": `${payMintifiUrl}/enach/success_url`,
+                    "error_url": `${payMintifiUrl}/enach/error_url`,
+                    "cancel_url": `${payMintifiUrl}/enach/cancel_url`,
+                    "timestamp": new Date()
+                })
+            }).then((resp) => {
+                changeLoader(true);
+                // success
+                if (resp.response === Object(resp.response)) {
+                    // resp.response.mandate_id
+                    // ToDo : make it base64 payload
+                    let payloadDecrypt = {
+                        ...payload,
+                        user_name: adharObj.f_name + ' ' + adharObj.l_name,
+                        user_mobile: adharObj.mobile,
+                        user_email: adharObj.email,
+                        mandate_id: resp.response.mandate_id,
+                        loan_application_id: preFlightResp.loan_application_id,
+                        company_id: preFlightResp.company_id,
+                        success_url: `${payMintifiUrl}/enach/success_url`,
+                        error_url: `${payMintifiUrl}/enach/error_url`,
+                        cancel_url: `${payMintifiUrl}/enach/cancel_url`
+                    };
+                    let base64_decode = base64Logic(payloadDecrypt, 'encode');
+                    setTimeout(() => history.push(`${PUBLIC_URL}/enach?payload=${base64_decode}&token=${token}`));
+                    /* setTimeout(() => history.push(`${PUBLIC_URL}/enach`, {
+                         token: token,
+                         payload: base64_decode
+                     }));*/
+                }
+                // error
+                if (resp.error === Object(resp.error)) {
+                    alertModule(resp.error.message, 'warn');
+                }
 
-        }, (resp) => {
-            alertModule();
-            changeLoader(false);
-        })
+            }, (resp) => {
+                alertModule();
+                changeLoader(false);
+            })
+        }
+        else alertModule("Something went wrong with the Request", 'warn');
     }
 
     _fetchIFSC(ifsc) {

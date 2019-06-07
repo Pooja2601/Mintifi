@@ -111,7 +111,6 @@ class ReviewBusinessDetail extends Component {
         }).then(resp => resp.json()).then(resp => {
             changeLoader(false);
             if (resp.response === Object(resp.response)) {
-                //ToDo : POST request to anchor for notifiing the Status
 
                 let {loan_status} = resp.response.credit_eligibility;
                 // this._updateAnchor(loan_status);
@@ -136,7 +135,6 @@ class ReviewBusinessDetail extends Component {
         });
     }
 
-    //ToDo : Fetching info of the Business Information and Credit Line Check
     componentDidMount() {
 
         const {adharObj, adhar, pan, businessObj} = this.props;

@@ -3,10 +3,6 @@ import {withRouter} from "react-router-dom";
 // import {withSnackbar} from "material-ui-snackbar-provider";
 
 let paths;
-// regexB, regexP, regexA;
-// regexB = new RegExp("BusinessLoan");
-// regexP = new RegExp("PersonalLoan");
-// regexA = new RegExp("Auth");
 
 const ScrollToTop = ({history, children}) => {
     useEffect(() => {

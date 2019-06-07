@@ -1,10 +1,10 @@
 import React, {Component} from "react";
 import {Link, withRouter} from 'react-router-dom';
 // import {GetinTouch} from "../../shared/getin_touch";
-import {baseUrl, landingPayload} from "../shared/constants";
+import {baseUrl, landingPayload, environment} from "../shared/constants";
 import {connect} from "react-redux";
 import {checkExists, setToken, changeLoader} from "../actions";
-import {alertModule} from "../shared/commonLogic";
+import {alertModule, base64Logic} from "../shared/commonLogic";
 
 const Timer = 10;
 const {PUBLIC_URL} = process.env;
@@ -14,18 +14,24 @@ class Login extends Component {
     componentDidMount() {
         this.props.changeLoader(false);
         const {setToken, match, payload} = this.props;
-        let base64_decode = (match.params.payload !== undefined) ? JSON.parse(new Buffer(match.params.payload, 'base64').toString('ascii')) : {};
+        // let base64_decode = (match.params.payload !== undefined) ? JSON.parse(new Buffer(match.params.payload, 'base64').toString('ascii')) : {};
+        let base64_decode, payloadData;
 
-        // ToDo : hide it in Prod
-        base64_decode = landingPayload;
+        if (environment === 'dev')
+            payloadData = payload;
+        else payloadData = match.params.payload;
 
-        if (match.params.token !== undefined && payload !== Object(payload))
+        if (environment === 'dev')
+            base64_decode = landingPayload; // ToDo : hide it in Prod
+        else base64_decode = base64Logic(payloadData, 'decode');
+
+        if (match.params.token !== undefined && payloadData !== Object(payloadData))
             alertModule("You cannot access this page directly without Appropriate Permission!!", 'warn');
         else setToken(match.params.token, base64_decode);
         // console.log(this.props.token);
     }
 
-    // ToDo : Not useful in Prod
+    // ToDo : Not useful in Live Production
     _generateToken() {
         // ToDo : make it const in Prod
         let {changeLoader, setToken, payload} = this.props;

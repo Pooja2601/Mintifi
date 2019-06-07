@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {Link, withRouter} from "react-router-dom";
-import {landingPayload} from "../../../shared/constants";
+import {environment, landingPayload} from "../../../shared/constants";
 import {pan_adhar, setAdharManual, setBusinessDetail} from "../../../actions/index";
 
 const {PUBLIC_URL} = process.env;
@@ -24,6 +24,7 @@ class AppRejected extends Component {
     render() {
         let {match, adharObj, preFlightResp, history} = this.props;
         // ToDo :  Hide it in Prod
+        if (environment === 'dev')
         match = {params: {status: 'declined'}};  // declined  // expired
 
         return (

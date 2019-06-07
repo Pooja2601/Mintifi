@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {withRouter} from "react-router-dom";
-import {baseUrl, drawdownPayload} from "../../shared/constants";
-import {alertModule} from '../../shared/commonLogic';
+import {baseUrl, drawdownPayload, environment} from "../../shared/constants";
+import {alertModule, base64Logic} from '../../shared/commonLogic';
 import {connect} from "react-redux";
 import {changeLoader, DrawsetToken} from "../../actions";
 
@@ -15,11 +15,11 @@ class DrawLanding extends Component {
         const {token, payload} = match.params;
         changeLoader(false);
 
-        let base64_decode = (payload !== undefined) ? JSON.parse(new Buffer(payload, 'base64').toString('ascii')) : {};
+        let base64_decode = base64Logic(payload, 'decode');
 
 // ToDo : comment in production
-        base64_decode = drawdownPayload;
-
+        if (environment === 'dev')
+            base64_decode = drawdownPayload;
 
         if (base64_decode !== Object(base64_decode))
             alertModule('You cannot access this page directly without Authorised Session!!', 'error');

@@ -190,7 +190,6 @@ class ReviewBusinessDetail extends Component {
         }
     }
 
-    //ToDo : Fetching info of the Business Information and Credit Line Check
     componentDidMount() {
 
         const {adharObj, adhar, pan, businessObj} = this.props;

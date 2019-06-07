@@ -31,7 +31,7 @@ import ThankYou from "./components/preapprove/ip_approval/thank_you";
 
 //Existing User
 import Auth from "./components/preapprove/exist_user";
-// import Dashboard from "./components/preapprove/exist_user/dashboard";
+import Dashboard from "./components/preapprove/exist_user/dashboard";
 
 //Drawdown
 import DrawIndex from "./components/drawdown/";
@@ -42,6 +42,9 @@ import DrawThankYou from "./components/drawdown/thankyou";
 
 //E-NACH
 import ENach from "./components/e_nach";
+import SuccessUrl from "./components/e_nach/success_url";
+import ErrorUrl from "./components/e_nach/error_url";
+import CancelUrl from "./components/e_nach/cancel_url";
 
 const {store, persistor} = configureStore();
 
@@ -121,8 +124,8 @@ class App extends Component {
                                                        component={Login}/>
                                                 <Route path={`${PUBLIC_URL}/preapprove/auth/`}
                                                        component={Auth}/>
-                                                {/*<Route path={`${PUBLIC_URL}/preapprove/dashboard/`}
-                                                       component={Dashboard}/>*/}
+                                                <Route path={`${PUBLIC_URL}/preapprove/dashboard/`}
+                                                       component={Dashboard}/>
                                                 <Route path={`${PUBLIC_URL}/preapprove/adharpan`}
                                                        component={AdharPan}/>
                                                 <Route path={`${PUBLIC_URL}/preapprove/personaldetail`}
@@ -158,8 +161,14 @@ class App extends Component {
                                                        component={Offers}/>
                                                 <Route path={`${PUBLIC_URL}/drawdown/thankyou`}
                                                        component={DrawThankYou}/>
-                                                <Route exact path={`${PUBLIC_URL}/enach/:token?/:payload?`}
+                                                <Route exact path={`${PUBLIC_URL}/enach`}
                                                        component={ENach}/>
+                                                <Route exact path={`${PUBLIC_URL}/enach/success_url`}
+                                                       component={SuccessUrl}/>
+                                                <Route exact path={`${PUBLIC_URL}/enach/cancel_url`}
+                                                       component={CancelUrl}/>
+                                                <Route exact path={`${PUBLIC_URL}/enach/error_url`}
+                                                       component={ErrorUrl}/>
                                                 <Route component={Error}/>
                                             </Switch>
                                             {/*</CSSTransition>*/}

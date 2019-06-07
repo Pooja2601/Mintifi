@@ -2,8 +2,8 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {Link, withRouter} from "react-router-dom";
 import {changeLoader, EnachsetPayload, EnachsetAttempt} from "../../actions";
-import {alertModule} from "../../shared/commonLogic";
-import {eNachPayload, baseUrl} from "../../shared/constants";
+import {alertModule, base64Logic, retrieveParam} from "../../shared/commonLogic";
+import {eNachPayload, baseUrl, payMintifiUrl} from "../../shared/constants";
 
 const {PUBLIC_URL} = process.env;
 
@@ -26,13 +26,17 @@ class ENach extends Component {
                 company_id: eNachPayload.company_id
             })
         }).then((resp) => {
-            alertModule(resp.status);
+            let payload = retrieveParam(resp.response.nach_url, 'payload');
+            let base64_decode = base64Logic(payload, 'decode');
+
+            // alertModule(resp.status);
             changeLoader(false);
 
-            if (resp.response.status === 'success')
+            if (resp.response === Object(resp.response))
                 setTimeout(() => {
                     // ToDo : Uncomment the below line in Prod
-                    // window.location.href = eNachPayload.success_url;
+                    if (payMintifiUrl === 'prod')
+                        window.location.href = base64_decode.success_url;
                 }, 1000);
 
             if (resp.error === Object(resp.error))
@@ -59,7 +63,8 @@ class ENach extends Component {
             this.setState({errorMsg: true});
             setTimeout(() => {
                 // ToDo : Uncomment this line in Prod
-                // window.location.href = this.props.payload.error_url;
+                if (payMintifiUrl === 'prod')
+                    window.location.href = this.props.payload.error_url;
             }, 1000);
         }
     };
@@ -68,12 +73,18 @@ class ENach extends Component {
 
         const {match, changeLoader, EnachsetPayload} = this.props;
         changeLoader(false);
-        const {payload, token} = match.params;
-        let base64_decode = (payload !== undefined) ? JSON.parse(new Buffer(payload, 'base64').toString('ascii')) : {};
+        const {href} = window.location;
+        // const {garbage} = match.params;
+        const payload = retrieveParam(href, 'payload');
+        const token = retrieveParam(href, 'token');
+        let base64_decode = base64Logic(payload, 'decode');
 
         // ToDo : hide the 2 lines in prod
-        eNachPayload.document_id = eNachPayload.mandate_id;
-        Object.assign(base64_decode, eNachPayload);
+        if (payMintifiUrl === 'dev') {
+            // coming from constant
+            eNachPayload.document_id = eNachPayload.mandate_id;
+            Object.assign(base64_decode, eNachPayload);
+        }
 
         if (base64_decode !== Object(base64_decode))
             alertModule('You cannot access this page directly without Authorised Session !!', 'error');
@@ -97,7 +108,8 @@ class ENach extends Component {
                 }), () => EnachsetAttempt(that.state.ctr));
                 setTimeout(() => {
                     // ToDo : uncomment in prod
-                    // window.location.href = eNachPayload.error_url;
+                    if (payMintifiUrl === 'prod')
+                        window.location.href = eNachPayload.error_url;
                 }, 1000);
             }
             else {
@@ -107,10 +119,10 @@ class ENach extends Component {
         });
 
         // ToDo : uncomment in prod
-        // setTimeout(() => this._triggerDigio(), 1000);
+        if (payMintifiUrl === 'prod')
+            setTimeout(() => this._triggerDigio(), 1000);
     }
 
-    //, as there are few changes needed to be made after putting it on the server (like changing the resource e.g, css, js location if required)
     render() {
         // let {payload, match} = this.props;
         return (
