@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
-import {baseUrl, gst_karza, BusinessType} from "../../../shared/constants";
+import {baseUrl, gst_karza, BusinessType, app_id} from "../../../shared/constants";
 import {connect} from "react-redux";
 import {pan_adhar, changeLoader, setGstProfile, setBusinessDetail} from "../../../actions/index";
 import {Link, withRouter} from "react-router-dom";
@@ -137,7 +137,7 @@ class AdharPan extends Component {
     _gstFetch = (gstSelected) => {
         const {changeLoader, history, setGstProfile, token, payload, setBusinessDetail} = this.props;
         changeLoader(true);
-        fetch(`${baseUrl}/companies/get_company_details_by_gstin?app_id=3&anchor_id=${payload.anchor_id}&gstin=${gstSelected}`, {
+        fetch(`${baseUrl}/companies/get_company_details_by_gstin?app_id=${app_id}&anchor_id=${payload.anchor_id}&gstin=${gstSelected}`, {
             method: 'GET',
             headers: {'Content-Type': "application/json", token: token},
         })
@@ -172,7 +172,7 @@ class AdharPan extends Component {
     };
     /*
         body: JSON.stringify({
-        app_id: '3',
+        app_id: app_id,
         anchor_id: '8186bc', //8186bc
         pan: pan
     })*/
@@ -181,7 +181,7 @@ class AdharPan extends Component {
         const {changeLoader, history, payload, pan, token} = this.props;
         console.log(token);
         changeLoader(true);
-        fetch(`${baseUrl}/companies/get_gst_details?app_id=3&anchor_id=${payload.anchor_id}&pan=${pan}`, {
+        fetch(`${baseUrl}/companies/get_gst_details?app_id=${app_id}&anchor_id=${payload.anchor_id}&pan=${pan}`, {
             method: 'GET',
             headers: {'Content-Type': "application/json", token: token},
         })

@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
-import {baseUrl, loanUrl, BusinessType} from "../../../shared/constants";
+import {baseUrl, loanUrl, BusinessType, app_id} from "../../../shared/constants";
 import {connect} from "react-redux";
 import {setBusinessDetail, setAdharManual, pan_adhar, storeResponse, changeLoader} from "../../../actions/index";
 import {Link, withRouter} from "react-router-dom";
@@ -75,7 +75,7 @@ class ReviewBusinessDetail extends Component {
             method: "POST",
             headers: {"Content-Type": "application/json", "token": token},
             body: JSON.stringify({
-                "app_id": "3",
+                "app_id": app_id,
                 "anchor_id": payload.anchor_id,
                 "distributor_dealer_code": payload.distributor_dealer_code,
                 "sales_agent_mobile_number": payload.sales_agent_mobile_number,

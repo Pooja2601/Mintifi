@@ -9,7 +9,7 @@ class Cancel_URL extends Component {
     render() {
         return (
             <>
-                <i className={"fa fa-check-circle checkCircle"}></i>
+                <i className={"fa fa-exclamation checkCircle"} style={{color:'orange'}}></i>
                 <h3 className={"text-center"}> E-NACH Cancelled !</h3>
                 <br/>
 

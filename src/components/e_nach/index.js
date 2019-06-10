@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import {Link, withRouter} from "react-router-dom";
 import {changeLoader, EnachsetPayload, EnachsetAttempt} from "../../actions";
 import {alertModule, base64Logic, retrieveParam} from "../../shared/commonLogic";
-import {eNachPayload, baseUrl, payMintifiUrl} from "../../shared/constants";
+import {eNachPayload, baseUrl, payMintifiUrl, app_id, environment} from "../../shared/constants";
 
 const {PUBLIC_URL} = process.env;
 
@@ -13,12 +13,12 @@ class ENach extends Component {
 
     _updateBackend = (result) => {
         const {token, changeLoader, eNachPayload} = this.props;
-        changeLoader(false);
+        changeLoader(true);
         fetch(`${baseUrl}/loans/enach_status`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json', token: token},
             body: JSON.stringify({
-                app_id: '3',
+                app_id: app_id,
                 status: result.status,
                 mandate_id: result.mandate_id,
                 anchor_id: eNachPayload.anchor_id,
@@ -50,10 +50,13 @@ class ENach extends Component {
 
     _triggerDigio = () => {
         // console.log(this.props.eNachPayload);
+        const {eNachPayload, payload} = this.props;
+        let eNachPayDigio = eNachPayload;
+        eNachPayDigio.code_mode = environment;
 
         if (this.state.ctr < 2) {
             let event = new CustomEvent("dispatchDigio", {
-                detail: this.props.eNachPayload
+                detail: eNachPayDigio
             });
             document.dispatchEvent(event);
         }
@@ -64,7 +67,7 @@ class ENach extends Component {
             setTimeout(() => {
                 // ToDo : Uncomment this line in Prod
                 if (payMintifiUrl === 'prod')
-                    window.location.href = this.props.payload.error_url;
+                    window.location.href = payload.error_url;
             }, 1000);
         }
     };

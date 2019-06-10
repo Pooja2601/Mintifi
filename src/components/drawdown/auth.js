@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
-import {baseUrl, otpUrl, OTP_Timer} from "../../shared/constants";
+import {baseUrl, otpUrl, OTP_Timer, app_id} from "../../shared/constants";
 import {connect} from "react-redux";
 import {withRouter} from "react-router-dom";
 import {DrawsetAuth, DrawsetToken, changeLoader, DrawAnchorPayload} from "../../actions";
@@ -36,7 +36,7 @@ class MobileOtp extends Component {
             method: "POST",
             headers: {'Content-Type': 'application/json', 'token': token},
             body: JSON.stringify({
-                "app_id": 3,
+                "app_id": app_id,
                 "otp_type": "drawdown",
                 "mobile_number": this.state.mobile,
                 "timestamp": new Date()
@@ -75,7 +75,7 @@ class MobileOtp extends Component {
             method: "POST",
             headers: {'Content-Type': 'application/json', token: token},
             body: JSON.stringify({
-                "app_id": 3,
+                "app_id": app_id,
                 "otp_reference_number": authObj.otp_reference_code,
                 "mobile_number": authObj.mobile,
                 "otp": this.state.otp,
@@ -108,7 +108,7 @@ class MobileOtp extends Component {
             method: "GET",
             headers: {'Content-Type': 'application/json', token: token},
             body: JSON.stringify({
-                "app_id": 3,
+                "app_id": app_id,
                 "anchor_id": payload.anchor_id,
                 "mobile_number": authObj.mobile,
             })

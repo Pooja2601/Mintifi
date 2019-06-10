@@ -1,8 +1,8 @@
 import React, {Component} from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
-import {baseUrl, accountType, loanUrl, payMintifiUrl} from "../../../shared/constants";
+import {baseUrl, accountType, loanUrl, payMintifiUrl, app_id, user_id, auth_secret} from "../../../shared/constants";
 import {connect} from "react-redux";
-import {setBankDetail, changeLoader} from "../../../actions/index";
+import {setBankDetail, changeLoader, setToken} from "../../../actions";
 import {Link, withRouter} from "react-router-dom";
 import {alertModule, base64Logic} from "../../../shared/commonLogic";
 // import DatePicker from "react-datepicker";
@@ -69,6 +69,35 @@ class BankDetail extends Component {
            this.handleValidation();
        }*/
 
+    _genAuthToken = (base64_encode) => {
+        const {history} = this.props;
+        changeLoader(true);
+        fetch(`${baseUrl}/auth`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                    "app_id": app_id,
+                    "user_id": user_id,
+                    "secret_key": auth_secret,
+                    "type": "react_web_user"
+                }
+            )
+        }).then(resp => resp.json()).then((resp) => {
+            changeLoader(false);
+            if (resp.response === Object(resp.response))
+                if (resp.response.status === 'success')
+                    setTimeout(() => history.push(`${PUBLIC_URL}/enach?payload=${base64_encode}&token=${resp.response.auth.token}`), 500);
+
+            if (resp.error === Object(resp.error))
+                alertModule(resp.error.message, 'warn');
+        }, () => {
+            changeLoader(false);
+            alertModule();
+        })
+    };
+
     _formSubmit = (e) => {
         e.preventDefault();
         const {changeLoader, token, payload, preFlightResp, adharObj, history} = this.props;
@@ -78,7 +107,7 @@ class BankDetail extends Component {
                 method: "POST",
                 headers: {"Content-Type": "application/json", "token": token},
                 body: JSON.stringify({
-                    "app_id": 3,
+                    "app_id": app_id,
                     "loan_application_id": preFlightResp.loan_application_id,
                     "company_id": preFlightResp.company_id,
                     "anchor_id": payload.anchor_id,
@@ -112,8 +141,8 @@ class BankDetail extends Component {
                         error_url: `${payMintifiUrl}/enach/error_url`,
                         cancel_url: `${payMintifiUrl}/enach/cancel_url`
                     };
-                    let base64_decode = base64Logic(payloadDecrypt, 'encode');
-                    setTimeout(() => history.push(`${PUBLIC_URL}/enach?payload=${base64_decode}&token=${token}`));
+                    let base64_encode = base64Logic(payloadDecrypt, 'encode');
+                    this._genAuthToken(base64_encode);
                     /* setTimeout(() => history.push(`${PUBLIC_URL}/enach`, {
                          token: token,
                          payload: base64_decode
@@ -444,5 +473,5 @@ const mapStateToProps = state => ({
 });
 
 export default withRouter(connect
-(mapStateToProps, {setBankDetail, changeLoader})
+(mapStateToProps, {setBankDetail, changeLoader, setToken})
 (BankDetail));

@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {Link, withRouter} from "react-router-dom";
-import {baseUrl, loanUrl} from "../../../shared/constants";
+import {baseUrl, loanUrl, app_id} from "../../../shared/constants";
 import {pan_adhar, setAdharManual, setBusinessDetail, changeLoader} from "../../../actions/index";
 import {alertModule} from "../../../shared/commonLogic";
 
@@ -219,7 +219,7 @@ class DocsUpload extends Component {
         const inputFiles = document.querySelectorAll('input[type="file"]');
         const formData = new FormData();
 
-        formData.append("app_id", "3");
+        formData.append("app_id", app_id);
         formData.append("anchor_id", payload.anchor_id);
         formData.append("loan_application_id", preFlightResp.loan_application_id);
 

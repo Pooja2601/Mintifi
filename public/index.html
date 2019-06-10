@@ -146,11 +146,11 @@ To create a production bundle, use `npm run build` or `yarn build`.
 <script>
 
     document.addEventListener("dispatchDigio", function (obj) {
-        let {mandate_id, user_mobile, user_email} = obj.detail;
+        let {mandate_id, user_mobile, user_email, code_mode} = obj.detail;
 
         let options = {
-            //default environment stage (sandbox)
-            environment: "stage", // production , stage
+            //default environment 'stage' (sandbox)
+            environment: (code_mode === 'prod') ? 'production' : "stage", // 'production' , 'stage'
             callback: function (t) {
                 let event = new CustomEvent("responseDigio", {
                     detail: t
@@ -162,8 +162,8 @@ To create a production bundle, use `npm run build` or `yarn build`.
         };
         let digio = new Digio(options);
         digio.init();  // Call init on user action (eg.button press and proceed to asynchronous upload)
-        let mobile = (user_mobile !== undefined) ? user_mobile : user_email;
-        digio.submit(mandate_id, mobile);
+        // let mobile = (user_mobile !== undefined) ? user_mobile : user_email;
+        digio.submit(mandate_id, user_mobile);
     });
 
 </script>

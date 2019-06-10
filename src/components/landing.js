@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {Link, withRouter} from 'react-router-dom';
 // import {GetinTouch} from "../../shared/getin_touch";
-import {baseUrl, landingPayload, environment} from "../shared/constants";
+import {baseUrl, landingPayload, environment, app_id} from "../shared/constants";
 import {connect} from "react-redux";
 import {checkExists, setToken, changeLoader} from "../actions";
 import {alertModule, base64Logic} from "../shared/commonLogic";
@@ -43,7 +43,7 @@ class Login extends Component {
             body: JSON.stringify({
                 user_id: payload.anchor_id,
                 secret_key: "3f147e1bf610b5f3",
-                app_id: "3",
+                app_id: app_id,
                 type: "anchor"
             })
         }).then(resp => resp.json()).then(resp => {

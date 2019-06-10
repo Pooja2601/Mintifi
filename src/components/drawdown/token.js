@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {withRouter} from "react-router-dom";
-import {baseUrl, drawdownPayload, environment} from "../../shared/constants";
+import {baseUrl, drawdownPayload, environment, app_id} from "../../shared/constants";
 import {alertModule, base64Logic} from '../../shared/commonLogic';
 import {connect} from "react-redux";
 import {changeLoader, DrawsetToken} from "../../actions";
@@ -31,7 +31,7 @@ class DrawLanding extends Component {
         else {
             DrawsetToken(token, base64_decode);
             // console.log(this.props.payload);
-            setTimeout(() => history.push(`${PUBLIC_URL}/Drawdown/auth/`, {token: token, payload: base64_decode}), 500);
+            setTimeout(() => history.push(`${PUBLIC_URL}/drawdown/auth/`, {token: token, payload: base64_decode}), 500);
         }
     }
 
@@ -45,7 +45,7 @@ class DrawLanding extends Component {
             body: JSON.stringify({
                 user_id: payload.anchor_id,// 'uyh65t',
                 secret_key: "3f147e1bf610b5f3",
-                app_id: "3",
+                app_id: app_id,
                 type: "anchor"
             })
         }).then(resp => resp.json()).then(resp => {
@@ -53,7 +53,7 @@ class DrawLanding extends Component {
             if (resp.response === Object(resp.response))
                 if (resp.response.status === 'success') {
                     DrawsetToken(resp.response.auth.token, payload);
-                    setTimeout(() => history.push(`${PUBLIC_URL}/Drawdown/auth/`, {
+                    setTimeout(() => history.push(`${PUBLIC_URL}/drawdown/auth/`, {
                         token: resp.response.auth.token,
                         payload: payload
                     }), 500);

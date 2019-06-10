@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
-import {baseUrl, otpUrl, OTP_Timer} from "../../../shared/constants";
+import {baseUrl, otpUrl, OTP_Timer, app_id} from "../../../shared/constants";
 import {connect} from "react-redux";
 import {setAuth, sendOTP, changeLoader, setAdharManual} from "../../../actions/index";
 import {Link, withRouter} from "react-router-dom";
@@ -38,7 +38,7 @@ class MobileOtp extends Component {
             method: "POST",
             headers: {'Content-Type': 'application/json', 'token': token},
             body: JSON.stringify({
-                "app_id": 3,
+                "app_id": app_id,
                 "otp_type": "one_time_password",
                 "mobile_number": this.state.mobile,
                 "timestamp": new Date()
@@ -80,7 +80,7 @@ class MobileOtp extends Component {
             method: "POST",
             headers: {'Content-Type': 'application/json', token: token},
             body: JSON.stringify({
-                "app_id": 3,
+                "app_id": app_id,
                 "otp_reference_number": adharObj.otp_reference_id,
                 "mobile_number": adharObj.mobile,
                 "otp": this.state.otp,

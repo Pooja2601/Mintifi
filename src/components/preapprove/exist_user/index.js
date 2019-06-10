@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
-import {baseUrl, baseUrl2, otpUrl, OTP_Timer, landingPayload} from "../../../shared/constants";
+import {baseUrl, baseUrl2, otpUrl, OTP_Timer, landingPayload, app_id} from "../../../shared/constants";
 import {connect} from "react-redux";
 import {
     setAuth,
@@ -77,7 +77,7 @@ class Auth extends Component {
                 method: "POST",
                 headers: {'Content-Type': 'application/json', token: token},
                 body: JSON.stringify({
-                    "app_id": 3,
+                    "app_id": app_id,
                     "otp_type": "one_time_password",
                     "mobile_number": this.state.mobile,
                     "timestamp": new Date()
@@ -116,7 +116,7 @@ class Auth extends Component {
             method: "POST",
             headers: {'Content-Type': 'application/json', token: token},
             body: JSON.stringify({
-                "app_id": 3,
+                "app_id": app_id,
                 "otp_reference_number": authObj.otp_reference_id,
                 "mobile_number": authObj.mobile,
                 "otp": this.state.otp,

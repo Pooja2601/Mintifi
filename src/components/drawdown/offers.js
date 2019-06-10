@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import {changeLoader, DrawsetLoanPayload, DrawsetPreflight} from "../../actions";
-import {otpUrl, baseUrl, environment} from "../../shared/constants";
+import {otpUrl, baseUrl, environment, app_id} from "../../shared/constants";
 import {PrivacyPolicy, TnCPolicy} from "../../shared/policy";
 import {alertModule} from "../../shared/commonLogic";
 
@@ -86,7 +86,7 @@ class Offers extends Component {
             method: 'GET',
             headers: {'Content-Type': 'application/json', token: token},
             body: JSON.stringify({
-                "app_id": 1,
+                "app_id": app_id,
                 "anchor_id": "6iu89o",
                 "loan_application_id": "1975"
             })
@@ -108,7 +108,7 @@ class Offers extends Component {
                     method: 'GET',
                     headers: {'Content-Type': 'application/json', token: token},
                     body: JSON.stringify({
-                        "app_id": 1,
+                        "app_id": app_id,
                         "anchor_id": "6iu89o"
                     })
                 }).then((resp) => {
@@ -131,7 +131,7 @@ class Offers extends Component {
                     method: 'GET',
                     headers: {'Content-Type': 'application/json', token: token},
                     body: JSON.stringify({
-                        "app_id": 1,
+                        "app_id": app_id,
                         "anchor_id": "6iu89o",
                         "amount": payload.drawdown_amount,
                     })
@@ -199,7 +199,7 @@ class Offers extends Component {
             method: "POST",
             headers: {'Content-Type': 'application/json', token: token},
             body: JSON.stringify({
-                    "app_id": 2,
+                    "app_id": app_id,
                     "anchor_id": payload.anchor_id, //6iu89o
                     "anchor_drawdown_id": payload.anchor_drawdown_id, //hy76543
                     "drawdown_amount": payload.drawdown_amount,
