@@ -1,10 +1,10 @@
 import React, {Component} from "react";
 import {Link, withRouter} from 'react-router-dom';
 // import {GetinTouch} from "../../shared/getin_touch";
-import {baseUrl, landingPayload, environment, app_id} from "../shared/constants";
+import {baseUrl, landingPayload, environment, app_id, auth_secret, user_id} from "../shared/constants";
 import {connect} from "react-redux";
 import {checkExists, setToken, changeLoader} from "../actions";
-import {alertModule, base64Logic} from "../shared/commonLogic";
+import {alertModule, base64Logic, generateToken} from "../shared/commonLogic";
 
 const Timer = 10;
 const {PUBLIC_URL} = process.env;
@@ -32,30 +32,13 @@ class Login extends Component {
     }
 
     // ToDo : Not useful in Live Production
-    _generateToken() {
-        // ToDo : make it const in Prod
+    async _generateToken() {
         let {changeLoader, setToken, payload} = this.props;
         changeLoader(true);
+        let authToken = await generateToken();
+        changeLoader(false);
+        setToken(authToken, payload);
 
-        fetch('https://test.mintifi.com/api/v1/auth', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                user_id: payload.anchor_id,
-                secret_key: "3f147e1bf610b5f3",
-                app_id: app_id,
-                type: "anchor"
-            })
-        }).then(resp => resp.json()).then(resp => {
-            changeLoader(false);
-            if (resp.response === Object(resp.response))
-                if (resp.response.status === 'success')
-                    setToken(resp.response.auth.token, payload);
-            // console.log(this.props.token);
-        }, () => {
-            alertModule();
-            changeLoader(false);
-        });
     }
 
     _existCustomer = () => {

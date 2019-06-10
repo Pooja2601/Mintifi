@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {withRouter} from "react-router-dom";
-import {baseUrl, drawdownPayload, environment, app_id} from "../../shared/constants";
-import {alertModule, base64Logic} from '../../shared/commonLogic';
+import {baseUrl, drawdownPayload, environment, app_id, user_id, auth_secret} from "../../shared/constants";
+import {alertModule, base64Logic, generateToken} from '../../shared/commonLogic';
 import {connect} from "react-redux";
 import {changeLoader, DrawsetToken} from "../../actions";
 
@@ -35,34 +35,44 @@ class DrawLanding extends Component {
         }
     }
 
-    _generateToken = () => {
+    async _generateToken() {
         const {changeLoader, DrawsetToken, payload, history} = this.props;
-        // console.log(JSON.stringify(payload));
+
         changeLoader(true);
-        fetch(`${baseUrl}/auth`, {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                user_id: payload.anchor_id,// 'uyh65t',
-                secret_key: "3f147e1bf610b5f3",
-                app_id: app_id,
-                type: "anchor"
-            })
-        }).then(resp => resp.json()).then(resp => {
-            changeLoader(false);
-            if (resp.response === Object(resp.response))
-                if (resp.response.status === 'success') {
-                    DrawsetToken(resp.response.auth.token, payload);
-                    setTimeout(() => history.push(`${PUBLIC_URL}/drawdown/auth/`, {
-                        token: resp.response.auth.token,
-                        payload: payload
-                    }), 500);
-                }
-            // setTimeout(() => console.log(this.props.token),2000)
-        }, () => {
-            alertModule();
-            changeLoader(false);
-        });
+        let authToken = await generateToken();
+        changeLoader(false);
+
+        DrawsetToken(authToken, payload);
+        setTimeout(() => history.push(`${PUBLIC_URL}/drawdown/auth/`, {
+            token: authToken,
+            payload: payload
+        }), 500);
+        // console.log(JSON.stringify(payload));
+        /* changeLoader(true);
+         fetch(`${baseUrl}/auth`, {
+             method: 'POST',
+             headers: {'Content-Type': 'application/json'},
+             body: JSON.stringify({
+                 user_id: user_id,// 'uyh65t',
+                 secret_key: auth_secret,
+                 app_id: app_id,
+                 type: "react_web_user"
+             })
+         }).then(resp => resp.json()).then(resp => {
+             changeLoader(false);
+             if (resp.response === Object(resp.response))
+                 if (resp.response.status === 'success') {
+                     DrawsetToken(resp.response.auth.token, payload);
+                     setTimeout(() => history.push(`${PUBLIC_URL}/drawdown/auth/`, {
+                         token: resp.response.auth.token,
+                         payload: payload
+                     }), 500);
+                 }
+             // setTimeout(() => console.log(this.props.token),2000)
+         }, () => {
+             alertModule();
+             changeLoader(false);
+         });*/
     };
 
     render() {

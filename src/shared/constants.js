@@ -1,28 +1,23 @@
-// import React from 'react';
+// Just change the following line to Test it on Prod or Dev environment
+const env_mode = 'prod'; // dev , prod , static,
+const subUrl = (env_mode === 'prod') ? 'test' : 'test'; //  `live` | `test`  , Sub url for Mintifi API webhook
+const payMintifiUrl = (env_mode === 'prod') ? 'https://pay.mintifi.com' : 'https://pay-test.mintifi.com';
 
 module.exports = {
-    environment: 'prod', // dev , prod , static,
-    subUrl: (this.environment === 'prod') ? 'live' : 'test',
-    app_id: 6, // For React
+    environment: env_mode,
+    app_id: '6', // For React
     user_id: '7KhXdg', // For React
     auth_secret: 'PYj055HtW7sDxsd2GD4Cgw',
-    payMintifiUrl: (this.environment === 'prod') ? 'https://pay.mintifi.com' : 'https://pay-test.mintifi.com',
-    baseUrl: `https://${this.subUrl}.mintifi.com/api/v1`,
-    baseUrl2: `https://${this.subUrl}.mintifi.com/api/v2`,
-    loanUrl: `https://${this.subUrl}.mintifi.com/api/loan/v1`,
-    otpUrl: `https://${this.subUrl}.mintifi.com/api/v2/communications`,
+    payMintifiUrl: payMintifiUrl,
+    baseUrl: `https://${subUrl}.mintifi.com/api/v1`,
+    baseUrl2: `https://${subUrl}.mintifi.com/api/v2`,
+    loanUrl: `https://${subUrl}.mintifi.com/api/loan/v1`,
+    otpUrl: `https://${subUrl}.mintifi.com/api/v2/communications`,
     gst_karza: "https://gst.karza.in/uat/v1",
     test_kscan: "https://testapi.kscan.in/v1/gst/",
     karza_key: "jdughfoP51majvjAUW6W",
     digio: "",
-    /*   BusinessType: {
-           "proprietorship": "Proprietorship",
-           "private_limited": "Private Limited Company",
-           "partnership": "Partnership",
-           "llp": "Limited Liability Partnership",
-           "trust": "Trust",
-           "others": "Others"
-       },*/
+
     BusinessType: [
         {value: "", label: "Select Company type"},
         {value: "proprietorship", label: "Proprietorship"},
@@ -62,9 +57,9 @@ module.exports = {
         "loan_application_id": 2314,
         "company_id": 700,
         "anchor_id": "uyh65t",
-        "success_url": `${this.payMintifiUrl}/enach/success_url`,
-        "cancel_url": `${this.payMintifiUrl}/enach/cancel_url`,
-        "error_url": `${this.payMintifiUrl}/enach/error_url`
+        "success_url": `${payMintifiUrl}/enach/success_url`,
+        "cancel_url": `${payMintifiUrl}/enach/cancel_url`,
+        "error_url": `${payMintifiUrl}/enach/error_url`
     },
     drawdownPayload: {
         "anchor_id": "uyh65t",

@@ -16,7 +16,8 @@ class AdharPan extends Component {
         adhar_skip: false,
         adhar_correct: false,
         gst_details: {},
-        checked: {}
+        checked: {},
+        selectedGST: '',
     };
     gstDetails = {
         companytype: '',
@@ -61,7 +62,8 @@ class AdharPan extends Component {
                                                                this.setState(prevState => ({
                                                                    checked: {
                                                                        [key]: true
-                                                                   }
+                                                                   },
+                                                                   selectedGST: val.gstinId
                                                                }));
                                                            }
                                                            }/> <b
@@ -78,13 +80,16 @@ class AdharPan extends Component {
                                         <br/>
                                     </div>
                                 </div>
+                                {/*{this.state.selectedGST}*/}
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn greenButton btn-raised align-left"
                                         onClick={() => this._setGST()}
+                                        disabled={!this.state.selectedGST.length}
                                         style={{padding: '7px 11px 8px 11px'}}
                                         data-dismiss="modal">Select GST
                                 </button>
+
                                 <button type="button" className="btn btn-primary pull-right"
                                         data-dismiss="modal">Close
                                 </button>
