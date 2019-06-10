@@ -1,7 +1,7 @@
 // Just change the following line to Test it on Prod or Dev environment
 const env_mode = 'prod'; // dev , prod , static,
 const subUrl = (env_mode === 'prod') ? 'test' : 'test'; //  `live` | `test`  , Sub url for Mintifi API webhook
-const payMintifiUrl = (env_mode === 'prod') ? 'https://pay.mintifi.com' : 'https://pay-test.mintifi.com';
+const payMintifiUrl = (env_mode === 'prod') ? 'https://pay-test.mintifi.com' : 'https://pay-test.mintifi.com'; // Change `pay-test` to `pay`
 
 module.exports = {
     environment: env_mode,
