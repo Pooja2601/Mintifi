@@ -129,8 +129,12 @@ class MobileOtp extends Component {
         if (payload === Object(payload)) {
             if (adharObj !== Object(adharObj))
                 history.push(`${PUBLIC_URL}/preapprove/personaldetail`);
-            if (authObj.verified)
-                history.push(`${PUBLIC_URL}/preapprove/businessdetail`);
+            else if (adharObj.verified)
+                window.location.href = `${PUBLIC_URL}/preapprove/businessdetail`;
+            if (authObj === Object(authObj))
+                if (authObj.verified)
+                    window.location.href = `${PUBLIC_URL}/preapprove/businessdetail`;
+            // history.push(`${PUBLIC_URL}/preapprove/businessdetail`);
         }
         else history.push(`${PUBLIC_URL}/preapprove/token`);
 

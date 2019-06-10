@@ -104,6 +104,7 @@ class BusinessDetail extends Component {
 
     businessGst(e) {
         const value = e;
+
         if (value.length <= 15) {
             let bpan = value.substr(2, 10);
             this.setState({gst: value, bpan}, () => this.props.setBusinessDetail(this.state))
@@ -140,7 +141,6 @@ class BusinessDetail extends Component {
                       });
                       this.setState({gst: gstProfile.gstin, lgnm: gstProfile.lgnm});
                   }*/
-// console.log(payload.length);
             if (payload === Object(payload) && payload.length) {
                 this.setState({dealercode: payload.distributor_dealer_code}, () => setBusinessDetail(this.state));
             }
@@ -156,8 +156,12 @@ class BusinessDetail extends Component {
     }
 
     componentDidMount() {
+        const {businessObj, adharObj} = this.props;
         setTimeout(() => this.handleValidation(), 500);
-        console.log(this.props.adharObj);
+        // console.log(adharObj);
+
+        if (businessObj === Object(businessObj))
+            this.businessGst(businessObj.gst);
     }
 
     render() {

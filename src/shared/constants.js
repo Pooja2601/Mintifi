@@ -1,7 +1,9 @@
 // Just change the following line to Test it on Prod or Dev environment
-const env_mode = 'prod'; // dev , prod , static,
+const env_mode = 'prod'; // dev , prod , local,
 const subUrl = (env_mode === 'prod') ? 'test' : 'test'; //  `live` | `test`  , Sub url for Mintifi API webhook
 const payMintifiUrl = (env_mode === 'prod') ? 'https://pay-test.mintifi.com' : 'https://pay-test.mintifi.com'; // Change `pay-test` to `pay`
+
+const baseRootPath = (env_mode === 'local') ? 'http://localhost' : (env_mode === 'dev') ? 'https://pay-test.mintifi.com' : 'https://pay.mintifi.com';
 
 module.exports = {
     environment: env_mode,
@@ -46,9 +48,9 @@ module.exports = {
         "retailer_onboarding_date": "2006-09-19",
         "vintage": null,
         "loan_amount": "500000",
-        "success_url": 'http://localhost',
-        "error_url": 'http://localhost',
-        "cancel_url": 'http://localhost',
+        "success_url": `${baseRootPath}/`,
+        "error_url": `${baseRootPath}/`,
+        "cancel_url": `${baseRootPath}/`,
     },
     eNachPayload: {
         "mandate_id": "ENA190607121623999YUPG9VAMFRXWAP",
@@ -69,9 +71,9 @@ module.exports = {
         "company_id": "629",
         "drawdown_amount": "20000",
         "disbursement_account_code": "sdtf78",
-        "success_url": "https://success_url",
-        "cancel_url": "https://cancel_url",
-        "error_url": "https://error_url"
+        "success_url": `${baseRootPath}/`,
+        "cancel_url": `${baseRootPath}/`,
+        "error_url": `${baseRootPath}/`
     }
 
 };

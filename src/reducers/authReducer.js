@@ -23,6 +23,9 @@ export default (state = {}, action) => {
         case types.CHANGE_LOADER:
             return {...state, loader: action.loader};
 
+        case types.ANCHOR_PAYLOAD:
+            return {...state, anchorObj: action.anchorObj};
+
         /* case types.FETCH_AUTH_SUCCESS:
          return {...state, authPayload: action.payload};
 */

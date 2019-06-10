@@ -1,4 +1,5 @@
 export const types = {
+    ANCHOR_PAYLOAD: 'ANCHOR_PAYLOAD',
     SET_TOKEN: "SET_TOKEN",
     CHANGE_LOADER: "CHANGE_LOADER",
     CHECK_USER_EXISTS: "CHECK_USER_EXISTS",
@@ -30,6 +31,11 @@ export const types = {
 export const changeLoader = loader => ({
     type: types.CHANGE_LOADER,
     loader
+});
+
+export const setAnchorObj = anchorObj => ({
+    type: types.ANCHOR_PAYLOAD,
+    anchorObj
 });
 
 export const setToken = (token, payload) => ({

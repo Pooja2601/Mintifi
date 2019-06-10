@@ -57,7 +57,7 @@ class AdharPan extends Component {
 
                                                 <label>
                                                     <input type="radio" name={"gst_details"}
-                                                           checked={(this.state.checked[key])}
+                                                           checked={(this.state.checked[key])  || ''}
                                                            onChange={(e) => {
                                                                this.setState(prevState => ({
                                                                    checked: {

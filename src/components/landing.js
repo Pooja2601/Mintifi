@@ -3,7 +3,7 @@ import {Link, withRouter} from 'react-router-dom';
 // import {GetinTouch} from "../../shared/getin_touch";
 import {baseUrl, landingPayload, environment, app_id, auth_secret, user_id} from "../shared/constants";
 import {connect} from "react-redux";
-import {checkExists, setToken, changeLoader} from "../actions";
+import {checkExists, setToken, changeLoader, setAnchorObj} from "../actions";
 import {alertModule, base64Logic, generateToken} from "../shared/commonLogic";
 
 const Timer = 10;
@@ -31,6 +31,27 @@ class Login extends Component {
         // console.log(this.props.token);
     }
 
+
+    _fetchAnchorDetail() {
+        const {token, payload, setAnchorObj} = this.props;
+        changeLoader(true);
+        fetch(`${baseUrl}/merchants/${payload.anchor_id}/get_details?app_id=${app_id}`,
+            {
+                method: 'GET',
+                headers: {"Content-type": "application/json", token: token}
+            }).then(resp => resp.json()).then((resp) => {
+            changeLoader(false);
+            if (resp.response === Object(resp.response))
+                setAnchorObj(resp.response);
+
+            console.log(resp.response);
+        }, (resp) => {
+            changeLoader(false);
+            alertModule();
+        })
+    }
+
+
     // ToDo : Not useful in Live Production
     async _generateToken() {
         let {changeLoader, setToken, payload} = this.props;
@@ -38,7 +59,7 @@ class Login extends Component {
         let authToken = await generateToken();
         changeLoader(false);
         setToken(authToken, payload);
-
+        this._fetchAnchorDetail();
     }
 
     _existCustomer = () => {
@@ -126,5 +147,5 @@ const mapStateToProps = state => ({
 
 export default withRouter(connect(
     mapStateToProps,
-    {checkExists, setToken, changeLoader}
+    {checkExists, setToken, changeLoader, setAnchorObj}
 )(Login));
