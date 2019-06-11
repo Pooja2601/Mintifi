@@ -26,7 +26,7 @@ class ThankYou extends Component {
             let {f_name, l_name} = payload;
 
             // ToDo : Comment the below code in production
-            if (environment === 'dev') {
+            if (environment === 'local') {
                 f_name = 'Mahesh';
                 l_name = 'Pai';
             }

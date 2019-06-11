@@ -1,8 +1,10 @@
 // Just change the following line to Test it on Prod or Dev environment
-const env_mode = 'prod'; // dev , prod , local,
-const subUrl = (env_mode === 'prod') ? 'test' : 'test'; //  `live` | `test`  , Sub url for Mintifi API webhook
-const payMintifiUrl = (env_mode === 'prod') ? 'https://pay-test.mintifi.com' : 'https://pay-test.mintifi.com'; // Change `pay-test` to `pay`
+const env_mode = 'dev'; // dev , prod , local,
+const subUrl = (env_mode === 'dev' || env_mode === 'local') ? 'test' : 'live'; //  `live` | `test`  , Sub url for Mintifi API webhook
+const payMintifiUrl = (env_mode === 'dev' || env_mode === 'local') ? 'https://pay-test.mintifi.com' : 'https://pay.mintifi.com';
+// For Deployment of Base Root
 
+// For redirection after Failure and Success (of enach or drawdwon) (Its a dummy and Optional)
 const baseRootPath = (env_mode === 'local') ? 'http://localhost' : (env_mode === 'dev') ? 'https://pay-test.mintifi.com' : 'https://pay.mintifi.com';
 
 module.exports = {
@@ -46,6 +48,7 @@ module.exports = {
         "sales_agent_mobile_number": "9876543210",
         "anchor_transaction_id": "hy76520",
         "retailer_onboarding_date": "2006-09-19",
+        "product_type": "term_loan", // ["over_draft", "term_loan", "daily_emi", "supply_chain"]
         "vintage": null,
         "loan_amount": "500000",
         "success_url": `${baseRootPath}/`,

@@ -17,20 +17,24 @@ class Login extends Component {
         // let base64_decode = (match.params.payload !== undefined) ? JSON.parse(new Buffer(match.params.payload, 'base64').toString('ascii')) : {};
         let base64_decode, payloadData;
 
-        if (environment === 'dev')
-            payloadData = payload;
-        else payloadData = match.params.payload;
+        /*
+                if (environment === 'dev')
+                    payloadData = payload;
+                else payloadData = match.params.payload;
+        */
 
-        if (environment === 'dev')
+        if (environment === 'dev' || environment === 'local')
             base64_decode = landingPayload; // ToDo : hide it in Prod
-        else base64_decode = base64Logic(payloadData, 'decode');
+        else base64_decode = base64Logic(match.params.payload, 'decode');
 
-        if (match.params.token !== undefined && payloadData !== Object(payloadData))
+        if (match.params.token !== undefined && base64_decode !== Object(base64_decode))
             alertModule("You cannot access this page directly without Appropriate Permission!!", 'warn');
         else setToken(match.params.token, base64_decode);
+
+        if (payload === Object(payload))
+            this._fetchAnchorDetail();
         // console.log(this.props.token);
     }
-
 
     _fetchAnchorDetail() {
         const {token, payload, setAnchorObj} = this.props;
@@ -51,7 +55,6 @@ class Login extends Component {
         })
     }
 
-
     // ToDo : Not useful in Live Production
     async _generateToken() {
         let {changeLoader, setToken, payload} = this.props;
@@ -59,7 +62,8 @@ class Login extends Component {
         let authToken = await generateToken();
         changeLoader(false);
         setToken(authToken, payload);
-        this._fetchAnchorDetail();
+        if (environment === 'dev' || environment === 'local')
+            this._fetchAnchorDetail();
     }
 
     _existCustomer = () => {
@@ -77,15 +81,16 @@ class Login extends Component {
     };
 
     render() {
-        const {setToken, match, existing, payload} = this.props;
+        const {setToken, match, existing, payload, anchorObj} = this.props;
 
         return (
             <>
                 {/*<Link to={'/'} >Go Back </Link>*/}
-                <h5 align="center">Mintifi Pay</h5>
+                <h5 align="center">Mintifi Pay </h5>
                 <p className="paragraph_styling text-center">
                     Get a credit line of upto Rs. 5 lacs instantly and pay for your purchases.
                     {/*{token} , {trans_id}*/}
+                    {/*{anchorObj.anchor_logo}*/}
                 </p>
                 <div className="mt-5 mb-5 text-center row">
                     <div className={"col-sm-12 col-md-2"}></div>
@@ -142,7 +147,8 @@ class Login extends Component {
 const mapStateToProps = state => ({
     existing: state.authPayload.existing,
     token: state.authPayload.token,
-    payload: state.authPayload.payload
+    payload: state.authPayload.payload,
+    anchorObj: state.authPayload.anchorObj
 });
 
 export default withRouter(connect(

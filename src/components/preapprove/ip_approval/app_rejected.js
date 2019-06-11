@@ -24,7 +24,7 @@ class AppRejected extends Component {
     render() {
         let {match, adharObj, preFlightResp, history} = this.props;
         // ToDo :  Hide it in Prod
-        if (environment === 'dev')
+        if (environment === 'local')
         match = {params: {status: 'declined'}};  // declined  // expired
 
         return (

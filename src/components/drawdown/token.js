@@ -18,7 +18,7 @@ class DrawLanding extends Component {
         let base64_decode = base64Logic(payload, 'decode');
 
 // ToDo : comment in production
-        if (environment === 'dev')
+        if (environment === 'dev' || environment === 'local')
             base64_decode = drawdownPayload;
 
         if (base64_decode !== Object(base64_decode))

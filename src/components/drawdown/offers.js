@@ -214,13 +214,13 @@ class Offers extends Component {
             changeLoader(false);
             if (resp.response === Object(resp.response)) {
                 // ToDo : uncomment this 2 lines for production
-                if (environment === 'prod') {
+                if (environment === 'prod' || environment === 'dev') {
                     DrawsetPreflight(resp.response);
                     setTimeout(() => history.push(`${PUBLIC_URL}/drawdown/thankyou`), 500);
                 }
             }
             // ToDo : comment this for production
-            if (environment === 'dev')
+            if (environment === 'local')
                 setTimeout(() => history.push(`${PUBLIC_URL}/drawdown/thankyou`), 500);
 
         }, resp => {
@@ -231,7 +231,7 @@ class Offers extends Component {
 
     componentWillMount() {
         // ToDo : comment this development
-        if (environment === 'prod')
+        if (environment === 'prod' || environment === 'dev')
             this._fetchInformation();
         const {payload, authObj, changeLoader, history} = this.props;
 
@@ -247,7 +247,7 @@ class Offers extends Component {
         changeLoader(false);
 
         // ToDo : uncomment this 2 lines for development
-        if (environment === 'dev') {
+        if (environment === 'local') {
             DrawsetLoanPayload({loanOffers: loanOffers, loanStatus: loanStatus, creditLimit: creditLimit});
             DrawsetPreflight(preFlightResp);
         }
@@ -267,7 +267,7 @@ class Offers extends Component {
             let {f_name, l_name} = payload;
 
             // ToDo :  comment this 2 line in prod.
-            if (environment === 'dev') {
+            if (environment === 'local') {
                 f_name = 'Mahesh';
                 l_name = 'Pai';
             }

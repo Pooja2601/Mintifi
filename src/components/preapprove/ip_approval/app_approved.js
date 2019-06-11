@@ -33,7 +33,7 @@ class AppApproved extends Component {
         let {loan_application_id, credit_eligibility} = preFlightResp;
 
         // ToDo : Hide Start (in Prod)
-        if (environment === 'dev') {
+        if (environment === 'local') {
             const load_status = 'bank_approved';  // pending // bank_approved
             credit_eligibility = {
                 product_offered: 'LoC',

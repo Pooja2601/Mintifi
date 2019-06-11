@@ -100,6 +100,7 @@ class ReviewBusinessDetail extends Component {
                 },
                 "loan_details": {
                     "loan_amount": payload.loan_amount,
+                    "product_type": payload.product_type,
                     "average_monthly_transaction": businessObj.avgtrans,
                     "retailer_onboarding_date": payload.retailer_onboarding_date,
                     "vintage": 60
