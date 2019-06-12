@@ -1,22 +1,27 @@
 export const types = {
+    //...................................Preapproval Flow
+    // Exisiting User
+    EXIST_SUMMARY: "EXIST_SUMMARY",
+    CHECK_USER_EXISTS: "CHECK_USER_EXISTS",
+    FETCH_AUTH: "FETCH_AUTH",
+    FETCH_AUTH_SUCCESS: "FETCH_AUTH_SUCCESS",
+
+    // New User
     ANCHOR_PAYLOAD: 'ANCHOR_PAYLOAD',
     SET_TOKEN: "SET_TOKEN",
     CHANGE_LOADER: "CHANGE_LOADER",
-    CHECK_USER_EXISTS: "CHECK_USER_EXISTS",
     PAN_ADHAR: "PAN_ADHAR",
     PERSONAL_DETAIL: "PERSONAL_DETAIL",
     GST_PROFILE: "GST_PROFILE",
     PREFLIGHT_RESPONSE: "PREFLIGHT_RESPONSE",
     BUSINESS_DETAIL: "BUSINESS_DETAIL",
     BANK_DETAIL: "BANK_DETAIL",
-    FETCH_AUTH: "FETCH_AUTH",
-    FETCH_AUTH_SUCCESS: "FETCH_AUTH_SUCCESS",
+
     SEND_OTP: "SEND_OTP",
     SEND_OTP_SUCCESS: "SEND_OTP_SUCCESS",
     RECEIVE_OTP: "RECEIVE_OTP",
     RECEIVE_OTP_SUCCESS: "RECEIVE_OTP_SUCCESS",
-    SORT_UPCOMING: "SORT_UPCOMING",
-    FILTER_UPCOMING: "FILTER_UPCOMING",
+
     //...................................    Drawdown Section
     D_SET_AUTH: "D_SET_AUTH",
     D_SET_TOKEN: "D_SET_TOKEN",
@@ -27,6 +32,12 @@ export const types = {
     ENACH_PAYLOAD: 'ENACH_PAYLOAD',
     ENACH_ATTEMPT: 'ENACH_ATTEMPT'
 };
+
+// ...........................................Existing User
+export const setExistSummary = summaryObj => ({
+    type: types.EXIST_SUMMARY,
+    summaryObj
+})
 
 export const changeLoader = loader => ({
     type: types.CHANGE_LOADER,

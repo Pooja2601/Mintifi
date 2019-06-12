@@ -62,13 +62,13 @@ class App extends Component {
         return (
             <Provider store={store}>
                 <PersistGate loading={null} persistor={persistor}>
-                    {/* ToDo : Change to sub Dir name in Prod  */}
+                    {/* ToDo : Change to sub Dir name in Prod (if placed in a sub) */}
                     <BrowserRouter basename={"./"}>
 
                         <Route
                             render={({location}) => (<>
                                 <ScrollToTop/>
-                                <AccessRoute/>
+                                {/*<AccessRoute/>*/}
                                 <Headers/>
                                 <div
                                     className="row justify-content-center background-color"

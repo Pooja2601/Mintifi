@@ -13,18 +13,12 @@ class AppApproved extends Component {
     componentWillMount() {
         const {payload, authObj, adharObj, businessObj, history} = this.props;
 
-        if (payload === Object(payload)) {
-            if (adharObj !== Object(adharObj))
-                history.push(`${PUBLIC_URL}/preapprove/personaldetail`);
-
-            if (businessObj !== Object(businessObj))
-                history.push(`${PUBLIC_URL}/preapprove/businessdetail`);
-        }
-        else history.push(`${PUBLIC_URL}/preapprove/token`);
+        // if (payload !== Object(payload))
+        //     history.push(`${PUBLIC_URL}/preapprove/token`);
     }
 
     render() {
-        let {adharObj, match, preFlightResp, history} = this.props;
+        let {adharObj, match, preFlightResp, history, anchorObj} = this.props;
 
         // if (adharObj === Object(adharObj))
         // if(preFlightResp ===Object(preFlightResp))
@@ -93,7 +87,7 @@ class AppApproved extends Component {
                                 </tr>*/}
                             <tr>
                                 <td className={"tableDataRight"}>Loan ID</td>
-                                <td>{loan_application_id}</td>
+                                <td>{(preFlightResp === Object(preFlightResp)) ? loan_application_id : ''}</td>
                             </tr>
                             <tr>
                                 <td className={"tableDataRight"}>Application Status</td>
@@ -155,7 +149,8 @@ class AppApproved extends Component {
                             In case of any query, please contact us at <a
                             href={"mailto:support@mintifi.com"}>support@mintifi.com</a> or <a
                             href={"tel:+919999999999"}>+91 9999999999</a>. <br/>Please
-                            mention your ( loan application id : {loan_application_id} ) in the request.
+                            mention your ( loan application id
+                            : {(preFlightResp === Object(preFlightResp)) ? loan_application_id : ''} ) in the request.
                         </div>
                         <div className="mt-5 mb-5 text-center ">
                             {/*
@@ -165,7 +160,7 @@ class AppApproved extends Component {
                                 type="button"
                                 onClick={e => history.push(`${PUBLIC_URL}/${landingPayload.success_url}`)}
                                 className="form-submit btn btn-raised greenButton"
-                            >Back to Yatra
+                            >Back to {(anchorObj === Object(anchorObj)) ? anchorObj.anchor_name : 'Yatra'}
                             </button>
                         </div>
 
@@ -179,6 +174,7 @@ class AppApproved extends Component {
 const mapStateToProps = state => ({
     adharObj: state.adharDetail.adharObj,
     // authObj: state.authPayload.authObj,
+    anchorObj: state.authPayload.anchorObj,
     businessObj: state.businessDetail.businessObj,
     payload: state.authPayload.payload,
     preFlightResp: state.businessDetail.preFlightResp

@@ -62,9 +62,11 @@ class ReviewBusinessDetail extends Component {
 
     _formSubmit(e) {
         // e.preventDefault();
+        let dob;
         const {payload, gstProfile, businessObj, adharObj, pan, adhar, token, changeLoader, history, storeResponse} = this.props;
         changeLoader(true);
-        let dob = adharObj.dob.substr(0, 10);
+        if (adharObj === Object(adharObj))
+            dob = adharObj.dob.substr(0, 10);
         /*
                 let date = (adharObj.dob).getDate();
                 let month = (adharObj.dob).getMonth();

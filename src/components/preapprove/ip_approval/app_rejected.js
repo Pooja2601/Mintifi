@@ -11,21 +11,15 @@ class AppRejected extends Component {
     componentWillMount() {
         const {payload, authObj, adharObj, businessObj, history} = this.props;
 
-        if (payload === Object(payload)) {
-            if (adharObj !== Object(adharObj))
-                history.push(`${PUBLIC_URL}/preapprove/personaldetail`);
-
-            if (businessObj !== Object(businessObj))
-                history.push(`${PUBLIC_URL}/preapprove/businessdetail`);
-        }
-        else history.push(`${PUBLIC_URL}/preapprove/token`);
+        // if (payload !== Object(payload))
+        //     history.push(`${PUBLIC_URL}/preapprove/token`);
     }
 
     render() {
-        let {match, adharObj, preFlightResp, history} = this.props;
+        let {match, adharObj, preFlightResp, history, anchorObj} = this.props;
         // ToDo :  Hide it in Prod
         if (environment === 'local')
-        match = {params: {status: 'declined'}};  // declined  // expired
+            match = {params: {status: 'declined'}};  // declined  // expired
 
         return (
             <>
@@ -52,7 +46,9 @@ class AppRejected extends Component {
                         In case of any query, please contact us at <a
                         href={"mailto:support@mintifi.com"}>support@mintifi.com</a> or <a href={"tel:+919999999999"}>+91
                         9999999999</a>. <br/>Please
-                        mention your <b>( loan application id : {preFlightResp.loan_application_id} )</b> in the
+                        mention your <b>( loan application id
+                        : {(preFlightResp === Object(preFlightResp)) ? preFlightResp.loan_application_id : ''} )</b> in
+                        the
                         request.
                     </div>
 
@@ -65,7 +61,7 @@ class AppRejected extends Component {
                         type="button"
                         onClick={e => history.push(`${PUBLIC_URL}/${landingPayload.error_url}`)}
                         className="form-submit btn btn-raised greenButton"
-                    >Back to Yatra
+                    >Back to {(anchorObj === Object(anchorObj)) ? anchorObj.anchor_name : 'Yatra'}
                     </button>
                 </div>
             </>
@@ -75,6 +71,7 @@ class AppRejected extends Component {
 
 const mapStateToProps = state => ({
     adharObj: state.adharDetail.adharObj,
+    anchorObj: state.authPayload.anchorObj,
     preFlightResp: state.businessDetail.preFlightResp
 });
 

@@ -9,7 +9,7 @@ const baseRootPath = (env_mode === 'local') ? 'http://localhost' : (env_mode ===
 
 module.exports = {
     environment: env_mode,
-    app_id: '6', // For React
+    app_id: '1', // For React
     user_id: '7KhXdg', // For React
     auth_secret: 'PYj055HtW7sDxsd2GD4Cgw',
     payMintifiUrl: payMintifiUrl,
@@ -46,7 +46,7 @@ module.exports = {
         "anchor_id": "uyh65t",
         "distributor_dealer_code": "R1T89563",
         "sales_agent_mobile_number": "9876543210",
-        "anchor_transaction_id": "hy76520",
+        "anchor_transaction_id": "ju677d",
         "retailer_onboarding_date": "2006-09-19",
         "product_type": "term_loan", // ["over_draft", "term_loan", "daily_emi", "supply_chain"]
         "vintage": null,
@@ -55,13 +55,13 @@ module.exports = {
         "error_url": `${baseRootPath}/`,
         "cancel_url": `${baseRootPath}/`,
     },
-    eNachPayload: {
-        "mandate_id": "ENA190607121623999YUPG9VAMFRXWAP",
+    eNachPayloadStatic: {
+        "mandate_id": "ENA19061214540850995IU6FCU1LE1AP",
         "user_name": "Arun Garg",
         "user_mobile": "9738361083",
-        "loan_application_id": 2314,
+        "loan_application_id": 2369,
         "company_id": 700,
-        "anchor_id": "uyh65t",
+        "anchor_id": "8186bc",
         "success_url": `${payMintifiUrl}/enach/success_url`,
         "cancel_url": `${payMintifiUrl}/enach/cancel_url`,
         "error_url": `${payMintifiUrl}/enach/error_url`

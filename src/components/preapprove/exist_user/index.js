@@ -7,7 +7,7 @@ import {
     sendOTP,
     changeLoader,
     setAdharManual,
-    setBusinessDetail,
+    setBusinessDetail, setExistSummary,
     setBankDetail,
     pan_adhar,
 } from "../../../actions/index";
@@ -131,13 +131,52 @@ class Auth extends Component {
                 this.setState({verified: resp.response.is_otp_verified}, () => setAuth(this.state));
 
                 if (resp.response.is_otp_verified)
-                    setTimeout(() => history.push(`${PUBLIC_URL}/preapprove/dashboard`), 500);
+                    this.checkSummary();
 
             }
         }, resp => {
             alertModule();
             changeLoader(false);
         })
+    }
+
+    checkSummary = () => {
+        const {payload, authObj, token, changeLoader, history} = this.props;
+        changeLoader(true);
+        fetch(`${baseUrl}/loans/loan_summary?user_number=${authObj.mobile}&anchor_transaction_id=${payload.anchor_transaction_id}&app_id=${app_id}`, {
+            method: 'GET',
+            headers: {token: token, "Content-Type": 'application/json'}
+        }).then(resp => resp.json()).then(resp => {
+
+            if (resp.error === Object(resp.error))
+                alertModule(resp.error.message, 'warn');
+
+            if (resp.response === Object(resp.response)) {
+                const {response} = resp;
+                setExistSummary(response);
+                if (response.loan_status == 'new_user') {
+                    alertModule('User doesn`t exist, redirecting you to the New User Portal...', 'info');
+                    setTimeout(() => history.push(`${PUBLIC_URL}/preapprove/adharpan`), 3000);
+                }
+                else if (response.loan_status == 'user_exist') {
+                    alertModule(`Welcome Back ${response.user_name} , Let's create your Loan Application. Redirecting you in a while...`, 'success');
+                    // ToDo : fetch User personal and business details
+                    // ToDo : set inside the Redux Object for adhar and business
+                    setTimeout(() => history.push(`${PUBLIC_URL}/preapprove/personaldetail`), 3000);
+                }
+                else {
+                    alertModule(`Welcome Back ${response.user_name}, redirecting you to the dashboard...`, 'success');
+                    setTimeout(() => history.push(`${PUBLIC_URL}/preapprove/dashboard`), 500);
+                }
+
+            }
+
+            changeLoader(false);
+        }, () => {
+            alertModule();
+            changeLoader(false);
+        });
+
     }
 
 //authObj
@@ -301,6 +340,6 @@ export default withRouter(connect(
         setAuth, sendOTP, changeLoader, setAdharManual,
         setBusinessDetail,
         setBankDetail,
-        pan_adhar
+        pan_adhar, setExistSummary
     }
 )(Auth));
