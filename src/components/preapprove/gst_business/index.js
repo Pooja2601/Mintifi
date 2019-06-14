@@ -324,7 +324,7 @@ class BusinessDetail extends Component {
                         </div>
                     </div>
                     {<div className="checkbox mt-5">
-                        <label style={{color: 'black'}}>
+                        <label style={{color: 'black', lineHeight: '1.5'}}>
                             <input type="checkbox" checked={this.state.tnc_consent}
                                    onChange={(e) =>
                                        this.setState(prevState => ({tnc_consent: !prevState.tnc_consent}))

@@ -57,8 +57,9 @@ class AdharPan extends Component {
         let state = adharObj;
 
         if (authObj === Object(authObj))
-            if (authObj.verified)
-                state.mobile = authObj.mobile;
+            if (authObj.verified && state === Object(state))
+                if (state.mobile)
+                    state.mobile = authObj.mobile;
 
         if (state === Object(state))
             this.setState(state, () => {
@@ -289,7 +290,7 @@ class AdharPan extends Component {
                                         // ref={ref => (this.obj.pan = ref)}
                                         onChange={(e) => {
                                             let {value} = e.target;
-                                            if (e.target.value.length <= 10)
+                                            if (value.length <= 10)
                                                 this.setState({mobile: value});
                                             this.validate.mobile = (value.length === 10 || value.length === 11) ? true : false;
                                             // console.log(value.length);

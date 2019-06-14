@@ -158,7 +158,7 @@ class AppApproved extends Component {
                     */}
                             <button
                                 type="button"
-                                onClick={e => history.push(`${PUBLIC_URL}/${landingPayload.success_url}`)}
+                                onClick={e => window.location.href=`${PUBLIC_URL}/${landingPayload.success_url}`}
                                 className="form-submit btn btn-raised greenButton"
                             >Back to {(anchorObj === Object(anchorObj)) ? anchorObj.anchor_name : 'Yatra'}
                             </button>

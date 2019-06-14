@@ -66,7 +66,8 @@ class ReviewBusinessDetail extends Component {
         const {payload, gstProfile, businessObj, adharObj, pan, adhar, token, changeLoader, history, storeResponse} = this.props;
         changeLoader(true);
         if (adharObj === Object(adharObj))
-            dob = adharObj.dob.substr(0, 10);
+            if (adharObj.dob)
+                dob = adharObj.dob.substr(0, 10);
         /*
                 let date = (adharObj.dob).getDate();
                 let month = (adharObj.dob).getMonth();

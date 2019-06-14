@@ -59,7 +59,7 @@ class AppRejected extends Component {
                     */}
                     <button
                         type="button"
-                        onClick={e => history.push(`${PUBLIC_URL}/${landingPayload.error_url}`)}
+                        onClick={e => window.location.href = `${PUBLIC_URL}/${landingPayload.error_url}`}
                         className="form-submit btn btn-raised greenButton"
                     >Back to {(anchorObj === Object(anchorObj)) ? anchorObj.anchor_name : 'Yatra'}
                     </button>
