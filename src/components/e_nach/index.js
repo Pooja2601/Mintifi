@@ -87,7 +87,8 @@ class ENach extends Component {
         // ToDo : hide the 2 lines in prod
         if (environment === 'dev') {
             // coming from constant
-            eNachPayload.document_id = eNachPayloadStatic.mandate_id;
+            if (eNachPayload === Object(eNachPayload))
+                eNachPayload.document_id = eNachPayloadStatic.mandate_id;
             Object.assign(base64_decode, eNachPayload);
         }
 

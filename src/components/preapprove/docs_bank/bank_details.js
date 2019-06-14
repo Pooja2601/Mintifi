@@ -4,7 +4,7 @@ import {baseUrl, accountType, loanUrl, payMintifiUrl, app_id, user_id, auth_secr
 import {connect} from "react-redux";
 import {setBankDetail, changeLoader, setToken} from "../../../actions";
 import {Link, withRouter} from "react-router-dom";
-import {alertModule, base64Logic} from "../../../shared/commonLogic";
+import {alertModule, base64Logic, retrieveParam} from "../../../shared/commonLogic";
 // import DatePicker from "react-datepicker";
 // import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select'
@@ -142,7 +142,10 @@ class BankDetail extends Component {
                         error_url: `${payMintifiUrl}/enach/error_url`,
                         cancel_url: `${payMintifiUrl}/enach/cancel_url`
                     };
-                    let base64_encode = base64Logic(payloadDecrypt, 'encode');
+                    // ToDo : uncomment In Prod
+                    // let base64_encode = base64Logic(payloadDecrypt, 'encode');
+                    // ToDo : comment in Prod
+                    let base64_encode = retrieveParam(resp.response.nach_url, 'payload');
                     this._genAuthToken(base64_encode);
                     /* setTimeout(() => history.push(`${PUBLIC_URL}/enach`, {
                          token: token,
