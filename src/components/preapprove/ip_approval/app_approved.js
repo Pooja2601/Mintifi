@@ -136,8 +136,8 @@ class AppApproved extends Component {
                         type="button"
                         disabled={!this.state.confirmed}
                         onClick={e => {
-                            // history.push(`${PUBLIC_URL}/preapprove/docsupload`);
-                            document.location.href = '/preapprove/docsupload';
+                            history.push(`${PUBLIC_URL}/preapprove/docsupload`);
+                            // document.location.href = '/preapprove/docsupload';
                         }}
                         className="form-submit btn btn-raised greenButton"
                     >Complete Your KYC

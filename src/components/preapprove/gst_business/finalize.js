@@ -119,6 +119,7 @@ class ReviewBusinessDetail extends Component {
                 let {loan_status} = resp.response.credit_eligibility;
                 // this._updateAnchor(loan_status);
                 storeResponse(resp.response);
+                console.log(resp.response);
                 if (loan_status === 'expired' || loan_status === 'declined')
                     history.push(`${PUBLIC_URL}/preapprove/apprejected`, {status: 'declined'});
                 else if (loan_status === 'pending') {

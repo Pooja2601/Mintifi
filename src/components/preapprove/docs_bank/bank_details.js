@@ -101,6 +101,7 @@ class BankDetail extends Component {
     _formSubmit = (e) => {
         e.preventDefault();
         const {changeLoader, token, payload, preFlightResp, adharObj, history} = this.props;
+        console.log(preFlightResp);
         if (preFlightResp === Object(preFlightResp)) {
             changeLoader(true);
             fetch(`${baseUrl}/bank_account`, {
@@ -124,7 +125,7 @@ class BankDetail extends Component {
                     "timestamp": new Date()
                 })
             }).then(resp => resp.json()).then((resp) => {
-                changeLoader(true);
+                changeLoader(false);
                 // success
                 if (resp.response === Object(resp.response)) {
                     // resp.response.mandate_id
@@ -467,6 +468,7 @@ class BankDetail extends Component {
 const mapStateToProps = state => ({
     adharObj: state.adharDetail.adharObj,
     payload: state.authPayload.payload,
+    preFlightResp: state.businessDetail.preFlightResp,
     businessObj: state.businessDetail.businessObj,
     gstProfile: state.businessDetail.gstProfile,
     bankObj: state.businessDetail.bankObj
