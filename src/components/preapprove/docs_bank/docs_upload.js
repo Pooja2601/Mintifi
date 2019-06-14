@@ -240,34 +240,32 @@ class DocsUpload extends Component {
             ctr++;
         }
 
-        /*
-                fetch(`${baseUrl}/documents`, {
-                    method: 'POST',
-                    headers: {
-                        // "Content-Type": "",
-                        "token": token,
-                        "cache": "no-cache",
-                    },
-                    body: formData // This is your file object
-                })
-                    .then(resp => resp.json())
-                    .then(
-                        resp => {
-                            this.props.changeLoader(false);
-                            console.log(resp); // Handle the success response object
-                            if (resp.error === Object(resp.error))
-                                alertModule("We couldn't upload the files, Kindly try again !", 'warn');
-                            else if (resp.response === Object(resp.response))
-                                history.push(`${PUBLIC_URL}/preapprove/bankdetail`);
-                        }
-                    ).catch(
-                    error => {
-                        changeLoader(false);
-                        console.log(error); // Handle the error response object
-                        alertModule("Something went wrong !", 'error');
-                        alertModule();
-                    }
-                );*/
+        fetch(`${baseUrl}/documents`, {
+            method: 'POST',
+            headers: {
+                // "Content-Type": "",
+                "token": token,
+                "cache": "no-cache",
+            },
+            body: formData // This is your file object
+        })
+            .then(resp => resp.json())
+            .then(
+                resp => {
+                    this.props.changeLoader(false);
+                    console.log(resp); // Handle the success response object
+                    if (resp.error === Object(resp.error))
+                        alertModule("We couldn't upload the files, Kindly try again !", 'warn');
+                    else if (resp.response === Object(resp.response))
+                        history.push(`${PUBLIC_URL}/preapprove/bankdetail`);
+                }
+            ).catch(
+            error => {
+                changeLoader(false);
+                console.log(error); // Handle the error response object
+                alertModule();
+            }
+        );
     }
 
     componentWillMount() {
