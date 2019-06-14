@@ -123,7 +123,7 @@ class BankDetail extends Component {
                     "cancel_url": `${payMintifiUrl}/enach/cancel_url`,
                     "timestamp": new Date()
                 })
-            }).then((resp) => {
+            }).then(resp => resp.json()).then((resp) => {
                 changeLoader(true);
                 // success
                 if (resp.response === Object(resp.response)) {
