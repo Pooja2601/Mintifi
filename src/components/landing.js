@@ -62,6 +62,7 @@ class Login extends Component {
         let authToken = await generateToken();
         changeLoader(false);
         setToken(authToken, payload);
+        console.log(payload);
         if (environment === 'dev' || environment === 'local')
             this._fetchAnchorDetail();
     }

@@ -51,7 +51,7 @@ module.exports = {
         "anchor_id": "uyh65t",
         "distributor_dealer_code": "R1T89563",
         "sales_agent_mobile_number": "9876543210",
-        "anchor_transaction_id": "ju677d",
+        "anchor_transaction_id": Math.random().toString(36).substr(2, 6),
         "retailer_onboarding_date": "2006-09-19",
         "product_type": "term_loan", // ["over_draft", "term_loan", "daily_emi", "supply_chain"]
         "vintage": null,
