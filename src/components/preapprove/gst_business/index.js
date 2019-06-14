@@ -104,7 +104,7 @@ class BusinessDetail extends Component {
 
     businessGst(e) {
         const value = e;
-
+// ToDo : allow only Business PAN
         if (value.length <= 15) {
             let bpan = value.substr(2, 10);
             this.setState({gst: value, bpan}, () => this.props.setBusinessDetail(this.state))

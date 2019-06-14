@@ -107,6 +107,7 @@ class AdharPan extends Component {
     }
 
     _PANEnter = e => {
+        // ToDo : allow only Personal PAN
         let regex = /^[a-zA-Z]{5}([0-9]){4}[a-zA-Z]{1}?$/;
         if (e.target.value.length <= 10) {
             let pan_correct = regex.test(e.target.value);

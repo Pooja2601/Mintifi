@@ -7,6 +7,12 @@ const payMintifiUrl = (env_mode === 'dev' || env_mode === 'local') ? 'https://pa
 // For redirection after Failure and Success (of enach or drawdwon) (Its a dummy and Optional)
 const baseRootPath = (env_mode === 'local') ? 'http://localhost' : (env_mode === 'dev') ? 'https://pay-test.mintifi.com' : 'https://pay.mintifi.com';
 
+const anchorUrls = {
+    "success_url": `${baseRootPath}/`,
+    "cancel_url": `${baseRootPath}/`,
+    "error_url": `${baseRootPath}/`
+};
+
 module.exports = {
     environment: env_mode,
     app_id: '1', // For React
@@ -21,7 +27,6 @@ module.exports = {
     test_kscan: "https://testapi.kscan.in/v1/gst/",
     karza_key: "jdughfoP51majvjAUW6W",
     digio: "",
-
     BusinessType: [
         {value: "", label: "Select Company type"},
         {value: "proprietorship", label: "Proprietorship"},
@@ -51,9 +56,9 @@ module.exports = {
         "product_type": "term_loan", // ["over_draft", "term_loan", "daily_emi", "supply_chain"]
         "vintage": null,
         "loan_amount": "500000",
-        "success_url": `${baseRootPath}/`,
-        "error_url": `${baseRootPath}/`,
-        "cancel_url": `${baseRootPath}/`,
+        "success_url": anchorUrls.success_url,
+        "error_url": anchorUrls.error_url,
+        "cancel_url": anchorUrls.cancel_url,
     },
     eNachPayloadStatic: {
         "mandate_id": "ENA19061214540850995IU6FCU1LE1AP",
@@ -74,9 +79,9 @@ module.exports = {
         "company_id": "629",
         "drawdown_amount": "20000",
         "disbursement_account_code": "sdtf78",
-        "success_url": `${baseRootPath}/`,
-        "cancel_url": `${baseRootPath}/`,
-        "error_url": `${baseRootPath}/`
+        "success_url": anchorUrls.success_url,
+        "cancel_url": anchorUrls.cancel_url,
+        "error_url": anchorUrls.error_url
     }
 
 };
