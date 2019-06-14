@@ -67,7 +67,7 @@ class ENach extends Component {
             setTimeout(() => {
                 // ToDo : Uncomment this line in Prod
                 if (environment === 'prod' || environment === 'dev')
-                    window.location.href = payload.error_url;
+                    window.location.href = eNachPayload.error_url;
             }, 1000);
         }
     };
