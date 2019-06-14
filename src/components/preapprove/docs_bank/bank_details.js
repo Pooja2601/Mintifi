@@ -466,6 +466,7 @@ class BankDetail extends Component {
 }
 
 const mapStateToProps = state => ({
+    token: state.authPayload.token,
     adharObj: state.adharDetail.adharObj,
     payload: state.authPayload.payload,
     preFlightResp: state.businessDetail.preFlightResp,
