@@ -22,6 +22,13 @@ const doc_att = [
     {doc_type: 'rent_agreement', doc_category: 'address', doc_owner: 'company'},
 ];
 
+const doc_type_attr = [
+    'id_proof',
+    'add_proof',
+    'entity_proof',
+    'caddr_proof'
+];
+
 class DocsUpload extends Component {
 
     state = {
@@ -223,43 +230,44 @@ class DocsUpload extends Component {
         formData.append("anchor_id", payload.anchor_id);
         formData.append("loan_application_id", preFlightResp.loan_application_id);
 
+        // console.log(JSON.stringify(this.state.checked[doc_type_attr[ctr]]));
         for (const file of inputFiles) {
 
-            formData.append(`documents[][doc_type]`, this.state.checked[ctr]);
+            formData.append(`documents[][doc_type]`, this.state.checked[doc_type_attr[ctr]]);
             formData.append(`documents[][doc_category]`, doc_att[ctr].doc_category);
             formData.append(`documents[][doc_owner]`, doc_att[ctr].doc_owner);
             formData.append(`documents[][file]`, file.files[0]);
             ctr++;
         }
-        // console.log(formData);
 
-        fetch(`${baseUrl}/documents`, {
-            method: 'POST',
-            headers: {
-                // "Content-Type": "",
-                "token": token,
-                "cache": "no-cache",
-            },
-            body: formData // This is your file object
-        })
-            .then(resp => resp.json())
-            .then(
-                resp => {
-                    this.props.changeLoader(false);
-                    console.log(resp); // Handle the success response object
-                    if (resp.error === Object(resp.error))
-                        alertModule("We couldn't upload the files, Kindly try again !", 'warn');
-                    else if (resp.response === Object(resp.response))
-                        history.push(`${PUBLIC_URL}/preapprove/bankdetail`);
-                }
-            ).catch(
-            error => {
-                changeLoader(false);
-                console.log(error); // Handle the error response object
-                alertModule("Something went wrong !", 'error');
-                alertModule();
-            }
-        );
+        /*
+                fetch(`${baseUrl}/documents`, {
+                    method: 'POST',
+                    headers: {
+                        // "Content-Type": "",
+                        "token": token,
+                        "cache": "no-cache",
+                    },
+                    body: formData // This is your file object
+                })
+                    .then(resp => resp.json())
+                    .then(
+                        resp => {
+                            this.props.changeLoader(false);
+                            console.log(resp); // Handle the success response object
+                            if (resp.error === Object(resp.error))
+                                alertModule("We couldn't upload the files, Kindly try again !", 'warn');
+                            else if (resp.response === Object(resp.response))
+                                history.push(`${PUBLIC_URL}/preapprove/bankdetail`);
+                        }
+                    ).catch(
+                    error => {
+                        changeLoader(false);
+                        console.log(error); // Handle the error response object
+                        alertModule("Something went wrong !", 'error');
+                        alertModule();
+                    }
+                );*/
     }
 
     componentWillMount() {

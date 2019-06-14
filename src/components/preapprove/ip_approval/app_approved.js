@@ -119,11 +119,11 @@ class AppApproved extends Component {
                 </div>
                 <br/>
 
-                <div className="checkbox " style={{
+                <div className=" " style={{
                     marginLeft: '2.3rem',
                     visibility: (match.params.status !== 'pending') ? 'visible' : 'hidden'
                 }}>
-                    <label style={{color: 'black'}}>
+                    <label style={{color: 'black', lineHeight: '1.5'}}>
                         <input type="checkbox" checked={this.state.confirmed}
                                onChange={(e) =>
                                    this.setState(prevState => ({confirmed: !prevState.confirmed}))
@@ -158,7 +158,7 @@ class AppApproved extends Component {
                     */}
                             <button
                                 type="button"
-                                onClick={e => window.location.href=`${PUBLIC_URL}/${landingPayload.success_url}`}
+                                onClick={e => window.location.href = `${PUBLIC_URL}/${landingPayload.success_url}`}
                                 className="form-submit btn btn-raised greenButton"
                             >Back to {(anchorObj === Object(anchorObj)) ? anchorObj.anchor_name : 'Yatra'}
                             </button>
