@@ -8,7 +8,12 @@ const Loader = (props) => {
     return (<>
         <div className={"loaderOverlay"}
              style={{display: (props.loader) ? 'block' : 'none'}}>
-            <div className="lds-hourglass"></div>
+            <div className="lds-ring">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
         </div>
        
     </>);

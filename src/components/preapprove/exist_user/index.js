@@ -402,7 +402,9 @@ class Auth extends Component {
 const mapStateToProps = state => ({
     payload: state.authPayload.payload,
     authObj: state.authPayload.authObj,
-    token: state.authPayload.token
+    token: state.authPayload.token,
+    adharObj: state.adharDetail.adharObj,
+    businessObj: state.businessDetail.businessObj
 });
 
 export default withRouter(connect(

@@ -330,7 +330,7 @@ class AdharPan extends Component {
 
 
                     <div className={"row"}>
-                        <div className={"col-sm-12 col-md-6 text-center"}>
+                        <div className={"col-sm-12 col-md-6 text-left"}>
                             <label htmlFor="ResidenceOwnership" className="labelLoan bmd-label">
                                 Gender *
                             </label><br/>
@@ -392,7 +392,7 @@ class AdharPan extends Component {
                                 </button>
                             </div>
                         </div>
-                        <div className={"col-sm-12 col-md-6 text-center"}>
+                        <div className={"col-sm-12 col-md-6 text-left"}>
                             <label htmlFor="ResidenceOwnership" className="labelLoan bmd-label">
                                 Ownership *
                             </label><br/>

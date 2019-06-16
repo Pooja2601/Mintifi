@@ -177,12 +177,30 @@ class BusinessDetail extends Component {
                 <p className="paragraph_styling  text-center">
                     <b> Please submit your business details to complete the loan application.</b>
                 </p>
-                <h5 className={"text-center"}>{(gstProfile === Object(gstProfile)) ? gstProfile.lgnm : ''}</h5>
+                <br/>
+                {/*<h5 className={"text-center"}>{(gstProfile === Object(gstProfile)) ? gstProfile.lgnm : ''}</h5>*/}
 
                 <form
                     id="serverless-contact-form"
                     onSubmit={e => this._formSubmit(e)}
                 >
+                    <div className={"row"}>
+                        <div className={"col-md-6 col-sm-12"}>
+                            {/*<h5 className={"text-center"}>{(gstProfile === Object(gstProfile)) ? gstProfile.lgnm : ''}</h5>*/}
+                            <input
+                                type="text"
+                                className="form-control font_weight"
+                                style={{fontWeight: 600, padding: '10px'}}
+                                title="Company Legal Name"
+                                autoCapitalize="characters"
+                                id="companyName"
+                                required={true}
+                                value={(gstProfile === Object(gstProfile)) ? gstProfile.lgnm : ''}
+                                readOnly={true}
+                                disabled={true}
+                            />
+                        </div>
+                    </div>
                     <div className={"row"}>
                         <div className={"col-md-6 col-sm-12"}>
                             <div className="form-group mb-3">
@@ -191,6 +209,7 @@ class BusinessDetail extends Component {
                                         required={true}
                                         id="companyType"
                                         inputId={"companyType"}
+                                        value={BusinessType[1]}
                                         onBlur={() => this.validationErrorMsg()}
                                         onChange={(e) => {
                                             let {value} = e;
