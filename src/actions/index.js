@@ -37,7 +37,7 @@ export const types = {
 export const setExistSummary = summaryObj => ({
     type: types.EXIST_SUMMARY,
     summaryObj
-})
+});
 
 export const changeLoader = loader => ({
     type: types.CHANGE_LOADER,

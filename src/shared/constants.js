@@ -82,6 +82,19 @@ module.exports = {
         "success_url": anchorUrls.success_url,
         "cancel_url": anchorUrls.cancel_url,
         "error_url": anchorUrls.error_url
+    },
+    existUserPayload: {
+        "user_name": "Mahesh Pai",
+        "user_email": "mahesh.pai@gmail.com",
+        "loan_application_id": "1740",
+        "loan_status": "pending",
+        "loan_amount_approved": "500000",
+        "loan_product_type": "term_loan",
+        loan_details: {
+            loan_tenor: '16',
+            roi: '7',
+            emi: '33440'
+        }
     }
 
 };

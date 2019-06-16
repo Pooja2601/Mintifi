@@ -99,8 +99,6 @@ class App extends Component {
                                                        component={Login}/>
                                                 <Route path={`${PUBLIC_URL}/preapprove/auth/`}
                                                        component={Auth}/>
-                                                <Route path={`${PUBLIC_URL}/preapprove/dashboard/`}
-                                                       component={Dashboard}/>
                                                 <Route path={`${PUBLIC_URL}/preapprove/adharpan`}
                                                        component={AdharPan}/>
                                                 <Route path={`${PUBLIC_URL}/preapprove/personaldetail`}
@@ -124,6 +122,9 @@ class App extends Component {
                                                        component={ThankYou}/>
                                                 <Route path={`${PUBLIC_URL}/preapprove/privacy`}
                                                        component={Privacy}/>
+
+                                                <Route path={`${PUBLIC_URL}/exist/dashboard/`}
+                                                       component={Dashboard}/>
 
                                                 <Route exact path={`${PUBLIC_URL}/drawdown`}
                                                        component={DrawIndex}/>

@@ -114,12 +114,15 @@ class BusinessDetail extends Component {
     }
 
     componentWillMount() {
-        const {businessObj, gstProfile, payload, adharObj, setBusinessDetail, changeLoader} = this.props;
+        const {businessObj, gstProfile, payload, adharObj, setBusinessDetail, changeLoader, history} = this.props;
 
-        if (payload !== Object(payload))
+
+        if (payload === Object(payload)) {
             if (adharObj !== Object(adharObj))
-                if (adharObj.verified)
-                    this.props.history.push(`${PUBLIC_URL}/preapprove/token`);
+                history.push(`${PUBLIC_URL}/preapprove/personaldetail`);
+
+        }
+        else history.push(`${PUBLIC_URL}/preapprove/token`);
 
         if (businessObj === Object(businessObj)) {
             this.businessGst(businessObj.gst);

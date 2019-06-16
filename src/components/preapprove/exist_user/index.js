@@ -17,6 +17,22 @@ import {alertModule} from "../../../shared/commonLogic";
 const Timer = OTP_Timer;
 const {PUBLIC_URL} = process.env;
 
+let personalDetails = {
+    f_name: '',
+    m_name: '',
+    l_name: '',
+    mobile: '',
+    email: '',
+    dob: new Date(),
+    gender: 'm',
+    ownership: 'rented',
+    pincode: '',
+    address1: '',
+    address2: '',
+    city: '',
+    state: '',
+};
+
 class Auth extends Component {
     state = {
         submitted: false,
@@ -140,6 +156,63 @@ class Auth extends Component {
         })
     }
 
+    _fetchUserInfo() {
+        const {changeLoader, history, authObj, token} = this.props;
+        changeLoader(true);
+        fetch(`${baseUrl}/users/user_summary?user_number=${authObj.mobile}&app_id=${app_id}`, {
+            headers: {'Content-Type': 'application/json', token: token},
+        }).then(resp => resp.json()).then(resp => {
+            changeLoader(false);
+            // console.log(resp.response);
+            if (resp.error === Object(resp.error))
+                alertModule(resp.error.message, 'warn');
+
+            if (resp.response === Object(resp.response)) {
+                let {borrowers, business_details} = resp.response;
+
+                if (borrowers === Object(borrowers)) {
+                    const {residence_address} = borrowers;
+                    pan_adhar(borrowers.pan, borrowers.aadhar);
+                    Object.assign(personalDetails, borrowers);
+                    let nameFull = borrowers.name.split(' ');
+                    personalDetails.f_name = nameFull[0];
+                    personalDetails.l_name = nameFull[1];
+                    personalDetails.mobile = borrowers.mobile_number;
+
+                    if (residence_address === Object(residence_address)) {
+                        Object.assign(personalDetails, residence_address);
+                        personalDetails.ownership = residence_address.ownership_type;
+                        personalDetails.address1 = residence_address.address_line_1;
+                        personalDetails.address2 = residence_address.address_line_2;
+                    }
+
+                    setAdharManual(personalDetails);
+                    console.log(personalDetails);
+                }
+
+
+                if (business_details === Object(business_details) && business_details[0].pan) {
+                    let businessDetails = {
+                        lgnm: business_details[0].business_name,
+                        companytype: business_details[0].business_type,
+                        gst: business_details[0].business_gst,
+                        bpan: business_details[0].business_pan,
+                        avgtrans: '',
+                        dealercode: '',
+                    }
+                    setBusinessDetail(businessDetails);
+                    console.log(businessDetails);
+                }
+
+            }
+            setTimeout(() => history.push(`${PUBLIC_URL}/preapprove/personaldetail`), 1000);
+        }, () => {
+            alertModule();
+            changeLoader(false);
+        });
+
+    }
+
     checkSummary = () => {
         const {payload, authObj, token, changeLoader, history} = this.props;
         changeLoader(true);
@@ -161,14 +234,13 @@ class Auth extends Component {
                 else if (response.loan_status == 'user_exist') {
                     alertModule(`Welcome Back ${response.user_name} , Let's create your Loan Application. Redirecting you in a while...`, 'success');
                     // ToDo : fetch User personal and business details
+                    this._fetchUserInfo();
                     // ToDo : set inside the Redux Object for adhar and business
-                    setTimeout(() => history.push(`${PUBLIC_URL}/preapprove/personaldetail`), 3000);
                 }
                 else {
                     alertModule(`Welcome Back ${response.user_name}, redirecting you to the dashboard...`, 'success');
-                    setTimeout(() => history.push(`${PUBLIC_URL}/preapprove/dashboard`), 500);
+                    setTimeout(() => history.push(`${PUBLIC_URL}/exist/dashboard`), 500);
                 }
-
             }
 
             changeLoader(false);
@@ -210,7 +282,6 @@ class Auth extends Component {
                 <form
                     id="serverless-contact-form"
                 >
-
                     <div className={"row"}>
                         <div className={"col-sm-11 col-md-8"} style={{margin: 'auto'}}>
                             <div className="form-group mb-3">
@@ -245,6 +316,7 @@ class Auth extends Component {
                                 </div>
                             </div>
                         </div>
+
                         <div className={"col-sm-11 col-md-8"} style={{margin: 'auto'}}>
                             <div className="form-group mb-3"
                                  style={{visibility: (this.state.submitted) ? 'visible' : 'hidden'}}>
@@ -297,7 +369,6 @@ class Auth extends Component {
                     </div>
 
                     <div className="mt-3 text-center ">
-
                         <button
                             type="submit"
                             name="submit"
@@ -308,7 +379,6 @@ class Auth extends Component {
                         >Send OTP
                         </button>
                         <br/>
-
                         <button
                             style={{visibility: (this.state.loading && (this.state.otp.length === 6)) ? 'visible' : 'hidden'}}
                             onClick={e => this._verifyOTP(e)}
@@ -330,6 +400,7 @@ class Auth extends Component {
 
 
 const mapStateToProps = state => ({
+    payload: state.authPayload.payload,
     authObj: state.authPayload.authObj,
     token: state.authPayload.token
 });
