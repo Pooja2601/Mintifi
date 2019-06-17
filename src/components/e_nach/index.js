@@ -31,16 +31,22 @@ class ENach extends Component {
             changeLoader(false);
 
             if (resp.response === Object(resp.response)) {
-                let payload = retrieveParam(resp.response.nach_url, 'payload');
-                let base64_decode = base64Logic(payload, 'decode');
+                // let payload = retrieveParam(eNachPayload.nach_url, 'payload');
+                // let base64_decode = base64Logic(payload, 'decode');
                 setTimeout(() => {
                     // ToDo : Uncomment the below line in Prod
                     if (environment === 'prod' || environment === 'dev')
-                        window.location.href = base64_decode.success_url;
+                        window.location.href = eNachPayload.success_url;
                 }, 1000);
             }
-            if (resp.error === Object(resp.error))
+            if (resp.error === Object(resp.error)){
                 alertModule(resp.error.message, 'warn');
+                setTimeout(() => {
+                    // ToDo : Uncomment the below line in Prod
+                    if (environment === 'prod' || environment === 'dev')
+                        window.location.href = eNachPayload.error_url;
+                }, 1000);
+            }
 
         }, (resp) => {
             alertModule();

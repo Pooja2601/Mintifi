@@ -83,7 +83,7 @@ class AdharPan extends Component {
     }
 
     _loadGstProfile() {
-        const {gstProfile} = this.props;
+        const {gstProfile, setAdharManual} = this.props;
         let tempName;
         if (gstProfile === Object(gstProfile)) {
             if (gstProfile.mbr.length > 0) {
@@ -92,13 +92,13 @@ class AdharPan extends Component {
                     f_name: tempName[0],
                     m_name: (tempName[2]) ? tempName[1] : '',
                     l_name: (tempName[2]) ? tempName[2] : ''
-                }, () => this.props.setAdharManual(this.state));
+                }, () => setAdharManual(this.state));
             }
             if (gstProfile.pradr.length > 0) {
                 this.setState({
                     mobile: gstProfile.pradr.mb,
                     email: gstProfile.pradr.em
-                }, () => this.props.setAdharManual(this.state));
+                }, () => setAdharManual(this.state));
             }
         }
     }
