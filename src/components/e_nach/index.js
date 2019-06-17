@@ -91,7 +91,9 @@ class ENach extends Component {
 
         if (environment === 'prod' || environment === 'dev') {
             payload = retrieveParam(href, 'payload');
+            console.log(payload);
             token = retrieveParam(href, 'token');
+            console.log(token);
             base64_decode = base64Logic(payload, 'decode');
         }
 
