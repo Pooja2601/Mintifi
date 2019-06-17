@@ -19,7 +19,7 @@ export const alertModule = (props, type) => {
 
 export const base64Logic =
     (payload, action) => {
-        let base64;
+        let base64 = '';
         if (action === 'decode') {
             base64 = (payload) ? JSON.parse(new Buffer(payload, 'base64').toString('ascii')) : {};
         }
