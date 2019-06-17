@@ -62,6 +62,7 @@ module.exports = {
     },
     eNachPayloadStatic: {
         "mandate_id": "ENA19061214540850995IU6FCU1LE1AP",
+        "document_id": "ENA19061214540850995IU6FCU1LE1AP",
         "user_name": "Arun Garg",
         "user_mobile": "9738361083",
         "loan_application_id": 2369,

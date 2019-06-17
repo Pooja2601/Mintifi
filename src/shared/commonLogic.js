@@ -15,7 +15,6 @@ export const alertModule = (props, type) => {
         else if (type === 'error') toast.error(props);
         else toast.info(props);
     }
-    // props.changeLoader(false);
 };
 
 export const base64Logic =

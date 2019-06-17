@@ -19,6 +19,7 @@ class MobileOtp extends Component {
         otp: '',
         otp_reference_id: '',
         verified: false,
+        verified_number: '',
         mobile_correct: false
     };
 
@@ -91,10 +92,10 @@ class MobileOtp extends Component {
             if (resp.error === Object(resp.error))
                 alertModule(resp.error.message, 'warn');
             else if (resp.response === Object(resp.response)) {
-                this.setState({verified: resp.response.is_otp_verified}, () => {
+                this.setState({verified: resp.response.is_otp_verified, verified_number: adharObj.mobile}, () => {
                     setAdharManual(this.state);
                 });
-                if (resp.response.is_otp_verified)
+                if (resp.response.is_otp_verified) //&& this.state.verified_number === adharObj.mobile
                     setTimeout(() => {
                         history.push(`${PUBLIC_URL}/preapprove/businessdetail`);
                     }, 500);

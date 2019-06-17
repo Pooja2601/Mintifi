@@ -1,4 +1,5 @@
 export const types = {
+    SHOW_ALERT: "SHOW_ALERT",
     //...................................Preapproval Flow
     // Exisiting User
     EXIST_SUMMARY: "EXIST_SUMMARY",
@@ -32,6 +33,11 @@ export const types = {
     ENACH_PAYLOAD: 'ENACH_PAYLOAD',
     ENACH_ATTEMPT: 'ENACH_ATTEMPT'
 };
+
+export const showAlert = (alertMsg, alertType) => ({
+    type: types.SHOW_ALERT,
+    alertMsg, alertType
+});
 
 // ...........................................Existing User
 export const setExistSummary = summaryObj => ({

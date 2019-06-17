@@ -5,7 +5,6 @@ import ScrollToTop from "./shared/scrollhack";
 
 import configureStore from "./store";
 import {PersistGate} from 'redux-persist/integration/react';
-// import { withSnackbar } from 'material-ui-snackbar-provider';
 import {ToastContainer, toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -47,6 +46,7 @@ import ErrorUrl from "./components/e_nach/error_url";
 import CancelUrl from "./components/e_nach/cancel_url";
 
 import Headers from "./shared/header";
+import CustomAlerts from "./shared/custom_alerts";
 import AccessRoute from "./shared/test";
 
 const {store, persistor} = configureStore();
@@ -122,10 +122,8 @@ class App extends Component {
                                                        component={ThankYou}/>
                                                 <Route path={`${PUBLIC_URL}/preapprove/privacy`}
                                                        component={Privacy}/>
-
                                                 <Route path={`${PUBLIC_URL}/exist/dashboard/`}
                                                        component={Dashboard}/>
-
                                                 <Route exact path={`${PUBLIC_URL}/drawdown`}
                                                        component={DrawIndex}/>
                                                 <Route exact
@@ -150,8 +148,11 @@ class App extends Component {
                                             {/*</CSSTransition>*/}
                                             {/*</TransitionGroup>*/}
                                         </div>
+
+                                        <CustomAlerts/>
                                     </div>
                                 </div>
+
                                 <ToastContainer style={{marginBottom: '100px'}} autoClose={8000}
                                                 position={toast.POSITION.BOTTOM_RIGHT}/>
                             </>)}/>

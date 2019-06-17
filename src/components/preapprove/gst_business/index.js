@@ -209,7 +209,7 @@ class BusinessDetail extends Component {
                                         required={true}
                                         id="companyType"
                                         inputId={"companyType"}
-                                        value={BusinessType[1]}
+                                        // value={BusinessType[1]}
                                         onBlur={() => this.validationErrorMsg()}
                                         onChange={(e) => {
                                             let {value} = e;

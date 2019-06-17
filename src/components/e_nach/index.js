@@ -80,22 +80,22 @@ class ENach extends Component {
         // let token = `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyNiwidHlwZSI6InJlYWN0X3dlYl91c2VyIiwiZXhwIjoxNTYwMzMzNTYxfQ.yzD-pIyaf4Z7zsXEJZG-Hm0ka80CjMjMB74q6dpRSPM`;
         let {href} = window.location, base64_decode, payload;
 
-        if (environment === 'dev' || environment === 'local')
+        if (environment === 'local')
             base64_decode = eNachPayloadStatic;
-
 
         // ToDo : hide the 2 lines in prod
         if (environment === 'dev') {
             // coming from constant
             if (eNachPayload === Object(eNachPayload))
-                eNachPayload.document_id = eNachPayloadStatic.mandate_id;
+                eNachPayload.document_id = eNachPayload.mandate_id;
             Object.assign(base64_decode, eNachPayload);
         }
 
-        if (environment === 'prod') {
+        if (environment === 'prod' || environment === 'dev') {
             payload = retrieveParam(href, 'payload');
             token = retrieveParam(href, 'token');
             base64_decode = base64Logic(payload, 'decode');
+            base64_decode.document_id = base64_decode.mandate_id;
         }
 
         if (base64_decode !== Object(base64_decode))

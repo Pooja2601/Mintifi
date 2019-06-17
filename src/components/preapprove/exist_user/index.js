@@ -9,7 +9,7 @@ import {
     setAdharManual,
     setBusinessDetail, setExistSummary,
     setBankDetail,
-    pan_adhar,
+    pan_adhar, showAlert
 } from "../../../actions/index";
 import {Link, withRouter} from "react-router-dom";
 import {alertModule} from "../../../shared/commonLogic";
@@ -199,13 +199,14 @@ class Auth extends Component {
                         bpan: business_details[0].business_pan,
                         avgtrans: '',
                         dealercode: '',
-                    }
+                    };
                     setBusinessDetail(businessDetails);
                     console.log(businessDetails);
                 }
 
             }
-            setTimeout(() => history.push(`${PUBLIC_URL}/preapprove/personaldetail`), 1000);
+            setTimeout(() => history.push(`${PUBLIC_URL}/preapprove/personaldetail`), 1500);
+
         }, () => {
             alertModule();
             changeLoader(false);
@@ -227,11 +228,11 @@ class Auth extends Component {
             if (resp.response === Object(resp.response)) {
                 const {response} = resp;
                 setExistSummary(response);
-                if (response.loan_status == 'new_user') {
+                if (response.loan_status === 'new_user') {
                     alertModule('User doesn`t exist, redirecting you to the New User Portal...', 'info');
                     setTimeout(() => history.push(`${PUBLIC_URL}/preapprove/adharpan`), 3000);
                 }
-                else if (response.loan_status == 'user_exist') {
+                else if (response.loan_status === 'user_exist') {
                     alertModule(`Welcome Back ${response.user_name} , Let's create your Loan Application. Redirecting you in a while...`, 'success');
                     // ToDo : fetch User personal and business details
                     this._fetchUserInfo();
@@ -266,6 +267,8 @@ class Auth extends Component {
         if (authObj === Object(authObj))
             this.setState({mobile: authObj.mobile, verified: authObj.verified});
         else setAuth(this.state);
+
+        showAlert('this is message', 'warn');
     }
 
     render() {
@@ -413,6 +416,6 @@ export default withRouter(connect(
         setAuth, sendOTP, changeLoader, setAdharManual,
         setBusinessDetail,
         setBankDetail,
-        pan_adhar, setExistSummary
+        pan_adhar, setExistSummary, showAlert
     }
 )(Auth));

@@ -70,7 +70,7 @@ class BankDetail extends Component {
        }*/
 
     _genAuthToken = (base64_encode) => {
-        const {history} = this.props;
+        const {history, token} = this.props;
         changeLoader(true);
         fetch(`${baseUrl}/auth`, {
             method: 'POST',
@@ -89,7 +89,7 @@ class BankDetail extends Component {
             if (resp.response === Object(resp.response))
                 if (resp.response.status === 'success')
                     setTimeout(() => history.push(`${PUBLIC_URL}/enach?payload=${base64_encode}&token=${resp.response.auth.token}`), 500);
-
+            //resp.response.auth.token
             if (resp.error === Object(resp.error))
                 alertModule(resp.error.message, 'warn');
         }, () => {
