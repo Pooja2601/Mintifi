@@ -157,7 +157,7 @@ class Auth extends Component {
     }
 
     _fetchUserInfo() {
-        const {changeLoader, history, authObj, token} = this.props;
+        const {changeLoader, history, authObj, token, adharObj, businessObj} = this.props;
         changeLoader(true);
         fetch(`${baseUrl}/users/user_summary?user_number=${authObj.mobile}&app_id=${app_id}`, {
             headers: {'Content-Type': 'application/json', token: token},
@@ -187,7 +187,9 @@ class Auth extends Component {
                     }
 
                     setAdharManual(personalDetails);
-                    console.log(personalDetails);
+
+                    console.log(adharObj);
+                    console.log(adharObj);
                 }
 
 
@@ -201,11 +203,11 @@ class Auth extends Component {
                         dealercode: '',
                     };
                     setBusinessDetail(businessDetails);
-                    console.log(businessDetails);
+                    console.log(businessObj);
                 }
 
             }
-            setTimeout(() => history.push(`${PUBLIC_URL}/preapprove/personaldetail`), 1500);
+            // setTimeout(() => history.push(`${PUBLIC_URL}/preapprove/personaldetail`), 1500);
 
         }, () => {
             alertModule();

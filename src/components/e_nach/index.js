@@ -95,7 +95,8 @@ class ENach extends Component {
             payload = retrieveParam(href, 'payload');
             token = retrieveParam(href, 'token');
             base64_decode = base64Logic(payload, 'decode');
-            base64_decode.document_id = base64_decode.mandate_id;
+            if (base64_decode === Object(base64_decode))
+                base64_decode.document_id = base64_decode.mandate_id;
         }
 
         if (base64_decode !== Object(base64_decode))

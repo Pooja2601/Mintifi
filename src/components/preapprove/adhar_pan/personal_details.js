@@ -56,6 +56,8 @@ class AdharPan extends Component {
 
         let state = adharObj;
 
+        console.log(state);
+
         if (authObj === Object(authObj))
             if (authObj.verified && state === Object(state))
                 if (state.mobile)
