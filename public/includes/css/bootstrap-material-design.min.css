@@ -3075,7 +3075,7 @@ tbody.collapse.show {
 
 .input-group-prepend {
     margin-right: -1px;
-    z-index: 100;
+    z-index: 0;
 }
 
 .input-group-append {
@@ -9791,7 +9791,7 @@ a:focus, button:focus {
 
 .checkbox label .checkbox-decorator .check, label.checkbox-inline .checkbox-decorator .check {
     position: relative;
-    z-index: 1;
+    z-index: 0;
     display: inline-block;
     width: 1.25rem;
     height: 1.25rem;

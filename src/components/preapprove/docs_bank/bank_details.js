@@ -163,7 +163,7 @@ class BankDetail extends Component {
             })
         }
         else alertModule("Something went wrong with the Request", 'warn');
-    }
+    };
 
     _fetchIFSC(ifsc) {
         let bank_name, micr_code, branch_name;
@@ -178,6 +178,7 @@ class BankDetail extends Component {
             }
             else {
                 bank_name = micr_code = branch_name = '';
+                alertModule('Make sure to enter correct IFSC code', 'error');
             }
             this.setState({
                 bank_name,

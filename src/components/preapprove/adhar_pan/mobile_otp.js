@@ -209,7 +209,7 @@ class MobileOtp extends Component {
                                         id="otpVerify"
                                         style={{
                                             fontWeight: 600, marginRight: '5px',
-                                            fontSize: '17px'
+                                            fontSize: '14px'
                                         }}
                                         value={this.state.otp}
                                         min={100000}

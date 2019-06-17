@@ -30,10 +30,15 @@ export const base64Logic =
     };
 
 export const retrieveParam = (urlToParse, key) => {
-    let url = new URL(urlToParse);
-    let paramVal = url.searchParams.get(key);
+    try {
+        let url = new URL(urlToParse);
+        let paramVal = url.searchParams.get(key);
 
-    return paramVal;
+        return paramVal;
+    }
+    catch (e) {
+        return null;
+    }
 };
 
 export const generateToken = () => {

@@ -154,7 +154,6 @@ class Auth extends Component {
                     }
 
                     setAdharManual(personalDetails);
-
                     // console.log(personalDetails);
                     console.log(adharObj);
                 }

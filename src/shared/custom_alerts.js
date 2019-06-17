@@ -6,9 +6,15 @@ import {showAlert} from "../actions";
 const {PUBLIC_URL} = process.env;
 const CustomAlerts = (props) => {
     const {alertMsg, alertType} = props;
+    const types = {
+        'error': 'danger',
+        'warn': 'warn',
+        'info': 'info',
+        'success': 'success'
+    }
     return (
         <>
-            <div className={`alert alert-${alertType}`}>
+            <div className={`alert alert-${types[alertType]}`}>
                 <b>{alertMsg}</b>
             </div>
         </>
