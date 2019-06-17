@@ -47,39 +47,6 @@ class Auth extends Component {
         mobile_correct: false
     };
 
-    /*
-        // To Redirect the Page to the concerned Pages
-        _existingSection() {
-
-            let {
-                payload, changeLoader, history, setAdharManual,
-                setBusinessDetail,
-                setBankDetail,
-                pan_adhar,
-            } = this.props;
-            // ToDo : uncomment in prod;
-            payload = landingPayload;
-
-            changeLoader(true);
-            fetch(`${baseUrl2}/agents/${payload.anchor_id}/loan_applications`).then((resp) => {
-                changeLoader(false);
-
-                if (resp.response === Object(resp.response)) {
-                    //ToDo : Adding responses into States
-                    // setAdharManual,
-                    // setBusinessDetail,
-                    // setBankDetail,
-                    // pan_adhar,
-                    setTimeout(() => history.push(`${PUBLIC_URL}/preapprove/personaldetail`));
-                    // / Goes to New Page
-                }
-
-            }, () => {
-                alertModule();
-                changeLoader(false);
-            })
-
-        }*/
 
     _formSubmit(e) {
         e.preventDefault();
@@ -188,7 +155,7 @@ class Auth extends Component {
 
                     setAdharManual(personalDetails);
 
-                    console.log(adharObj);
+                    console.log(personalDetails);
                     console.log(adharObj);
                 }
 

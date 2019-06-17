@@ -84,10 +84,8 @@ class ENach extends Component {
             base64_decode = eNachPayloadStatic;
 
         // ToDo : hide the 2 lines in prod
-        if (environment === 'dev') {
+        if (eNachPayload === Object(eNachPayload)) {
             // coming from constant
-            if (eNachPayload === Object(eNachPayload))
-                eNachPayload.document_id = eNachPayload.mandate_id;
             Object.assign(base64_decode, eNachPayload);
         }
 
@@ -95,8 +93,6 @@ class ENach extends Component {
             payload = retrieveParam(href, 'payload');
             token = retrieveParam(href, 'token');
             base64_decode = base64Logic(payload, 'decode');
-            if (base64_decode === Object(base64_decode))
-                base64_decode.document_id = base64_decode.mandate_id;
         }
 
         if (base64_decode !== Object(base64_decode))
