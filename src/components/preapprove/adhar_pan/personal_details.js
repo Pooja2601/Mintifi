@@ -39,10 +39,10 @@ class AdharPan extends Component {
         // gender: true,
         pincode: false,
         address1: false,
-        address2: false,
+        // address2: false,
     };
 
-    componentWillMount() {
+    componentDidMount() {
 
         const {payload, authObj, adharObj, changeLoader, setAdharManual, history, pan} = this.props;
 
@@ -56,7 +56,7 @@ class AdharPan extends Component {
 
         let state = adharObj;
 
-        console.log(state);
+        // console.log(state);
 
         if (authObj === Object(authObj))
             if (authObj.verified && state === Object(state))
@@ -86,15 +86,16 @@ class AdharPan extends Component {
         const {gstProfile, setAdharManual} = this.props;
         let tempName;
         if (gstProfile === Object(gstProfile)) {
-            if (gstProfile.mbr.length > 0) {
+            if (Array.isArray(gstProfile.mbr) && gstProfile.mbr.length > 0) {
                 tempName = gstProfile.mbr[0].split(' ');
+                console.log(tempName[0]);
                 this.setState({
                     f_name: tempName[0],
                     m_name: (tempName[2]) ? tempName[1] : '',
                     l_name: (tempName[2]) ? tempName[2] : ''
                 }, () => setAdharManual(this.state));
             }
-            if (gstProfile.pradr.length > 0) {
+            if (Array.isArray(gstProfile.pradr) && gstProfile.pradr.length > 0) {
                 this.setState({
                     mobile: gstProfile.pradr.mb,
                     email: gstProfile.pradr.em
@@ -111,7 +112,7 @@ class AdharPan extends Component {
     }
 
     handleValidation() {
-        let ctrerror = 7, missed_fields;
+        let ctrerror = 6, missed_fields;
         // let missed_fields = Object.keys(this.validate).some(x => this.validate[x]);
         Object.values(this.validate).map((val, key) => {
             if (!val)
@@ -152,19 +153,6 @@ class AdharPan extends Component {
                 });
         }
     };
-
-    /*_pincodeFetch = () => {
-        //https://test.mintifi.com/api/v2/communications/pincode/400059
-        fetch(`http://postalpincode.in/api/pincode/${this.state.pincode}`)
-            .then(resp => resp.json())
-            .then(resp => {
-                let list_posts = resp.PostOffice;
-                console.log(JSON.stringify(resp.PostOffice));
-                if (list_posts !== null && list_posts === Object(list_posts)) {
-                    this.setState({list_posts});
-                }
-            });
-    };*/
 
     changeDob = (dob) => {
         /*        let date = d.getDate();
@@ -463,7 +451,7 @@ class AdharPan extends Component {
                         <div className={"col-md-6 col-sm-12"}>
                             <div className="form-group mb-3 ">
                                 <label htmlFor="textAddress1" className="bmd-label-floating">
-                                    Address 1
+                                    Address 1 *
                                 </label>
                                 <input
                                     type="text"
@@ -532,13 +520,13 @@ class AdharPan extends Component {
                                     value={this.state.address2}
                                     onBlur={() => {
                                         this.props.setAdharManual(this.state);
-                                        this.handleValidation();
+                                        // this.handleValidation();
                                     }}
                                     // ref={ref => (this.obj.pan = ref)}
                                     onChange={(e) => {
                                         const {value} = e.target;
                                         this.setState({address2: value});
-                                        this.validate.address2 = (value);
+                                        // this.validate.address2 = (value);
                                     }}
                                 />
                             </div>

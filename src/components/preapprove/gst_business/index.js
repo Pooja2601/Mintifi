@@ -120,7 +120,6 @@ class BusinessDetail extends Component {
         if (payload === Object(payload)) {
             if (adharObj !== Object(adharObj))
                 history.push(`${PUBLIC_URL}/preapprove/personaldetail`);
-
         }
         else history.push(`${PUBLIC_URL}/preapprove/token`);
 
@@ -209,7 +208,7 @@ class BusinessDetail extends Component {
                                         required={true}
                                         id="companyType"
                                         inputId={"companyType"}
-                                        // value={BusinessType[1]}
+                                    // value={BusinessType[1]}
                                         onBlur={() => this.validationErrorMsg()}
                                         onChange={(e) => {
                                             let {value} = e;

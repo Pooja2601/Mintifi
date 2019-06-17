@@ -117,7 +117,7 @@ class ENach extends Component {
             this.setState({ctr: eNachAttempt});
         document.addEventListener("responseDigio", function (obj) {
             let {detail} = obj;
-            console.log(JSON.stringify(detail));
+            // console.log(JSON.stringify(detail));
             if (detail.error_code !== undefined) {
                 alertModule(`Failed to register with error :  ${detail.message}`, 'error');
                 that.setState((prevState) => ({

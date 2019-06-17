@@ -9,7 +9,7 @@ const ScrollToTop = ({history, children}) => {
         const unlisten = history.listen(() => {
             window.scrollTo(0, 0);
             paths = history.location.pathname.split("/").slice(-1)[0];
-            console.log(paths);
+            // console.log(paths);
         });
         return () => {
             unlisten();
