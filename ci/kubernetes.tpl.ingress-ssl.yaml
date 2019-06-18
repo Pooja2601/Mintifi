@@ -14,7 +14,7 @@ spec:
     - _CI_ENVIRONMENT_SLUG_._APP_NAME_._MY_DOMAIN_
     secretName: tls-_APP_NAME_-_CI_ENVIRONMENT_SLUG_
   rules:
-  - host: pay-test._MY_DOMAIN_
+  - host: test.pay._MY_DOMAIN_
     http:
       paths:
       - path: /

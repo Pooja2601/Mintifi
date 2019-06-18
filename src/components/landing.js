@@ -11,17 +11,14 @@ const {PUBLIC_URL} = process.env;
 
 class Login extends Component {
 
+    state = {
+        anchor_transaction_id: ''
+    }
+
     componentDidMount() {
         this.props.changeLoader(false);
         const {setToken, match, payload} = this.props;
-        // let base64_decode = (match.params.payload !== undefined) ? JSON.parse(new Buffer(match.params.payload, 'base64').toString('ascii')) : {};
         let base64_decode, payloadData;
-
-        /*
-                if (environment === 'dev')
-                    payloadData = payload;
-                else payloadData = match.params.payload;
-        */
 
         if (environment === 'dev' || environment === 'local')
             base64_decode = landingPayload; // ToDo : hide it in Prod
@@ -58,9 +55,14 @@ class Login extends Component {
     // ToDo : Not useful in Live Production
     async _generateToken() {
         let {changeLoader, setToken, payload} = this.props;
+        let {anchor_transaction_id} = this.state;
         changeLoader(true);
         let authToken = await generateToken();
         changeLoader(false);
+        if (anchor_transaction_id.length > 0)
+            payload.anchor_transaction_id = anchor_transaction_id;
+        else payload.anchor_transaction_id = Math.random().toString(36).substr(2, 6);
+
         setToken(authToken, payload);
         console.log(payload);
         if (environment === 'dev' || environment === 'local')
@@ -123,8 +125,12 @@ class Login extends Component {
                     </div>
 
                     <div className={"col-sm-12 col-md-2"}></div>
-
                     <br/>
+                    <div className={"row col-sm-12"}>
+                        <input style={{margin: 'auto'}} className="form-control" onChange={(e) => {
+                            this.setState({anchor_transaction_id: e.target.value})
+                        }} placeholder={"Anchor Trans ID (Development Us Only)"} type={"text"}/>
+                    </div>
                     <button
                         onClick={() => this._generateToken()}
                         style={{visibility: (payload !== Object(payload) && !match.params.token) ? 'visible' : 'hidden'}}
