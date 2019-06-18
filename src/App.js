@@ -148,13 +148,15 @@ class App extends Component {
                                             {/*</CSSTransition>*/}
                                             {/*</TransitionGroup>*/}
                                         </div>
+                                        {/*<CustomAlerts/>*/}
+                                        <div style={{height:'50px'}}></div>
+                                        <ToastContainer style={{marginBottom: '-37px', position: 'absolute'}}
+                                                        autoClose={8000}
+                                                        position={toast.POSITION.BOTTOM_CENTER}/>
 
-                                        <CustomAlerts/>
                                     </div>
                                 </div>
 
-                                <ToastContainer style={{marginTop: '80px'}} autoClose={8000}
-                                                position={toast.POSITION.TOP_RIGHT}/>
                             </>)}/>
 
                     </BrowserRouter>

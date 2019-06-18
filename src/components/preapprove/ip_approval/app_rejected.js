@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {Link, withRouter} from "react-router-dom";
 import {environment, landingPayload} from "../../../shared/constants";
+import {alertModule} from "../../../shared/commonLogic";
 import {pan_adhar, setAdharManual, setBusinessDetail, changeLoader} from "../../../actions/index";
 
 const {PUBLIC_URL} = process.env;
@@ -10,7 +11,7 @@ class AppRejected extends Component {
 
     componentWillMount() {
         const {payload, authObj, adharObj, businessObj, history, changeLoader} = this.props;
-
+        // alertModule(`hello`);
         changeLoader(false);
         // if (payload !== Object(payload))
         //     history.push(`${PUBLIC_URL}/preapprove/token`);

@@ -11,10 +11,11 @@ const CustomAlerts = (props) => {
         'warn': 'warn',
         'info': 'info',
         'success': 'success'
-    }
+    };
+
     return (
         <>
-            <div className={`alert alert-${types[alertType]}`}>
+            <div style={{visibility: 'visible'}} className={`alert alert-${types[alertType]}`}>
                 <b>{alertMsg}</b>
             </div>
         </>

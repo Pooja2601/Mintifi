@@ -4,16 +4,17 @@ import React from 'react';
 import {toast} from 'react-toastify';
 import {app_id, auth_secret, baseUrl, user_id} from "./constants";
 
-export const alertModule = (props, type) => {
-    if (!props) {
+export const alertModule = (msg, type) => {
+    if (!msg) {
         console.log('Looks like a connectivity issue..!');
         toast.error('Looks like a connectivity issue..!');
     }
     else {
-        if (type === 'warn') toast.warn(props);
-        else if (type === 'success') toast.success(props);
-        else if (type === 'error') toast.error(props);
-        else toast.info(props);
+        if (type === 'warn') toast.warn(msg);
+        else if (type === 'success') toast.success(msg);
+        else if (type === 'error') toast.error(msg);
+        else if (type === 'info') toast.info(msg);
+        else toast(msg);
     }
 };
 

@@ -23,7 +23,8 @@ class BusinessDetail extends Component {
         missed_fields: true,
         lgnm: '',
         tnc_consent: false,
-        tncModal: false
+        tncModal: false,
+        ctrerror: 4,
     };
 
     validate = {companytype: false, gst: false, avgtrans: false, dealercode: false};
@@ -81,9 +82,11 @@ class BusinessDetail extends Component {
                 ++ctrerror;
             else --ctrerror;
         });
+        this.setState({ctrerror});
+
         if (ctrerror !== 0) {
             fieldTxt = (ctrerror > 1) ? 'field is ' : 'fields are ';
-            alertModule(`Kindly check the form again, ${ctrerror / 2} ${fieldTxt} still having some issue !`, 'warn');
+            // alertModule(`Kindly check the form again, ${ctrerror / 2} ${fieldTxt} still having some issue !`, 'warn');
         }
     }
 
@@ -372,6 +375,10 @@ class BusinessDetail extends Component {
                         >Check your eligibility
                         </button>
                     </div>
+                    {/*<div style={{display: (this.state.missed_fields) ? 'block' : 'none'}}
+                         className={"alert alert-error"}>
+                        Check {this.state.ctrerror} fields for the error, you might have missed something !
+                    </div>*/}
                 </form>
                 {this.RenderModalTnC()}
             </>
