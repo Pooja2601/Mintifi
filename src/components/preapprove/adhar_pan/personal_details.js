@@ -193,12 +193,12 @@ class AdharPan extends Component {
                                     required={true}
                                     value={this.state.f_name}
                                     onBlur={() => {
-                                        this.props.setAdharManual(this.state);
+                                        // this.props.setAdharManual(this.state);
                                         this.handleValidation()
                                     }}
                                     // ref={ref => (this.obj.pan = ref)}
                                     onChange={(e) => {
-                                        this.setState({f_name: e.target.value});
+                                        this.setState({f_name: e.target.value}, () => this.props.setAdharManual(this.state));
                                         this.validate.f_name = (e.target.value.length >= 2) ? true : false;
                                     }}
                                 />
@@ -217,9 +217,9 @@ class AdharPan extends Component {
                                     autoCapitalize="characters"
                                     id="middleName"
                                     value={this.state.m_name}
-                                    onBlur={() => this.props.setAdharManual(this.state)}
+                                    // onBlur={() => this.props.setAdharManual(this.state)}
                                     // ref={ref => (this.obj.pan = ref)}
-                                    onChange={(e) => this.setState({m_name: e.target.value})}
+                                    onChange={(e) => this.setState({m_name: e.target.value}, () => this.props.setAdharManual(this.state))}
                                 />
                             </div>
                         </div>
@@ -238,12 +238,12 @@ class AdharPan extends Component {
                                     required={true}
                                     value={this.state.l_name}
                                     onBlur={() => {
-                                        this.props.setAdharManual(this.state);
+                                        // this.props.setAdharManual(this.state);
                                         this.handleValidation()
                                     }}
                                     // ref={ref => (this.obj.pan = ref)}
                                     onChange={(e) => {
-                                        this.setState({l_name: e.target.value});
+                                        this.setState({l_name: e.target.value}, () => this.props.setAdharManual(this.state));
                                         this.validate.l_name = (e.target.value.length >= 2) ? true : false;
                                     }}
                                 />
@@ -273,14 +273,14 @@ class AdharPan extends Component {
                                         required={true}
                                         value={this.state.mobile}
                                         onBlur={() => {
-                                            this.props.setAdharManual(this.state);
+                                            // this.props.setAdharManual(this.state);
                                             this.handleValidation()
                                         }}
                                         // ref={ref => (this.obj.pan = ref)}
                                         onChange={(e) => {
                                             let {value} = e.target;
                                             if (value.length <= 10)
-                                                this.setState({mobile: value});
+                                                this.setState({mobile: value}, () => this.props.setAdharManual(this.state));
                                             this.validate.mobile = (value.length === 10 || value.length === 11) ? true : false;
                                             // console.log(value.length);
                                         }}
@@ -303,13 +303,13 @@ class AdharPan extends Component {
                                     required={true}
                                     value={this.state.email}
                                     onBlur={() => {
-                                        this.props.setAdharManual(this.state);
+                                        // this.props.setAdharManual(this.state);
                                         this.handleValidation();
                                     }}
                                     // ref={ref => (this.obj.pan = ref)}
                                     onChange={(e) => {
                                         let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-                                        this.setState({email: e.target.value});
+                                        this.setState({email: e.target.value}, () => this.props.setAdharManual(this.state));
                                         this.validate.email = (regex.test(e.target.value)) ? true : false;
                                     }}
                                 />
@@ -359,7 +359,6 @@ class AdharPan extends Component {
                                     className="btn btn-default"
                                     onClick={() => {
                                         this.setState({gender: 'f'}, () => this.props.setAdharManual(this.state));
-
                                     }}
                                     style={{
                                         width: "90px",
@@ -464,13 +463,13 @@ class AdharPan extends Component {
                                     required={true}
                                     value={this.state.address1}
                                     onBlur={() => {
-                                        this.props.setAdharManual(this.state);
+                                        // this.props.setAdharManual(this.state);
                                         this.handleValidation();
                                     }}
                                     // ref={ref => (this.obj.pan = ref)}
                                     onChange={(e) => {
                                         const {value} = e.target;
-                                        this.setState({address1: value});
+                                        this.setState({address1: value}, () => this.props.setAdharManual(this.state));
                                         this.validate.address1 = (value);
                                     }}
                                 />
@@ -518,13 +517,13 @@ class AdharPan extends Component {
                                     required={true}
                                     value={this.state.address2}
                                     onBlur={() => {
-                                        this.props.setAdharManual(this.state);
+                                        // this.props.setAdharManual(this.state);
                                         // this.handleValidation();
                                     }}
                                     // ref={ref => (this.obj.pan = ref)}
                                     onChange={(e) => {
                                         const {value} = e.target;
-                                        this.setState({address2: value});
+                                        this.setState({address2: value}, () => this.props.setAdharManual(this.state));
                                         // this.validate.address2 = (value);
                                     }}
                                 />
@@ -548,14 +547,15 @@ class AdharPan extends Component {
                                     required={true}
                                     value={this.state.pincode}
                                     onBlur={() => {
-                                        this.props.setAdharManual(this.state);
+                                        // this.props.setAdharManual(this.state);
                                         this._pincodeFetch();
                                         this.handleValidation();
                                     }}
                                     // ref={ref => (this.obj.pan = ref)}
                                     onChange={(e) => {
                                         let regex = /^[0-9]{6,7}$/;
-                                        if (e.target.value.length <= 6) this.setState({pincode: e.target.value});
+                                        if (e.target.value.length <= 6)
+                                            this.setState({pincode: e.target.value}, () => this.props.setAdharManual(this.state));
                                         this.validate.pincode = (regex.test(e.target.value));
                                     }}
                                 />

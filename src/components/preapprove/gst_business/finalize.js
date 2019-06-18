@@ -85,7 +85,7 @@ class ReviewBusinessDetail extends Component {
                 "business_type": businessObj.companytype,
                 "anchor_transaction_id": payload.anchor_transaction_id,
                 "borrowers": {
-                    "first_name": adharObj.f_name,
+                    "first_name": adharObj.f_name || '_',
                     "middle_name": adharObj.m_name,
                     "last_name": adharObj.l_name,
                     "pan": pan,
@@ -106,7 +106,7 @@ class ReviewBusinessDetail extends Component {
                     "product_type": payload.product_type,
                     "average_monthly_transaction": businessObj.avgtrans,
                     "retailer_onboarding_date": payload.retailer_onboarding_date,
-                    "vintage": 60
+                    // "vintage": 60
                 },
                 "tnc_accepted": true,
                 "is_credit_decision": true,
@@ -149,7 +149,7 @@ class ReviewBusinessDetail extends Component {
             businessDetail: businessObj,
         });
         console.log(adharObj);
-        this._formSubmit();
+        // this._formSubmit();
     }
 
 

@@ -207,6 +207,7 @@ class AdharPan extends Component {
                 }
                 else {
                     alertModule(resp.error.message, 'error');
+                    setTimeout(() => this.adharSkipped(), 500);
                     // this._gstFetch(resp.result[0].gstinId);  // status 101
                 }
             }, () => {
