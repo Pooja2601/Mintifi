@@ -126,23 +126,28 @@ class Login extends Component {
 
                     <div className={"col-sm-12 col-md-2"}></div>
                     <br/>
-                    <div className={"row col-sm-12"}>
-                        <input style={{margin: 'auto'}} className="form-control" onChange={(e) => {
+                    <div className={"row col-sm-12"} style={{
+                        borderTop: '1px solid',
+                        marginLeft: '-3px',
+                        marginTop: '10%'
+                    }}>
+                        <input style={{margin: 'auto 25%'}}
+                               className="form-control bmd-form-group" onChange={(e) => {
                             this.setState({anchor_transaction_id: e.target.value})
-                        }} placeholder={"Anchor Trans ID (Development Us Only)"} type={"text"}/>
+                        }} placeholder={"Anchor Trans ID (Dev use Only)"} type={"text"}/>
                     </div>
                     <button
                         onClick={() => this._generateToken()}
                         style={{visibility: (payload !== Object(payload) && !match.params.token) ? 'visible' : 'hidden'}}
                         style={{
                             padding: "5px 35px", width: '100%',
-                            margin: '50px 20%'
+                            margin: '30px 20%'
                         }}
                         className="form-submit btn greenButton text-center"
                     >
                         Create TOKEN and PAYLOAD
                     </button>
-                    <br/>
+
                     <small>(above button is for development use only)</small>
 
                 </div>
