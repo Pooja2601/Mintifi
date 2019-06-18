@@ -124,7 +124,7 @@ class Auth extends Component {
     }
 
     _fetchUserInfo() {
-        const {changeLoader, history, authObj, token, adharObj, businessObj} = this.props;
+        const {changeLoader, history, authObj, token, adharObj, businessObj, setAdharManual, setBusinessDetail} = this.props;
         changeLoader(true);
         fetch(`${baseUrl}/users/user_summary?user_number=${authObj.mobile}&app_id=${app_id}`, {
             headers: {'Content-Type': 'application/json', token: token},
@@ -173,7 +173,7 @@ class Auth extends Component {
                 }
 
             }
-            // setTimeout(() => history.push(`${PUBLIC_URL}/preapprove/personaldetail`), 1500);
+            setTimeout(() => history.push(`${PUBLIC_URL}/preapprove/personaldetail`), 1500);
 
         }, () => {
             alertModule();

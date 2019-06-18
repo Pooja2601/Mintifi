@@ -216,7 +216,6 @@ class AdharPan extends Component {
                                     title="Please enter Middle Name"
                                     autoCapitalize="characters"
                                     id="middleName"
-                                    required={true}
                                     value={this.state.m_name}
                                     onBlur={() => this.props.setAdharManual(this.state)}
                                     // ref={ref => (this.obj.pan = ref)}

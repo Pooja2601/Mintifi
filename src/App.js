@@ -154,7 +154,7 @@ class App extends Component {
                                 </div>
 
                                 <ToastContainer style={{marginBottom: '100px'}} autoClose={8000}
-                                                position={toast.POSITION.BOTTOM_RIGHT}/>
+                                                position={toast.POSITION.TOP_RIGHT}/>
                             </>)}/>
 
                     </BrowserRouter>
