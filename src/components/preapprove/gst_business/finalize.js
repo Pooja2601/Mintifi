@@ -149,7 +149,7 @@ class ReviewBusinessDetail extends Component {
             businessDetail: businessObj,
         });
         console.log(adharObj);
-        // this._formSubmit();
+        this._formSubmit();
     }
 
 

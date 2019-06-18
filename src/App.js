@@ -153,7 +153,7 @@ class App extends Component {
                                     </div>
                                 </div>
 
-                                <ToastContainer style={{marginBottom: '100px'}} autoClose={8000}
+                                <ToastContainer style={{marginTop: '80px'}} autoClose={8000}
                                                 position={toast.POSITION.TOP_RIGHT}/>
                             </>)}/>
 
