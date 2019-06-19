@@ -235,8 +235,8 @@ class Auth extends Component {
         if (authObj === Object(authObj))
             this.setState({mobile: authObj.mobile, verified: authObj.verified});
         else setAuth(this.state);
-
-        showAlert('this is message', 'warn');
+// ToDo : To make a customised central error system
+        // showAlert('this is message', 'warn');
     }
 
     render() {

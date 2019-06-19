@@ -11,8 +11,8 @@ class AppRejected extends Component {
 
     componentWillMount() {
         const {payload, authObj, adharObj, businessObj, history, changeLoader} = this.props;
-        // alertModule(`hello`);
         changeLoader(false);
+        // alertModule('Just a test');
         // if (payload !== Object(payload))
         //     history.push(`${PUBLIC_URL}/preapprove/token`);
     }

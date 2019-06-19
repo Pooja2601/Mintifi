@@ -31,15 +31,16 @@ export const base64Logic =
     };
 
 export const retrieveParam = (urlToParse, key) => {
-    try {
-        let url = new URL(urlToParse);
-        let paramVal = url.searchParams.get(key);
+    // if (urlToParse.length > 0)
+        try {
+            let url = new URL(urlToParse);
+            let paramVal = url.searchParams.get(key);
 
-        return paramVal;
-    }
-    catch (e) {
-        return null;
-    }
+            return paramVal;
+        }
+        catch (e) {
+            return null;
+        }
 };
 
 export const generateToken = () => {

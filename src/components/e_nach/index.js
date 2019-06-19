@@ -31,8 +31,6 @@ class ENach extends Component {
             changeLoader(false);
 
             if (resp.response === Object(resp.response)) {
-                // let payload = retrieveParam(eNachPayload.nach_url, 'payload');
-                // let base64_decode = base64Logic(payload, 'decode');
                 setTimeout(() => {
                     // ToDo : Uncomment the below line in Prod
                     if (environment === 'prod' || environment === 'dev')
@@ -95,18 +93,20 @@ class ENach extends Component {
             Object.assign(base64_decode, eNachPayload);
         }
 
+        this.setState({errorMsg: false});
         if (environment === 'prod' || environment === 'dev') {
-            payload = retrieveParam(href, 'payload');
-            token = retrieveParam(href, 'token');
-            base64_decode = base64Logic(payload, 'decode');
+            payload = retrieveParam(href, 'payload') || undefined;
+            token = retrieveParam(href, 'token') || undefined;
+            if (payload)
+                base64_decode = base64Logic(payload, 'decode');
+            // else this.setState({errorMsg: true});
             console.log(base64_decode);
         }
 
-        if (base64_decode !== Object(base64_decode))
+        if (base64_decode !== Object(base64_decode) && !base64_decode.length && !token.length)
             alertModule('You cannot access this page directly without Authorised Session !!', 'error');
         else EnachsetPayload(token, base64_decode);
 
-        this.setState({errorMsg: false});
     }
 
     componentDidMount() {
@@ -138,30 +138,36 @@ class ENach extends Component {
                 detail.mandate_id = detail.digio_doc_id;
                 detail.status = 'success';
             }
-            // console.log(obj.detail);
+            // console.log(eNachPayload);
             that._updateBackend(detail);
         });
 
         // ToDo : uncomment in prod
         if (environment === 'prod' || environment === 'dev')
-            setTimeout(() => this._triggerDigio(), 1000);
+            if (eNachPayload === Object(eNachPayload) && eNachPayload.mandate_id)
+                setTimeout(() => this._triggerDigio(), 1000);
     }
 
     render() {
         // let {payload, match} = this.props;
+        const {eNachPayload} = this.props;
         return (
             <>
                 {/*<i style={{fontSize: '60px'}} className={"fa fa-check-circle checkCircle"}></i>*/}
                 <h3 className={"text-center"}> e-NACH Mandate</h3>
                 <br/>
 
-                <div className=" text-left alert alert-success" role="alert"
+                <div className=" text-left " role="alert"
                      style={{margin: 'auto'}}
                 >
-                    <p className="paragraph_styling ">
-                        Kindly complete the eNACH procedure by clicking the button below. Remember, you may only try
-                        twice.
-                    </p>
+                    {(eNachPayload === Object(eNachPayload) && eNachPayload.mandate_id) ? (
+                            <p className="paragraph_styling alert alert-info">
+                                Kindly complete the eNACH procedure by clicking the button below. Remember, you may only try
+                                twice.
+                            </p>) :
+                        (<p className="paragraph_styling alert alert-danger">
+                            You may not access this page directly without appropriate payload/session.
+                        </p>)}
                 </div>
                 <br/>
                 <div className=" text-left alert alert-danger" role="alert"
@@ -175,6 +181,7 @@ class ENach extends Component {
                     <button
                         type="button"
                         onClick={e => this._triggerDigio()}
+                        disabled={(eNachPayload !== Object(eNachPayload) || !eNachPayload.mandate_id)}
                         // onClick={e => this.props.history.push(`${PUBLIC_URL}/Drawdown/Auth`)}
                         className="form-submit btn btn-raised greenButton"
                     >Initiate E-NACH

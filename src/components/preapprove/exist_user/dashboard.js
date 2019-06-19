@@ -11,7 +11,7 @@ class Dashboard extends Component {
 
     componentWillMount() {
         const {payload, authObj, history, summaryObj} = this.props;
-        // console.log(payload)
+        console.log(summaryObj);
         if (payload === Object(payload)) {
             if (authObj !== Object(authObj))
                 history.push(`${PUBLIC_URL}/preapprove/auth`);

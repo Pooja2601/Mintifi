@@ -347,7 +347,7 @@ class BusinessDetail extends Component {
                             </div>
                         </div>
                     </div>
-                    {<div className=" mt-5">
+                    <div className=" mt-5">
                         <label style={{color: 'black', lineHeight: '1.5'}}>
                             <input type="checkbox" checked={this.state.tnc_consent}
                                    onChange={(e) =>
@@ -364,7 +364,7 @@ class BusinessDetail extends Component {
                             Policy</a> of the Mintifi and provide the
                             consent to retrieve the Bureau information for checking my Credit worthiness .
                         </label>
-                    </div>}
+                    </div>
 
                     <div className="mt-5 mb-5 text-center">
                         <button

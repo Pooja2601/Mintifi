@@ -82,6 +82,7 @@ class App extends Component {
                                              paddingRight: '1%'
                                          }}>
 
+                                        <div style={{height:'50px'}}></div>
                                         <Loader/>
                                         <div className="ml-2" style={{marginTop: '30px'}}>
 
@@ -149,10 +150,9 @@ class App extends Component {
                                             {/*</TransitionGroup>*/}
                                         </div>
                                         {/*<CustomAlerts/>*/}
-                                        <div style={{height:'50px'}}></div>
-                                        <ToastContainer style={{marginBottom: '-37px', position: 'absolute'}}
+                                        <ToastContainer style={{marginTop: '-20px', position: 'absolute'}}
                                                         autoClose={8000}
-                                                        position={toast.POSITION.BOTTOM_CENTER}/>
+                                                        position={toast.POSITION.TOP_CENTER}/>
 
                                     </div>
                                 </div>
