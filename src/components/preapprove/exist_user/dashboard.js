@@ -58,7 +58,6 @@ class Dashboard extends Component {
 
                             <table width="100%" style={{margin: 'auto 10%'}}>
                                 <tbody>
-
                                 <tr>
                                     <td className={"tableDataRight"}>Product Offered</td>
                                     <td>Rs. {loan_app_payload.loan_product_type}</td>

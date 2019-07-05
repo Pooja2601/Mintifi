@@ -183,7 +183,7 @@ class Auth extends Component {
     }
 
     checkSummary = () => {
-        const {payload, authObj, token, changeLoader, history} = this.props;
+        const {payload, authObj, token, changeLoader, history, setExistSummary} = this.props;
         changeLoader(true);
         fetch(`${baseUrl}/loans/loan_summary?user_number=${authObj.mobile}&anchor_transaction_id=${payload.anchor_transaction_id}&app_id=${app_id}`, {
             method: 'GET',
