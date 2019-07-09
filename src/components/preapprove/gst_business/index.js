@@ -187,7 +187,7 @@ class BusinessDetail extends Component {
                     onSubmit={e => this._formSubmit(e)}
                 >
                     <div className={"row"}>
-                        <div className={"col-md-6 col-sm-12"}>
+                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             {/*<h5 className={"text-center"}>{(gstProfile === Object(gstProfile)) ? gstProfile.lgnm : ''}</h5>*/}
                             <input
                                 type="text"
@@ -204,7 +204,7 @@ class BusinessDetail extends Component {
                         </div>
                     </div>
                     <div className={"row"}>
-                        <div className={"col-md-6 col-sm-12"}>
+                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3">
                                 <label htmlFor="companyType" className={"bmd-label-floating"}>Company Type *</label>
                                 <Select options={BusinessType}
@@ -240,7 +240,7 @@ class BusinessDetail extends Component {
 
                             </div>
                         </div>
-                        <div className={"col-md-6 col-sm-12"}>
+                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3">
                                 <label htmlFor="numberGST" className={"bmd-label-floating"}>GST Number *</label>
                                 <input
@@ -287,7 +287,7 @@ class BusinessDetail extends Component {
 
 
                     <div className={"row"}>
-                        <div className={"col-md-6 col-sm-12"}>
+                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3">
                                 <label htmlFor="avgTrans" className="bmd-label-floating">
                                     Average Monthly Transactions *
@@ -320,7 +320,7 @@ class BusinessDetail extends Component {
                                 </div>
                             </div>
                         </div>
-                        <div className={"col-md-6 col-sm-12"}>
+                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3">
                                 <label htmlFor="dealerCode" className="bmd-label-floating">
                                     Dealer Code

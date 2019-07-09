@@ -241,7 +241,7 @@ class BankDetail extends Component {
                     onSubmit={e => this._formSubmit(e)}
                 >
                     <div className={"row"}>
-                        <div className={"col-md-6 col-sm-12"}>
+                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3 ">
                                 <label htmlFor="nameAccount" className={"bmd-label-floating"}>Account Name *</label>
                                 <input
@@ -265,7 +265,7 @@ class BankDetail extends Component {
                                 />
                             </div>
                         </div>
-                        <div className={"col-md-6 col-sm-12"}>
+                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3">
                                 <label htmlFor="numberAccount" className={"bmd-label-floating"}>Account Number *</label>
                                 <input
@@ -297,7 +297,7 @@ class BankDetail extends Component {
                     </div>
 
                     <div className={"row"}>
-                        <div className={"col-md-6 col-sm-12"}>
+                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3">
                                 <label htmlFor="ifscCode" className="bmd-label-floating">
                                     IFSC *
@@ -329,7 +329,7 @@ class BankDetail extends Component {
 
                             </div>
                         </div>
-                        <div className={"col-md-6 col-sm-12"}>
+                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3">
                                 <label htmlFor="accountType" className={"bmd-label-floating"}>Account Type *</label>
                                 <Select options={accountType}
@@ -367,7 +367,7 @@ class BankDetail extends Component {
                     </div>
 
                     <div className={"row"}>
-                        <div className={"col-md-6 col-sm-12"}>
+                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3"
                                  style={{display: (this.state.bank_name) ? 'block' : 'none'}}>
                                 <label htmlFor="nameBank" className={"bmd-label-floating"}>Bank Name *</label>
@@ -393,7 +393,7 @@ class BankDetail extends Component {
                                 />
                             </div>
                         </div>
-                        <div className={"col-md-6 col-sm-12"}>
+                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3"
                                  style={{display: (this.state.micr_code) ? 'block' : 'none'}}>
                                 <label htmlFor="micrCode" className="bmd-label-floating">

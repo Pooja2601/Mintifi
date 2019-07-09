@@ -178,7 +178,7 @@ class AdharPan extends Component {
                     onSubmit={e => this._formSubmit(e)}
                 >
                     <div className={"row"}>
-                        <div className={"col-md-4 col-sm-12"}>
+                        <div className={"col-md-4 col-sm-4 col-xs-12"}>
                             <div className="form-group mb-3 ">
                                 <label htmlFor="firstName" className={"bmd-label-floating"}>First Name *</label>
                                 <input
@@ -204,7 +204,7 @@ class AdharPan extends Component {
                                 />
                             </div>
                         </div>
-                        <div className={"col-md-4 col-sm-12"}>
+                        <div className={"col-md-4 col-sm-4 col-xs-12"}>
                             <div className="form-group mb-3 ">
                                 <label htmlFor="middleName" className={"bmd-label-floating"}>Middle Name </label>
                                 <input
@@ -223,7 +223,7 @@ class AdharPan extends Component {
                                 />
                             </div>
                         </div>
-                        <div className={"col-md-4 col-sm-12"}>
+                        <div className={"col-md-4 col-sm-4 col-xs-12"}>
                             <div className="form-group mb-3 ">
                                 <label htmlFor="lastName" className={"bmd-label-floating"}>Last Name *</label>
                                 <input
@@ -251,7 +251,7 @@ class AdharPan extends Component {
                         </div>
                     </div>
                     <div className={"row"}>
-                        <div className={"col-md-6 col-sm-12"}>
+                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3">
                                 <label htmlFor="numberMobile"
                                        className={"bmd-label-floating"}>Mobile
@@ -288,7 +288,7 @@ class AdharPan extends Component {
                                 </div>
                             </div>
                         </div>
-                        <div className={"col-md-6 col-sm-12"}>
+                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3 ">
                                 <label htmlFor="textEmail" className={"bmd-label-floating"}>Email ID *</label>
                                 <input
@@ -319,7 +319,7 @@ class AdharPan extends Component {
 
 
                     <div className={"row"}>
-                        <div className={"col-sm-12 col-md-6 text-left"}>
+                        <div className={"col-sm-6 col-xs-12 col-md-6 text-left"}>
                             <label htmlFor="ResidenceOwnership" className="labelLoan bmd-label">
                                 Gender *
                             </label><br/>
@@ -380,7 +380,7 @@ class AdharPan extends Component {
                                 </button>
                             </div>
                         </div>
-                        <div className={"col-sm-12 col-md-6 text-left"}>
+                        <div className={"col-sm-6 col-xs-12 col-md-6 text-left"}>
                             <label htmlFor="ResidenceOwnership" className="labelLoan bmd-label">
                                 Ownership *
                             </label><br/>
@@ -446,7 +446,7 @@ class AdharPan extends Component {
                     </div>
 
                     <div className={"row"}>
-                        <div className={"col-md-6 col-sm-12"}>
+                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3 ">
                                 <label htmlFor="textAddress1" className="bmd-label-floating">
                                     Address 1 *
@@ -475,7 +475,7 @@ class AdharPan extends Component {
                                 />
                             </div>
                         </div>
-                        <div className={"col-md-6 col-sm-12"}>
+                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3">
                                 <label htmlFor="dobDate" className="bmd-label-floating">
                                     Date of Birth
@@ -500,7 +500,7 @@ class AdharPan extends Component {
                     </div>
 
                     <div className={"row"}>
-                        <div className={"col-md-6 col-sm-12"}>
+                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3 ">
                                 <label htmlFor="textAddress2" className="bmd-label-floating">
                                     Address 2
@@ -530,7 +530,7 @@ class AdharPan extends Component {
                             </div>
 
                         </div>
-                        <div className={"col-md-6 col-sm-12"}>
+                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3">
                                 <label htmlFor="numberPincode" className="bmd-label-floating">
                                     Pincode *
@@ -568,11 +568,11 @@ class AdharPan extends Component {
                              marginTop: '26px',
                              visibility: (this.state.city && this.state.state) ? 'visible' : 'hidden'
                          }}>
-                        <div className={"col-md-6 col-sm-12 "}>
+                        <div className={"col-md-6 col-sm-6 col-xs-12 "}>
                             <label className={"form-control font_weight"}
                                    style={{fontWeight: 600}}>{this.state.city}</label>
                         </div>
-                        <div className={"col-md-6 col-sm-12"}>
+                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <label className={"form-control font_weight"}
                                    style={{fontWeight: 600}}>{this.state.state}</label>
                         </div>

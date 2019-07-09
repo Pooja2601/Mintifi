@@ -316,7 +316,7 @@ class DocsUpload extends Component {
                         <div className="paragraph_styling  text-center">
 
                             <div className={"row mb-4 mt-4"}>
-                                <div className={"col-md-6 col-sm-12"}>
+                                <div className={"col-md-6 col-sm-6 col-xs-12"}>
                                     <div className="input-container text-left" style={{cursor: 'pointer'}}
                                          onClick={() => this._multiDimDocsUpload('id_proof')}>
                                         <input type="file" id="idProofInput"
@@ -334,7 +334,7 @@ class DocsUpload extends Component {
                                         VoterCard, PAN or Passport.
                                     </small>
                                 </div>
-                                <div className={"col-md-6 col-sm-12"}>
+                                <div className={"col-md-6 col-sm-6 col-xs-12"}>
                                     <div className="input-container text-left" style={{cursor: 'pointer'}}
                                          onClick={() => this._multiDimDocsUpload('add_proof')}>
                                         <input type="file" id="addressProofInput"
@@ -378,7 +378,7 @@ class DocsUpload extends Component {
                             </div>*/}
 
                             <div className={"row"}>
-                                <div className={"col-md-6 col-sm-12"}>
+                                <div className={"col-md-6 col-sm-6 col-xs-12"}>
                                     <div className="input-container text-left" style={{cursor: 'pointer'}}
                                          onClick={() => this._multiDimDocsUpload('entity_proof')}>
                                         <input type="file" id="addressProofInput"
@@ -399,7 +399,7 @@ class DocsUpload extends Component {
                                         Registration Certificate.
                                     </small>
                                 </div>
-                                <div className={"col-md-6 col-sm-12"}>
+                                <div className={"col-md-6 col-sm-6 col-xs-12"}>
                                     <div className="input-container text-left" style={{cursor: 'pointer'}}
                                          onClick={() => this._multiDimDocsUpload('caddr_proof')}>
                                         <input type="file" id="addressProofInput"
