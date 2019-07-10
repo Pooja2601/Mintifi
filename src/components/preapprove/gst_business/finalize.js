@@ -80,7 +80,7 @@ class ReviewBusinessDetail extends Component {
             body: JSON.stringify({
                 "app_id": app_id,
                 "anchor_id": payload.anchor_id,
-                "distributor_dealer_code": payload.distributor_dealer_code,
+                "distributor_dealer_code": businessObj.dealercode && payload.distributor_dealer_code,
                 "sales_agent_mobile_number": payload.sales_agent_mobile_number,
                 "business_type": businessObj.companytype,
                 "anchor_transaction_id": payload.anchor_transaction_id,

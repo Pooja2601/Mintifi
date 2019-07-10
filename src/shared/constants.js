@@ -49,7 +49,7 @@ module.exports = {
     OTP_Timer: 60,
     landingPayload: {
         "anchor_id": "uyh65t",
-        "distributor_dealer_code": "R1T89563",
+        "distributor_dealer_code": "WC001",
         "sales_agent_mobile_number": "9876543210",
         "anchor_transaction_id": Math.random().toString(36).substr(2, 6),
         "retailer_onboarding_date": "2006-09-19",
