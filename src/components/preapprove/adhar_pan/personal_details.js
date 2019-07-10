@@ -490,7 +490,7 @@ class AdharPan extends Component {
                                     showMonthDropdown
                                     required={true}
                                     showYearDropdown
-                                    style={{margin: 'auto'}}
+                                    style={{margin: 'auto', display: 'block'}}
                                     dateFormat={'dd/MM/yyyy'}
                                     onChange={(date) => this.changeDob(date)}
 
