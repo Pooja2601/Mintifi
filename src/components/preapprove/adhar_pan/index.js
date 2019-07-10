@@ -108,7 +108,8 @@ class AdharPan extends Component {
 
     _PANEnter = e => {
         // ToDo : allow only Personal PAN
-        let regex = /^[a-zA-Z]{5}([0-9]){4}[a-zA-Z]{1}?$/;
+        // let regex = /^[a-zA-Z]{5}([0-9]){4}[a-zA-Z]{1}?$/;
+        let regex = /^[a-zA-Z]{3}[pP][a-zA-Z]{1}([0-9]){4}[a-zA-Z]{1}?$/;
         if (e.target.value.length <= 10) {
             let pan_correct = regex.test(e.target.value);
             this.setState({pan: (e.target.value).toUpperCase(), pan_correct});
@@ -183,6 +184,7 @@ class AdharPan extends Component {
         anchor_id: '8186bc', //8186bc
         pan: pan
     })*/
+
     _panFetch = () => {
         let checked = {};
         const {changeLoader, history, payload, pan, token} = this.props;
@@ -262,7 +264,7 @@ class AdharPan extends Component {
                                     maxLength={10}
                                     minLength={10}
                                     style={{fontWeight: 600}}
-                                    pattern="^[a-zA-Z]{5}([0-9]){4}[a-zA-Z]{1}?$"
+                                    pattern="^[a-zA-Z]{3}[pP][a-zA-Z]{1}([0-9]){4}[a-zA-Z]{1}?$"
                                     title="Please enter valid PAN number. E.g. AAAAA9999A"
                                     autoCapitalize="characters"
                                     id="numberPAN"

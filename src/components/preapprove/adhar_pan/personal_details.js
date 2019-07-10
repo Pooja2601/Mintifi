@@ -17,7 +17,7 @@ class AdharPan extends Component {
         l_name: '',
         mobile: '',
         email: '',
-        dob: new Date(),
+        dob: new Date(1980, 0, 1),
         gender: 'm',
         ownership: 'rented',
         pincode: '',
