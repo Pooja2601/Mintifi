@@ -10,19 +10,13 @@ class AppApproved extends Component {
 
     state = {confirmed: false};
 
-    componentWillMount() {
-        const {payload, authObj, adharObj, businessObj, history} = this.props;
-
-        // if (payload !== Object(payload))
-        //     history.push(`${PUBLIC_URL}/preapprove/token`);
-    }
-
     render() {
         let {adharObj, match, preFlightResp, history, anchorObj} = this.props;
 
         // if (adharObj === Object(adharObj))
         // if(preFlightResp ===Object(preFlightResp))
         // {
+
         const {f_name, l_name} = adharObj;
         let {loan_application_id, credit_eligibility} = preFlightResp;
 
@@ -130,10 +124,16 @@ class AppApproved extends Component {
                     visibility: (match.params.status !== 'pending') ? 'visible' : 'hidden'
                 }}>
                     <label style={{color: 'black', lineHeight: '1.5'}}>
-                        <input type="checkbox" checked={this.state.confirmed}
+                        {/*<input type="checkbox" checked={this.state.confirmed}
                                onChange={(e) =>
                                    this.setState(prevState => ({confirmed: !prevState.confirmed}))
-                               }/> I accept the terms of the credit eligibility as given above.
+                               }/>*/}
+                        <label className="main">I accept the terms of the credit eligibility as given above.
+                            <input checked={this.state.confirmed} onChange={(e) =>
+                                this.setState(prevState => ({confirmed: !prevState.confirmed}))
+                            } type="checkbox"/>
+                            <span className="geekmark"></span>
+                        </label>
                     </label>
                 </div>
                 <div className="mt-5 mb-3 text-center"

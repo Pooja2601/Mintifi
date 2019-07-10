@@ -480,21 +480,22 @@ class AdharPan extends Component {
                                 <label htmlFor="dobDate" className="bmd-label-floating">
                                     Date of Birth
                                 </label>
-                                <DatePicker
-                                    className="form-control font_weight"
-                                    // placeholderText={"Date of Birth"}
-                                    selected={this.state.dob}
-                                    id={"dobDate"}
-                                    pattern={"^[0-9]{2}/[0-9]{2}/[0-9]{4}$"}
-                                    scrollableYearDropdown
-                                    showMonthDropdown
-                                    required={true}
-                                    showYearDropdown
-                                    style={{margin: 'auto', display: 'block'}}
-                                    dateFormat={'dd/MM/yyyy'}
-                                    onChange={(date) => this.changeDob(date)}
-
-                                />
+                                <div style={{display: 'block '}}>
+                                    <DatePicker
+                                        className="form-control font_weight"
+                                        // placeholderText={"Date of Birth"}
+                                        selected={this.state.dob}
+                                        id={"dobDate"}
+                                        pattern={"^[0-9]{2}/[0-9]{2}/[0-9]{4}$"}
+                                        scrollableYearDropdown
+                                        showMonthDropdown
+                                        required={true}
+                                        showYearDropdown
+                                        style={{margin: 'auto', display: 'block'}}
+                                        dateFormat={'dd/MM/yyyy'}
+                                        onChange={(date) => this.changeDob(date)}
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>

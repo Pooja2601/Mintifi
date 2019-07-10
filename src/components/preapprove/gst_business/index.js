@@ -352,17 +352,23 @@ class BusinessDetail extends Component {
                             <input type="checkbox" checked={this.state.tnc_consent}
                                    onChange={(e) =>
                                        this.setState(prevState => ({tnc_consent: !prevState.tnc_consent}))
-                                   }/> I accept the <a href={'#'} onClick={(e) => {
-                            e.preventDefault();
-                            this.setState({tncModal: true}, () => this.triggerTnCModal.click());
-                        }}>Terms &
-                            Condition</a>, <a href={'#'} onClick={(e) => {
-                            e.preventDefault();
-                            this.setState({tncModal: false}, () => this.triggerTnCModal.click());
-                        }}
-                                              href={"#"}>Privacy
-                            Policy</a> of the Mintifi and provide the
-                            consent to retrieve the Bureau information for checking my Credit worthiness .
+                                   }/>
+                            <label className="main">I accept the <a href={'#'} onClick={(e) => {
+                                e.preventDefault();
+                                this.setState({tncModal: true}, () => this.triggerTnCModal.click());
+                            }}>Terms &
+                                Condition</a>, <a href={'#'} onClick={(e) => {
+                                e.preventDefault();
+                                this.setState({tncModal: false}, () => this.triggerTnCModal.click());
+                            }}
+                                                  href={"#"}>Privacy
+                                Policy</a> of the Mintifi and provide the
+                                consent to retrieve the Bureau information for checking my Credit worthiness .
+                                <input type="checkbox" onChange={(e) =>
+                                    this.setState(prevState => ({tnc_consent: !prevState.tnc_consent}))
+                                } checked={this.state.tnc_consent}/>
+                                <span className="geekmark"></span>
+                            </label>
                         </label>
                     </div>
 
