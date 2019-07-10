@@ -1,11 +1,11 @@
 // Just change the following line to Test it on Prod or Dev environment
 const env_mode = 'dev'; // dev , prod , local,
 const subUrl = (env_mode === 'dev' || env_mode === 'local') ? 'test' : 'live'; //  `live` | `test`  , Sub url for Mintifi API webhook
-const payMintifiUrl = (env_mode === 'dev' || env_mode === 'local') ? 'https://pay-test.mintifi.com' : 'https://pay.mintifi.com';
+const payMintifiUrl = (env_mode === 'dev' || env_mode === 'local') ? 'https://test.pay.mintifi.com' : 'https://pay.mintifi.com';
 // For Deployment of Base Root
 
 // For redirection after Failure and Success (of enach or drawdwon) (Its a dummy and Optional)
-const baseRootPath = (env_mode === 'local') ? 'http://localhost' : (env_mode === 'dev') ? 'https://pay-test.mintifi.com' : 'https://pay.mintifi.com';
+const baseRootPath = (env_mode === 'local') ? 'http://localhost' : (env_mode === 'dev') ? 'https://test.pay.mintifi.com' : 'https://pay.mintifi.com';
 
 const anchorUrls = {
     "success_url": `${baseRootPath}/`,
