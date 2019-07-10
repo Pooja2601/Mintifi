@@ -29,7 +29,6 @@ deploy_stage:
   image: google/cloud-sdk
   script: 
     - echo "Deploy to QA"
-    - config_kubernetes
     - create_deployment_files
     - apply_and_rollout
   environment:
