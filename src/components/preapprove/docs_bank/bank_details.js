@@ -130,7 +130,7 @@ class BankDetail extends Component {
                 if (resp.response === Object(resp.response)) {
                     // resp.response.mandate_id
                     // ToDo : make it base64 payload
-                    let payloadDecrypt = {
+                    /* let payloadDecrypt = {
                         ...payload,
                         user_name: adharObj.f_name + ' ' + adharObj.l_name,
                         user_mobile: adharObj.mobile,
@@ -141,7 +141,7 @@ class BankDetail extends Component {
                         success_url: `${payMintifiUrl}/enach/success_url`,
                         error_url: `${payMintifiUrl}/enach/error_url`,
                         cancel_url: `${payMintifiUrl}/enach/cancel_url`
-                    };
+                    }; */
                     // ToDo : uncomment In Prod
                     // let base64_encode = base64Logic(payloadDecrypt, 'encode');
                     // ToDo : comment in Prod
@@ -480,5 +480,7 @@ const mapStateToProps = state => ({
 });
 
 export default withRouter(connect
-(mapStateToProps, {setBankDetail, changeLoader, setToken})
-(BankDetail));
+(mapStateToProps, 
+    {setBankDetail, changeLoader, setToken})
+(BankDetail)
+);

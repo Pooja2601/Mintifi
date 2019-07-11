@@ -56,7 +56,7 @@ class ThankYou extends Component {
                     >
 
                         {(preFlightResp === Object(preFlightResp) && loanPayload === Object(loanPayload)) ? (
-                            <table width="100%" style={{margin: 'auto 10%'}}>
+                            <table width="100%" style={{margin: 'auto 14%'}}>
                                 <tbody>
                                 <tr>
                                     <td className={"tableDataRight"}>Product Selected</td>

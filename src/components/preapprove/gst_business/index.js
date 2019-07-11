@@ -1,10 +1,10 @@
 import React, {Component} from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
-import {accountType, baseUrl, BusinessType} from "../../../shared/constants";
+import { BusinessType} from "../../../shared/constants";
 import {connect} from "react-redux";
-import {setBusinessDetail, setAdharManual, changeLoader} from "../../../actions/index";
-import {Link, withRouter} from "react-router-dom";
-import {alertModule} from "../../../shared/commonLogic";
+import {setBusinessDetail, changeLoader} from "../../../actions/index";
+import { withRouter} from "react-router-dom";
+// import {alertModule} from "../../../shared/commonLogic";
 import {PrivacyPolicy, TnCPolicy} from "../../../shared/policy";
 import Select from "react-select";
 // import DatePicker from "react-datepicker";
@@ -117,7 +117,7 @@ class BusinessDetail extends Component {
     }
 
     componentWillMount() {
-        const {businessObj, gstProfile, payload, adharObj, setBusinessDetail, changeLoader, history} = this.props;
+        const {businessObj, payload, adharObj, setBusinessDetail, changeLoader, history} = this.props;
 
 
         if (payload === Object(payload)) {
@@ -161,7 +161,7 @@ class BusinessDetail extends Component {
     }
 
     componentDidMount() {
-        const {businessObj, adharObj} = this.props;
+        const {businessObj} = this.props;
         setTimeout(() => this.handleValidation(), 1000);
         // console.log(adharObj);
 
@@ -360,8 +360,7 @@ class BusinessDetail extends Component {
                                 Condition</a>, <a href={'#'} onClick={(e) => {
                                 e.preventDefault();
                                 this.setState({tncModal: false}, () => this.triggerTnCModal.click());
-                            }}
-                                                  href={"#"}>Privacy
+                            }}>Privacy
                                 Policy</a> of the Mintifi and provide the
                                 consent to retrieve the Bureau information for checking my Credit worthiness .
                                 <input type="checkbox" onChange={(e) =>

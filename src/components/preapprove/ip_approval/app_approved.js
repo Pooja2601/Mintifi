@@ -122,7 +122,7 @@ class AppApproved extends Component {
                 : "alert alert-success"
             }
           >
-            <table width="100%" style={{ margin: "auto 10%" }}>
+            <table width="100%" style={{ margin: "auto 15%" }}>
               <tbody>
                 {/*<tr>
                                     <td>PRODUCT OFFERED</td>
