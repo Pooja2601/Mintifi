@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React from "react";
 import {withRouter} from "react-router-dom";
 import {changeLoader} from '../actions';
 import connect from "react-redux/es/connect/connect";

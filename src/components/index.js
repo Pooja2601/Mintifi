@@ -1,14 +1,16 @@
-import React, {Component} from "react";
-import {withRouter} from "react-router-dom";
+import React from "react";
+import { withRouter } from "react-router-dom";
 
-const {PUBLIC_URL} = process.env;
+const { PUBLIC_URL } = process.env;
 
-const Landing = (props) => {
+const Landing = props => {
+  const { token, payload } = props.match.params;
+  props.history.push(`${PUBLIC_URL}/preapprove/token/`, {
+    token: token,
+    payload: payload
+  });
 
-    const {token, payload} = props.match.params;
-    props.history.push(`${PUBLIC_URL}/preapprove/token/`, {token: token, payload: payload});
-
-    return (<> </>);
+  return <> </>;
 };
 
 export default withRouter(Landing);

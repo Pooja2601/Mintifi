@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
-import {Link, withRouter} from "react-router-dom";
-import {baseUrl, loanUrl, app_id} from "../../../shared/constants";
+import { withRouter} from "react-router-dom";
+import {baseUrl, app_id} from "../../../shared/constants";
 import {pan_adhar, setAdharManual, setBusinessDetail, changeLoader} from "../../../actions/index";
 import {alertModule} from "../../../shared/commonLogic";
 
@@ -221,7 +221,7 @@ class DocsUpload extends Component {
 
         preFlightResp = {loan_application_id: '1780'};
 
-        let ctr = 0, documents = {};
+        let ctr = 0;
 
         const inputFiles = document.querySelectorAll('input[type="file"]');
         const formData = new FormData();
@@ -270,7 +270,7 @@ class DocsUpload extends Component {
 
     componentWillMount() {
 
-        const {payload, authObj, adharObj, businessObj, changeLoader, token, history} = this.props;
+        const {payload, adharObj, businessObj, changeLoader, token, history} = this.props;
         changeLoader(false);
         if (!token)
             history.push(`${PUBLIC_URL}/preapprove/token`);

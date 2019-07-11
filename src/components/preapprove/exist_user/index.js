@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
-import {baseUrl, baseUrl2, otpUrl, OTP_Timer, landingPayload, app_id} from "../../../shared/constants";
+import {baseUrl,  otpUrl, OTP_Timer, app_id} from "../../../shared/constants";
 import {connect} from "react-redux";
 import {
     setAuth,

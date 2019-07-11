@@ -1,10 +1,10 @@
 import React, {Component} from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
-import {baseUrl, accountType, loanUrl, payMintifiUrl, app_id, user_id, auth_secret} from "../../../shared/constants";
+import {baseUrl, accountType,  payMintifiUrl, app_id, user_id, auth_secret} from "../../../shared/constants";
 import {connect} from "react-redux";
 import {setBankDetail, changeLoader, setToken} from "../../../actions";
-import {Link, withRouter} from "react-router-dom";
-import {alertModule, base64Logic, retrieveParam} from "../../../shared/commonLogic";
+import { withRouter} from "react-router-dom";
+import {alertModule, retrieveParam} from "../../../shared/commonLogic";
 // import DatePicker from "react-datepicker";
 // import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select'
@@ -70,7 +70,7 @@ class BankDetail extends Component {
        }*/
 
     _genAuthToken = (base64_encode) => {
-        const {history, token} = this.props;
+        const {history} = this.props;
         changeLoader(true);
         fetch(`${baseUrl}/auth`, {
             method: 'POST',
@@ -100,7 +100,7 @@ class BankDetail extends Component {
 
     _formSubmit = (e) => {
         e.preventDefault();
-        const {changeLoader, token, payload, preFlightResp, adharObj, history} = this.props;
+        const {changeLoader, token, payload, preFlightResp, adharObj} = this.props;
         console.log(preFlightResp);
         if (preFlightResp === Object(preFlightResp)) {
             changeLoader(true);
@@ -194,7 +194,7 @@ class BankDetail extends Component {
 
 
     componentWillMount() {
-        const {bankObj, gstProfile, payload, adharObj, setBankDetail, changeLoader, history, businessObj} = this.props;
+        const {bankObj, payload, adharObj, setBankDetail, changeLoader, history, businessObj} = this.props;
 
         if (payload === Object(payload)) {
             if (adharObj !== Object(adharObj))
@@ -225,7 +225,7 @@ class BankDetail extends Component {
     }
 
     render() {
-        const gstProfile = this.props.gstProfile;
+        // const gstProfile = this.props.gstProfile;
         return (
             <>
                 {/*<Link to={`${PUBLIC_URL}/preapprove/personaldetails`} className={"btn btn-link"}>Go Back </Link>*/}

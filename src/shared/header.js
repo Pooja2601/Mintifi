@@ -1,51 +1,59 @@
-import React from 'react';
-import {withRouter} from 'react-router-dom';
+import React from "react";
+import { withRouter } from "react-router-dom";
 import connect from "react-redux/es/connect/connect";
-import {changeLoader} from "../actions";
+import { changeLoader } from "../actions";
 
-const {PUBLIC_URL} = process.env;
-const Header = (props) => {
-    return (
-        <>
-            <header>
-                <div className="mt-3 text-center">
-                    <div className="mb-4">
-                        {/*    ToDo : Swap All $PUBLIC_URL$ to ./ in production */}
-                        <img
-                            src={`${PUBLIC_URL}/images/Mintifi-Logo-white_2.png`}
-                            className={"logoHeader"}
-                        />
-                        {/*<b className={"anchorText"}>Anchor Merchant</b>*/}
-                        <img style={{
-                            position: 'absolute', right: '25%', top: "18px",
-                            width: '85px'
-                        }}
-                             src={(props.anchorObj === Object(props.anchorObj)) ? props.anchorObj.anchor_logo : `${PUBLIC_URL}/images/company/yatra.png`}
-                             className={"anchorLogo"}
-                        />
-                    </div>
-                </div>
-                {/*<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"
+const { PUBLIC_URL } = process.env;
+const Header = props => {
+  return (
+    <>
+      <header>
+        <div className="mt-3 text-center">
+          <div className="mb-4">
+            {/*    ToDo : Swap All $PUBLIC_URL$ to ./ in production */}
+            <img
+              src={`${PUBLIC_URL}/images/Mintifi-Logo-white_2.png`}
+              alt="Mintifi Logo"
+              className={"logoHeader"}
+            />
+            {/*<b className={"anchorText"}>Anchor Merchant</b>*/}
+            <img
+              style={{
+                position: "absolute",
+                right: "25%",
+                top: "18px",
+                width: "85px"
+              }}
+              src={
+                props.anchorObj === Object(props.anchorObj)
+                  ? props.anchorObj.anchor_logo
+                  : `${PUBLIC_URL}/images/company/yatra.png`
+              }
+              alt="Anchor Logo"
+              className={"anchorLogo"}
+            />
+          </div>
+        </div>
+        {/*<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"
                                          preserveAspectRatio="none">
                                         <polygon className="svg--sm" fill="white"
                                                  points="0,0 30,100 65,21 90,100 100,75 100,100 0,100"/>
                                         <polygon className="svg--lg" fill="white"
                                                  points="0,0 15,100 33,21 45,100 50,75 55,100 72,20 85,100 95,50 100,80 100,100 0,100"/>
             </svg>*/}
-            </header>
-        </>
-    )
+      </header>
+    </>
+  );
 };
 
-
 const mapStateToProps = state => ({
-    token: state.eNachReducer.token,
-    anchorObj: state.authPayload.anchorObj
+  token: state.eNachReducer.token,
+  anchorObj: state.authPayload.anchorObj
 });
 
 export default withRouter(
-    connect(
-        mapStateToProps,
-        {changeLoader}
-    )(Header)
+  connect(
+    mapStateToProps,
+    { changeLoader }
+  )(Header)
 );

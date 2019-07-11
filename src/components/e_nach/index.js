@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { changeLoader, EnachsetPayload, EnachsetAttempt } from "../../actions";
 import {
   alertModule,
@@ -10,15 +10,14 @@ import {
 import {
   eNachPayloadStatic,
   baseUrl,
-  payMintifiUrl,
   app_id,
   environment
 } from "../../shared/constants";
 
-const { PUBLIC_URL } = process.env;
+// const { PUBLIC_URL } = process.env;
 
 class ENach extends Component {
-  state = { ctr: 0, errorMsg: false };
+  state = { ctr: 0, errorMsg: false, backendError: 0 };
 
   _updateBackend = result => {
     let { token, changeLoader, eNachPayload } = this.props;
@@ -48,15 +47,19 @@ class ENach extends Component {
               if (environment === "prod" || environment === "dev")
                 window.location.href = eNachPayload.success_url;
             }, 1000);
+            this.setState({ backendError: 0 });
           }
           if (resp.error === Object(resp.error)) {
             alertModule(resp.error.message, "warn");
+            this.setState({ backendError: this.state.backendError + 1 });
+          }
+          if (this.state.backendError < 2) this._updateBackend(result);
+          else
             setTimeout(() => {
               // ToDo : Uncomment the below line in Prod
               if (environment === "prod" || environment === "dev")
-                window.location.href = eNachPayload.error_url;
+                window.location.href = eNachPayload.cancel_url;
             }, 1000);
-          }
         },
         resp => {
           alertModule();
@@ -67,7 +70,7 @@ class ENach extends Component {
 
   _triggerDigio = () => {
     // console.log(this.props.eNachPayload);
-    const { eNachPayload, payload } = this.props;
+    const { eNachPayload } = this.props;
     let eNachPayDigio = eNachPayload;
     eNachPayDigio.code_mode = environment;
 
@@ -77,8 +80,8 @@ class ENach extends Component {
       });
       document.dispatchEvent(event);
     } else {
-      // alertModule("You can not try eNACH more than twice", 'warn');
-      // alertModule("Redirecting you back to Anchor portal..", 'info');
+      alertModule("You can not try eNACH more than twice", "warn");
+      alertModule("Redirecting you back to Anchor portal..", "info");
       this.setState({ errorMsg: true });
       setTimeout(() => {
         // ToDo : Uncomment this line in Prod
@@ -158,10 +161,8 @@ class ENach extends Component {
           // ToDo : uncomment in prod
           if (environment === "prod" || environment === "dev")
             if (eNachPayload === Object(eNachPayload))
-              window.location.href =
-                detail.error_code === "CANCELLED"
-                  ? eNachPayload.cancel_url
-                  : eNachPayload.error_url;
+              if (detail.error_code !== "CANCELLED")
+                window.location.href = eNachPayload.error_url;
         }, 1000);
       } else {
         alertModule("Register successful for" + detail.digio_doc_id, "success");
