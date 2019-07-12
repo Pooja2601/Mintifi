@@ -41,7 +41,7 @@ class BankDetail extends Component {
         });
         if (ctrerror !== 0) {
             fieldTxt = (ctrerror > 1) ? 'field is ' : 'fields are ';
-            alertModule(`Kindly check the form again, ${ctrerror / 2} ${fieldTxt} still having some issue !`, 'warn');
+            // alertModule(`Kindly check the form again, ${ctrerror / 2} ${fieldTxt} still having some issue !`, 'warn');
         }
     };
 
@@ -100,7 +100,7 @@ class BankDetail extends Component {
 
     _formSubmit = (e) => {
         e.preventDefault();
-        const {changeLoader, token, payload, preFlightResp, adharObj} = this.props;
+        const {changeLoader, token, payload, preFlightResp} = this.props;
         console.log(preFlightResp);
         if (preFlightResp === Object(preFlightResp)) {
             changeLoader(true);

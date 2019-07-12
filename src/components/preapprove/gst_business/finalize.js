@@ -70,7 +70,7 @@ class ReviewBusinessDetail extends Component {
 
   _formSubmit(e) {
     // e.preventDefault();
-    let dob;
+    let dob = "1980-01-01";
     const {
       payload,
       gstProfile,
@@ -85,13 +85,16 @@ class ReviewBusinessDetail extends Component {
     } = this.props;
     changeLoader(true);
     if (adharObj === Object(adharObj))
-      if (adharObj.dob) dob = adharObj.dob.substr(0, 10);
-    /*
-                let date = (adharObj.dob).getDate();
-                let month = (adharObj.dob).getMonth();
-                let year = (adharObj.dob).getFullYear();
-                let dob = `${year}-${month}-${date}`;
-        */
+      if (adharObj.dob) {
+        let dobObj = new Date(adharObj.dob);
+        dob =
+          dobObj.getFullYear() +
+          "-" +
+          dobObj.getMonth() +
+          "-" +
+          dobObj.getDate();
+      }
+
     fetch(`${loanUrl}/application/instant`, {
       method: "POST",
       headers: { "Content-Type": "application/json", token: token },
