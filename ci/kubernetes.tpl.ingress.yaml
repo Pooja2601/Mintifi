@@ -9,6 +9,8 @@ metadata:
     # use the Kubernetes ingress "nginx"
     kubernetes.io/ingress.class: "nginx"
 spec:
+  tls:
+  - secretName: sslcerts-pay-with-mintifi
   rules:
   - host: test.pay._MY_DOMAIN_
     http:
