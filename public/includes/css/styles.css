@@ -2860,7 +2860,7 @@ input[type=number]::-webkit-outer-spin-button {
     height: 64px;
     position: fixed;
     top: 45%;
-    left: 49%;
+    left: 45.5%;
 }
 
 .lds-ring div {
