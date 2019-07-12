@@ -258,7 +258,7 @@ class BankDetail extends Component {
                                     // ref={ref => (this.obj.pan = ref)}
                                     onChange={(e) => {
                                         let {value} = e.target;
-                                        this.validate.acc_name = (value.length > 5);
+                                        this.validate.acc_name = (value.length > 2);
                                         this.setState({acc_name: value}, () => this.props.setBankDetail(this.state));
                                         this.handleValidation();
                                     }}

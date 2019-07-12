@@ -90,7 +90,7 @@ class ReviewBusinessDetail extends Component {
         dob =
           dobObj.getFullYear() +
           "-" +
-          dobObj.getMonth() +
+          (dobObj.getMonth() + 1) +
           "-" +
           dobObj.getDate();
       }

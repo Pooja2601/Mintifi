@@ -318,20 +318,19 @@ class DocsUpload extends Component {
                             <div className={"row mb-4 mt-4"}>
                                 <div className={"col-md-6 col-sm-6 col-xs-12"}>
                                     <div className="input-container text-left" style={{cursor: 'pointer'}}
-                                         onClick={() => this._multiDimDocsUpload('id_proof')}>
+                                         onClick={() => this.idProofInput.click()}>
                                         <input type="file" id="idProofInput"
                                                onChange={(e) => this._onChangeFile(e, 'id_proof')}
                                                ref={ref => this.idProofInput = ref}/>
                                         <button className="btn btn-raised uploadButton inputFilebutton"
-                                                onClick={() => this._multiDimDocsUpload('id_proof')}
+                                                onClick={() => this.idProofInput.click()}
                                                 style={{minWidth: '111px'}}
                                                 id={"idProofBtn"}>
                                             ID Proof
                                         </button>
                                         <span className="helperUploadTxt">{this.state.id_proof_msg}</span>
                                     </div>
-                                    <small className="text-muted" style={{fontSize: 'x-small'}}>Upload a Aadhaar,
-                                        VoterCard, PAN or Passport.
+                                    <small className="text-muted" style={{fontSize: 'x-small'}}>Upload a PAN or Passport.
                                     </small>
                                 </div>
                                 <div className={"col-md-6 col-sm-6 col-xs-12"}>
@@ -440,6 +439,7 @@ class DocsUpload extends Component {
                 </>
             )
         }
+        else return null;
     }
 }
 

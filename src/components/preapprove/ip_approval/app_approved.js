@@ -138,7 +138,11 @@ class AppApproved extends Component {
                 </tr>
                 <tr>
                   <td className={"tableDataRight"}>Application Status</td>
-                  <td>{credit_eligibility.loan_status}</td>
+                  <td>
+                    {credit_eligibility.loan_status === "aip"
+                      ? "approval_in_principle"
+                      : credit_eligibility.loan_status}
+                  </td>
                 </tr>
                 <tr>
                   <td className={"tableDataRight"}>Lender</td>
