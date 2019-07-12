@@ -58,12 +58,12 @@ class AdharPan extends Component {
 
         // console.log(state);
 
-        if (authObj === Object(authObj))
+        if (authObj === Object(authObj) && authObj.length)
             if (authObj.verified && state === Object(state))
                 if (state.mobile)
                     state.mobile = authObj.mobile;
 
-        if (state === Object(state))
+        if (state === Object(state) && state.length)
             this.setState(state, () => {
                 Object.keys(this.state).map((val, key) => {
                     if (this.validate[val] !== undefined)

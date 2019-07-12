@@ -161,9 +161,9 @@ class BusinessDetail extends Component {
     }
 
     componentDidMount() {
-        const {businessObj} = this.props;
+        const {businessObj, adharObj} = this.props;
         setTimeout(() => this.handleValidation(), 1000);
-        // console.log(adharObj);
+        console.log(adharObj);
 
         if (businessObj === Object(businessObj))
             this.businessGst(businessObj.gst);
