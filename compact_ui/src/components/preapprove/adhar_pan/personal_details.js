@@ -50,7 +50,7 @@ class AdharPan extends Component {
         var datePickerInputWrapper = document.getElementsByClassName('react-datepicker-wrapper');
         setTimeout(() => {
             // datePickerInput.style.width = '100%';
-            // datePickerInputWrapper.style.width = '100%';
+            datePickerInputWrapper.style.width = '100%';
         }, 1000);
         // console.log(pan)
         if (payload === Object(payload)) {

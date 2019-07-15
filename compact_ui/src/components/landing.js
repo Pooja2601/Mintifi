@@ -120,35 +120,35 @@ class Login extends Component {
           {/*{anchorObj.anchor_logo}*/}
         </p>
         <div className="mt-5 mb-5 text-center row">
-          <div className={"col-sm-12 col-md-2"} />
-          <div className={"col-sm-12 col-md-4 text-center"}>
+          {/* <div className={"col-sm-2 col-md-2"} /> */}
+          <div className={"col-6 text-center"}>
             <img
               src={`${PUBLIC_URL}/images/supply_chain/new.png`}
               alt="New User"
-              className="user_type_img"
               style={{
                 border: existing === "new" && "1px solid #00bfa5",
                 opacity: existing === "new" ? "1.0" : "0.4"
               }}
               onClick={() => this._newCustomer()}
+              className="user_type_img"
             />
             <br /> <p style={{ paddingRight: "0%" }}>New User</p>
           </div>
-          <div className={"col-sm-12 col-md-4 text-center"}>
+          <div className={"col-6 text-center"}>
             <img
               src={`${PUBLIC_URL}/images/supply_chain/existing.png`}
               alt="Existing User"
-              className="user_type_img"
               style={{
                 border: existing === "exist" && "1px solid #00bfa5",
                 opacity: existing === "exist" ? "1.0" : "0.4"
               }}
               onClick={() => this._existCustomer()}
+              className="user_type_img"
             />{" "}
             <br /> <p style={{ paddingLeft: "0%" }}>Existing User</p>
           </div>
 
-          <div className={"col-sm-12 col-md-2"} />
+          {/* <div className={"col-sm-2 col-md-2"} /> */}
           <br />
           <div
             className={"row col-sm-12"}
@@ -178,7 +178,7 @@ class Login extends Component {
             style={{
               padding: "5px 35px",
               width: "100%",
-              margin: "30px 20%"
+              margin: "25px 10%"
             }}
             className="form-submit btn greenButton text-center"
           >
