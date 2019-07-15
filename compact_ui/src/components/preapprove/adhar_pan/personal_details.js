@@ -172,10 +172,10 @@ class AdharPan extends Component {
     render() {
         return (
             <>
-                <Link to={`${PUBLIC_URL}/preapprove/adharpan`} className={"btn btn-link"}>Go
-                    Back </Link><br/><br/>
-                <h4 className={"text-center"}>Personal Details </h4>
-                <h5 className="paragraph_styling  text-center" style={{fontSize: '17px'}}>
+                <Link to={`${PUBLIC_URL}/preapprove/adharpan`} className={"btn btn-sm btn-link"}>Go
+                    Back </Link><br/>
+                <h4 className={"text-center"} style={{fontSize: '1.2rem'}}>Personal Details </h4>
+                <h5 className="paragraph_styling  text-center" style={{fontSize: '14px'}}>
                     <b> Enter your personal information to proceed.</b>
                 </h5>
                 <br/>
@@ -184,14 +184,13 @@ class AdharPan extends Component {
                     onSubmit={e => this._formSubmit(e)}
                 >
                     <div className={"row"}>
-                        <div className={"col-md-4 col-sm-4 col-xs-12"}>
-                            <div className="form-group mb-3 ">
+                        <div className={"col-4"}>
+                            <div className="form-group mb-0">
                                 <label htmlFor="firstName" className={"bmd-label-floating"}>First Name *</label>
                                 <input
                                     type="text"
                                     className="form-control font_weight"
                                     // placeholder="Full Name"
-                                    style={{fontWeight: 600}}
                                     pattern="^[a-zA-Z]+$"
                                     title="Please enter First Name"
                                     autoCapitalize="characters"
@@ -210,14 +209,13 @@ class AdharPan extends Component {
                                 />
                             </div>
                         </div>
-                        <div className={"col-md-4 col-sm-4 col-xs-12"}>
-                            <div className="form-group mb-3 ">
+                        <div className={"col-4"}>
+                            <div className="form-group mb-0 ">
                                 <label htmlFor="middleName" className={"bmd-label-floating"}>Middle Name </label>
                                 <input
                                     type="text"
                                     className="form-control font_weight"
                                     // placeholder="Full Name"
-                                    style={{fontWeight: 600}}
                                     pattern="^[a-zA-Z]+$"
                                     title="Please enter Middle Name"
                                     autoCapitalize="characters"
@@ -229,14 +227,13 @@ class AdharPan extends Component {
                                 />
                             </div>
                         </div>
-                        <div className={"col-md-4 col-sm-4 col-xs-12"}>
-                            <div className="form-group mb-3 ">
+                        <div className={"col-4"}>
+                            <div className="form-group mb-0">
                                 <label htmlFor="lastName" className={"bmd-label-floating"}>Last Name *</label>
                                 <input
                                     type="text"
                                     className="form-control font_weight"
                                     // placeholder="Full Name"
-                                    style={{fontWeight: 600}}
                                     pattern="^[a-zA-Z]+$"
                                     title="Please enter Last Name"
                                     autoCapitalize="characters"
@@ -257,8 +254,8 @@ class AdharPan extends Component {
                         </div>
                     </div>
                     <div className={"row"}>
-                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
-                            <div className="form-group mb-3">
+                        <div className={"col-6"}>
+                            <div className="form-group mb-0">
                                 <label htmlFor="numberMobile"
                                        className={"bmd-label-floating"}>Mobile
                                     Number *</label>
@@ -294,14 +291,13 @@ class AdharPan extends Component {
                                 </div>
                             </div>
                         </div>
-                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
-                            <div className="form-group mb-3 ">
+                        <div className={"col-6"}>
+                            <div className="form-group mb-0">
                                 <label htmlFor="textEmail" className={"bmd-label-floating"}>Email ID *</label>
                                 <input
                                     type="text"
                                     className="form-control font_weight"
                                     // placeholder="Email"
-                                    style={{fontWeight: 600}}
                                     pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
                                     title="Please enter Email"
                                     autoCapitalize="characters"
@@ -324,8 +320,8 @@ class AdharPan extends Component {
                     </div>
 
 
-                    <div className={"row"}>
-                        <div className={"col-sm-6 col-xs-12 col-md-6 text-left"}>
+                    <div className={"row mt-3"}>
+                        <div className={"col-6 text-left"}>
                             <label htmlFor="ResidenceOwnership" className="labelLoan bmd-label">
                                 Gender *
                             </label><br/>
@@ -338,55 +334,39 @@ class AdharPan extends Component {
                             >
                                 <button
                                     type="button"
-                                    className="btn btn-default"
+                                    className="btn btn-default state_btn_left"
                                     onClick={() => {
                                         this.setState({gender: 'm'}, () => this.props.setAdharManual(this.state));
                                     }}
                                     style={{
-                                        width: "90px",
                                         border:
                                             this.state.gender === "m" && "2px solid #00bfa5",
-                                        borderBottomLeftRadius: '25px',
-                                        borderTopLeftRadius: '25px'
                                     }}
                                 >
                                     <i
                                         className="fa fa-male"
-                                        style={{
-                                            fontSize: "x-large",
-                                            display: "block",
-                                            padding: "0 10px"
-                                        }}
                                     />
                                     <small style={{fontSize: "75%"}}>Male</small>
                                 </button>
                                 <button
                                     type="button"
-                                    className="btn btn-default"
+                                    className="btn btn-default state_btn_right"
                                     onClick={() => {
                                         this.setState({gender: 'f'}, () => this.props.setAdharManual(this.state));
                                     }}
                                     style={{
-                                        width: "90px",
                                         border:
                                             this.state.gender === "f" && "2px solid #00bfa5",
-                                        borderBottomRightRadius: '25px',
-                                        borderTopRightRadius: '25px'
                                     }}
                                 >
                                     <i
                                         className="fa fa-female"
-                                        style={{
-                                            fontSize: "x-large",
-                                            display: "block",
-                                            padding: "0 10px"
-                                        }}
                                     />
                                     <small style={{fontSize: "75%"}}>Female</small>
                                 </button>
                             </div>
                         </div>
-                        <div className={"col-sm-6 col-xs-12 col-md-6 text-left"}>
+                        <div className={"col-6 text-left"}>
                             <label htmlFor="ResidenceOwnership" className="labelLoan bmd-label">
                                 Ownership *
                             </label><br/>
@@ -400,50 +380,33 @@ class AdharPan extends Component {
 
                                 <button
                                     type="button"
-                                    className="btn btn-default"
+                                    className="btn btn-default state_btn_left"
                                     onClick={() => {
                                         this.setState({ownership: 'rented'}, () => this.props.setAdharManual(this.state));
                                     }}
                                     style={{
-                                        width: "90px",
                                         border:
                                             this.state.ownership === "rented" && "2px solid #00bfa5",
-                                        borderBottomLeftRadius: '25px',
-                                        borderTopLeftRadius: '25px'
                                     }}
                                 >
                                     <i
                                         className="fa fa-building"
-                                        style={{
-                                            fontSize: "x-large",
-                                            display: "block",
-                                            padding: "0 10px"
-                                        }}
                                     />
                                     <small style={{fontSize: "75%"}}>Rented</small>
                                 </button>
                                 <button
                                     type="button"
-                                    className="btn btn-default"
+                                    className="btn btn-default state_btn_right"
                                     onClick={() => {
                                         this.setState({ownership: 'owned'}, () => this.props.setAdharManual(this.state));
-
                                     }}
                                     style={{
-                                        width: "90px",
                                         border:
                                             this.state.ownership === "owned" && "2px solid #00bfa5",
-                                        borderBottomRightRadius: '25px',
-                                        borderTopRightRadius: '25px'
                                     }}
                                 >
                                     <i
                                         className="fa fa-home"
-                                        style={{
-                                            fontSize: "x-large",
-                                            display: "block",
-                                            padding: "0 10px"
-                                        }}
                                     />
                                     <small style={{fontSize: "75%"}}>Owned</small>
                                 </button>
@@ -452,8 +415,8 @@ class AdharPan extends Component {
                     </div>
 
                     <div className={"row"}>
-                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
-                            <div className="form-group mb-3 ">
+                        <div className={"col-6"}>
+                            <div className="form-group mb-0 ">
                                 <label htmlFor="textAddress1" className="bmd-label-floating">
                                     Address 1 *
                                 </label>
@@ -461,7 +424,6 @@ class AdharPan extends Component {
                                     type="text"
                                     className="form-control font_weight"
                                     // placeholder="Pincode"
-                                    style={{fontWeight: 600}}
                                     title="Please enter Address 1"
                                     // pattern={"^[A-Za-z0-9'\\.\\-\\s\\,]{3,}"}
                                     autoCapitalize="characters"
@@ -481,14 +443,14 @@ class AdharPan extends Component {
                                 />
                             </div>
                         </div>
-                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
-                            <div className="form-group mb-3">
+                        <div className={"col-6"}>
+                            <div className="form-group mb-0">
                                 <label htmlFor="dobDate" className="bmd-label-floating">
                                     Date of Birth
                                 </label>
                                 <div style={{display: 'block '}}>
                                     <DatePicker
-                                        className="form-control font_weight"
+                                        className="form-control font_weight d-block react_datepicker"
                                         // placeholderText={"Date of Birth"}
                                         selected={this.state.dob}
                                         id={"dobDate"}
@@ -497,7 +459,6 @@ class AdharPan extends Component {
                                         showMonthDropdown
                                         required={true}
                                         showYearDropdown
-                                        style={{margin: 'auto', display: 'block'}}
                                         dateFormat={'dd/MM/yyyy'}
                                         onChange={(date) => this.changeDob(date)}
                                     />
@@ -507,8 +468,8 @@ class AdharPan extends Component {
                     </div>
 
                     <div className={"row"}>
-                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
-                            <div className="form-group mb-3 ">
+                        <div className={"col-6"}>
+                            <div className="form-group mb-0 ">
                                 <label htmlFor="textAddress2" className="bmd-label-floating">
                                     Address 2
                                 </label>
@@ -516,7 +477,6 @@ class AdharPan extends Component {
                                     type="text"
                                     className="form-control font_weight"
                                     // placeholder="Pincode"
-                                    style={{fontWeight: 600}}
                                     title="Please enter Address 2"
                                     autoCapitalize="characters"
                                     // pattern={"^.+{3,}"}
@@ -537,8 +497,8 @@ class AdharPan extends Component {
                             </div>
 
                         </div>
-                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
-                            <div className="form-group mb-3">
+                        <div className={"col-6"}>
+                            <div className="form-group mb-0">
                                 <label htmlFor="numberPincode" className="bmd-label-floating">
                                     Pincode *
                                 </label>
@@ -546,7 +506,6 @@ class AdharPan extends Component {
                                     type="number"
                                     className="form-control font_weight"
                                     // placeholder="Pincode"
-                                    style={{fontWeight: 600}}
                                     pattern="^[0-9]{6}$"
                                     title="Please enter Pincode"
                                     autoCapitalize="characters"
@@ -573,15 +532,13 @@ class AdharPan extends Component {
                     <div className={"row"}
                          style={{
                              marginTop: '26px',
-                             visibility: (this.state.city && this.state.state) ? 'visible' : 'hidden'
+                             display: (this.state.city && this.state.state) ? 'flex' : 'none'
                          }}>
-                        <div className={"col-md-6 col-sm-6 col-xs-12 "}>
-                            <label className={"form-control font_weight"}
-                                   style={{fontWeight: 600}}>{this.state.city}</label>
+                        <div className={"col-6 "}>
+                            <label className={"form-control font_weight"}>{this.state.city}</label>
                         </div>
-                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
-                            <label className={"form-control font_weight"}
-                                   style={{fontWeight: 600}}>{this.state.state}</label>
+                        <div className={"col-6"}>
+                            <label className={"form-control font_weight"}>{this.state.state}</label>
                         </div>
                     </div>
                     {/*  <div className="form-group mb-3">
@@ -607,7 +564,7 @@ class AdharPan extends Component {
                         </select>
                     </div>*/}
 
-                    <div className="mt-5 mb-5 text-center ">
+                    <div className="mt-4 mb-1 text-center ">
                         {<button
                             type="submit"
                             onClick={e => this._formSubmit(e)}

@@ -174,16 +174,15 @@ class BusinessDetail extends Component {
         return (
             <>
                 {/*<Link to={`${PUBLIC_URL}/preapprove/personaldetails`} className={"btn btn-link"}>Go Back </Link>*/}
-                <br/><br/>
+                
                 <h4 className={"text-center"}>Business Details</h4>
                 <p className="paragraph_styling  text-center">
                     <b> Please submit your business details to complete the loan application.</b>
                 </p>
-                <br/>
                 {/*<h5 className={"text-center"}>{(gstProfile === Object(gstProfile)) ? gstProfile.lgnm : ''}</h5>*/}
-
+<br/>
                 <form
-                    id="serverless-contact-form"
+                    id="serverless-contact-form mb-0"
                     onSubmit={e => this._formSubmit(e)}
                 >
                     <div className={"row"}>
@@ -192,7 +191,7 @@ class BusinessDetail extends Component {
                             <input
                                 type="text"
                                 className="form-control font_weight"
-                                style={{fontWeight: 600, padding: '10px'}}
+                                style={{ padding: '10px'}}
                                 title="Company Legal Name"
                                 autoCapitalize="characters"
                                 id="companyName"
@@ -204,8 +203,8 @@ class BusinessDetail extends Component {
                         </div>
                     </div>
                     <div className={"row"}>
-                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
-                            <div className="form-group mb-3">
+                        <div className={"col-6"}>
+                            <div className="form-group">
                                 <label htmlFor="companyType" className={"bmd-label-floating"}>Company Type *</label>
                                 <Select options={BusinessType}
                                         required={true}
@@ -240,14 +239,13 @@ class BusinessDetail extends Component {
 
                             </div>
                         </div>
-                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
-                            <div className="form-group mb-3">
+                        <div className={"col-6"}>
+                            <div className="form-group ">
                                 <label htmlFor="numberGST" className={"bmd-label-floating"}>GST Number *</label>
                                 <input
                                     type="text"
                                     className="form-control font_weight"
                                     // placeholder="Mobile Number"
-                                    style={{fontWeight: 600}}
                                     pattern="^\d{2}[A-Z]{5}\d{4}[A-Z]{1}[A-Z\d]{1}[Z]{1}[A-Z\d]{1}$"
                                     title="Please enter GST Number"
                                     autoCapitalize="characters"
@@ -269,7 +267,7 @@ class BusinessDetail extends Component {
                                 type="text"
                                 className="form-control font_weight"
                                 // placeholder="Email"
-                                style={{fontWeight: 600, padding: '10px'}}
+                                style={{ padding: '10px'}}
                                 pattern="^[a-zA-Z]{5}([0-9]){4}[a-zA-Z]{1}?$"
                                 title="Please enter Business PAN"
                                 autoCapitalize="characters"
@@ -285,10 +283,9 @@ class BusinessDetail extends Component {
                         </div>
                     ) : <></>}
 
-
                     <div className={"row"}>
-                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
-                            <div className="form-group mb-3">
+                        <div className={"col-6"}>
+                            <div className="form-group">
                                 <label htmlFor="avgTrans" className="bmd-label-floating">
                                     Average Monthly Transactions *
                                 </label>
@@ -320,15 +317,14 @@ class BusinessDetail extends Component {
                                 </div>
                             </div>
                         </div>
-                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
-                            <div className="form-group mb-3">
+                        <div className={"col-6"}>
+                            <div className="form-group">
                                 <label htmlFor="dealerCode" className="bmd-label-floating">
                                     Dealer Code
                                 </label>
                                 <input
                                     type="text"
                                     className="form-control font_weight"
-                                    style={{fontWeight: 600}}
                                     pattern="^[0-9A-Za-z]{4,}$"
                                     title="Enter Dealer Code"
                                     autoCapitalize="characters"
@@ -347,7 +343,7 @@ class BusinessDetail extends Component {
                             </div>
                         </div>
                     </div>
-                    <div className=" mt-5">
+                    <div className="mt-2">
                         <label style={{color: 'black', lineHeight: '1.5'}}>
                             <input type="checkbox" checked={this.state.tnc_consent}
                                    onChange={(e) =>
@@ -371,7 +367,7 @@ class BusinessDetail extends Component {
                         </label>
                     </div>
 
-                    <div className="mt-5 mb-5 text-center">
+                    <div className="mt-3 mb-1 text-center">
                         <button
                             type="submit"
                             disabled={this.state.missed_fields || !this.state.tnc_consent}

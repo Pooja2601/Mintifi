@@ -731,6 +731,36 @@ li a:focus {
     width: 100px;
 }
 
+.state_btn_left{
+    border-bottom-left-radius: 25px;
+    border-top-left-radius: 25px;
+    width: 70px;
+    height: 58px;
+}
+
+.state_btn_right{
+    border-bottom-right-radius: 25px;
+    border-top-right-radius: 25px;
+    width: 70px;
+    height: 58px;
+}
+
+.state_btn_right i, .state_btn_left i {
+    font-size: 25px;
+    display: block;
+    padding: 0 10px;
+}
+
+.state_btn_right small, .state_btn_left small {
+    font-size: 0.6;
+}
+
+
+.css-1pahdxg-control{
+    border-color: transparent !important;
+    box-shadow: 0 0 0 1px transparent !important;
+}
+
 .cofounder {
     margin-right: 0rem;
     margin-top: -4rem;
@@ -2787,8 +2817,22 @@ input[type=number]::-webkit-outer-spin-button {
 
 .prependInput {
     font-weight: 600;
-    padding-left: 45px;
+    padding-left: 30px;
     margin-left: -1.3rem;
+}
+
+.react_datepicker {
+display: block;
+width: 100% !important;
+}
+
+ .react-datepicker-wrapper {
+    width: 100% !important;
+}
+
+
+ .react-datepicker-wrapper .react-datepicker__input-container {
+    width: 100% !important;
 }
 
 .tableDataRight {

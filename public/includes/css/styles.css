@@ -17,6 +17,11 @@ header {
     box-shadow: 0 0 8px #cccccc;
 }
 
+.css-1pahdxg-control{
+    border-color: transparent !important;
+    box-shadow: 0 0 0 1px transparent !important;
+}
+
 /*
 .headerTop {
     top: 64px;

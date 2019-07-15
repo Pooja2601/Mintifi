@@ -204,7 +204,7 @@ class MobileOtp extends Component {
       <>
         <Link
           to={`${PUBLIC_URL}/preapprove/personaldetail`}
-          className={"btn btn-link"}
+          className={"btn btn-sm btn-link"}
         >
           Go Back{" "}
         </Link>
@@ -215,7 +215,7 @@ class MobileOtp extends Component {
         <form id="serverless-contact-form">
           <div className={"row"}>
             <div className={"col-sm-11 col-md-8"} style={{ margin: "auto" }}>
-              <div className="form-group mb-3">
+              <div className="form-group">
                 <label htmlFor="numberMobile" className={"bmd-label-floating"}>
                   Mobile Number *
                 </label>
@@ -250,7 +250,7 @@ class MobileOtp extends Component {
             </div>
             <div className={"col-sm-11 col-md-8"} style={{ margin: "auto" }}>
               <div
-                className="form-group mb-3"
+                className="form-group"
                 style={{
                   visibility: this.state.submitted ? "visible" : "hidden",
                   marginTop: "-15px"
@@ -269,7 +269,6 @@ class MobileOtp extends Component {
                     title="This field is required"
                     id="otpVerify"
                     style={{
-                      fontWeight: 600,
                       marginRight: "5px",
                       fontSize: "14px"
                     }}
@@ -305,7 +304,7 @@ class MobileOtp extends Component {
                 fontSize: "small",
                 paddingTop: "14px",
                 color: "#bbb",
-                visibility: this.state.submitted ? "visible" : "hidden"
+                display: this.state.submitted ? "block" : "none"
               }}
             >
               You can resend OTP after{" "}
