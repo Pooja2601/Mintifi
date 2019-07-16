@@ -26,25 +26,28 @@ class AppApproved extends Component {
     const { f_name, l_name } = adharObj;
     let { loan_application_id, credit_eligibility } = preFlightResp;
     // ToDo : Hide Start (in Prod)
-    const load_status = "pending";
+    // if(environment === "local" || environment === "dev")
+    const loan_status = "approved";
+    // credit_eligibility.loan_status = loan_status;
     // ToDo : Hide Start (in Prod)
     if (environment === "local") {
       // pending // bank_approved
       credit_eligibility = {
         product_offered: "LoC",
-        loan_status: load_status,
+        loan_status: loan_status,
         loan_amount_approved: "500000",
         loan_tenor: "16",
         roi: "7",
         emi: "33440"
       };
       loan_application_id = 1740;
-      location = { state: { status: load_status } };
+      location = { state: { status: loan_status } };
     }
     // ToDo : Hide Ends here
 
-    if (location.state !== Object(location.state))
-      location = { state: { status: load_status } };
+    if (environment === "dev")
+      if (location.state !== Object(location.state))
+        location = { state: { status: loan_status } };
 
     let iconCss = "fa checkCircle ";
     return (
@@ -53,30 +56,36 @@ class AppApproved extends Component {
                     Go Back
                 </button>*/}
         <h4 className={"text-center"}>Credit Eligibility</h4>
-        <br />
 
-        <i
-          className={
-            credit_eligibility.loan_status === "pending"
-              ? iconCss + "fa-hourglass-half"
-              : iconCss + "fa-check-circle"
-          }
-          style={{
-            color:
-              credit_eligibility.loan_status === "pending" ? "#02587F" : "",
-            fontSize: "60px"
-          }}
-        />
-        <h5 className={"text-center"}>
-          {" "}
-          Application{" "}
-          {credit_eligibility.loan_status === "pending"
-            ? "Pending..."
-            : "Approved !"}
-        </h5>
+        <div className="row">
+          <div className="col-4">
+            <i
+              className={
+                credit_eligibility.loan_status === "pending"
+                  ? iconCss + "fa-hourglass-half"
+                  : iconCss + "fa-check-circle"
+              }
+              style={{
+                color:
+                  credit_eligibility.loan_status === "pending" ? "#02587F" : "",
+                fontSize: "45px",
+                textAlign: "right"
+              }}
+            />
+          </div>
+          <div className="col-8" style={{ margin: "auto" }}>
+            <h5 className={"text-center"} style={{ marginLeft: "-3rem" }}>
+              {" "}
+              Application{" "}
+              {credit_eligibility.loan_status === "pending"
+                ? "Pending..."
+                : "Approved !"}
+            </h5>
+          </div>
+        </div>
 
-        <div className={"alert text-center"} role="alert">
-          <p className="paragraph_styling">
+        <>
+          <p className="paragraph_styling mt-2 text-center">
             {credit_eligibility.loan_status === "pending" ? (
               <>
                 Thank you {f_name} for completing the Loan Application process{" "}
@@ -97,17 +106,7 @@ class AppApproved extends Component {
               </>
             )}{" "}
           </p>
-          {/*<p className="paragraph_styling " style={{fontSize: '14px'}}>
-                            Thank you for completing the Loan Application process.<br/>
-                            {(location.state.status === 'pending') ? <>However, we need more information for
-                                    processing your loan application .<br/> We will get in touch with you in next 24
-                                    hours.</> :
-                                <b><br/>Your Application is approved for a credit line of
-                                    <b style={{fontWeight: '700'}}> Rs. {credit_eligibility.loan_amount_approved}/-</b>.</b>}
-                            <br/>
-                        </p>*/}
-        </div>
-        <br />
+        </>
 
         <div
           className="paragraph_styling text-left"
@@ -122,11 +121,11 @@ class AppApproved extends Component {
           <div
             className={
               credit_eligibility.loan_status === "pending"
-                ? "alert alert-info"
-                : "alert alert-success"
+                ? "alert alert-info text-nowrap"
+                : "alert alert-success text-nowrap"
             }
           >
-            <table width="100%" style={{ margin: "auto 15%" }}>
+            <table width="100%" style={{ margin: "auto 6%" }}>
               <tbody>
                 {/*<tr>
                                     <td>PRODUCT OFFERED</td>
@@ -149,7 +148,7 @@ class AppApproved extends Component {
                   </td>
                 </tr>
                 <tr>
-                  <td className={"tableDataRight"}>Lender</td>
+                  <td className={"tableDataRight "}>Lender</td>
                   <td>{defaultLender}</td>
                 </tr>
                 {credit_eligibility.loan_status !== "pending" ? (
@@ -191,9 +190,9 @@ class AppApproved extends Component {
           }}
         >
           {/*<input type="checkbox" checked={this.state.confirmed}
-                               onChange={(e) =>
-                                   this.setState(prevState => ({confirmed: !prevState.confirmed}))
-                               }/>*/}
+          onChange={(e) =>
+              this.setState(prevState => ({confirmed: !prevState.confirmed}))
+          }/>*/}
           <label className="main_tnc">
             I accept the terms of the credit eligibility as given above.
             <input
@@ -209,7 +208,7 @@ class AppApproved extends Component {
           </label>
         </div>
         <div
-          className="mt-5 mb-3 text-center"
+          className="mt-4 mb-3 text-center"
           style={{
             visibility:
               credit_eligibility.loan_status !== "pending"
@@ -233,7 +232,7 @@ class AppApproved extends Component {
           <>
             <div
               className={"blockquote-footer mb-5 text-center"}
-              style={{ marginTop: "-120px" }}
+              style={{ marginTop: "-100px", fontSize: "0.6rem" }}
             >
               In case of any query, please contact us at{" "}
               <a href={"mailto:support@mintifi.com"}>support@mintifi.com</a> or{" "}
@@ -244,7 +243,7 @@ class AppApproved extends Component {
                 : ""}{" "}
               ) in the request.
             </div>
-            <div className="mt-5 mb-5 text-center ">
+            <div className="mb-1 text-center" style={{ margin: "-20px auto" }}>
               {/*
                     ToDo : Applying the name of the anchor
                     */}

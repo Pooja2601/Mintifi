@@ -32,11 +32,11 @@ const doc_type_attr = [
 class DocsUpload extends Component {
 
     state = {
-        id_proof_msg: file_msg,
-        add_proof_msg: file_msg,
+        id_proof_msg: 'ID Proof',
+        add_proof_msg: 'Address Proof',
         // bank_proof_msg: file_msg,
-        entity_proof_msg: file_msg,
-        caddr_proof_msg: file_msg,
+        entity_proof_msg: 'Shop Registration',
+        caddr_proof_msg: 'Shop Address',
         validated: false,
         active_modal: 'add_proof',
         checked: {
@@ -101,6 +101,12 @@ class DocsUpload extends Component {
 
     RenderModalUpload = () => {
 
+        const radioText={
+            marginLeft: "20px",
+            color: 'black',
+            cursor: 'pointer'
+        };
+
         return (
             <>
                 <button type="button" style={{visibility: 'hidden'}} ref={ref => this.triggerModalUpload = ref}
@@ -113,7 +119,7 @@ class DocsUpload extends Component {
                     <div className="modal-dialog" role="document" style={{margin: '5.75rem auto'}}>
                         <div className="modal-content">
                             <div className="modal-header">
-                                <h5 className="modal-title">Select the Document Type</h5>
+                                <h5 className="modal-title" style={{fontSize:'1rem'}}>Select the Document Type</h5>
                                 <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -133,12 +139,7 @@ class DocsUpload extends Component {
                                                        }));
                                                    }
                                                    }/> <b
-                                            style={{
-                                                marginLeft: "20px",
-                                                fontSize: '12px',
-                                                color: 'black',
-                                                cursor: 'pointer'
-                                            }}>{val.toUpperCase()}</b>
+                                            style={radioText}>{val.toUpperCase()}</b>
                                         </label><br/></div>))}
                                 </div>
                             </div>
@@ -296,6 +297,10 @@ class DocsUpload extends Component {
     }
 
     render() {
+        const helperText = {
+            fontSize: '0.6rem'
+        }
+        const st = this.state;
         if (this.props.adharObj === Object(this.props.adharObj)) {
             const {f_name, l_name} = this.props.adharObj;
             return (
@@ -303,20 +308,18 @@ class DocsUpload extends Component {
                     {/* <button onClick={() => this.props.history.push('${PUBLIC_URL}/preapprove/businessdetail`)} className={"btn btn-link"}>
                     Go Back
                 </button>*/}
-                    <br/>
                     {/*<i className={"fa fa-file-pdf checkCircle"} style={{color: 'cadetblue'}}></i>*/}
-                    <h3 className={"text-center"}> KYC Documents </h3>
-                    <br/>
-
-                    <div className="alert " role="alert">
-                        <p className="alert-heading text-center">Hi {f_name} {l_name}, Please upload following documents
+                    <h3 className={"text-center"} style={{fontSize: '1.2rem'}}> KYC Documents </h3>
+                
+                    <div className="alert mb-2" role="alert">
+                        <p className="paragraph_styling text-center">Hi {f_name} {l_name}, Please upload following documents
                             in
                             pdf or png/jpg
                             format. </p>
                         <div className="paragraph_styling  text-center">
 
-                            <div className={"row mb-4 mt-4"}>
-                                <div className={"col-md-6 col-sm-6 col-xs-12"}>
+                            <div className={"row mb-3 mt-3"}>
+                                <div className={"col-6"}>
                                     <div className="input-container text-left" style={{cursor: 'pointer'}}
                                          onClick={() => this.idProofInput.click()}>
                                         <input type="file" id="idProofInput"
@@ -324,16 +327,15 @@ class DocsUpload extends Component {
                                                ref={ref => this.idProofInput = ref}/>
                                         <button className="btn btn-raised uploadButton inputFilebutton"
                                                 onClick={() => this.idProofInput.click()}
-                                                style={{minWidth: '111px'}}
                                                 id={"idProofBtn"}>
-                                            ID Proof
+                                            <i className="fa fa-upload"></i>
                                         </button>
-                                        <span className="helperUploadTxt">{this.state.id_proof_msg}</span>
+                                        <span className="helperUploadTxt">{st.id_proof_msg}</span>
                                     </div>
-                                    <small className="text-muted" style={{fontSize: 'x-small'}}>Upload a PAN or Passport.
+                                    <small className="text-muted" style={helperText}>Upload a PAN or Passport.
                                     </small>
                                 </div>
-                                <div className={"col-md-6 col-sm-6 col-xs-12"}>
+                                <div className={"col-6"}>
                                     <div className="input-container text-left" style={{cursor: 'pointer'}}
                                          onClick={() => this._multiDimDocsUpload('add_proof')}>
                                         <input type="file" id="addressProofInput"
@@ -341,14 +343,14 @@ class DocsUpload extends Component {
                                                ref={ref => this.addProofInput = ref}/>
                                         <button className="btn btn-raised uploadButton inputFilebutton"
                                                 onClick={() => this._multiDimDocsUpload('add_proof')}
-                                                style={{minWidth: '111px'}}
                                                 id={"addressProofBtn"}>
-                                            Address Proof
+                                            
+                                            <i className="fa fa-upload"></i>
                                         </button>
                                         <span className="helperUploadTxt"
-                                        >{this.state.add_proof_msg}</span>
+                                        >{st.add_proof_msg}</span>
                                     </div>
-                                    <small className="text-muted" style={{fontSize: 'x-small'}}>Upload Aadhaar, Driving
+                                    <small className="text-muted" style={helperText}>Upload Aadhaar, Driving
                                         License or Ration Card or
                                         Passport..
                                     </small>
@@ -377,7 +379,7 @@ class DocsUpload extends Component {
                             </div>*/}
 
                             <div className={"row"}>
-                                <div className={"col-md-6 col-sm-6 col-xs-12"}>
+                                <div className={"col-6"}>
                                     <div className="input-container text-left" style={{cursor: 'pointer'}}
                                          onClick={() => this._multiDimDocsUpload('entity_proof')}>
                                         <input type="file" id="addressProofInput"
@@ -385,20 +387,19 @@ class DocsUpload extends Component {
                                                ref={ref => this.entityProofInput = ref}/>
                                         <button className="btn btn-raised uploadButton inputFilebutton "
                                                 onClick={() => this._multiDimDocsUpload('entity_proof')}
-                                                style={{minWidth: '111px'}}
                                                 id={"addressProofBtn"}>
-                                            Shop Registration
-
+                                           
+                                            <i className="fa fa-upload"></i>
                                         </button>
                                         <span className="helperUploadTxt"
-                                        >{this.state.entity_proof_msg}</span>
+                                        > {st.entity_proof_msg}</span>
                                     </div>
-                                    <small className="text-muted" style={{fontSize: 'x-small'}}>Upload Shop &
+                                    <small className="text-muted" style={helperText}>Upload Shop &
                                         Establishment Certificate or GST
                                         Registration Certificate.
                                     </small>
                                 </div>
-                                <div className={"col-md-6 col-sm-6 col-xs-12"}>
+                                <div className={"col-6"}>
                                     <div className="input-container text-left" style={{cursor: 'pointer'}}
                                          onClick={() => this._multiDimDocsUpload('caddr_proof')}>
                                         <input type="file" id="addressProofInput"
@@ -406,20 +407,18 @@ class DocsUpload extends Component {
                                                ref={ref => this.cAddressProofInput = ref}/>
                                         <button className="btn btn-raised uploadButton inputFilebutton "
                                                 onClick={() => this._multiDimDocsUpload('caddr_proof')}
-                                                style={{minWidth: '111px'}}
                                                 id={"addressProofBtn"}>
-                                            Shop Address
+                                           
+                                            <i className="fa fa-upload"></i>
                                         </button>
                                         <span className="helperUploadTxt"
-                                        >{this.state.caddr_proof_msg}</span>
+                                        > {st.caddr_proof_msg}</span>
                                     </div>
-                                    <small className="text-muted" style={{fontSize: 'x-small'}}>Upload Company's
+                                    <small className="text-muted" style={helperText}>Upload Company's
                                         Electricity Bill or Rent Agreement.
                                     </small>
                                 </div>
                             </div>
-                            <br/>
-                            <br/>
                         </div>
                     </div>
 

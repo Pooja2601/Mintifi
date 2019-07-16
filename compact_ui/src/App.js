@@ -197,7 +197,9 @@ class App extends Component {
                       {/*<CustomAlerts/>*/}
                       <ToastContainer
                         style={{
-                          marginTop: "-20px",
+                          margin: "-11px auto auto -5px",
+                          width: "92vw",
+                          fontSize: "14px",
                           width: "92vw",
                           position: "absolute"
                         }}

@@ -23,8 +23,16 @@ class AppRejected extends Component {
 
   render() {
     let { adharObj, preFlightResp, location, payload, anchorObj } = this.props;
+    // let { loan_application_id, credit_eligibility } = preFlightResp;
+    const loan_status = "expired"; // rejected  // expired
+    let { state } = location;
     // ToDo :  Hide it in Prod
-    if (environment === "local") location = { state: { status: "declined" } }; // declined  // expired
+    if (environment === "local") location = { state: { status: loan_status } };
+
+    // console.log(state);
+
+    if (environment === "dev")
+      if (state !== Object(state)) state = { status: loan_status };
 
     return (
       <>
@@ -35,10 +43,13 @@ class AppRejected extends Component {
         <br />
         {/*fa-exclamation-circle*/}
         <i
-          style={{ fontSize: "60px" }}
+          style={{
+            fontSize: "60px",
+            color: state.status === "rejected" ? "crimson" : "gold"
+          }}
           className={"fa fa-exclamation-triangle closeCircle"}
         />
-        {/*<h5 className={"text-center"}> Application {(location.state.status === 'decline') ? 'Rejected' : 'Error'}</h5>*/}
+        {/*<h5 className={"text-center"}> Application {(location.state.status === 'rejected') ? 'Rejected' : 'Error'}</h5>*/}
         <br />
         <div
           className="paragraph_styling  text-center"
@@ -46,14 +57,18 @@ class AppRejected extends Component {
         >
           <div
             className={
-              location.state.status === "decline"
+              state.status === "rejected"
                 ? "alert alert-danger"
                 : "alert alert-warning"
             }
+            style={{
+              backgroundColor:
+                state.status !== "rejected" && "lightgoldenrodyellow"
+            }}
             role="alert"
           >
             <h5 className="alert-heading">
-              {location.state.status === "decline" ? (
+              {state.status === "rejected" ? (
                 <>
                   {" "}
                   Dear{" "}
@@ -72,7 +87,7 @@ class AppRejected extends Component {
             this point of time.
             <br />
             <b>
-              {location.state.status === "decline"
+              {state.status === "rejected"
                 ? "You can try again with us after 6 months"
                 : "Kindly try again after some time"}
             </b>
@@ -81,15 +96,8 @@ class AppRejected extends Component {
             In case of any query, please contact us at{" "}
             <a href={"mailto:support@mintifi.com"}>support@mintifi.com</a> or{" "}
             <a href={"tel:+919999999999"}>+91 9999999999</a>. <br />
-            Please mention your{" "}
-            <b>
-              ( loan application id :{" "}
-              {preFlightResp === Object(preFlightResp)
-                ? preFlightResp.loan_application_id
-                : ""}{" "}
-              )
-            </b>{" "}
-            in the request.
+            Please mention your registered phone number and email in the
+            request.
           </div>
         </div>
         <div className="mt-5 mb-5 text-center ">
