@@ -72,25 +72,9 @@ class App extends Component {
               render={({ location }) => (
                 <>
                   <ScrollToTop />
-                  {/*<AccessRoute/>*/}
-                  <Headers />
-                  <div
-                    className="row justify-content-center background-color"
-                    style={{
-                      marginTop: "150px",
-                      marginLeft: 0,
-                      marginRight: 0
-                    }}
-                  >
-                    <div
-                      className="col-11 col-md-6 ml-5 mr-5 mb-3 partner_section"
-                      style={{
-                        backgroundColor: "#fff",
-                        border: "0px",
-                        paddingLeft: "1%",
-                        paddingRight: "1%"
-                      }}
-                    >
+                  {/* <Headers /> */}
+                  <div className="row justify-content-center background-color outer_box_card">
+                    <div className="col-11 col-md-6 ml-5 mr-5 mb-3 partner_section mintifiCard">
                       <div style={{ height: "50px" }} />
                       <Loader />
                       <div className="ml-2 mt-2">
@@ -221,6 +205,8 @@ class App extends Component {
                         position={toast.POSITION.TOP_CENTER}
                       />
                     </div>
+
+                    <b style={{ fontSize: "0.6rem" }}>Powered by Mintifi</b>
                   </div>
                 </>
               )}

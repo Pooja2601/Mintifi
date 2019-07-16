@@ -175,7 +175,7 @@ class AdharPan extends Component {
                 <Link to={`${PUBLIC_URL}/preapprove/adharpan`} className={"btn btn-sm btn-link"}>Go
                     Back </Link><br/>
                 <h4 className={"text-center"} style={{fontSize: '1.2rem'}}>Personal Details </h4>
-                <h5 className="paragraph_styling  text-center" style={{fontSize: '14px'}}>
+                <h5 className="paragraph_styling  text-center" >
                     <b> Enter your personal information to proceed.</b>
                 </h5>
                 <br/>

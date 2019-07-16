@@ -48,8 +48,8 @@ class BusinessDetail extends Component {
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                            <div className="modal-body">
-                                {(this.state.tncModal) ? TnCPolicy({fontSize: 13}) : PrivacyPolicy({
+                            <div className="modal-body" style={{padding:'12px 15px 5px'}}>
+                                {(this.state.tncModal) ? TnCPolicy({fontSize: 11}) : PrivacyPolicy({
                                     fontSize: 13,
                                     headSize: 1.5
                                 })}
@@ -175,12 +175,12 @@ class BusinessDetail extends Component {
             <>
                 {/*<Link to={`${PUBLIC_URL}/preapprove/personaldetails`} className={"btn btn-link"}>Go Back </Link>*/}
                 
-                <h4 className={"text-center"}>Business Details</h4>
+                <h4 className={"text-center"} style={{fontSize: '1.2rem'}}>Business Details</h4>
                 <p className="paragraph_styling  text-center">
                     <b> Please submit your business details to complete the loan application.</b>
                 </p>
                 {/*<h5 className={"text-center"}>{(gstProfile === Object(gstProfile)) ? gstProfile.lgnm : ''}</h5>*/}
-<br/>
+
                 <form
                     id="serverless-contact-form mb-0"
                     onSubmit={e => this._formSubmit(e)}
@@ -261,7 +261,7 @@ class BusinessDetail extends Component {
                     </div>
 
                     {(this.state.companytype !== "proprietorship" && this.state.companytype !== "") ? (
-                        <div className="form-group mb-3 ">
+                        <div className="form-group ">
                             <label htmlFor="numberPAN" className={"bmd-label-floating"}>Business PAN *</label>
                             <input
                                 type="text"
@@ -287,7 +287,7 @@ class BusinessDetail extends Component {
                         <div className={"col-6"}>
                             <div className="form-group">
                                 <label htmlFor="avgTrans" className="bmd-label-floating">
-                                    Average Monthly Transactions *
+                                    Avg Trans./month *
                                 </label>
                                 <div className={"input-group"}>
                                     <div className="input-group-prepend">
@@ -349,7 +349,7 @@ class BusinessDetail extends Component {
                                    onChange={(e) =>
                                        this.setState(prevState => ({tnc_consent: !prevState.tnc_consent}))
                                    }/>
-                            <label className="main">I accept the <a href={'#'} onClick={(e) => {
+                            <label className="main" style={{fontSize:'0.6rem'}}>I accept the <a href={'#'} onClick={(e) => {
                                 e.preventDefault();
                                 this.setState({tncModal: true}, () => this.triggerTnCModal.click());
                             }}>Terms &

@@ -16,7 +16,7 @@ export const PrivacyText = props => (
       </h2>
     </div>
     <p
-      className="paragraph_section col-11 ml-4 mb-4 mb-lg-5"
+      className="paragraph_section col-12 ml-2 mb-4 mb-lg-5"
       style={stylePara(props.fontSize)}
     >
       Mintifi Private Limited, a company registered under the Companies Act 2013
@@ -49,7 +49,7 @@ export const PrivacyText = props => (
 
     <h4 className="h4_para">Your acknowledgment and consent</h4>
     <p
-      className="paragraph_section col-11 ml-4 mb-4 mb-lg-5"
+      className="paragraph_section col-12 ml-2 mb-4 mb-lg-5"
       style={stylePara(props.fontSize)}
     >
       By visiting this Platform you agree to be bound by the terms and
@@ -78,7 +78,7 @@ export const PrivacyText = props => (
       1. INFORMATION THAT IS COLLECTED BY US
     </h3>
     <p
-      className="paragraph_section col-11 ml-4 mb-4 mb-lg-5"
+      className="paragraph_section col-12 ml-2 mb-4 mb-lg-5"
       style={stylePara(props.fontSize)}
     >
       We collect various types of information from and about Users of Our
@@ -118,7 +118,7 @@ export const PrivacyText = props => (
     </p>
     <h4 className="h4_para"> Information You Provide to Us</h4>
     <p
-      className="paragraph_section col-11 ml-4 mb-4 mb-lg-5"
+      className="paragraph_section col-12 ml-2 mb-4 mb-lg-5"
       style={stylePara(props.fontSize)}
     >
       The information We collect on or through Our Platforms shall include inter
@@ -200,7 +200,7 @@ export const PrivacyText = props => (
       2. PAYMENT CARD INFORMATION{" "}
     </h3>
     <p
-      className="paragraph_section col-11 ml-4 mb-4 mb-lg-5"
+      className="paragraph_section col-12 ml-2 mb-4 mb-lg-5"
       style={stylePara(props.fontSize)}
     >
       To avail certain services from lenders/ merchants/ service providers
@@ -216,7 +216,7 @@ export const PrivacyText = props => (
     <br />
     <h4 className="h4_para">Information received from Third Parties</h4>
     <p
-      className="paragraph_section col-11 ml-4 mb-4 mb-lg-5"
+      className="paragraph_section col-12 ml-2 mb-4 mb-lg-5"
       style={stylePara(props.fontSize)}
     >
       We will be collecting, processing and storing Your user ID associated with
@@ -229,7 +229,7 @@ export const PrivacyText = props => (
 
     <h4 className="h4_para">Information Collected Through Platforms</h4>
     <p
-      className="paragraph_section col-11 ml-4 mb-4 mb-lg-5"
+      className="paragraph_section col-12 ml-2 mb-4 mb-lg-5"
       style={stylePara(props.fontSize)}
     >
       Information may be collected automatically from the computer or devices
@@ -275,7 +275,7 @@ export const PrivacyText = props => (
     <br />
     <h4 className="h4_para">Other tools and Cookies</h4>
     <p
-      className="paragraph_section col-11 ml-4 mb-4 mb-lg-5"
+      className="paragraph_section col-12 ml-2 mb-4 mb-lg-5"
       style={stylePara(props.fontSize)}
     >
       We, and third parties with whom We partner, shall use pixel tags, cookies,
@@ -316,7 +316,7 @@ export const PrivacyText = props => (
     </h3>
     <p
       style={stylePara(props.fontSize)}
-      className="paragraph_section col-11 ml-4 mb-4 mb-lg-5"
+      className="paragraph_section col-12 ml-2 mb-4 mb-lg-5"
     >
       <b className="h4_para" style={{ marginLeft: "15px" }}>
         Usages
@@ -342,7 +342,7 @@ export const PrivacyText = props => (
     <h4 className="h4_para">Disclosures</h4>
     <p
       style={stylePara(props.fontSize)}
-      className="paragraph_section col-11 ml-4 mb-4 mb-lg-5"
+      className="paragraph_section col-12 ml-2 mb-4 mb-lg-5"
     >
       Personal Information/ sensitive personal data collected from You or on/
       through the Platform may be disclosed to and/ or for various purposes
@@ -376,7 +376,7 @@ export const PrivacyText = props => (
     </h3>
     <p
       style={stylePara(props.fontSize)}
-      className="paragraph_section col-11 ml-4 mb-4 mb-lg-5"
+      className="paragraph_section col-12 ml-2 mb-4 mb-lg-5"
     >
       You can close Your account through a written request addressed to the
       Company’s representatives (as identified on the ‘Contact Us’ page on the
@@ -399,7 +399,7 @@ export const PrivacyText = props => (
     </h3>
     <p
       style={stylePara(props.fontSize)}
-      className="paragraph_section col-11 ml-4 mb-4 mb-lg-5"
+      className="paragraph_section col-12 ml-2 mb-4 mb-lg-5"
     >
       The Platforms are not intended for Users under the age of 18 years. We do
       not knowingly collect any personal information from persons under the age
@@ -411,7 +411,7 @@ export const PrivacyText = props => (
     </h3>
     <p
       style={stylePara(props.fontSize)}
-      className="paragraph_section col-11 ml-4 mb-4 mb-lg-5"
+      className="paragraph_section col-12 ml-2 mb-4 mb-lg-5"
     >
       The Platforms links to other websites/ applications, which may collect
       personally identifiable information about You. The Company is not and will
@@ -432,7 +432,7 @@ export const PrivacyText = props => (
     </h3>
     <p
       style={stylePara(props.fontSize)}
-      className="paragraph_section col-11 ml-4 mb-4 mb-lg-5"
+      className="paragraph_section col-12 ml-2 mb-4 mb-lg-5"
     >
       We use third-party advertising companies/ entities to serve advertisements
       when You visit Our Platforms. These entities may use information (not
@@ -445,7 +445,7 @@ export const PrivacyText = props => (
     </h3>
     <p
       style={stylePara(props.fontSize)}
-      className="paragraph_section col-11 ml-4 mb-4 mb-lg-5"
+      className="paragraph_section col-12 ml-2 mb-4 mb-lg-5"
     >
       To prevent any form of unlawful interception or misuse of User
       Information, We use reasonable physical, electronic, and managerial
@@ -483,7 +483,7 @@ export const PrivacyText = props => (
     </h3>
     <p
       style={stylePara(props.fontSize)}
-      className="paragraph_section col-11 ml-4 mb-4 mb-lg-5"
+      className="paragraph_section col-12 ml-2 mb-4 mb-lg-5"
     >
       All content on Our Platform, including graphics, text, icons, interfaces,
       audio clips, logos, images, reviews, comments and software is the property
@@ -510,7 +510,7 @@ export const PrivacyText = props => (
     </h3>
     <p
       style={stylePara(props.fontSize)}
-      className="paragraph_section col-11 ml-4 mb-4 mb-lg-5"
+      className="paragraph_section col-12 ml-2 mb-4 mb-lg-5"
     >
       If Your information is submitted to Us through Our Platform when applying
       for a position with the Company, the information will be used to consider
@@ -526,7 +526,7 @@ export const PrivacyText = props => (
     </h3>
     <p
       style={stylePara(props.fontSize)}
-      className="paragraph_section col-11 ml-4 mb-4 mb-lg-5"
+      className="paragraph_section col-12 ml-2 mb-4 mb-lg-5"
     >
       Our privacy policy is subject to change at any time without notice. we
       reserve the right to update, modify and amend any terms of this privacy
@@ -547,7 +547,7 @@ export const PrivacyText = props => (
     </h3>
     <p
       style={stylePara(props.fontSize)}
-      className="paragraph_section col-11 ml-4 mb-4 mb-lg-5"
+      className="paragraph_section col-12 ml-2 mb-4 mb-lg-5"
     >
       Notwithstanding anything contained in this Privacy Policy or elsewhere, We
       shall not be held responsible for any loss, damage or misuse of Your User
@@ -565,7 +565,7 @@ export const PrivacyText = props => (
     </h3>
     <p
       style={stylePara(props.fontSize)}
-      className="paragraph_section col-11 ml-4 mb-4 mb-lg-5"
+      className="paragraph_section col-12 ml-2 mb-4 mb-lg-5"
     >
       This Policy shall be governed by and construed in accordance with the laws
       of India and subject to the provisions of arbitration set out herein, the
@@ -590,7 +590,7 @@ export const PrivacyText = props => (
     </h3>
     <p
       style={stylePara(props.fontSize)}
-      className="paragraph_section col-11 ml-4 mb-4 mb-lg-5"
+      className="paragraph_section col-12 ml-2 mb-4 mb-lg-5"
     >
       The Company makes no representation that the content contained on the
       Platform is appropriate or to be used or accessed outside of India. If the
@@ -603,7 +603,7 @@ export const PrivacyText = props => (
     </h3>
     <p
       style={stylePara(props.fontSize)}
-      className="paragraph_section col-11 ml-4 mb-4 mb-lg-5"
+      className="paragraph_section col-12 ml-2 mb-4 mb-lg-5"
     >
       Please Contact Us (through “contact us” link) regarding any questions
       regarding (i) this Privacy Policy; (ii) practices of this Platform, or
@@ -614,7 +614,7 @@ export const PrivacyText = props => (
     </h3>
     <p
       style={stylePara(props.fontSize)}
-      className="paragraph_section col-11 ml-4 mb-4 mb-lg-5"
+      className="paragraph_section col-12 ml-2 mb-4 mb-lg-5"
     >
       We make no warranties or representations about the accuracy or
       completeness of this Platform and contents hereof. We nor any of Our

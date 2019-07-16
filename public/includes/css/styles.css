@@ -2863,7 +2863,7 @@ input[type=number]::-webkit-outer-spin-button {
     cursor: pointer;
     padding: 10px;
     border-radius: 15%;
-    width: 100px;
+    width: 10rem;
 }
 
 .lds-ring {
