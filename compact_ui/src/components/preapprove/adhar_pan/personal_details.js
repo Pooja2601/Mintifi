@@ -45,13 +45,7 @@ class AdharPan extends Component {
     componentDidMount() {
 
         const {payload, authObj, adharObj, changeLoader, setAdharManual, history, pan} = this.props;
-
-        var datePickerInput = document.getElementsByClassName('react-datepicker__input-container');
-        var datePickerInputWrapper = document.getElementsByClassName('react-datepicker-wrapper');
-        setTimeout(() => {
-            // datePickerInput.style.width = '100%';
-            datePickerInputWrapper.style.width = '100%';
-        }, 1000);
+     
         // console.log(pan)
         if (payload === Object(payload)) {
             if (!pan)
@@ -346,7 +340,7 @@ class AdharPan extends Component {
                                     <i
                                         className="fa fa-male"
                                     />
-                                    <small style={{fontSize: "75%"}}>Male</small>
+                                    <small >Male</small>
                                 </button>
                                 <button
                                     type="button"
@@ -362,7 +356,7 @@ class AdharPan extends Component {
                                     <i
                                         className="fa fa-female"
                                     />
-                                    <small style={{fontSize: "75%"}}>Female</small>
+                                    <small >Female</small>
                                 </button>
                             </div>
                         </div>
@@ -392,7 +386,7 @@ class AdharPan extends Component {
                                     <i
                                         className="fa fa-building"
                                     />
-                                    <small style={{fontSize: "75%"}}>Rented</small>
+                                    <small >Rented</small>
                                 </button>
                                 <button
                                     type="button"
@@ -408,7 +402,7 @@ class AdharPan extends Component {
                                     <i
                                         className="fa fa-home"
                                     />
-                                    <small style={{fontSize: "75%"}}>Owned</small>
+                                    <small >Owned</small>
                                 </button>
                             </div>
                         </div>

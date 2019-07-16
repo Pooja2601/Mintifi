@@ -17,7 +17,7 @@ header {
     box-shadow: 0 0 8px #cccccc;
 }
 
-.css-1pahdxg-control{
+.css-1pahdxg-control {
     border-color: transparent !important;
     box-shadow: 0 0 0 1px transparent !important;
 }
@@ -1452,6 +1452,15 @@ input[type="radio"]:after {
     font-weight: 500;
 }
 
+.react_datepicker {
+    display: block;
+    width: 100% !important;
+}
+
+.react-datepicker-wrapper, .react-datepicker__input-container {
+    width: 100% !important;
+}
+
 /*.label_tag label{position: absolute; margin-top: 23px;}*/
 #lead_type-error {
     position: absolute;
@@ -2863,7 +2872,7 @@ input[type=number]::-webkit-outer-spin-button {
     cursor: pointer;
     padding: 10px;
     border-radius: 15%;
-    width: 10rem;
+    width: 9rem;
 }
 
 .lds-ring {

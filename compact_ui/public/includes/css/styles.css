@@ -17,6 +17,11 @@ header {
     box-shadow: 0 0 8px #cccccc;
 }
 
+
+label {
+    font-size: 0.7rem !important;
+}
+
 /*
 .headerTop {
     top: 64px;
@@ -526,7 +531,7 @@ li a:focus {
 
 .paragraph_section {
     color: #5a5a5a;
-    line-height: 39px;
+    line-height: 26px;
     text-align: justify !important;
     font-size: 20px;
     margin-top: auto;
@@ -760,13 +765,13 @@ li a:focus {
 }
 
 .state_btn_right i, .state_btn_left i {
-    font-size: 25px;
+    font-size: 22px;
     display: block;
     padding: 0 10px;
 }
 
 .state_btn_right small, .state_btn_left small {
-    font-size: 0.6;
+    font-size: 0.6rem;
 }
 
 
@@ -1071,7 +1076,7 @@ li a:focus {
 
 .font_weight {
     font-weight: 600;
-    font-size: 12px;
+    font-size: 11px;
     height: 2.5rem;
 }
 
@@ -2605,7 +2610,7 @@ input[type="radio"]:after {
 }
 
 .h4_para {
-    font-size: 23px;
+    font-size: 13px;
     margin-left: 50px;
     color: #5a5a8c;
     line-height: 40px;
@@ -2840,13 +2845,15 @@ display: block;
 width: 100% !important;
 }
 
- .react-datepicker-wrapper {
+ .react-datepicker-wrapper, .react-datepicker__input-container {
     width: 100% !important;
 }
 
 
- .react-datepicker-wrapper .react-datepicker__input-container {
-    width: 100% !important;
+.footer_copyright{
+    font-size: 0.6rem;
+    display: block;
+    text-align: center;
 }
 
 .tableDataRight {
@@ -2989,13 +2996,13 @@ width: 100% !important;
 }
 
 /*CheckBox*/
-.main {
+.main_tnc {
     display: block;
     position: relative;
     padding-left: 45px;
     margin-bottom: 15px;
     cursor: pointer;
-    font-size: 0.8rem;
+    font-size: 0.6rem !important;
 }
 
 /* Hide the default checkbox */
@@ -3017,19 +3024,19 @@ based on demand */
 
 /* Specify the background color to be
 shown when hovering over checkbox */
-.main:hover input ~ .geekmark {
+.main_tnc:hover input ~ .geekmark {
     background-color: darkgray;
 }
 
 /* Specify the background color to be
 shown when checkbox is active */
-.main input:active ~ .geekmark {
+.main_tnc input:active ~ .geekmark {
     background-color: darkgreen;
 }
 
 /* Specify the background color to be
 shown when checkbox is checked */
-.main input:checked ~ .geekmark {
+.main_tnc input:checked ~ .geekmark {
     background-color: teal;
 }
 
@@ -3042,7 +3049,7 @@ shown when checkbox is checked */
 }
 
 /* Display checkmark when checked */
-.main input:checked ~ .geekmark:after {
+.main_tnc input:checked ~ .geekmark:after {
     display: block;
 }
 
@@ -3050,7 +3057,7 @@ shown when checkbox is checked */
 /* Rotated the rectangle by 45 degree and
 showing only two border to make it look
 like a tickmark */
-.main .geekmark:after {
+.main_tnc .geekmark:after {
     left: 9px;
     bottom: 8px;
     width: 6px;

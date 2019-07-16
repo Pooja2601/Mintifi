@@ -25,10 +25,11 @@ class AppApproved extends Component {
 
     const { f_name, l_name } = adharObj;
     let { loan_application_id, credit_eligibility } = preFlightResp;
-
+    // ToDo : Hide Start (in Prod)
+    const load_status = "pending";
     // ToDo : Hide Start (in Prod)
     if (environment === "local") {
-      const load_status = "bank_approved"; // pending // bank_approved
+      // pending // bank_approved
       credit_eligibility = {
         product_offered: "LoC",
         loan_status: load_status,
@@ -41,6 +42,9 @@ class AppApproved extends Component {
       location = { state: { status: load_status } };
     }
     // ToDo : Hide Ends here
+
+    if (location.state !== Object(location.state))
+      location = { state: { status: load_status } };
 
     let iconCss = "fa checkCircle ";
     return (
@@ -181,34 +185,36 @@ class AppApproved extends Component {
           style={{
             marginLeft: "2.3rem",
             visibility:
-              location.state.status !== "pending" ? "visible" : "hidden"
+              credit_eligibility.loan_status !== "pending"
+                ? "visible"
+                : "hidden"
           }}
         >
-          <label style={{ color: "black", lineHeight: "1.5" }}>
-            {/*<input type="checkbox" checked={this.state.confirmed}
+          {/*<input type="checkbox" checked={this.state.confirmed}
                                onChange={(e) =>
                                    this.setState(prevState => ({confirmed: !prevState.confirmed}))
                                }/>*/}
-            <label className="main">
-              I accept the terms of the credit eligibility as given above.
-              <input
-                checked={this.state.confirmed}
-                onChange={e =>
-                  this.setState(prevState => ({
-                    confirmed: !prevState.confirmed
-                  }))
-                }
-                type="checkbox"
-              />
-              <span className="geekmark" />
-            </label>
+          <label className="main_tnc">
+            I accept the terms of the credit eligibility as given above.
+            <input
+              checked={this.state.confirmed}
+              onChange={e =>
+                this.setState(prevState => ({
+                  confirmed: !prevState.confirmed
+                }))
+              }
+              type="checkbox"
+            />
+            <span className="geekmark" />
           </label>
         </div>
         <div
           className="mt-5 mb-3 text-center"
           style={{
             visibility:
-              location.state.status !== "pending" ? "visible" : "hidden"
+              credit_eligibility.loan_status !== "pending"
+                ? "visible"
+                : "hidden"
           }}
         >
           <button
@@ -223,7 +229,7 @@ class AppApproved extends Component {
             Complete Your KYC
           </button>
         </div>
-        {location.state.status === "pending" ? (
+        {credit_eligibility.loan_status === "pending" ? (
           <>
             <div
               className={"blockquote-footer mb-5 text-center"}

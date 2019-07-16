@@ -27,10 +27,13 @@ class BusinessDetail extends Component {
         ctrerror: 4,
     };
 
+    
+
     validate = {companytype: false, gst: false, avgtrans: false, dealercode: false};
 
 
     RenderModalTnC = () => {
+       
         return (
             <>
                 <button type="button" style={{visibility: 'hidden'}} ref={ref => this.triggerTnCModal = ref}
@@ -40,7 +43,7 @@ class BusinessDetail extends Component {
 
                 <div className="modal fade" id={"TnCMsgModal"} tabIndex="-1"
                      role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div className="modal-dialog modal-lg" role="document" style={{margin: '5.75rem auto'}}>
+                    <div className="modal-dialog" role="document" style={{margin: '5.75rem auto'}}>
                         <div className="modal-content">
                             <div className="modal-header">
                                 <h5 className="modal-title">{(this.state.tncModal) ? 'Terms and Conditions' : 'Privacy policy'}</h5>
@@ -49,9 +52,9 @@ class BusinessDetail extends Component {
                                 </button>
                             </div>
                             <div className="modal-body" style={{padding:'12px 15px 5px'}}>
-                                {(this.state.tncModal) ? TnCPolicy({fontSize: 11}) : PrivacyPolicy({
-                                    fontSize: 13,
-                                    headSize: 1.5
+                                {(this.state.tncModal) ? TnCPolicy({fontSize: 10}) : PrivacyPolicy({
+                                    fontSize: 10,
+                                    headSize: 1
                                 })}
 
                             </div>
@@ -171,6 +174,22 @@ class BusinessDetail extends Component {
 
     render() {
         const gstProfile = this.props.gstProfile;
+        // react-select
+        const customStyles = {
+            option: (provided, state) => ({
+              ...provided,
+              fontSize: 11,
+              padding: 8,
+            }),
+            singleValue: (provided, state) => ({
+                ...provided,
+                fontSize: 13,
+            }),
+            Input: (provided, state) => ({
+                ...provided,
+                fontSize: 12,
+            }),
+        }
         return (
             <>
                 {/*<Link to={`${PUBLIC_URL}/preapprove/personaldetails`} className={"btn btn-link"}>Go Back </Link>*/}
@@ -204,12 +223,13 @@ class BusinessDetail extends Component {
                     </div>
                     <div className={"row"}>
                         <div className={"col-6"}>
-                            <div className="form-group">
+                            <div className="form-group mb-0">
                                 <label htmlFor="companyType" className={"bmd-label-floating"}>Company Type *</label>
                                 <Select options={BusinessType}
                                         required={true}
                                         id="companyType"
                                         inputId={"companyType"}
+                                        styles={customStyles}
                                     // value={BusinessType[1]}
                                         onBlur={() => this.validationErrorMsg()}
                                         onChange={(e) => {
@@ -240,7 +260,7 @@ class BusinessDetail extends Component {
                             </div>
                         </div>
                         <div className={"col-6"}>
-                            <div className="form-group ">
+                            <div className="form-group mb-0">
                                 <label htmlFor="numberGST" className={"bmd-label-floating"}>GST Number *</label>
                                 <input
                                     type="text"
@@ -261,7 +281,7 @@ class BusinessDetail extends Component {
                     </div>
 
                     {(this.state.companytype !== "proprietorship" && this.state.companytype !== "") ? (
-                        <div className="form-group ">
+                        <div className="form-group mb-0">
                             <label htmlFor="numberPAN" className={"bmd-label-floating"}>Business PAN *</label>
                             <input
                                 type="text"
@@ -285,7 +305,7 @@ class BusinessDetail extends Component {
 
                     <div className={"row"}>
                         <div className={"col-6"}>
-                            <div className="form-group">
+                            <div className="form-group mb-0">
                                 <label htmlFor="avgTrans" className="bmd-label-floating">
                                     Avg Trans./month *
                                 </label>
@@ -318,7 +338,7 @@ class BusinessDetail extends Component {
                             </div>
                         </div>
                         <div className={"col-6"}>
-                            <div className="form-group">
+                            <div className="form-group mb-0">
                                 <label htmlFor="dealerCode" className="bmd-label-floating">
                                     Dealer Code
                                 </label>
@@ -344,12 +364,12 @@ class BusinessDetail extends Component {
                         </div>
                     </div>
                     <div className="mt-2">
-                        <label style={{color: 'black', lineHeight: '1.5'}}>
+                        <label >
                             <input type="checkbox" checked={this.state.tnc_consent}
                                    onChange={(e) =>
                                        this.setState(prevState => ({tnc_consent: !prevState.tnc_consent}))
                                    }/>
-                            <label className="main" style={{fontSize:'0.6rem'}}>I accept the <a href={'#'} onClick={(e) => {
+                            <p className="main_tnc" >I accept the <a href={'#'} onClick={(e) => {
                                 e.preventDefault();
                                 this.setState({tncModal: true}, () => this.triggerTnCModal.click());
                             }}>Terms &
@@ -363,7 +383,7 @@ class BusinessDetail extends Component {
                                     this.setState(prevState => ({tnc_consent: !prevState.tnc_consent}))
                                 } checked={this.state.tnc_consent}/>
                                 <span className="geekmark"></span>
-                            </label>
+                            </p>
                         </label>
                     </div>
 

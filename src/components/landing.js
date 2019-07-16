@@ -125,7 +125,7 @@ class Login extends Component {
                         <img
                             src={`${PUBLIC_URL}/images/supply_chain/new.png`}
                             alt="New User"
-                            className="user_type_img w-75"
+                            className="user_type_img "
                             style={{
                                 border: existing === "new" && "1px solid #00bfa5",
                                 opacity: existing === "new" ? "1.0" : "0.4"
@@ -138,7 +138,7 @@ class Login extends Component {
                         <img
                             src={`${PUBLIC_URL}/images/supply_chain/existing.png`}
                             alt="Existing User"
-                            className="user_type_img w-75"
+                            className="user_type_img "
                             style={{
                                 border: existing === "exist" && "1px solid #00bfa5",
                                 opacity: existing === "exist" ? "1.0" : "0.4"

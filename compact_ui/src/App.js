@@ -205,8 +205,9 @@ class App extends Component {
                         position={toast.POSITION.TOP_CENTER}
                       />
                     </div>
-
-                    <b style={{ fontSize: "0.6rem" }}>Powered by Mintifi</b>
+                  </div>
+                  <div className="footer_copyright">
+                    <b>Powered by Mintifi</b>
                   </div>
                 </>
               )}
