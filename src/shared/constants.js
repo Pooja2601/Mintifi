@@ -56,7 +56,7 @@ module.exports = {
     { value: "sa", label: "Savings Account" },
     { value: "ca", label: "Current Account" }
   ],
-  defaultLender: "Mintifi Finserv Private Limited", // Fullerton India Private Limtited
+  defaultLender: "Mintifi Finserv Pvt Ltd", // Fullerton India Private Limtited
   OTP_Timer: 60,
   landingPayload: {
     anchor_id: "uyh65t",
