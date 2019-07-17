@@ -32,7 +32,7 @@ class Login extends Component {
       if (!match.params.payload) base64_decode = landingPayload;
     // ToDo : hide it in Prod
 
-    // console.log(JSON.parse(JSON.stringify(base64_decode)));
+    // console.log(base64_decode);
     // console.log(match.params.token);
 
     if (
@@ -48,7 +48,7 @@ class Login extends Component {
 
     if (payload === Object(payload)) this._fetchAnchorDetail();
 
-    // console.log(this.props.payload.anchor_id);
+    // console.log(this.props.payload);
   }
 
   _fetchAnchorDetail() {
