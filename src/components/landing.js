@@ -45,9 +45,9 @@ class Login extends Component {
       );
     else setToken(match.params.token, base64_decode);
 
-    if (payload === Object(payload)) this._fetchAnchorDetail();
+    if (payload === Object(payload) && payload.length) this._fetchAnchorDetail();
 
-    console.log(this.props.payload.anchor_id);
+    // console.log(this.props.payload.anchor_id);
   }
 
   _fetchAnchorDetail() {

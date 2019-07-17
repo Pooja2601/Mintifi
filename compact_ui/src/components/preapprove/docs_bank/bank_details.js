@@ -233,7 +233,7 @@ class BankDetail extends Component {
       businessObj
     } = this.props;
 
-    if (payload === Object(payload)) {
+    if (payload === Object(payload) && payload.length) {
       if (adharObj !== Object(adharObj))
         history.push(`${PUBLIC_URL}/preapprove/personaldetail`);
 

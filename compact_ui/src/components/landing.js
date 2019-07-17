@@ -24,15 +24,16 @@ class Login extends Component {
     const { setToken, match, payload } = this.props;
     let base64_decode;
 
-    if (match.params.payload)
-      base64_decode = base64Logic(match.params.payload, "decode");
+    if (match.params === Object(match.params))
+      if (match.params.payload)
+        base64_decode = base64Logic(match.params.payload, "decode");
 
     if (environment === "dev" || environment === "local")
       if (!match.params.payload) base64_decode = landingPayload;
     // ToDo : hide it in Prod
 
     if (
-      match.params.token !== undefined &&
+      match.params.token === undefined &&
       base64_decode !== Object(base64_decode)
     )
       alertModule(
@@ -41,7 +42,8 @@ class Login extends Component {
       );
     else setToken(match.params.token, base64_decode);
 
-    if (payload === Object(payload)) this._fetchAnchorDetail();
+    if (payload === Object(payload) && payload.length)
+      this._fetchAnchorDetail();
     // console.log(this.props.token);
   }
 

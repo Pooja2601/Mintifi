@@ -276,7 +276,7 @@ class DocsUpload extends Component {
         if (!token)
             history.push(`${PUBLIC_URL}/preapprove/token`);
 
-        if (payload === Object(payload)) {
+        if (payload === Object(payload) && payload.length) {
             if (adharObj !== Object(adharObj))
                 history.push(`${PUBLIC_URL}/preapprove/personaldetail`);
 

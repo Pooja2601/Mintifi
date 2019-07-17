@@ -47,7 +47,7 @@ class AdharPan extends Component {
         const {payload, authObj, adharObj, changeLoader, setAdharManual, history, pan} = this.props;
      
         // console.log(pan)
-        if (payload === Object(payload)) {
+        if (payload === Object(payload) && payload.length) {
             if (!pan)
                 history.push(`${PUBLIC_URL}/preapprove/adharpan`);
         }
