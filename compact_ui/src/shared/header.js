@@ -17,15 +17,15 @@ const Header = props => {
               className={"logoHeader"}
             />
             {/*<b className={"anchorText"}>Anchor Merchant</b>*/}
-            <img
-              src={
-                props.anchorObj === Object(props.anchorObj)
-                  ? props.anchorObj.anchor_logo
-                  : `${PUBLIC_URL}/images/company/yatra.png`
-              }
-              alt="Anchor Logo"
-              className={"anchorLogo"}
-            />
+            {props.anchorObj === Object(props.anchorObj) ? (
+              <img
+                src={props.anchorObj.anchor_logo}
+                alt="Anchor Logo"
+                className={"anchorLogo"}
+              />
+            ) : (
+              <></>
+            )}
           </div>
         </div>
         {/*<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"

@@ -52,10 +52,10 @@ header {
 
 .anchorLogo {
     position: absolute;
-    right: 24.4%;
-    top: 30px;
-    width: 120px;
-}
+    right: 25%;
+    top: 18px;
+    width: 85px;
+  }
 
 @media (max-width: 768px) {
     .anchorLogo {
@@ -3017,6 +3017,7 @@ like a tickmark */
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
 }
+
 
 /*@media (min-width: 769px) and (max-width: 1024px){
 .mob_display{display: none;}
