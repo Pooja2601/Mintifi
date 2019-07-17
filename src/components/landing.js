@@ -32,7 +32,7 @@ class Login extends Component {
       if (!match.params.payload) base64_decode = landingPayload;
     // ToDo : hide it in Prod
 
-    // console.log(JSON.parse(JSON.stringify(base64_decode)));
+    // console.log(base64_decode);
     // console.log(match.params.token);
 
     if (
@@ -48,7 +48,7 @@ class Login extends Component {
 
     if (payload === Object(payload)) this._fetchAnchorDetail();
 
-    // console.log(this.props.payload.anchor_id);
+    // console.log(this.props.payload);
   }
 
   _fetchAnchorDetail() {
@@ -127,7 +127,7 @@ class Login extends Component {
         </p>
         <div className="mt-5 mb-5 text-center row">
           <div className={"col-sm-12 col-md-1"} />
-          <div className={"col-sm-10 col-xs-10 col-md-5 text-center"}>
+          <div className={"col-sm-12 col-xs-12 col-md-5 text-center"}>
             <img
               src={`${PUBLIC_URL}/images/supply_chain/new.png`}
               alt="New User"
@@ -140,7 +140,7 @@ class Login extends Component {
             />
             <br /> <p style={{ paddingRight: "0%" }}>New User</p>
           </div>
-          <div className={"col-sm-10 col-xs-10 col-md-5  text-center"}>
+          <div className={"col-sm-12 col-xs-12 col-md-5  text-center"}>
             <img
               src={`${PUBLIC_URL}/images/supply_chain/existing.png`}
               alt="Existing User"
@@ -188,10 +188,12 @@ class Login extends Component {
             }}
             className="form-submit btn greenButton text-center"
           >
-            Create TOKEN and PAYLOAD
+            Create PAYLOAD
           </button>
 
-          <small>(above button is for development use only)</small>
+          <small style={{ margin: "auto" }}>
+            (above button is for development use only)
+          </small>
         </div>
       </>
     );
