@@ -1,6 +1,7 @@
 // Just change the following line to Test it on Prod or Dev environment
-const env_mode = process.env.NODE_ENV === "development" ? "dev" : "prod"; // dev , prod , local,
-const subUrl = env_mode === "local" || env_mode === "local" ? "test" : "live"; //  `live` | `test`  , Sub url for Mintifi API webhook
+// const env_mode = process.env.NODE_ENV === "development" ? "dev" : "prod"; // dev , prod , local,
+const env_mode = process.env.NODE_ENV === "development" ? "prod" : "prod"; // dev , prod , local,
+const subUrl = env_mode === "dev" || env_mode === "local" ? "test" : "live"; //  `live` | `test`  , Sub url for Mintifi API webhook
 const payMintifiUrl =
   env_mode === "dev" || env_mode === "local"
     ? "http://test.pay.mintifi.com"

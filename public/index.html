@@ -128,7 +128,7 @@ To create a production bundle, use `npm run build` or `yarn build`.
 
             let options = {
                 //default environment 'stage' (sandbox)
-                environment: (code_mode === 'prod' || code_mode === 'dev') ? 'production' : "stage", // 'production' , 'stage'
+                environment: (code_mode === 'prod') ? 'production' : "stage", // 'production' , 'stage'
                 callback: function (t) {
                     let event = new CustomEvent("responseDigio", {
                         detail: t
