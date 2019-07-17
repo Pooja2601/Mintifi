@@ -289,13 +289,13 @@ class AdharPan extends Component {
 
   componentWillMount() {
     const { payload, changeLoader } = this.props;
-    if (payload !== Object(payload))
+    if (payload !== Object(payload) && !payload.length)
       this.props.history.push(`${PUBLIC_URL}/preapprove/token`);
     changeLoader(false);
+    // console.log(typeof payload);
   }
 
   componentDidMount() {
-    // console.log(this.props.pan.length);
     const { pan } = this.props;
     if (pan) if (pan.length === 10) this.setState({ pan_correct: true });
     // console.log(this.props.token)
