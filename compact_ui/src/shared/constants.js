@@ -1,5 +1,8 @@
 // Just change the following line to Test it on Prod or Dev environment
-const env_mode = "dev"; // dev , prod , local,
+const isDev = window.location.host.localeCompare("test.pay.mintifi.com");
+const isLocal = window.location.host.localeCompare("localhost:3000");
+const env_mode = isDev === 0 || isLocal === 0 ? "dev" : "prod"; // dev , prod , local,
+// const env_mode = process.env.NODE_ENV === "development" ? "dev" : "prod"; // dev , prod , local,
 const subUrl = env_mode === "dev" || env_mode === "local" ? "test" : "live"; //  `live` | `test`  , Sub url for Mintifi API webhook
 const payMintifiUrl =
   env_mode === "dev" || env_mode === "local"

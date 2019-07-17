@@ -196,7 +196,7 @@ class BankDetail extends Component {
     componentWillMount() {
         const {bankObj, payload, adharObj, setBankDetail, changeLoader, history, businessObj} = this.props;
 
-        if (payload === Object(payload) && payload.length) {
+        if (payload === Object(payload)  && payload) {
             if (adharObj !== Object(adharObj))
                 history.push(`${PUBLIC_URL}/preapprove/personaldetail`);
 

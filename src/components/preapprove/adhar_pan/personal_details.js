@@ -53,7 +53,7 @@ class AdharPan extends Component {
             // datePickerInputWrapper.style.width = '100%';
         }, 1000);
         // console.log(pan)
-        if (payload === Object(payload) && payload.length) {
+        if (payload === Object(payload)  && payload) {
             if (!pan)
                 history.push(`${PUBLIC_URL}/preapprove/adharpan`);
         }

@@ -37,7 +37,8 @@ class Login extends Component {
 
     if (
       match.params.token === undefined &&
-      base64_decode !== Object(base64_decode)
+      base64_decode !== Object(base64_decode) &&
+      !base64_decode.length
     )
       alertModule(
         "You cannot access this page directly without Appropriate Permission!!",
@@ -47,7 +48,7 @@ class Login extends Component {
 
     if (payload === Object(payload)) this._fetchAnchorDetail();
 
-    console.log(this.props.payload.anchor_id);
+    // console.log(this.props.payload.anchor_id);
   }
 
   _fetchAnchorDetail() {

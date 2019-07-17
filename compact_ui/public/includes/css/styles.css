@@ -53,9 +53,9 @@ label {
 .anchorLogo {
     position: absolute;
     right: 25%;
-    top: 15px;
-    width: 80px;
-}
+    top: 18px;
+    width: 85px;
+  }
 
 @media (max-width: 768px) {
     .anchorLogo {

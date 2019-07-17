@@ -186,7 +186,7 @@ class MobileOtp extends Component {
 
     changeLoader(false);
 
-    if (payload === Object(payload)) {
+    if (payload === Object(payload) && payload.length) {
       if (adharObj !== Object(adharObj))
         history.push(`${PUBLIC_URL}/preapprove/personaldetail`);
       else if (adharObj.verified)
