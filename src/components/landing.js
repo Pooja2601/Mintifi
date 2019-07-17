@@ -1,121 +1,191 @@
 import React, {Component} from "react";
-import {Link, withRouter} from 'react-router-dom';
+import {withRouter} from "react-router-dom";
 // import {GetinTouch} from "../../shared/getin_touch";
-// import {baseUrl} from "../shared/constants";
+import {
+    baseUrl,
+    landingPayload,
+    environment,
+    app_id
+} from "../shared/constants";
 import {connect} from "react-redux";
-import {checkExists, setToken, changeLoader} from "../actions";
+import {checkExists, setToken, changeLoader, setAnchorObj} from "../actions";
+import {alertModule, base64Logic, generateToken} from "../shared/commonLogic";
 
-const Timer = 10;
+// const Timer = 10;
+const {PUBLIC_URL} = process.env;
 
 class Login extends Component {
+    state = {
+        anchor_transaction_id: ""
+    };
 
     componentDidMount() {
         this.props.changeLoader(false);
         const {setToken, match, payload} = this.props;
-        let base64_decode = (match.params.payload !== undefined) ? JSON.parse(new Buffer(match.params.payload, 'base64').toString('ascii')) : {};
-        setToken(match.params.token, base64_decode);
-        if (match.params.token !== undefined && payload !== Object(payload))
-            alert("You cannot access this page directly without Credential Payload!! ");
-        // console.log(base64_decode);
+        let base64_decode;
+
+        if (match.params.payload)
+            base64_decode = base64Logic(match.params.payload, "decode");
+
+        if (environment === "dev" || environment === "local")
+            if (!match.params.payload) base64_decode = landingPayload;
+        // ToDo : hide it in Prod
+
+        if (
+            match.params.token !== undefined &&
+            base64_decode !== Object(base64_decode)
+        )
+            alertModule(
+                "You cannot access this page directly without Appropriate Permission!!",
+                "warn"
+            );
+        else setToken(match.params.token, base64_decode);
+
+        if (payload === Object(payload)) this._fetchAnchorDetail();
+        // console.log(this.props.token);
     }
 
-    _generateToken() {
-        this.props.changeLoader(true);
-        let payload = {
-            "anchor_id": "uyh65t",
-            "distributor_dealer_code": "R1T89563",
-            "sales_agent_mobile_number": "9876543210",
-            "anchor_transaction_id": "hy76520",
-            "retailer_onboarding_date": "2006-09-19",
-            "loan_amount": "500000"
-        };
-        fetch('https://test.mintifi.com/api/v1/auth', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                user_id: "uyh65t",
-                secret_key: "3f147e1bf610b5f3",
-                app_id: "3",
-                type: "anchor"
-            })
-        }).then(resp => resp.json()).then(resp => {
-            this.props.changeLoader(false);
-            if (resp.response === Object(resp.response))
-                if (resp.response.status === 'success')
-                    this.props.setToken(resp.response.auth.token, payload);
-        });
+    _fetchAnchorDetail() {
+        const {token, payload, setAnchorObj} = this.props;
+        changeLoader(true);
+        fetch(
+            `${baseUrl}/merchants/${payload.anchor_id}/get_details?app_id=${app_id}`,
+            {
+                method: "GET",
+                headers: {"Content-type": "application/json", token: token}
+            }
+        )
+            .then(resp => resp.json())
+            .then(
+                resp => {
+                    changeLoader(false);
+                    if (resp.response === Object(resp.response))
+                        setAnchorObj(resp.response);
+
+                    console.log(resp.response);
+                },
+                resp => {
+                    changeLoader(false);
+                    alertModule();
+                }
+            );
+    }
+
+    // ToDo : Not useful in Live Production
+    async _generateToken() {
+        let {changeLoader, setToken, payload} = this.props;
+        let {anchor_transaction_id} = this.state;
+        changeLoader(true);
+        let authToken = await generateToken();
+        changeLoader(false);
+        if (anchor_transaction_id.length > 0)
+            payload.anchor_transaction_id = anchor_transaction_id;
+        else
+            payload.anchor_transaction_id = Math.random()
+                .toString(36)
+                .substr(2, 6);
+
+        setToken(authToken, payload);
+        console.log(payload);
+        if (environment === "dev" || environment === "local")
+            this._fetchAnchorDetail();
     }
 
     _existCustomer = () => {
         this.props.checkExists("exist");
         setTimeout(() => {
-            this.props.history.push('/Auth')
+            this.props.history.push(`${PUBLIC_URL}/preapprove/auth`);
         }, 500);
     };
 
     _newCustomer = () => {
         this.props.checkExists("new");
         setTimeout(() => {
-            this.props.history.push('/AdharPan')
+            this.props.history.push(`${PUBLIC_URL}/preapprove/adharpan`);
         }, 500);
     };
 
     render() {
-        const {setToken, match, existing, payload} = this.props;
+        // const { match, existing, payload, anchorObj } = this.props;
+        const {existing} = this.props;
+
         return (
             <>
                 {/*<Link to={'/'} >Go Back </Link>*/}
-                <h5 align="center">Mintifi Pay</h5>
+                <h5 align="center">Mintifi Pay </h5>
                 <p className="paragraph_styling text-center">
-                    Get a credit line of upto Rs. 5 lacs instantly and pay for your purchases.
+                    Get a credit line of upto Rs. 5 lacs instantly and pay for your
+                    purchases.
                     {/*{token} , {trans_id}*/}
+                    {/*{anchorObj.anchor_logo}*/}
                 </p>
                 <div className="mt-5 mb-5 text-center row">
-                    <div className={"col-sm-12 col-md-2"}></div>
-                    <div className={"col-sm-12 col-md-4 text-center"}><img
-                        src="/images/supply_chain/new.png"
-                        style={{
-                            width: "150px",
-                            border: (existing === 'new') && '1px solid #00bfa5',
-                            cursor: 'pointer',
-                            padding: '10px',
-                            borderRadius: '15%',
-                            opacity: (existing === 'new') ? '1.0' : '0.4'
-                        }}
-                        onClick={() => this._newCustomer()}
-                    /><br/> <p style={{paddingRight: '0%'}}>New User</p>
+                    <div className={"col-sm-12 col-md-1"}/>
+                    <div className={"col-sm-10 col-xs-10 col-md-5 text-center"}>
+                        <img
+                            src={`${PUBLIC_URL}/images/supply_chain/new.png`}
+                            alt="New User"
+                            className="user_type_img "
+                            style={{
+                                border: existing === "new" && "1px solid #00bfa5",
+                                opacity: existing === "new" ? "1.0" : "0.4"
+                            }}
+                            onClick={() => this._newCustomer()}
+                        />
+                        <br/> <p style={{paddingRight: "0%"}}>New User</p>
                     </div>
-                    <div className={"col-sm-12 col-md-4 text-center"}><img
-                        src="/images/supply_chain/existing.png"
-                        style={{
-                            width: "150px",
-                            border: (existing === 'exist') && '1px solid #00bfa5',
-                            cursor: 'pointer',
-                            padding: '10px',
-                            borderRadius: '15%',
-                            opacity: (existing === 'exist') ? '1.0' : '0.4'
-                        }}
-                        onClick={() => this._existCustomer()}
-                    /> <br/> <p style={{paddingLeft: '0%'}}>Existing User</p>
+                    <div className={"col-sm-10 col-xs-10 col-md-5  text-center"}>
+                        <img
+                            src={`${PUBLIC_URL}/images/supply_chain/existing.png`}
+                            alt="Existing User"
+                            className="user_type_img "
+                            style={{
+                                border: existing === "exist" && "1px solid #00bfa5",
+                                opacity: existing === "exist" ? "1.0" : "0.4"
+                            }}
+                            onClick={() => this._existCustomer()}
+                        />{" "}
+                        <br/> <p style={{paddingLeft: "0%"}}>Existing User</p>
                     </div>
 
-                    <div className={"col-sm-12 col-md-2"}></div>
-
+                    <div className={"col-sm-12 col-md-1"}/>
                     <br/>
+                    <div
+                        className={"row col-sm-12"}
+                        style={{
+                            borderTop: "1px solid",
+                            marginLeft: "-3px",
+                            marginTop: "10%"
+                        }}
+                    >
+                        <input
+                            style={{margin: "auto 25%"}}
+                            className="form-control bmd-form-group"
+                            onChange={e => {
+                                this.setState({anchor_transaction_id: e.target.value});
+                            }}
+                            placeholder={"Anchor Trans ID (Dev use Only)"}
+                            type={"text"}
+                        />
+                    </div>
+
+                    {/*   visibility:
+                payload !== Object(payload) && !match.params.token
+                  ? "visible"
+                  : "hidden" */}
                     <button
                         onClick={() => this._generateToken()}
-                        style={{visibility: (payload !== Object(payload) && !match.params.token) ? 'visible' : 'hidden'}}
                         style={{
-                            padding: "5px 35px", width: '100%',
-                            margin: '50px 20%'
+                            padding: "5px 35px",
+                            width: "100%",
+                            margin: "30px 20%"
                         }}
                         className="form-submit btn greenButton text-center"
                     >
                         Create TOKEN and PAYLOAD
                     </button>
-                    <br/>
-                    <small>(above button is for development use only)</small>
 
+                    <small>(above button is for development use only)</small>
                 </div>
             </>
         );
@@ -125,10 +195,13 @@ class Login extends Component {
 const mapStateToProps = state => ({
     existing: state.authPayload.existing,
     token: state.authPayload.token,
-    payload: state.authPayload.payload
+    payload: state.authPayload.payload,
+    anchorObj: state.authPayload.anchorObj
 });
 
-export default withRouter(connect(
-    mapStateToProps,
-    {checkExists, setToken, changeLoader}
-)(Login));
+export default withRouter(
+    connect(
+        mapStateToProps,
+        {checkExists, setToken, changeLoader, setAnchorObj}
+    )(Login)
+);

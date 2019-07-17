@@ -1,0 +1,23 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: _APP_NAME_-_CI_ENVIRONMENT_SLUG_-ingress
+  annotations:
+    ingress.kubernetes.io/ssl-redirect: "false"
+    # letsencrypt support enabled (https://github.com/jetstack/kube-lego)
+    kubernetes.io/tls-acme: "true"
+    # use the Kubernetes ingress "nginx"
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  tls:
+  - hosts: 
+    - _CI_ENVIRONMENT_SLUG_._APP_NAME_._MY_DOMAIN_
+    secretName: tls-_APP_NAME_-_CI_ENVIRONMENT_SLUG_
+  rules:
+  - host: test.pay._MY_DOMAIN_
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: _APP_NAME_-_CI_ENVIRONMENT_SLUG_-svc
+          servicePort: 3000

@@ -17,6 +17,11 @@ header {
     box-shadow: 0 0 8px #cccccc;
 }
 
+.css-1pahdxg-control {
+    border-color: transparent !important;
+    box-shadow: 0 0 0 1px transparent !important;
+}
+
 /*
 .headerTop {
     top: 64px;
@@ -1447,6 +1452,15 @@ input[type="radio"]:after {
     font-weight: 500;
 }
 
+.react_datepicker {
+    display: block;
+    width: 100% !important;
+}
+
+.react-datepicker-wrapper, .react-datepicker__input-container {
+    width: 100% !important;
+}
+
 /*.label_tag label{position: absolute; margin-top: 23px;}*/
 #lead_type-error {
     position: absolute;
@@ -2665,13 +2679,14 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 #numberPAN:valid, #numberMobile:valid, #numberAdhar:valid, #fullName:valid,
-#textEmail:valid, #numberPincode:valid, #dobDate:valid, #otpVerify:valid, #firstName:valid, #middleName:valid, #lastName:valid, #numberGST:valid, #avgTrans:valid, #textAddress1:valid, #textAddress2:valid {
+#textEmail:valid, #numberPincode:valid, #dobDate:valid, #otpVerify:valid, #firstName:valid, #middleName:valid, #lastName:valid, #numberGST:valid, #avgTrans:valid, #textAddress1:valid, #textAddress2:valid, #dealerCode:valid, #ifscCode:valid, #numberAccount:valid,
+#micrCode:valid {
     color: black !important;
     border-color: black !important;
 }
 
 #numberPAN:invalid, #numberMobile:invalid, #numberAdhar:invalid,
-#fullName:invalid, #textEmail:invalid, #numberPincode:invalid, #dobDate:invalid, #otpVerify:invalid, #firstName:invalid, #middleName:invalid, #lastName:invalid, #numberGST:invalid, #avgTrans:invalid, #textAddress1:invalid, #textAddress2:invalid {
+#fullName:invalid, #textEmail:invalid, #numberPincode:invalid, #dobDate:invalid, #otpVerify:invalid, #firstName:invalid, #middleName:invalid, #lastName:invalid, #numberGST:invalid, #avgTrans:invalid, #textAddress1:invalid, #textAddress2:invalid, #dealerCode:invalid, #ifscCode:invalid, #numberAccount:invalid, #micrCode:invalid {
     color: crimson !important; /* indianred */
     border-color: crimson !important;
 }
@@ -2784,7 +2799,7 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .tableDataRight {
-    text-align: right;
+    text-align: left;
     padding-right: 20px;
 }
 
@@ -2802,7 +2817,7 @@ input[type=number]::-webkit-outer-spin-button {
     width: 11px;
     height: 11px;
     border-radius: 50%;
-    background: #00bfa5;
+    background: teal;
     animation-timing-function: cubic-bezier(0, 1, 1, 0);
 }
 
@@ -2851,6 +2866,156 @@ input[type=number]::-webkit-outer-spin-button {
     100% {
         transform: translate(19px, 0);
     }
+}
+
+.user_type_img {
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 15%;
+    width: 9rem;
+}
+
+.lds-ring {
+    display: inline-block;
+    width: 64px;
+    height: 64px;
+    position: fixed;
+    top: 45%;
+    left: 45.5%;
+}
+
+.lds-ring div {
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    width: 51px;
+    height: 51px;
+    margin: 6px;
+    border: 6px solid #fff;
+    border-radius: 50%;
+    animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    border-color: #fff transparent transparent transparent;
+}
+
+.lds-ring div:nth-child(1) {
+    animation-delay: -0.45s;
+}
+
+.lds-ring div:nth-child(2) {
+    animation-delay: -0.3s;
+}
+
+.lds-ring div:nth-child(3) {
+    animation-delay: -0.15s;
+}
+
+@keyframes lds-ring {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.css-yk16xz-control {
+    background-color: transparent !important;
+    border-color: black;
+    border-radius: 0 !important;
+    border-style: none !important;
+    border-bottom: 1px solid hsl(0, 0%, 80%) !important;
+}
+
+.css-1uccc91-singleValue {
+    font-size: 14px !important;
+}
+
+.css-1okebmr-indicatorSeparator {
+    margin-right: 10px !important;
+}
+
+.css-tj5bde-Svg {
+    width: 25px;
+    margin-left: -17px;
+}
+
+.css-2613qy-menu {
+    background: white !important;
+    z-index: 999999 !important;
+}
+
+/*CheckBox*/
+.main {
+    display: block;
+    position: relative;
+    padding-left: 45px;
+    margin-bottom: 15px;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+/* Hide the default checkbox */
+input[type=checkbox] {
+    visibility: hidden;
+}
+
+/* Creating a custom checkbox
+based on demand */
+.geekmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    border-radius: 15px;
+    background-color: grey;
+}
+
+/* Specify the background color to be
+shown when hovering over checkbox */
+.main:hover input ~ .geekmark {
+    background-color: darkgray;
+}
+
+/* Specify the background color to be
+shown when checkbox is active */
+.main input:active ~ .geekmark {
+    background-color: darkgreen;
+}
+
+/* Specify the background color to be
+shown when checkbox is checked */
+.main input:checked ~ .geekmark {
+    background-color: teal;
+}
+
+/* Checkmark to be shown in checkbox */
+/* It is not be shown when not checked */
+.geekmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Display checkmark when checked */
+.main input:checked ~ .geekmark:after {
+    display: block;
+}
+
+/* Styling the checkmark using webkit */
+/* Rotated the rectangle by 45 degree and
+showing only two border to make it look
+like a tickmark */
+.main .geekmark:after {
+    left: 9px;
+    bottom: 8px;
+    width: 6px;
+    height: 12px;
+    border: solid white;
+    border-width: 0 4px 4px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
 }
 
 /*@media (min-width: 769px) and (max-width: 1024px){
