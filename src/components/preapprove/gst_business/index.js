@@ -120,7 +120,7 @@ class BusinessDetail extends Component {
         const {businessObj, payload, adharObj, setBusinessDetail, changeLoader, history} = this.props;
 
 
-        if (payload === Object(payload)) {
+        if (payload === Object(payload) && payload.length) {
             if (adharObj !== Object(adharObj))
                 history.push(`${PUBLIC_URL}/preapprove/personaldetail`);
         }
