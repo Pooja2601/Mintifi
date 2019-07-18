@@ -5,7 +5,9 @@ import {
   defaultLender,
   landingPayload,
   existUserPayload,
-  environment
+  environment,
+  mintifiMail,
+  mintifiMobile
 } from "../../../shared/constants";
 import {
   pan_adhar,
@@ -160,8 +162,8 @@ class Dashboard extends Component {
         >
           <div className={"blockquote-footer"}>
             In case of any query, please contact us at{" "}
-            <a href={"mailto:support@mintifi.com"}>support@mintifi.com</a> or{" "}
-            <a href={"tel:+919999999999"}>+91 9999999999</a>. <br />
+            <a href={`mailto:${mintifiMail}`}>{mintifiMail}</a> or{" "}
+            <a href={`tel:+91${mintifiMobile}`}>+91 {mintifiMobile}</a>. <br />
             Please mention your{" "}
             <b>
               ( loan application id :{" "}

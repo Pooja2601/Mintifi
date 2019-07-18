@@ -59,7 +59,7 @@ const { store, persistor } = configureStore();
 
 // const store = configureStore();   // without redux-persist
 const { PUBLIC_URL } = process.env;
-const anchor_logo = `${PUBLIC_URL}/images/company/yatra.png`;
+// const anchor_logo = `${PUBLIC_URL}/images/company/yatra.png`;
 
 class App extends Component {
   render() {

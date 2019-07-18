@@ -118,8 +118,7 @@ class BusinessDetail extends Component {
     }
 
     componentWillMount() {
-        const {businessObj, payload, adharObj, setBusinessDetail, changeLoader, history} = this.props;
-
+        const { payload, adharObj, changeLoader, history} = this.props;
 
         if (payload === Object(payload)  && payload) {
             if (adharObj !== Object(adharObj))
@@ -127,47 +126,44 @@ class BusinessDetail extends Component {
         }
         else history.push(`${PUBLIC_URL}/preapprove/token`);
 
-        if (businessObj === Object(businessObj)) {
-            this.businessGst(businessObj.gst);
-            this.setState(businessObj, () => {
-                Object.keys(this.state).map((val, key) => {
-                    if (this.validate[val] !== undefined)
-                        this.validate[val] = (this.state[val].length > 0);
-                    // console.log(this.validate);
-                });
-            });
-        }
-        else setBusinessDetail(this.state);
-
-        try {
-            /*  if (gstProfile === Object(gstProfile))
-                  if (gstProfile.length) {
-                      BusinessType.map((val, key) => {
-                          (`/${val}/gi`).test(gstProfile.ctb);
-                      });
-                      this.setState({gst: gstProfile.gstin, lgnm: gstProfile.lgnm});
-                  }*/
-            if (payload === Object(payload) && payload) {
-                this.setState({dealercode: payload.distributor_dealer_code}, () => setBusinessDetail(this.state));
-            }
-
-        }
-        catch (e) {
-            console.log(e);
-        }
-
         // console.log(this.props.gstProfile)
         changeLoader(false);
 
     }
 
     componentDidMount() {
-        const {businessObj, adharObj} = this.props;
+        const {businessObj, payload,  setBusinessDetail} = this.props;
         setTimeout(() => this.handleValidation(), 1000);
         // console.log(adharObj);
 
-        if (businessObj === Object(businessObj))
-            this.businessGst(businessObj.gst);
+            if (businessObj === Object(businessObj)) {
+                this.businessGst(businessObj.gst);
+                this.setState(businessObj, () => {
+                    Object.keys(this.state).map((val, key) => {
+                        if (this.validate[val] !== undefined)
+                            this.validate[val] = (this.state[val].length > 0);
+                        // console.log(this.validate);
+                    });
+                });
+            }
+            else setBusinessDetail(this.state);
+    
+            try {
+                /*  if (gstProfile === Object(gstProfile))
+                      if (gstProfile.length) {
+                          BusinessType.map((val, key) => {
+                              (`/${val}/gi`).test(gstProfile.ctb);
+                          });
+                          this.setState({gst: gstProfile.gstin, lgnm: gstProfile.lgnm});
+                      }*/
+                if (payload === Object(payload) && payload) {
+                    this.setState({dealercode: payload.distributor_dealer_code}, () => setBusinessDetail(this.state));
+                }
+    
+            }
+            catch (e) {
+                console.log(e);
+            }
     }
 
     render() {

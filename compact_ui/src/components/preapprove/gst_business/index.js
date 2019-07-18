@@ -120,14 +120,23 @@ class BusinessDetail extends Component {
     }
 
     componentWillMount() {
-        const {businessObj, payload, adharObj, setBusinessDetail, changeLoader, history} = this.props;
+        const { payload, adharObj, changeLoader, history} = this.props;
 
-
-        if (payload === Object(payload) && payload.length) {
+        if (payload === Object(payload) && payload) {
             if (adharObj !== Object(adharObj))
                 history.push(`${PUBLIC_URL}/preapprove/personaldetail`);
         }
         else history.push(`${PUBLIC_URL}/preapprove/token`);
+
+        // console.log(this.props.gstProfile)
+        changeLoader(false);
+
+    }
+
+    componentDidMount() {
+        const {businessObj, payload,  setBusinessDetail} = this.props;
+        setTimeout(() => this.handleValidation(), 1000);
+        // console.log(adharObj);
 
         if (businessObj === Object(businessObj)) {
             this.businessGst(businessObj.gst);
@@ -158,18 +167,6 @@ class BusinessDetail extends Component {
             console.log(e);
         }
 
-        // console.log(this.props.gstProfile)
-        changeLoader(false);
-
-    }
-
-    componentDidMount() {
-        const {businessObj, adharObj} = this.props;
-        setTimeout(() => this.handleValidation(), 1000);
-        console.log(adharObj);
-
-        if (businessObj === Object(businessObj))
-            this.businessGst(businessObj.gst);
     }
 
     render() {

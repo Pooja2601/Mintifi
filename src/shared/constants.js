@@ -31,6 +31,8 @@ module.exports = {
   app_id: "1", // For React
   user_id: "7KhXdg", // For React
   auth_secret: "PYj055HtW7sDxsd2GD4Cgw",
+  mintifiMail: "care@mintifi.com",
+  mintifiMobile: "22-28201230",
   payMintifiUrl: payMintifiUrl,
   baseUrl: `https://${subUrl}.mintifi.com/api/v1`,
   baseUrl2: `https://${subUrl}.mintifi.com/api/v2`,

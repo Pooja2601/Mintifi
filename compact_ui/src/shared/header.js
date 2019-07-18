@@ -5,8 +5,10 @@ import { changeLoader } from "../actions";
 
 const { PUBLIC_URL } = process.env;
 const Header = props => {
+  const style = `${PUBLIC_URL}/includes/css/styles.css`;
   return (
     <>
+      <link rel="stylesheet" type="text/css" href={style} />
       <header>
         <div className="mt-3 text-center">
           <div className="mb-4">

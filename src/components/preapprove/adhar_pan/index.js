@@ -292,7 +292,7 @@ class AdharPan extends Component {
     const { payload, changeLoader } = this.props;
     if (payload !== Object(payload) && !payload)
       this.props.history.push(`${PUBLIC_URL}/preapprove/token`);
-    changeLoader(false);
+
     // console.log(typeof payload);
   }
 
@@ -300,6 +300,7 @@ class AdharPan extends Component {
     const { pan } = this.props;
     if (pan) if (pan.length === 10) this.setState({ pan_correct: true });
     // console.log(this.props.token)
+    changeLoader(false);
   }
 
   render() {
