@@ -54,9 +54,10 @@ class BankDetail extends Component {
             else --ctrerror;
             // console.log(val);
         });
-        console.log(ctrerror);
+        // console.log(ctrerror);
         missed_fields = (ctrerror !== 0);
-        this.setState({missed_fields}, () => console.log('All Fields Validated : ' + this.state.missed_fields));
+        this.setState({missed_fields});
+        // this.setState({missed_fields}, () => console.log('All Fields Validated : ' + this.state.missed_fields));
     };
 
     /*   businessGst(e) {
@@ -101,7 +102,7 @@ class BankDetail extends Component {
     _formSubmit = (e) => {
         e.preventDefault();
         const {changeLoader, token, payload, preFlightResp} = this.props;
-        console.log(preFlightResp);
+        // console.log(preFlightResp);
         if (preFlightResp === Object(preFlightResp)) {
             changeLoader(true);
             fetch(`${baseUrl}/bank_account`, {

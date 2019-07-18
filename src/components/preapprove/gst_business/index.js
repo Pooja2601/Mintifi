@@ -101,7 +101,8 @@ class BusinessDetail extends Component {
         });
         // console.log(ctrerror);
         missed_fields = (ctrerror !== 0);
-        this.setState({missed_fields}, () => console.log('All Fields Validated : ' + this.state.missed_fields));
+        this.setState({missed_fields});
+        // this.setState({missed_fields}, () => console.log('All Fields Validated : ' + this.state.missed_fields));
 
     };
 
@@ -163,7 +164,7 @@ class BusinessDetail extends Component {
     componentDidMount() {
         const {businessObj, adharObj} = this.props;
         setTimeout(() => this.handleValidation(), 1000);
-        console.log(adharObj);
+        // console.log(adharObj);
 
         if (businessObj === Object(businessObj))
             this.businessGst(businessObj.gst);

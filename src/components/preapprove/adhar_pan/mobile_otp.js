@@ -179,7 +179,7 @@ class MobileOtp extends Component {
     Object.assign(state, adharObj);
     setTimeout(() => {
       if (state === Object(state) && state) that.setState(state);
-      console.log(JSON.stringify(this.state));
+      // console.log(JSON.stringify(this.state));
     }, 500);
 
     // else setAdharManual(this.state);

@@ -254,7 +254,7 @@ class DocsUpload extends Component {
             .then(
                 resp => {
                     this.props.changeLoader(false);
-                    console.log(resp); // Handle the success response object
+                    // console.log(resp); // Handle the success response object
                     if (resp.error === Object(resp.error))
                         alertModule("We couldn't upload the files, Kindly try again !", 'warn');
                     else if (resp.response === Object(resp.response))
@@ -263,7 +263,7 @@ class DocsUpload extends Component {
             ).catch(
             error => {
                 changeLoader(false);
-                console.log(error); // Handle the error response object
+                // console.log(error); // Handle the error response object
                 alertModule();
             }
         );

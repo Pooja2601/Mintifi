@@ -157,44 +157,55 @@ class Login extends Component {
 
           <div className={"col-sm-12 col-md-1"} />
           <br />
-          <div
-            className={"row col-sm-12"}
-            style={{
-              borderTop: "1px solid",
-              marginLeft: "-3px",
-              marginTop: "10%"
-            }}
-          >
-            <input
-              style={{ margin: "auto 25%" }}
-              className="form-control bmd-form-group"
-              onChange={e => {
-                this.setState({ anchor_transaction_id: e.target.value });
+
+          {environment !== "prod" ? (
+            <div
+              className={"row col-sm-12"}
+              style={{
+                borderTop: "1px solid",
+                marginLeft: "-3px",
+                marginTop: "10%"
               }}
-              placeholder={"Anchor Trans ID (Dev use Only)"}
-              type={"text"}
-            />
-          </div>
+            >
+              <input
+                style={{ margin: "auto 25%" }}
+                className="form-control bmd-form-group"
+                onChange={e => {
+                  this.setState({ anchor_transaction_id: e.target.value });
+                }}
+                placeholder={"Anchor Trans ID (Dev use Only)"}
+                type={"text"}
+              />
+            </div>
+          ) : (
+            <></>
+          )}
 
           {/*   visibility:
                 payload !== Object(payload) && !match.params.token
                   ? "visible"
                   : "hidden" */}
-          <button
-            onClick={() => this._generateToken()}
-            style={{
-              padding: "5px 35px",
-              width: "100%",
-              margin: "30px 20%"
-            }}
-            className="form-submit btn greenButton text-center"
-          >
-            Create PAYLOAD
-          </button>
+          {environment !== "prod" ? (
+            <>
+              <button
+                onClick={() => this._generateToken()}
+                style={{
+                  padding: "5px 35px",
+                  width: "100%",
+                  margin: "30px 20%"
+                }}
+                className="form-submit btn greenButton text-center"
+              >
+                Create PAYLOAD
+              </button>
 
-          <small style={{ margin: "auto" }}>
-            (above button is for development use only)
-          </small>
+              <small style={{ margin: "auto" }}>
+                (above button is for development use only)
+              </small>
+            </>
+          ) : (
+            <></>
+          )}
         </div>
       </>
     );

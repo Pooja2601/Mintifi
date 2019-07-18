@@ -157,7 +157,7 @@ class ENach extends Component {
       token = retrieveParam(href, "token") || undefined;
       if (payload) base64_decode = base64Logic(payload, "decode");
       // else this.setState({errorMsg: true});
-      console.log(base64_decode);
+      // console.log(base64_decode);
     }
 
     if (base64_decode !== Object(base64_decode) && !base64_decode && !token)

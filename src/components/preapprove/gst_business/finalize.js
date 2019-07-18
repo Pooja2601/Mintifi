@@ -143,7 +143,7 @@ class ReviewBusinessDetail extends Component {
             let { loan_status } = resp.response.credit_eligibility;
             // this._updateAnchor(loan_status);
             storeResponse(resp.response);
-            console.log(resp.response);
+            // console.log(resp.response);
             if (loan_status === "expired" || loan_status === "rejected")
               history.push(`${PUBLIC_URL}/preapprove/apprejected`, {
                 status: "rejected"
@@ -187,7 +187,7 @@ class ReviewBusinessDetail extends Component {
       pan_adhar: { pan: pan, adhar: adhar },
       businessDetail: businessObj
     });
-    console.log(adharObj);
+    // console.log(adharObj);
     this._formSubmit();
   }
 

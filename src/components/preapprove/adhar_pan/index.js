@@ -227,7 +227,7 @@ class AdharPan extends Component {
             });
 
             this.gstDetails.lgnm = company_details.lgnm;
-            console.log(this.gstDetails);
+            // console.log(this.gstDetails);
             setBusinessDetail(this.gstDetails);
 
             // console.log(this.gstDetails); // status 101
@@ -276,7 +276,8 @@ class AdharPan extends Component {
             // console.log(this.state.gst_details);
           } else {
             alertModule(resp.error.message, "error");
-            setTimeout(() => this.adharSkipped(), 500);
+            if (resp.error.code !== "ER-AUTH-102")
+              setTimeout(() => this.adharSkipped(), 500);
             // this._gstFetch(resp.result[0].gstinId);  // status 101
           }
         },
@@ -374,13 +375,13 @@ class AdharPan extends Component {
                   <br />
 
                   {/* <div className="input-group-append">
-                                        <button
-                                            className={(this.state.adhar_skip) ? 'btn btn-secondary' : 'btn btn-default'}
-                                            style={{fontSize: '13px'}}
-                                            type="button" onClick={() => this.adharSkipped()}
-                                            id="adhar-area">Skip Aadhaar
-                                        </button>
-                                    </div>*/}
+                        <button
+                            className={(this.state.adhar_skip) ? 'btn btn-secondary' : 'btn btn-default'}
+                            style={{fontSize: '13px'}}
+                            type="button" onClick={() => this.adharSkipped()}
+                            id="adhar-area">Skip Aadhaar
+                        </button>
+                    </div>*/}
                 </div>
                 <span className="bmd-help">
                   Don't have mobile linked with Aadhaar ?

@@ -155,7 +155,7 @@ class Auth extends Component {
 
                     setAdharManual(personalDetails);
                     // console.log(personalDetails);
-                    console.log(adharObj);
+                    // console.log(adharObj);
                 }
 
 
@@ -169,7 +169,7 @@ class Auth extends Component {
                         dealercode: '',
                     };
                     setBusinessDetail(businessDetails);
-                    console.log(businessObj);
+                    // console.log(businessObj);
                 }
 
             }

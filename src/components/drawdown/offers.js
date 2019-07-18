@@ -393,7 +393,7 @@ class Offers extends Component {
                     <label style={{color: 'black', cursor: 'pointer'}}>
                         <input type="checkbox" checked={this.state.tnc_consent}
                                onChange={(e) =>
-                                   this.setState(prevState => ({tnc_consent: !prevState.tnc_consent}), () => console.log(this.state.tnc_consent))
+                                   this.setState(prevState => ({tnc_consent: !prevState.tnc_consent}))
                                }/> I accept the <a href={'#'} onClick={(e) => {
                         e.preventDefault();
                         this.setState({tncModal: true}, () => this.triggerTnCModal.click());

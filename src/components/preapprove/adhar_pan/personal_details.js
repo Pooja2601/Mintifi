@@ -94,7 +94,7 @@ class AdharPan extends Component {
         if (gstProfile === Object(gstProfile)) {
             if (Array.isArray(gstProfile.mbr) && gstProfile.mbr.length > 0) {
                 tempName = gstProfile.mbr[0].split(' ');
-                console.log(tempName[0]);
+                // console.log(tempName[0]);
                 this.setState({
                     f_name: tempName[0],
                     m_name: (tempName[2]) ? tempName[1] : '',
@@ -124,10 +124,11 @@ class AdharPan extends Component {
             if (!val)
                 ++ctrerror;
             else --ctrerror;
-            console.log(val);
+            // console.log(val);
         });
         missed_fields = (ctrerror !== 0);
-        this.setState({missed_fields}, () => console.log('All Fields Validated : ' + this.state.missed_fields));
+        this.setState({missed_fields});
+        // this.setState({missed_fields}, () => console.log('All Fields Validated : ' + this.state.missed_fields));
     }
 
     _pincodeFetch = () => {
