@@ -19,18 +19,18 @@ class Login extends Component {
     anchor_transaction_id: ""
   };
 
-  componentDidMount() {
+  componentWillMount() {
     this.props.changeLoader(false);
     const { setToken, match, payload } = this.props;
     let base64_decode;
 
-    if (match.params === Object(match.params))
-      if (match.params.payload)
-        base64_decode = base64Logic(match.params.payload, "decode");
-
     if (environment === "dev" || environment === "local")
       if (!match.params.payload) base64_decode = landingPayload;
     // ToDo : hide it in Prod
+
+    if (match.params === Object(match.params))
+      if (match.params.payload)
+        base64_decode = base64Logic(match.params.payload, "decode");
 
     // console.log(base64_decode);
     // console.log(match.params.token);
@@ -46,9 +46,10 @@ class Login extends Component {
       );
     else setToken(match.params.token, base64_decode);
 
-    if (payload === Object(payload)) this._fetchAnchorDetail();
-
-    // console.log(this.props.payload);
+    window.setTimeout(() => {
+      if (payload === Object(payload) || payload) this._fetchAnchorDetail();
+      // console.log(payload);
+    }, 100);
   }
 
   _fetchAnchorDetail() {

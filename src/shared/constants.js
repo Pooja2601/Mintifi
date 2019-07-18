@@ -50,7 +50,7 @@ module.exports = {
   /*    accountType: {
               "sa": "Savings Account",
               "ca": "Current Account"
-          },*/
+        },*/
   accountType: [
     { value: "", label: "Select Account type" },
     { value: "sa", label: "Savings Account" },

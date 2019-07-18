@@ -251,7 +251,7 @@ class AdharPan extends Component {
   _panFetch = () => {
     let checked = {};
     const { changeLoader, payload, pan, token } = this.props;
-    console.log(token);
+    // console.log(token);
     changeLoader(true);
     fetch(
       `${baseUrl}/companies/get_gst_details?app_id=${app_id}&anchor_id=${
