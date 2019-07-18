@@ -129,13 +129,7 @@ class ENach extends Component {
   }
 
   componentWillMount() {
-    let {
-      match,
-      changeLoader,
-      EnachsetPayload,
-      token,
-      eNachPayload
-    } = this.props;
+    let { changeLoader, EnachsetPayload, token, eNachPayload } = this.props;
     changeLoader(false);
 
     // let token = `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyNiwidHlwZSI6InJlYWN0X3dlYl91c2VyIiwiZXhwIjoxNTYwMzMzNTYxfQ.yzD-pIyaf4Z7zsXEJZG-Hm0ka80CjMjMB74q6dpRSPM`;
@@ -157,14 +151,10 @@ class ENach extends Component {
       token = retrieveParam(href, "token") || undefined;
       if (payload) base64_decode = base64Logic(payload, "decode");
       // else this.setState({errorMsg: true});
-      console.log(base64_decode);
+      // console.log(base64_decode);
     }
 
-    if (
-      base64_decode !== Object(base64_decode) &&
-      !base64_decode.length &&
-      !token.length
-    )
+    if (base64_decode !== Object(base64_decode) && !base64_decode && !token)
       alertModule(
         "You cannot access this page directly without Authorised Session !!",
         "error"

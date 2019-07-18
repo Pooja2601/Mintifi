@@ -227,7 +227,7 @@ class AdharPan extends Component {
             });
 
             this.gstDetails.lgnm = company_details.lgnm;
-            console.log(this.gstDetails);
+            // console.log(this.gstDetails);
             setBusinessDetail(this.gstDetails);
 
             // console.log(this.gstDetails); // status 101
@@ -251,7 +251,7 @@ class AdharPan extends Component {
   _panFetch = () => {
     let checked = {};
     const { changeLoader, payload, pan, token } = this.props;
-    console.log(token);
+    // console.log(token);
     changeLoader(true);
     fetch(
       `${baseUrl}/companies/get_gst_details?app_id=${app_id}&anchor_id=${
@@ -276,7 +276,8 @@ class AdharPan extends Component {
             // console.log(this.state.gst_details);
           } else {
             alertModule(resp.error.message, "error");
-            setTimeout(() => this.adharSkipped(), 500);
+            if (resp.error.code !== "ER-AUTH-102")
+              setTimeout(() => this.adharSkipped(), 500);
             // this._gstFetch(resp.result[0].gstinId);  // status 101
           }
         },
@@ -328,7 +329,6 @@ class AdharPan extends Component {
                   name="url"
                   maxLength={10}
                   minLength={10}
-                  style={{ fontWeight: 600 }}
                   pattern="^[a-zA-Z]{3}[pP][a-zA-Z]{1}([0-9]){4}[a-zA-Z]{1}?$"
                   title="Please enter valid PAN number. E.g. AAAAA9999A"
                   autoCapitalize="characters"
@@ -362,7 +362,6 @@ class AdharPan extends Component {
                     pattern="^[0-9]{12}$"
                     title="This field is required"
                     autoComplete={"off"}
-                    style={{ fontWeight: 600 }}
                     id="numberAdhar"
                     maxLength={12}
                     minLength={12}
@@ -374,13 +373,13 @@ class AdharPan extends Component {
                   <br />
 
                   {/* <div className="input-group-append">
-                                        <button
-                                            className={(this.state.adhar_skip) ? 'btn btn-secondary' : 'btn btn-default'}
-                                            style={{fontSize: '13px'}}
-                                            type="button" onClick={() => this.adharSkipped()}
-                                            id="adhar-area">Skip Aadhaar
-                                        </button>
-                                    </div>*/}
+                        <button
+                            className={(this.state.adhar_skip) ? 'btn btn-secondary' : 'btn btn-default'}
+                            style={{fontSize: '13px'}}
+                            type="button" onClick={() => this.adharSkipped()}
+                            id="adhar-area">Skip Aadhaar
+                        </button>
+                    </div>*/}
                 </div>
                 <span className="bmd-help">
                   Don't have mobile linked with Aadhaar ?

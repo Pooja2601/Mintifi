@@ -54,9 +54,10 @@ class BankDetail extends Component {
             else --ctrerror;
             // console.log(val);
         });
-        console.log(ctrerror);
+        // console.log(ctrerror);
         missed_fields = (ctrerror !== 0);
-        this.setState({missed_fields}, () => console.log('All Fields Validated : ' + this.state.missed_fields));
+        this.setState({missed_fields});
+        // this.setState({missed_fields}, () => console.log('All Fields Validated : ' + this.state.missed_fields));
     };
 
     /*   businessGst(e) {
@@ -101,7 +102,7 @@ class BankDetail extends Component {
     _formSubmit = (e) => {
         e.preventDefault();
         const {changeLoader, token, payload, preFlightResp} = this.props;
-        console.log(preFlightResp);
+        // console.log(preFlightResp);
         if (preFlightResp === Object(preFlightResp)) {
             changeLoader(true);
             fetch(`${baseUrl}/bank_account`, {
@@ -248,7 +249,6 @@ class BankDetail extends Component {
                                     type="text"
                                     className="form-control font_weight"
                                     // placeholder="Email"
-                                    style={{fontWeight: 600}}
                                     title="Please enter Account Name"
                                     autoCapitalize="characters"
                                     id="nameAccount"
@@ -272,7 +272,6 @@ class BankDetail extends Component {
                                     type="text"
                                     className="form-control font_weight"
                                     // placeholder="Mobile Number"
-                                    style={{fontWeight: 600}}
                                     pattern="^[0-9]{9,18}$"
                                     title="Please enter Account Number"
                                     autoCapitalize="characters"
@@ -375,7 +374,6 @@ class BankDetail extends Component {
                                     type="text"
                                     className="form-control font_weight"
                                     // placeholder="Email"
-                                    style={{fontWeight: 600}}
                                     title="Please enter Bank Name"
                                     autoCapitalize="characters"
                                     id="nameBank"
@@ -402,7 +400,6 @@ class BankDetail extends Component {
                                 <input
                                     type="text"
                                     className="form-control font_weight"
-                                    style={{fontWeight: 600}}
                                     pattern="^[0-9]{9}$"
                                     title="Enter MICR Code"
                                     autoCapitalize="characters"
@@ -432,7 +429,6 @@ class BankDetail extends Component {
                                     type="text"
                                     className="form-control font_weight"
                                     // placeholder="Email"
-                                    style={{fontWeight: 600}}
                                     title="Please enter Branch Name"
                                     id="nameBranch"
                                     required={true}

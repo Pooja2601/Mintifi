@@ -1,8 +1,10 @@
 // Just change the following line to Test it on Prod or Dev environment
 const isDev = window.location.host.localeCompare("test.pay.mintifi.com");
 const isLocal = window.location.host.localeCompare("localhost:3000");
+const isLocal2 = window.location.host.localeCompare("192.168.0.165:3000");
 // const env_mode = process.env.NODE_ENV === "development" ? "dev" : "prod"; // dev , prod , local,
-const env_mode = isDev === 0 || isLocal === 0 ? "dev" : "prod"; // dev , prod , local,
+const env_mode =
+  isDev === 0 || isLocal === 0 || isLocal2 === 0 ? "dev" : "prod"; // dev , prod , local,
 
 const subUrl = env_mode === "dev" || env_mode === "local" ? "test" : "live"; //  `live` | `test`  , Sub url for Mintifi API webhook
 const payMintifiUrl =
@@ -50,13 +52,13 @@ module.exports = {
   /*    accountType: {
               "sa": "Savings Account",
               "ca": "Current Account"
-          },*/
+        },*/
   accountType: [
     { value: "", label: "Select Account type" },
     { value: "sa", label: "Savings Account" },
     { value: "ca", label: "Current Account" }
   ],
-  defaultLender: "Mintifi Finserv Private Limited", // Fullerton India Private Limtited
+  defaultLender: "Mintifi Finserv Pvt Ltd", // Fullerton India Private Limtited
   OTP_Timer: 60,
   landingPayload: {
     anchor_id: "uyh65t",

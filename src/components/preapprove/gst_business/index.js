@@ -101,7 +101,8 @@ class BusinessDetail extends Component {
         });
         // console.log(ctrerror);
         missed_fields = (ctrerror !== 0);
-        this.setState({missed_fields}, () => console.log('All Fields Validated : ' + this.state.missed_fields));
+        this.setState({missed_fields});
+        // this.setState({missed_fields}, () => console.log('All Fields Validated : ' + this.state.missed_fields));
 
     };
 
@@ -146,7 +147,7 @@ class BusinessDetail extends Component {
                       });
                       this.setState({gst: gstProfile.gstin, lgnm: gstProfile.lgnm});
                   }*/
-            if (payload === Object(payload) && payload.length) {
+            if (payload === Object(payload) && payload) {
                 this.setState({dealercode: payload.distributor_dealer_code}, () => setBusinessDetail(this.state));
             }
 
@@ -163,7 +164,7 @@ class BusinessDetail extends Component {
     componentDidMount() {
         const {businessObj, adharObj} = this.props;
         setTimeout(() => this.handleValidation(), 1000);
-        console.log(adharObj);
+        // console.log(adharObj);
 
         if (businessObj === Object(businessObj))
             this.businessGst(businessObj.gst);
@@ -192,7 +193,7 @@ class BusinessDetail extends Component {
                             <input
                                 type="text"
                                 className="form-control font_weight"
-                                style={{fontWeight: 600, padding: '10px'}}
+                                style={{ padding: '10px'}}
                                 title="Company Legal Name"
                                 autoCapitalize="characters"
                                 id="companyName"
@@ -247,7 +248,6 @@ class BusinessDetail extends Component {
                                     type="text"
                                     className="form-control font_weight"
                                     // placeholder="Mobile Number"
-                                    style={{fontWeight: 600}}
                                     pattern="^\d{2}[A-Z]{5}\d{4}[A-Z]{1}[A-Z\d]{1}[Z]{1}[A-Z\d]{1}$"
                                     title="Please enter GST Number"
                                     autoCapitalize="characters"
@@ -269,7 +269,7 @@ class BusinessDetail extends Component {
                                 type="text"
                                 className="form-control font_weight"
                                 // placeholder="Email"
-                                style={{fontWeight: 600, padding: '10px'}}
+                                style={{ padding: '10px'}}
                                 pattern="^[a-zA-Z]{5}([0-9]){4}[a-zA-Z]{1}?$"
                                 title="Please enter Business PAN"
                                 autoCapitalize="characters"
@@ -328,7 +328,6 @@ class BusinessDetail extends Component {
                                 <input
                                     type="text"
                                     className="form-control font_weight"
-                                    style={{fontWeight: 600}}
                                     pattern="^[0-9A-Za-z]{4,}$"
                                     title="Enter Dealer Code"
                                     autoCapitalize="characters"

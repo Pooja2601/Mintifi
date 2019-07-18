@@ -167,7 +167,7 @@ class MobileOtp extends Component {
     const { DrawsetAuth } = this.props;
 
     if (value.length <= 10) {
-      console.log(value.length);
+      // console.log(value.length);
       this.setState(
         { mobile: value, mobile_correct: value.length !== 10 },
         () => DrawsetAuth(this.state)
@@ -187,11 +187,12 @@ class MobileOtp extends Component {
   componentDidMount() {
     const { authObj, DrawsetAuth } = this.props;
     if (authObj === Object(authObj))
-      this.setState({
-        mobile: authObj.mobile,
-        mobile_correct: authObj.mobile.length !== 10
-      });
-    else DrawsetAuth(this.state);
+      if (authObj.mobile)
+        this.setState({
+          mobile: authObj.mobile,
+          mobile_correct: authObj.mobile.length !== 10
+        });
+      else DrawsetAuth(this.state);
   }
 
   render() {
@@ -259,7 +260,6 @@ class MobileOtp extends Component {
                     title="This field is required"
                     id="otpVerify"
                     style={{
-                      fontWeight: 600,
                       marginRight: "5px"
                     }}
                     value={this.state.otp}

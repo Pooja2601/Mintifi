@@ -19,18 +19,18 @@ class Login extends Component {
     anchor_transaction_id: ""
   };
 
-  componentDidMount() {
+  componentWillMount() {
     this.props.changeLoader(false);
     const { setToken, match, payload } = this.props;
     let base64_decode;
 
-    if (match.params === Object(match.params))
-      if (match.params.payload)
-        base64_decode = base64Logic(match.params.payload, "decode");
-
     if (environment === "dev" || environment === "local")
       if (!match.params.payload) base64_decode = landingPayload;
     // ToDo : hide it in Prod
+
+    if (match.params === Object(match.params))
+      if (match.params.payload)
+        base64_decode = base64Logic(match.params.payload, "decode");
 
     // console.log(base64_decode);
     // console.log(match.params.token);
@@ -38,7 +38,7 @@ class Login extends Component {
     if (
       match.params.token === undefined &&
       base64_decode !== Object(base64_decode) &&
-      !base64_decode.length
+      !base64_decode
     )
       alertModule(
         "You cannot access this page directly without Appropriate Permission!!",
@@ -46,9 +46,10 @@ class Login extends Component {
       );
     else setToken(match.params.token, base64_decode);
 
-    if (payload === Object(payload)) this._fetchAnchorDetail();
-
-    // console.log(this.props.payload);
+    window.setTimeout(() => {
+      if (payload === Object(payload) || payload) this._fetchAnchorDetail();
+      // console.log(payload);
+    }, 100);
   }
 
   _fetchAnchorDetail() {
@@ -68,7 +69,7 @@ class Login extends Component {
           if (resp.response === Object(resp.response))
             setAnchorObj(resp.response);
 
-          console.log(resp.response);
+          // console.log(resp.response);
         },
         resp => {
           changeLoader(false);
@@ -84,7 +85,7 @@ class Login extends Component {
     changeLoader(true);
     let authToken = await generateToken();
     changeLoader(false);
-    if (anchor_transaction_id.length > 0)
+    if (anchor_transaction_id)
       payload.anchor_transaction_id = anchor_transaction_id;
     else
       payload.anchor_transaction_id = Math.random()
@@ -92,7 +93,7 @@ class Login extends Component {
         .substr(2, 6);
 
     setToken(authToken, payload);
-    console.log(payload);
+    // console.log(payload);
     if (environment === "dev" || environment === "local")
       this._fetchAnchorDetail();
   }
@@ -156,44 +157,55 @@ class Login extends Component {
 
           <div className={"col-sm-12 col-md-1"} />
           <br />
-          <div
-            className={"row col-sm-12"}
-            style={{
-              borderTop: "1px solid",
-              marginLeft: "-3px",
-              marginTop: "10%"
-            }}
-          >
-            <input
-              style={{ margin: "auto 25%" }}
-              className="form-control bmd-form-group"
-              onChange={e => {
-                this.setState({ anchor_transaction_id: e.target.value });
+
+          {environment !== "prod" ? (
+            <div
+              className={"row col-sm-12"}
+              style={{
+                borderTop: "1px solid",
+                marginLeft: "-3px",
+                marginTop: "10%"
               }}
-              placeholder={"Anchor Trans ID (Dev use Only)"}
-              type={"text"}
-            />
-          </div>
+            >
+              <input
+                style={{ margin: "auto 25%" }}
+                className="form-control bmd-form-group"
+                onChange={e => {
+                  this.setState({ anchor_transaction_id: e.target.value });
+                }}
+                placeholder={"Anchor Trans ID (Dev use Only)"}
+                type={"text"}
+              />
+            </div>
+          ) : (
+            <></>
+          )}
 
           {/*   visibility:
                 payload !== Object(payload) && !match.params.token
                   ? "visible"
                   : "hidden" */}
-          <button
-            onClick={() => this._generateToken()}
-            style={{
-              padding: "5px 35px",
-              width: "100%",
-              margin: "30px 20%"
-            }}
-            className="form-submit btn greenButton text-center"
-          >
-            Create PAYLOAD
-          </button>
+          {environment !== "prod" ? (
+            <>
+              <button
+                onClick={() => this._generateToken()}
+                style={{
+                  padding: "5px 35px",
+                  width: "100%",
+                  margin: "30px 20%"
+                }}
+                className="form-submit btn greenButton text-center"
+              >
+                Create PAYLOAD
+              </button>
 
-          <small style={{ margin: "auto" }}>
-            (above button is for development use only)
-          </small>
+              <small style={{ margin: "auto" }}>
+                (above button is for development use only)
+              </small>
+            </>
+          ) : (
+            <></>
+          )}
         </div>
       </>
     );

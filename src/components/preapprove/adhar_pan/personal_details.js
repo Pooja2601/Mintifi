@@ -45,9 +45,9 @@ class AdharPan extends Component {
     componentDidMount() {
 
         const {payload, authObj, adharObj, changeLoader, setAdharManual, history, pan} = this.props;
-        console.log(typeof payload);
-        var datePickerInput = document.getElementsByClassName('react-datepicker__input-container');
-        var datePickerInputWrapper = document.getElementsByClassName('react-datepicker-wrapper');
+        // console.log(typeof payload);
+        // var datePickerInput = document.getElementsByClassName('react-datepicker__input-container');
+        // var datePickerInputWrapper = document.getElementsByClassName('react-datepicker-wrapper');
         setTimeout(() => {
             // datePickerInput.style.width = '100%';
             // datePickerInputWrapper.style.width = '100%';
@@ -64,12 +64,12 @@ class AdharPan extends Component {
 
         // console.log(state);
 
-        if (authObj === Object(authObj) && authObj.length)
+        if (authObj === Object(authObj) && authObj)
             if (authObj.verified && state === Object(state))
                 if (state.mobile)
                     state.mobile = authObj.mobile;
 
-        if (state === Object(state) && state.length)
+        if (state === Object(state) && state)
             this.setState(state, () => {
                 Object.keys(this.state).map((val, key) => {
                     if (this.validate[val] !== undefined)
@@ -94,7 +94,7 @@ class AdharPan extends Component {
         if (gstProfile === Object(gstProfile)) {
             if (Array.isArray(gstProfile.mbr) && gstProfile.mbr.length > 0) {
                 tempName = gstProfile.mbr[0].split(' ');
-                console.log(tempName[0]);
+                // console.log(tempName[0]);
                 this.setState({
                     f_name: tempName[0],
                     m_name: (tempName[2]) ? tempName[1] : '',
@@ -124,10 +124,11 @@ class AdharPan extends Component {
             if (!val)
                 ++ctrerror;
             else --ctrerror;
-            console.log(val);
+            // console.log(val);
         });
         missed_fields = (ctrerror !== 0);
-        this.setState({missed_fields}, () => console.log('All Fields Validated : ' + this.state.missed_fields));
+        this.setState({missed_fields});
+        // this.setState({missed_fields}, () => console.log('All Fields Validated : ' + this.state.missed_fields));
     }
 
     _pincodeFetch = () => {
@@ -191,7 +192,6 @@ class AdharPan extends Component {
                                     type="text"
                                     className="form-control font_weight"
                                     // placeholder="Full Name"
-                                    style={{fontWeight: 600}}
                                     pattern="^[a-zA-Z]+$"
                                     title="Please enter First Name"
                                     autoCapitalize="characters"
@@ -217,7 +217,6 @@ class AdharPan extends Component {
                                     type="text"
                                     className="form-control font_weight"
                                     // placeholder="Full Name"
-                                    style={{fontWeight: 600}}
                                     pattern="^[a-zA-Z]+$"
                                     title="Please enter Middle Name"
                                     autoCapitalize="characters"
@@ -236,7 +235,6 @@ class AdharPan extends Component {
                                     type="text"
                                     className="form-control font_weight"
                                     // placeholder="Full Name"
-                                    style={{fontWeight: 600}}
                                     pattern="^[a-zA-Z]+$"
                                     title="Please enter Last Name"
                                     autoCapitalize="characters"
@@ -301,7 +299,6 @@ class AdharPan extends Component {
                                     type="text"
                                     className="form-control font_weight"
                                     // placeholder="Email"
-                                    style={{fontWeight: 600}}
                                     pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
                                     title="Please enter Email"
                                     autoCapitalize="characters"
@@ -461,7 +458,6 @@ class AdharPan extends Component {
                                     type="text"
                                     className="form-control font_weight"
                                     // placeholder="Pincode"
-                                    style={{fontWeight: 600}}
                                     title="Please enter Address 1"
                                     // pattern={"^[A-Za-z0-9'\\.\\-\\s\\,]{3,}"}
                                     autoCapitalize="characters"
@@ -516,7 +512,6 @@ class AdharPan extends Component {
                                     type="text"
                                     className="form-control font_weight"
                                     // placeholder="Pincode"
-                                    style={{fontWeight: 600}}
                                     title="Please enter Address 2"
                                     autoCapitalize="characters"
                                     // pattern={"^.+{3,}"}
@@ -546,7 +541,6 @@ class AdharPan extends Component {
                                     type="number"
                                     className="form-control font_weight"
                                     // placeholder="Pincode"
-                                    style={{fontWeight: 600}}
                                     pattern="^[0-9]{6}$"
                                     title="Please enter Pincode"
                                     autoCapitalize="characters"
@@ -577,17 +571,17 @@ class AdharPan extends Component {
                          }}>
                         <div className={"col-md-6 col-sm-6 col-xs-12 "}>
                             <label className={"form-control font_weight"}
-                                   style={{fontWeight: 600}}>{this.state.city}</label>
+                                  >{this.state.city}</label>
                         </div>
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <label className={"form-control font_weight"}
-                                   style={{fontWeight: 600}}>{this.state.state}</label>
+                                  >{this.state.state}</label>
                         </div>
                     </div>
                     {/*  <div className="form-group mb-3">
                         <label htmlFor="textAddress2" className="bmd-label-floating"> Select Your Locality *</label>
                         <select className="form-control font_weight"
-                                style={{ fontWeight: 600}}
+                               
                                 onBlur={() => {
                                     this.props.setAdharManual(this.state);
                                     this.handleValidation()

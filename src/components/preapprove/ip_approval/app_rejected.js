@@ -22,7 +22,7 @@ class AppRejected extends Component {
   }
 
   render() {
-    let { adharObj, preFlightResp, location, payload, anchorObj } = this.props;
+    let { adharObj, location, payload, anchorObj } = this.props;
     // let { loan_application_id, credit_eligibility } = preFlightResp;
     const loan_status = "expired"; // rejected  // expired
     let { state } = location;
