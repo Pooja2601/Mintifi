@@ -38,7 +38,7 @@ class Login extends Component {
     if (
       match.params.token === undefined &&
       base64_decode !== Object(base64_decode) &&
-      !base64_decode.length
+      !base64_decode
     )
       alertModule(
         "You cannot access this page directly without Appropriate Permission!!",
@@ -69,7 +69,7 @@ class Login extends Component {
           if (resp.response === Object(resp.response))
             setAnchorObj(resp.response);
 
-          console.log(resp.response);
+          // console.log(resp.response);
         },
         resp => {
           changeLoader(false);
@@ -85,7 +85,7 @@ class Login extends Component {
     changeLoader(true);
     let authToken = await generateToken();
     changeLoader(false);
-    if (anchor_transaction_id.length > 0)
+    if (anchor_transaction_id)
       payload.anchor_transaction_id = anchor_transaction_id;
     else
       payload.anchor_transaction_id = Math.random()
@@ -93,7 +93,7 @@ class Login extends Component {
         .substr(2, 6);
 
     setToken(authToken, payload);
-    console.log(payload);
+    // console.log(payload);
     if (environment === "dev" || environment === "local")
       this._fetchAnchorDetail();
   }

@@ -146,7 +146,7 @@ class BusinessDetail extends Component {
                       });
                       this.setState({gst: gstProfile.gstin, lgnm: gstProfile.lgnm});
                   }*/
-            if (payload === Object(payload) && payload.length) {
+            if (payload === Object(payload) && payload) {
                 this.setState({dealercode: payload.distributor_dealer_code}, () => setBusinessDetail(this.state));
             }
 

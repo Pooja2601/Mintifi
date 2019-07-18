@@ -160,11 +160,7 @@ class ENach extends Component {
       console.log(base64_decode);
     }
 
-    if (
-      base64_decode !== Object(base64_decode) &&
-      !base64_decode.length &&
-      !token.length
-    )
+    if (base64_decode !== Object(base64_decode) && !base64_decode && !token)
       alertModule(
         "You cannot access this page directly without Authorised Session !!",
         "error"
