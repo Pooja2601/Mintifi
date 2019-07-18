@@ -45,9 +45,9 @@ class AdharPan extends Component {
     componentDidMount() {
 
         const {payload, authObj, adharObj, changeLoader, setAdharManual, history, pan} = this.props;
-        console.log(typeof payload);
-        var datePickerInput = document.getElementsByClassName('react-datepicker__input-container');
-        var datePickerInputWrapper = document.getElementsByClassName('react-datepicker-wrapper');
+        // console.log(typeof payload);
+        // var datePickerInput = document.getElementsByClassName('react-datepicker__input-container');
+        // var datePickerInputWrapper = document.getElementsByClassName('react-datepicker-wrapper');
         setTimeout(() => {
             // datePickerInput.style.width = '100%';
             // datePickerInputWrapper.style.width = '100%';
