@@ -192,7 +192,6 @@ class AdharPan extends Component {
                                     type="text"
                                     className="form-control font_weight"
                                     // placeholder="Full Name"
-                                    style={{fontWeight: 600}}
                                     pattern="^[a-zA-Z]+$"
                                     title="Please enter First Name"
                                     autoCapitalize="characters"
@@ -218,7 +217,6 @@ class AdharPan extends Component {
                                     type="text"
                                     className="form-control font_weight"
                                     // placeholder="Full Name"
-                                    style={{fontWeight: 600}}
                                     pattern="^[a-zA-Z]+$"
                                     title="Please enter Middle Name"
                                     autoCapitalize="characters"
@@ -237,7 +235,6 @@ class AdharPan extends Component {
                                     type="text"
                                     className="form-control font_weight"
                                     // placeholder="Full Name"
-                                    style={{fontWeight: 600}}
                                     pattern="^[a-zA-Z]+$"
                                     title="Please enter Last Name"
                                     autoCapitalize="characters"
@@ -302,7 +299,6 @@ class AdharPan extends Component {
                                     type="text"
                                     className="form-control font_weight"
                                     // placeholder="Email"
-                                    style={{fontWeight: 600}}
                                     pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
                                     title="Please enter Email"
                                     autoCapitalize="characters"
@@ -462,7 +458,6 @@ class AdharPan extends Component {
                                     type="text"
                                     className="form-control font_weight"
                                     // placeholder="Pincode"
-                                    style={{fontWeight: 600}}
                                     title="Please enter Address 1"
                                     // pattern={"^[A-Za-z0-9'\\.\\-\\s\\,]{3,}"}
                                     autoCapitalize="characters"
@@ -517,7 +512,6 @@ class AdharPan extends Component {
                                     type="text"
                                     className="form-control font_weight"
                                     // placeholder="Pincode"
-                                    style={{fontWeight: 600}}
                                     title="Please enter Address 2"
                                     autoCapitalize="characters"
                                     // pattern={"^.+{3,}"}
@@ -547,7 +541,6 @@ class AdharPan extends Component {
                                     type="number"
                                     className="form-control font_weight"
                                     // placeholder="Pincode"
-                                    style={{fontWeight: 600}}
                                     pattern="^[0-9]{6}$"
                                     title="Please enter Pincode"
                                     autoCapitalize="characters"
@@ -578,17 +571,17 @@ class AdharPan extends Component {
                          }}>
                         <div className={"col-md-6 col-sm-6 col-xs-12 "}>
                             <label className={"form-control font_weight"}
-                                   style={{fontWeight: 600}}>{this.state.city}</label>
+                                  >{this.state.city}</label>
                         </div>
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <label className={"form-control font_weight"}
-                                   style={{fontWeight: 600}}>{this.state.state}</label>
+                                  >{this.state.state}</label>
                         </div>
                     </div>
                     {/*  <div className="form-group mb-3">
                         <label htmlFor="textAddress2" className="bmd-label-floating"> Select Your Locality *</label>
                         <select className="form-control font_weight"
-                                style={{ fontWeight: 600}}
+                               
                                 onBlur={() => {
                                     this.props.setAdharManual(this.state);
                                     this.handleValidation()

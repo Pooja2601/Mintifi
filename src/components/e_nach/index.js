@@ -129,13 +129,7 @@ class ENach extends Component {
   }
 
   componentWillMount() {
-    let {
-      match,
-      changeLoader,
-      EnachsetPayload,
-      token,
-      eNachPayload
-    } = this.props;
+    let { changeLoader, EnachsetPayload, token, eNachPayload } = this.props;
     changeLoader(false);
 
     // let token = `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyNiwidHlwZSI6InJlYWN0X3dlYl91c2VyIiwiZXhwIjoxNTYwMzMzNTYxfQ.yzD-pIyaf4Z7zsXEJZG-Hm0ka80CjMjMB74q6dpRSPM`;

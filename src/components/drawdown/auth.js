@@ -260,7 +260,6 @@ class MobileOtp extends Component {
                     title="This field is required"
                     id="otpVerify"
                     style={{
-                      fontWeight: 600,
                       marginRight: "5px"
                     }}
                     value={this.state.otp}

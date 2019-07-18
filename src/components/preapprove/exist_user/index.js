@@ -301,8 +301,7 @@ class Auth extends Component {
                                         pattern="^[0-9]{6}$"
                                         title="This field is required"
                                         id="otpVerify"
-                                        style={{
-                                            fontWeight: 600, marginRight: '5px',
+                                        style={{ marginRight: '5px',
                                             fontSize: '17px'
                                         }}
                                         value={this.state.otp}

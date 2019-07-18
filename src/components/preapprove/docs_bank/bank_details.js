@@ -249,7 +249,6 @@ class BankDetail extends Component {
                                     type="text"
                                     className="form-control font_weight"
                                     // placeholder="Email"
-                                    style={{fontWeight: 600}}
                                     title="Please enter Account Name"
                                     autoCapitalize="characters"
                                     id="nameAccount"
@@ -273,7 +272,6 @@ class BankDetail extends Component {
                                     type="text"
                                     className="form-control font_weight"
                                     // placeholder="Mobile Number"
-                                    style={{fontWeight: 600}}
                                     pattern="^[0-9]{9,18}$"
                                     title="Please enter Account Number"
                                     autoCapitalize="characters"
@@ -376,7 +374,6 @@ class BankDetail extends Component {
                                     type="text"
                                     className="form-control font_weight"
                                     // placeholder="Email"
-                                    style={{fontWeight: 600}}
                                     title="Please enter Bank Name"
                                     autoCapitalize="characters"
                                     id="nameBank"
@@ -403,7 +400,6 @@ class BankDetail extends Component {
                                 <input
                                     type="text"
                                     className="form-control font_weight"
-                                    style={{fontWeight: 600}}
                                     pattern="^[0-9]{9}$"
                                     title="Enter MICR Code"
                                     autoCapitalize="characters"
@@ -433,7 +429,6 @@ class BankDetail extends Component {
                                     type="text"
                                     className="form-control font_weight"
                                     // placeholder="Email"
-                                    style={{fontWeight: 600}}
                                     title="Please enter Branch Name"
                                     id="nameBranch"
                                     required={true}

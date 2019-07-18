@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
-import { baseUrl, otpUrl, OTP_Timer, app_id } from "../../../shared/constants";
+import { otpUrl, OTP_Timer, app_id } from "../../../shared/constants";
 import { connect } from "react-redux";
 import {
   setAuth,
@@ -93,7 +93,6 @@ class MobileOtp extends Component {
   _verifyOTP(e) {
     const {
       adharObj,
-      payload,
       token,
       changeLoader,
       setAdharManual,
@@ -164,14 +163,7 @@ class MobileOtp extends Component {
   }
 
   componentDidMount() {
-    const {
-      adharObj,
-      payload,
-      changeLoader,
-      setAdharManual,
-      history,
-      authObj
-    } = this.props;
+    const { adharObj, payload, changeLoader, history, authObj } = this.props;
 
     let state = this.state,
       that = this;
@@ -269,7 +261,6 @@ class MobileOtp extends Component {
                     title="This field is required"
                     id="otpVerify"
                     style={{
-                      fontWeight: 600,
                       marginRight: "5px",
                       fontSize: "14px"
                     }}

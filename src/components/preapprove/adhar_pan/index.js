@@ -329,7 +329,6 @@ class AdharPan extends Component {
                   name="url"
                   maxLength={10}
                   minLength={10}
-                  style={{ fontWeight: 600 }}
                   pattern="^[a-zA-Z]{3}[pP][a-zA-Z]{1}([0-9]){4}[a-zA-Z]{1}?$"
                   title="Please enter valid PAN number. E.g. AAAAA9999A"
                   autoCapitalize="characters"
@@ -363,7 +362,6 @@ class AdharPan extends Component {
                     pattern="^[0-9]{12}$"
                     title="This field is required"
                     autoComplete={"off"}
-                    style={{ fontWeight: 600 }}
                     id="numberAdhar"
                     maxLength={12}
                     minLength={12}
