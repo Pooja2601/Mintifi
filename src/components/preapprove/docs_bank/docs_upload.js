@@ -304,16 +304,16 @@ class DocsUpload extends Component {
                     {/* <button onClick={() => this.props.history.push('${PUBLIC_URL}/preapprove/businessdetail`)} className={"btn btn-link"}>
                     Go Back
                 </button>*/}
-                    <br/>
                     {/*<i className={"fa fa-file-pdf checkCircle"} style={{color: 'cadetblue'}}></i>*/}
-                    <h3 className={"text-center"}> KYC Documents </h3>
-                    <br/>
-
-                    <div className="alert " role="alert">
-                        <p className="alert-heading text-center">Hi {f_name} {l_name}, Please upload following documents
+                    <h4 className={"text-center mt-5"}> KYC Documents </h4>
+                    <h5 className="secondLinePara paragraph_styling  text-center">
+                    Hi {f_name} {l_name}, Please upload following documents
                             in
                             pdf or png/jpg
-                            format. </p>
+                            format.
+                    </h5>
+
+                    <div className="alert " role="alert">
                         <div className="paragraph_styling  text-center">
 
                             <div className={"row mb-4 mt-4"}>
@@ -325,7 +325,6 @@ class DocsUpload extends Component {
                                                ref={ref => this.idProofInput = ref}/>
                                         <button className="btn btn-raised uploadButton inputFilebutton"
                                                 onClick={() => this.idProofInput.click()}
-                                                style={{minWidth: '111px'}}
                                                 id={"idProofBtn"}>
                                             ID Proof
                                         </button>
@@ -342,7 +341,6 @@ class DocsUpload extends Component {
                                                ref={ref => this.addProofInput = ref}/>
                                         <button className="btn btn-raised uploadButton inputFilebutton"
                                                 onClick={() => this._multiDimDocsUpload('add_proof')}
-                                                style={{minWidth: '111px'}}
                                                 id={"addressProofBtn"}>
                                             Address Proof
                                         </button>
@@ -386,7 +384,6 @@ class DocsUpload extends Component {
                                                ref={ref => this.entityProofInput = ref}/>
                                         <button className="btn btn-raised uploadButton inputFilebutton "
                                                 onClick={() => this._multiDimDocsUpload('entity_proof')}
-                                                style={{minWidth: '111px'}}
                                                 id={"addressProofBtn"}>
                                             Shop Registration
 
@@ -399,7 +396,7 @@ class DocsUpload extends Component {
                                         Registration Certificate.
                                     </small>
                                 </div>
-                                <div className={"col-md-6 col-sm-6 col-xs-12"}>
+                                <div className={"col-md-6 col-sm-6 col-xs-12 uploadContatiner"}>
                                     <div className="input-container text-left" style={{cursor: 'pointer'}}
                                          onClick={() => this._multiDimDocsUpload('caddr_proof')}>
                                         <input type="file" id="addressProofInput"
@@ -407,7 +404,6 @@ class DocsUpload extends Component {
                                                ref={ref => this.cAddressProofInput = ref}/>
                                         <button className="btn btn-raised uploadButton inputFilebutton "
                                                 onClick={() => this._multiDimDocsUpload('caddr_proof')}
-                                                style={{minWidth: '111px'}}
                                                 id={"addressProofBtn"}>
                                             Shop Address
                                         </button>

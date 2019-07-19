@@ -174,7 +174,7 @@ class Login extends Component {
           {/*   visibility:
                 payload !== Object(payload) && !match.params.token
                   ? "visible"
-                  : "hidden" */}
+          : "hidden" */}
           <button
             onClick={() => this._generateToken()}
             style={{

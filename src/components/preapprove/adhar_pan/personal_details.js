@@ -173,13 +173,12 @@ class AdharPan extends Component {
     render() {
         return (
             <>
-                <Link to={`${PUBLIC_URL}/preapprove/adharpan`} className={"btn btn-link"}>Go
-                    Back </Link><br/><br/>
-                <h4 className={"text-center"}>Personal Details </h4>
-                <h5 className="paragraph_styling  text-center" style={{fontSize: '17px'}}>
+                <Link to={`${PUBLIC_URL}/preapprove/adharpan`} className={"btn btn-link go-back-btn"}>Go
+                    Back </Link>
+                <h4 className={"text-center "}>Personal Details </h4>
+                <h5 className="paragraph_styling  text-center secondLinePara" >
                     <b> Enter your personal information to proceed.</b>
                 </h5>
-                <br/>
                 <form
                     id="serverless-contact-form"
                     onSubmit={e => this._formSubmit(e)}
@@ -270,7 +269,6 @@ class AdharPan extends Component {
                                         type="number"
                                         className="form-control font_weight prependInput"
                                         // placeholder="Mobile Number"
-
                                         pattern="^[0-9]{10}+$"
                                         title="Please enter Mobile Number"
                                         id="numberMobile"
@@ -323,73 +321,55 @@ class AdharPan extends Component {
 
                     <div className={"row"}>
                         <div className={"col-sm-6 col-xs-12 col-md-6 text-left"}>
-                            <label htmlFor="ResidenceOwnership" className="labelLoan bmd-label">
+                            <label htmlFor="ResidenceOwnership" className="d-block bmd-label">
                                 Gender *
-                            </label><br/>
+                            </label>
                             <div
-                                style={{marginBottom: '20px'}}
-                                className="btn-group"
+                                className="btn-group ToggleBtn"
                                 id="proprietorship"
                                 role="groupProperty"
                                 aria-label="..."
                             >
                                 <button
                                     type="button"
-                                    className="btn btn-default"
+                                    className="btn btn-default btnLeft"
                                     onClick={() => {
                                         this.setState({gender: 'm'}, () => this.props.setAdharManual(this.state));
                                     }}
                                     style={{
-                                        width: "90px",
                                         border:
                                             this.state.gender === "m" && "2px solid #00bfa5",
-                                        borderBottomLeftRadius: '25px',
-                                        borderTopLeftRadius: '25px'
                                     }}
                                 >
                                     <i
                                         className="fa fa-male"
-                                        style={{
-                                            fontSize: "x-large",
-                                            display: "block",
-                                            padding: "0 10px"
-                                        }}
                                     />
-                                    <small style={{fontSize: "75%"}}>Male</small>
+                                    <small >Male</small>
                                 </button>
                                 <button
                                     type="button"
-                                    className="btn btn-default"
+                                    className="btn btn-default btnRight"
                                     onClick={() => {
                                         this.setState({gender: 'f'}, () => this.props.setAdharManual(this.state));
                                     }}
                                     style={{
-                                        width: "90px",
                                         border:
                                             this.state.gender === "f" && "2px solid #00bfa5",
-                                        borderBottomRightRadius: '25px',
-                                        borderTopRightRadius: '25px'
                                     }}
                                 >
                                     <i
                                         className="fa fa-female"
-                                        style={{
-                                            fontSize: "x-large",
-                                            display: "block",
-                                            padding: "0 10px"
-                                        }}
                                     />
-                                    <small style={{fontSize: "75%"}}>Female</small>
+                                    <small >Female</small>
                                 </button>
                             </div>
                         </div>
                         <div className={"col-sm-6 col-xs-12 col-md-6 text-left"}>
-                            <label htmlFor="ResidenceOwnership" className="labelLoan bmd-label">
+                            <label htmlFor="ResidenceOwnership" className="d-block bmd-label">
                                 Ownership *
-                            </label><br/>
+                            </label>
                             <div
-                                style={{marginBottom: '20px'}}
-                                className="btn-group"
+                                className="btn-group ToggleBtn"
                                 id="proprietorship"
                                 role="groupProperty"
                                 aria-label="..."
@@ -397,52 +377,35 @@ class AdharPan extends Component {
 
                                 <button
                                     type="button"
-                                    className="btn btn-default"
+                                    className="btn btn-default btnLeft"
                                     onClick={() => {
                                         this.setState({ownership: 'rented'}, () => this.props.setAdharManual(this.state));
                                     }}
                                     style={{
-                                        width: "90px",
                                         border:
                                             this.state.ownership === "rented" && "2px solid #00bfa5",
-                                        borderBottomLeftRadius: '25px',
-                                        borderTopLeftRadius: '25px'
                                     }}
                                 >
                                     <i
                                         className="fa fa-building"
-                                        style={{
-                                            fontSize: "x-large",
-                                            display: "block",
-                                            padding: "0 10px"
-                                        }}
                                     />
-                                    <small style={{fontSize: "75%"}}>Rented</small>
+                                    <small >Rented</small>
                                 </button>
                                 <button
                                     type="button"
-                                    className="btn btn-default"
+                                    className="btn btn-default btnRight"
                                     onClick={() => {
                                         this.setState({ownership: 'owned'}, () => this.props.setAdharManual(this.state));
-
                                     }}
                                     style={{
-                                        width: "90px",
                                         border:
                                             this.state.ownership === "owned" && "2px solid #00bfa5",
-                                        borderBottomRightRadius: '25px',
-                                        borderTopRightRadius: '25px'
                                     }}
                                 >
                                     <i
                                         className="fa fa-home"
-                                        style={{
-                                            fontSize: "x-large",
-                                            display: "block",
-                                            padding: "0 10px"
-                                        }}
                                     />
-                                    <small style={{fontSize: "75%"}}>Owned</small>
+                                    <small >Owned</small>
                                 </button>
                             </div>
                         </div>
@@ -482,7 +445,7 @@ class AdharPan extends Component {
                                 <label htmlFor="dobDate" className="bmd-label-floating">
                                     Date of Birth
                                 </label>
-                                <div style={{display: 'block '}}>
+                                <div className={'d-block'} >
                                     <DatePicker
                                         className="form-control font_weight"
                                         // placeholderText={"Date of Birth"}
@@ -493,7 +456,6 @@ class AdharPan extends Component {
                                         showMonthDropdown
                                         required={true}
                                         showYearDropdown
-                                        style={{margin: 'auto', display: 'block'}}
                                         dateFormat={'dd/MM/yyyy'}
                                         onChange={(date) => this.changeDob(date)}
                                     />
@@ -564,9 +526,8 @@ class AdharPan extends Component {
 
                         </div>
                     </div>
-                    <div className={"row"}
+                    <div className={"row mt-4"}
                          style={{
-                             marginTop: '26px',
                              visibility: (this.state.city && this.state.state) ? 'visible' : 'hidden'
                          }}>
                         <div className={"col-md-6 col-sm-6 col-xs-12 "}>

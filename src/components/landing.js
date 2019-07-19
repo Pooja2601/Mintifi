@@ -139,7 +139,7 @@ class Login extends Component {
               }}
               onClick={() => this._newCustomer()}
             />
-            <br /> <p style={{ paddingRight: "0%" }}>New User</p>
+            <br /> <p>New User</p>
           </div>
           <div className={"col-sm-12 col-xs-12 col-md-5  text-center"}>
             <img
@@ -152,23 +152,14 @@ class Login extends Component {
               }}
               onClick={() => this._existCustomer()}
             />{" "}
-            <br /> <p style={{ paddingLeft: "0%" }}>Existing User</p>
+            <br /> <p>Existing User</p>
           </div>
 
           <div className={"col-sm-12 col-md-1"} />
-          <br />
 
           {environment !== "prod" ? (
-            <div
-              className={"row col-sm-12"}
-              style={{
-                borderTop: "1px solid",
-                marginLeft: "-3px",
-                marginTop: "10%"
-              }}
-            >
+            <div className={"row col-sm-12"} className="devTool_AnchorTrans">
               <input
-                style={{ margin: "auto 25%" }}
                 className="form-control bmd-form-group"
                 onChange={e => {
                   this.setState({ anchor_transaction_id: e.target.value });
@@ -186,23 +177,16 @@ class Login extends Component {
                   ? "visible"
                   : "hidden" */}
           {environment !== "prod" ? (
-            <>
+            <div className="devTool_PayloadBtn">
               <button
                 onClick={() => this._generateToken()}
-                style={{
-                  padding: "5px 35px",
-                  width: "100%",
-                  margin: "30px 20%"
-                }}
                 className="form-submit btn greenButton text-center"
               >
                 Create PAYLOAD
               </button>
 
-              <small style={{ margin: "auto" }}>
-                (above button is for development use only)
-              </small>
-            </>
+              <small>(above button is for development use only)</small>
+            </div>
           ) : (
             <></>
           )}

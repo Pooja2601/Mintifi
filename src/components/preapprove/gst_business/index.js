@@ -171,11 +171,11 @@ class BusinessDetail extends Component {
         return (
             <>
                 {/*<Link to={`${PUBLIC_URL}/preapprove/personaldetails`} className={"btn btn-link"}>Go Back </Link>*/}
-                <br/><br/>
-                <h4 className={"text-center"}>Business Details</h4>
-                <p className="paragraph_styling  text-center">
+               
+                <h4 className={"text-center mt-5"}>Business Details</h4>
+                <h5 className="paragraph_styling  text-center secondLinePara">
                     <b> Please submit your business details to complete the loan application.</b>
-                </p>
+                </h5>
                 <br/>
                 {/*<h5 className={"text-center"}>{(gstProfile === Object(gstProfile)) ? gstProfile.lgnm : ''}</h5>*/}
 
@@ -188,8 +188,7 @@ class BusinessDetail extends Component {
                             {/*<h5 className={"text-center"}>{(gstProfile === Object(gstProfile)) ? gstProfile.lgnm : ''}</h5>*/}
                             <input
                                 type="text"
-                                className="form-control font_weight"
-                                style={{ padding: '10px'}}
+                                className="form-control font_weight p-2"
                                 title="Company Legal Name"
                                 autoCapitalize="characters"
                                 id="companyName"
@@ -263,9 +262,8 @@ class BusinessDetail extends Component {
                             <label htmlFor="numberPAN" className={"bmd-label-floating"}>Business PAN *</label>
                             <input
                                 type="text"
-                                className="form-control font_weight"
+                                className="form-control font_weight p-2"
                                 // placeholder="Email"
-                                style={{ padding: '10px'}}
                                 pattern="^[a-zA-Z]{5}([0-9]){4}[a-zA-Z]{1}?$"
                                 title="Please enter Business PAN"
                                 autoCapitalize="characters"
@@ -343,11 +341,7 @@ class BusinessDetail extends Component {
                         </div>
                     </div>
                     <div className=" mt-5">
-                        <label style={{color: 'black', lineHeight: '1.5'}}>
-                            <input type="checkbox" checked={this.state.tnc_consent}
-                                   onChange={(e) =>
-                                       this.setState(prevState => ({tnc_consent: !prevState.tnc_consent}))
-                                   }/>
+                       
                             <label className="main">I accept the <a href={'#'} onClick={(e) => {
                                 e.preventDefault();
                                 this.setState({tncModal: true}, () => this.triggerTnCModal.click());
@@ -363,7 +357,6 @@ class BusinessDetail extends Component {
                                 } checked={this.state.tnc_consent}/>
                                 <span className="geekmark"></span>
                             </label>
-                        </label>
                     </div>
 
                     <div className="mt-5 mb-5 text-center">

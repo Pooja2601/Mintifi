@@ -157,26 +157,7 @@ class MobileOtp extends Component {
   };
 
   componentWillMount() {
-    const { adharObj } = this.props;
-    if (adharObj === Object(adharObj))
-      this.setState({ mobile: adharObj.mobile });
-  }
-
-  componentDidMount() {
-    const { adharObj, payload, changeLoader, history, authObj } = this.props;
-
-    let state = this.state,
-      that = this;
-
-    Object.assign(state, adharObj);
-    setTimeout(() => {
-      if (state === Object(state) && state) that.setState(state);
-      // console.log(JSON.stringify(this.state));
-    }, 500);
-
-    // else setAdharManual(this.state);
-
-    changeLoader(false);
+    const { adharObj, payload, history, authObj } = this.props;
 
     if (payload === Object(payload) && payload) {
       if (adharObj !== Object(adharObj))
@@ -189,6 +170,26 @@ class MobileOtp extends Component {
           history.push(`${PUBLIC_URL}/preapprove/businessdetail`);
       //   window.location.href = `${PUBLIC_URL}/preapprove/businessdetail`;
     } else history.push(`${PUBLIC_URL}/preapprove/token`);
+  }
+
+  componentDidMount() {
+    const { adharObj, changeLoader } = this.props;
+
+    let state = this.state,
+      that = this;
+
+    if (adharObj === Object(adharObj))
+      this.setState({ mobile: adharObj.mobile });
+
+    Object.assign(state, adharObj);
+    setTimeout(() => {
+      if (state === Object(state) && state) that.setState(state);
+      // console.log(JSON.stringify(this.state));
+    }, 500);
+
+    // else setAdharManual(this.state);
+
+    changeLoader(false);
   }
 
   render() {
@@ -206,7 +207,7 @@ class MobileOtp extends Component {
         </h5>
         <form id="serverless-contact-form">
           <div className={"row"}>
-            <div className={"col-sm-11 col-md-8"} style={{ margin: "auto" }}>
+            <div className={"col-sm-11 col-md-8 m-auto"}>
               <div className="form-group mb-3">
                 <label htmlFor="numberMobile" className={"bmd-label-floating"}>
                   Mobile Number *
@@ -240,12 +241,11 @@ class MobileOtp extends Component {
                 </div>
               </div>
             </div>
-            <div className={"col-sm-11 col-md-8"} style={{ margin: "auto" }}>
+            <div className={"col-sm-11 col-md-8 m-auto"}>
               <div
                 className="form-group mb-3"
                 style={{
-                  visibility: this.state.submitted ? "visible" : "hidden",
-                  marginTop: "-15px"
+                  visibility: this.state.submitted ? "visible" : "hidden"
                 }}
               >
                 <label htmlFor="otpVerify" className={"bmd-label-floating"}>
@@ -260,10 +260,6 @@ class MobileOtp extends Component {
                     pattern="^[0-9]{6}$"
                     title="This field is required"
                     id="otpVerify"
-                    style={{
-                      marginRight: "5px",
-                      fontSize: "14px"
-                    }}
                     value={this.state.otp}
                     min={100000}
                     max={999999}
@@ -292,11 +288,9 @@ class MobileOtp extends Component {
 
           <div className={"text-center"}>
             <label
+              className="resendOTPLabel"
               style={{
-                fontSize: "small",
-                paddingTop: "14px",
-                color: "#bbb",
-                visibility: this.state.submitted ? "visible" : "hidden"
+                display: this.state.submitted ? "block" : "none"
               }}
             >
               You can resend OTP after{" "}
@@ -316,11 +310,10 @@ class MobileOtp extends Component {
               }}
               // value={"Send OTP"}
               onClick={e => this._formSubmit(e)}
-              className="form-submit btn btn-raised greenButton"
+              className="form-submit btn btn-raised greenButton m-auto d-block"
             >
               Send OTP
             </button>
-            <br />
 
             <button
               style={{
@@ -330,7 +323,7 @@ class MobileOtp extends Component {
                     : "hidden"
               }}
               onClick={e => this._verifyOTP(e)}
-              className="btn btn-raised greenButton text-center"
+              className="btn btn-raised greenButton text-center m-auto d-block"
             >
               Verify OTP
             </button>

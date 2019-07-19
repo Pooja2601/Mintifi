@@ -289,7 +289,7 @@ class AdharPan extends Component {
   };
 
   componentWillMount() {
-    const { payload, changeLoader } = this.props;
+    const { payload } = this.props;
     if (payload !== Object(payload) && !payload)
       this.props.history.push(`${PUBLIC_URL}/preapprove/token`);
 
@@ -297,7 +297,7 @@ class AdharPan extends Component {
   }
 
   componentDidMount() {
-    const { pan } = this.props;
+    const { pan, changeLoader } = this.props;
     if (pan) if (pan.length === 10) this.setState({ pan_correct: true });
     // console.log(this.props.token)
     changeLoader(false);
@@ -315,7 +315,7 @@ class AdharPan extends Component {
         </h5>
         <form id="serverless-contact-form" onSubmit={e => this._formSubmit(e)}>
           <div className={"row"}>
-            <div className={"col-sm-11 col-md-8"} style={{ margin: "auto" }}>
+            <div className={"col-sm-11 col-md-8 m-auto"}>
               <div className="form-group mb-3">
                 {/*#00b7a5*/}
                 <label htmlFor="numberPAN" className={"bmd-label-floating"}>
@@ -344,13 +344,13 @@ class AdharPan extends Component {
             </div>
             {/*<div className={"col-sm-11 col-md-8"} style={{ margin: 'auto 45%'}}>
                             Or
-                        </div>*/}
-            <div className={"col-sm-11 col-md-8"} style={{ margin: "auto" }}>
+              </div>*/}
+            <div className={"col-sm-11 col-md-8 m-auto"}>
               <div
                 className="form-group"
                 style={{
                   visibility: this.state.pan_correct ? "visible" : "hidden"
-                }}
+                }}  
               >
                 <label htmlFor="numberAdhar" className={"bmd-label-floating"}>
                   Aadhaar Number (optional)
@@ -371,7 +371,7 @@ class AdharPan extends Component {
                     // ref={ref => (this.obj.adhar = ref)}
                     aria-describedby="adhar-area"
                   />
-                  <br />
+                  {/* <br /> */}
 
                   {/* <div className="input-group-append">
                         <button

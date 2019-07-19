@@ -231,9 +231,9 @@ class BankDetail extends Component {
         return (
             <>
                 {/*<Link to={`${PUBLIC_URL}/preapprove/personaldetails`} className={"btn btn-link"}>Go Back </Link>*/}
-                <br/><br/>
-                <h4 className={"text-center"}>Bank Details</h4>
-                <p className="paragraph_styling  text-center">
+               
+                <h4 className={"text-center mt-5"}>Bank Details</h4>
+                <p className="paragraph_styling  text-center secondLinePara">
                     <b> Please submit your Bank details to help us to disburse your loan into your account.</b>
                 </p>
                 {/*<h5 className={"text-center"}>{(gstProfile === Object(gstProfile)) ? gstProfile.lgnm : ''}</h5>*/}
