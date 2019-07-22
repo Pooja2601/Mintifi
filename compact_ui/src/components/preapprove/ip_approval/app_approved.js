@@ -255,7 +255,7 @@ class AppApproved extends Component {
                 Back to{" "}
                 {anchorObj === Object(anchorObj)
                   ? anchorObj.anchor_name
-                  : "Yatra"}
+                  : "Anchor"}
               </button>
             </div>
           </>

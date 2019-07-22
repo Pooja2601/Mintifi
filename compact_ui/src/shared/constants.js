@@ -1,7 +1,9 @@
 // Just change the following line to Test it on Prod or Dev environment
 const isDev = window.location.host.localeCompare("test.pay.mintifi.com");
 const isLocal = window.location.host.localeCompare("localhost:3000");
-const env_mode = isDev === 0 || isLocal === 0 ? "dev" : "prod"; // dev , prod , local,
+const isLocal2 = window.location.host.localeCompare("192.168.0.165:3000");
+const env_mode = "dev"; // dev , prod , local,
+// const env_mode = isDev === 0 || isLocal === 0 || isLocal2 ? "dev" : "prod"; // dev , prod , local,
 // const env_mode = process.env.NODE_ENV === "development" ? "dev" : "prod"; // dev , prod , local,
 const subUrl = env_mode === "dev" || env_mode === "local" ? "test" : "live"; //  `live` | `test`  , Sub url for Mintifi API webhook
 const payMintifiUrl =
@@ -59,8 +61,8 @@ module.exports = {
   defaultLender: "Mintifi Finserv Pvt Ltd", // Fullerton India Private Limtited
   OTP_Timer: 60,
   landingPayload: {
-    anchor_id: "uyh65t",
-    distributor_dealer_code: "WC001",
+    anchor_id: "05cc584e39f34d0e97fc4bb6cd1fa8aa",
+    distributor_dealer_code: "TSRCO869",
     sales_agent_mobile_number: "9876543210",
     anchor_transaction_id: Math.random()
       .toString(36)
@@ -86,7 +88,7 @@ module.exports = {
     error_url: `${payMintifiUrl}/enach/error_url`
   },
   drawdownPayload: {
-    anchor_id: "uyh65t",
+    anchor_id: "05cc584e39f34d0e97fc4bb6cd1fa8aa",
     loan_amount: "500000",
     anchor_drawdown_id: "s65d7f8",
     loan_application_id: "8456",

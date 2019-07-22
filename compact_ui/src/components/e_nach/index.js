@@ -1,7 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { changeLoader, EnachsetPayload, EnachsetAttempt } from "../../actions";
+import {
+  changeLoader,
+  EnachsetPayload,
+  EnachsetAttempt,
+  setAnchorObj
+} from "../../actions";
 import {
   alertModule,
   base64Logic,
@@ -71,6 +76,35 @@ class ENach extends Component {
       );
   };
 
+  _fetchAnchorDetail() {
+    const { token, eNachPayload, setAnchorObj } = this.props;
+    changeLoader(true);
+    if (eNachPayload === Object(eNachPayload))
+      fetch(
+        `${baseUrl}/merchants/${
+          eNachPayload.anchor_id
+        }/get_details?app_id=${app_id}`,
+        {
+          method: "GET",
+          headers: { "Content-type": "application/json", token: token }
+        }
+      )
+        .then(resp => resp.json())
+        .then(
+          resp => {
+            changeLoader(false);
+            if (resp.response === Object(resp.response))
+              setAnchorObj(resp.response);
+
+            //   console.log(resp.response);
+          },
+          resp => {
+            changeLoader(false);
+            //   alertModule();
+          }
+        );
+  }
+
   _triggerDigio = () => {
     // console.log(this.props.eNachPayload);
     const { eNachPayload } = this.props;
@@ -126,16 +160,15 @@ class ENach extends Component {
       console.log(base64_decode);
     }
 
-    if (
-      base64_decode !== Object(base64_decode) &&
-      !base64_decode.length &&
-      !token.length
-    )
+    if (base64_decode !== Object(base64_decode) && !base64_decode && !token)
       alertModule(
         "You cannot access this page directly without Authorised Session !!",
         "error"
       );
-    else EnachsetPayload(token, base64_decode);
+    else {
+      EnachsetPayload(token, base64_decode);
+      this._fetchAnchorDetail();
+    }
   }
 
   componentDidMount() {
@@ -245,6 +278,6 @@ const mapStateToProps = state => ({
 export default withRouter(
   connect(
     mapStateToProps,
-    { changeLoader, EnachsetPayload, EnachsetAttempt }
+    { changeLoader, EnachsetPayload, EnachsetAttempt, setAnchorObj }
   )(ENach)
 );

@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import { withRouter} from "react-router-dom";
-import {baseUrl, app_id} from "../../../shared/constants";
+import {baseUrl, app_id, environment} from "../../../shared/constants";
 import {pan_adhar, setAdharManual, setBusinessDetail, changeLoader} from "../../../actions/index";
 import {alertModule} from "../../../shared/commonLogic";
 
@@ -220,6 +220,7 @@ class DocsUpload extends Component {
         let {payload, token, preFlightResp, changeLoader, history} = this.props;
         changeLoader(true);
 
+        if(environment === 'local')
         preFlightResp = {loan_application_id: '1780'};
 
         let ctr = 0;
@@ -276,7 +277,7 @@ class DocsUpload extends Component {
         if (!token)
             history.push(`${PUBLIC_URL}/preapprove/token`);
 
-        if (payload === Object(payload) && payload.length) {
+        if (payload === Object(payload) && payload) {
             if (adharObj !== Object(adharObj))
                 history.push(`${PUBLIC_URL}/preapprove/personaldetail`);
 

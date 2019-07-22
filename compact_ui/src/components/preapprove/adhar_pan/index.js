@@ -251,7 +251,7 @@ class AdharPan extends Component {
   _panFetch = () => {
     let checked = {};
     const { changeLoader, payload, pan, token } = this.props;
-    console.log(token);
+    // console.log(token);
     changeLoader(true);
     fetch(
       `${baseUrl}/companies/get_gst_details?app_id=${app_id}&anchor_id=${
@@ -289,7 +289,7 @@ class AdharPan extends Component {
 
   componentWillMount() {
     const { payload, changeLoader } = this.props;
-    if (payload !== Object(payload) && payload.length)
+    if (payload !== Object(payload) && payload)
       this.props.history.push(`${PUBLIC_URL}/preapprove/token`);
     changeLoader(false);
   }

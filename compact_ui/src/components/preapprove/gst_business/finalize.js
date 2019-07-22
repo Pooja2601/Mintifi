@@ -47,7 +47,7 @@ class ReviewBusinessDetail extends Component {
   componentWillMount() {
     const { payload, authObj, adharObj, businessObj, history } = this.props;
 
-    if (payload === Object(payload) && payload.length) {
+    if (payload === Object(payload) && payload) {
       if (adharObj !== Object(adharObj))
         history.push(`${PUBLIC_URL}/preapprove/personaldetail`);
 
@@ -195,7 +195,7 @@ class ReviewBusinessDetail extends Component {
     return (
       <>
         <div className="justify-content-center text-center">
-          <i className={"fa fa-clipboard-list"} style={{ fontSize: "60px" }} />
+          <i className={"fa fa-clipboard-list"} style={{ fontSize: "50px" }} />
           <br />
 
           <div
@@ -211,8 +211,8 @@ class ReviewBusinessDetail extends Component {
             <div />
           </div>
           <p
-            className="paragraph_section"
-            style={{ fontSize: "15px", lineHeight: "22px" }}
+            className="paragraph_section text-center"
+            style={{ fontSize: "12px", lineHeight: "22px" }}
           >
             Processing your Application <br />
             Submitting your data to our server, Hold on !

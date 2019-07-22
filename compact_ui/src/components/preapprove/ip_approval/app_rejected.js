@@ -107,7 +107,7 @@ class AppRejected extends Component {
             className="form-submit btn btn-raised greenButton"
           >
             Back to{" "}
-            {anchorObj === Object(anchorObj) ? anchorObj.anchor_name : "Yatra"}
+            {anchorObj === Object(anchorObj) ? anchorObj.anchor_name : "Anchor"}
           </button>
         </div>
       </>
