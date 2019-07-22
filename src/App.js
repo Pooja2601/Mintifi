@@ -61,6 +61,8 @@ const { store, persistor } = configureStore();
 const { PUBLIC_URL } = process.env;
 const anchor_logo = `${PUBLIC_URL}/images/company/yatra.png`;
 
+const toastError = { marginTop: "-20px", position: "absolute" };
+
 class App extends Component {
   render() {
     return (
@@ -212,7 +214,7 @@ class App extends Component {
                       </div>
                       {/*<CustomAlerts/>*/}
                       <ToastContainer
-                        style={{ marginTop: "-20px", position: "absolute" }}
+                        style={toastError}
                         autoClose={8000}
                         position={toast.POSITION.TOP_CENTER}
                       />

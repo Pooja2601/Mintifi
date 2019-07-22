@@ -9,7 +9,7 @@ import {
   setBusinessDetail,
   changeLoader
 } from "../../../actions/index";
-
+import { postMessage } from "../../../shared/commonLogic";
 // const { PUBLIC_URL } = process.env;
 
 class AppRejected extends Component {
@@ -31,6 +31,12 @@ class AppRejected extends Component {
 
     if (environment === "dev")
       if (state !== Object(state)) state = { status: loan_status };
+
+    postMessage({
+      loan_status: state.status,
+      loan_id: "",
+      credit_limit: ""
+    });
 
     return (
       <>

@@ -3123,3 +3123,10 @@ like a tickmark */
 
 
 }*/
+
+.toastError{
+    top: -0.5rem;
+    font-size: 13px;
+    position: absolute;
+    max-width: 350px;
+}

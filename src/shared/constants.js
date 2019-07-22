@@ -26,6 +26,8 @@ const anchorUrls = {
   error_url: `${baseRootPath}/`
 };
 
+const { PUBLIC_URL } = process.env;
+
 module.exports = {
   environment: env_mode,
   app_id: "1", // For React
@@ -42,6 +44,11 @@ module.exports = {
   test_kscan: "https://testapi.kscan.in/v1/gst/",
   karza_key: "jdughfoP51majvjAUW6W",
   digio: "",
+  ENachResponseUrl: {
+    success_url: `${PUBLIC_URL}/enach/success_url`,
+    cancel_url: `${PUBLIC_URL}/enach/cancel_url`,
+    error_url: `${PUBLIC_URL}/enach/error_url`
+  },
   BusinessType: [
     { value: "", label: "Select Company type" },
     { value: "proprietorship", label: "Proprietorship" },

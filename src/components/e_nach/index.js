@@ -16,7 +16,8 @@ import {
   eNachPayloadStatic,
   baseUrl,
   app_id,
-  environment
+  environment,
+  ENachResponseUrl
 } from "../../shared/constants";
 
 // const { PUBLIC_URL } = process.env;
@@ -25,7 +26,7 @@ class ENach extends Component {
   state = { ctr: 0, errorMsg: false, backendError: 0 };
 
   _updateBackend = result => {
-    let { token, changeLoader, eNachPayload } = this.props;
+    let { token, changeLoader, eNachPayload, history } = this.props;
 
     changeLoader(true);
     fetch(`${baseUrl}/loans/enach_status`, {
@@ -50,7 +51,8 @@ class ENach extends Component {
             setTimeout(() => {
               // ToDo : Uncomment the below line in Prod
               if (environment === "prod" || environment === "dev")
-                window.location.href = eNachPayload.success_url;
+                history.push(ENachResponseUrl.success_url);
+              // window.location.href = ENachResponseUrl.success_url;
             }, 1000);
             // this.setState({ backendError: 0 });
             // return 1;
@@ -60,7 +62,8 @@ class ENach extends Component {
             setTimeout(() => {
               // ToDo : Uncomment the below line in Prod
               if (environment === "prod" || environment === "dev")
-                window.location.href = eNachPayload.cancel_url;
+                history.push(ENachResponseUrl.cancel_url);
+              // window.location.href = ENachResponseUrl.cancel_url;
             }, 1000);
           }
           /*  if (this.state.backendError < 2)
@@ -94,7 +97,8 @@ class ENach extends Component {
       setTimeout(() => {
         // ToDo : Uncomment this line in Prod
         if (environment === "prod" || environment === "dev")
-          window.location.href = eNachPayload.error_url;
+          history.push(ENachResponseUrl.error_url);
+        // window.location.href = ENachResponseUrl.error_url;
       }, 1000);
     }
   };
@@ -192,10 +196,14 @@ class ENach extends Component {
           if (environment === "prod" || environment === "dev")
             if (eNachPayload === Object(eNachPayload))
               if (detail.error_code !== "CANCELLED")
-                window.location.href = eNachPayload.error_url;
+                history.push(ENachResponseUrl.error_url);
+          // window.location.href = ENachResponseUrl.error_url;
         }, 1000);
       } else {
-        alertModule("Register successful for" + detail.digio_doc_id, "success");
+        alertModule(
+          "Register successful for " + detail.digio_doc_id,
+          "success"
+        );
         detail.mandate_id = detail.digio_doc_id;
         detail.status = "success";
       }

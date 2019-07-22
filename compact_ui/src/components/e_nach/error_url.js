@@ -1,9 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
-import {  withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { changeLoader, EnachsetAttempt, EnachsetPayload } from "../../actions";
+import { postMessage } from "../../shared/commonLogic";
 
 const Error_URL = props => {
+  postMessage({ enach_status: "error" });
   return (
     <>
       <i

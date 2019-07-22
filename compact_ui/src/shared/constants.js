@@ -21,9 +21,9 @@ const baseRootPath =
     : "https://pay.mintifi.com";
 
 const anchorUrls = {
-  success_url: `${baseRootPath}/`,
-  cancel_url: `${baseRootPath}/`,
-  error_url: `${baseRootPath}/`
+  success_url: `https://www.travelboutiqueonline.com/`,
+  cancel_url: `https://www.travelboutiqueonline.com/`,
+  error_url: `https://www.travelboutiqueonline.com/`
 };
 
 module.exports = {
@@ -31,6 +31,8 @@ module.exports = {
   app_id: "1", // For React
   user_id: "7KhXdg", // For React
   auth_secret: "PYj055HtW7sDxsd2GD4Cgw",
+  mintifiMail: "care@mintifi.com",
+  mintifiMobile: "22-28201230",
   payMintifiUrl: payMintifiUrl,
   baseUrl: `https://${subUrl}.mintifi.com/api/v1`,
   baseUrl2: `https://${subUrl}.mintifi.com/api/v2`,
@@ -40,6 +42,11 @@ module.exports = {
   test_kscan: "https://testapi.kscan.in/v1/gst/",
   karza_key: "jdughfoP51majvjAUW6W",
   digio: "",
+  ENachResponseUrl: {
+    success_url: `${payMintifiUrl}/enach/success_url`,
+    cancel_url: `${payMintifiUrl}/enach/cancel_url`,
+    error_url: `${payMintifiUrl}/enach/error_url`
+  },
   BusinessType: [
     { value: "", label: "Select Company type" },
     { value: "proprietorship", label: "Proprietorship" },
@@ -83,9 +90,9 @@ module.exports = {
     loan_application_id: 2369,
     company_id: 700,
     anchor_id: "8186bc",
-    success_url: `${payMintifiUrl}/enach/success_url`,
-    cancel_url: `${payMintifiUrl}/enach/cancel_url`,
-    error_url: `${payMintifiUrl}/enach/error_url`
+    success_url: anchorUrls.success_url,
+    cancel_url: anchorUrls.cancel_url,
+    error_url: anchorUrls.error_url
   },
   drawdownPayload: {
     anchor_id: "05cc584e39f34d0e97fc4bb6cd1fa8aa",

@@ -276,7 +276,8 @@ class AdharPan extends Component {
             // console.log(this.state.gst_details);
           } else {
             alertModule(resp.error.message, "error");
-            setTimeout(() => this.adharSkipped(), 500);
+            if (resp.error.code !== "ER-AUTH-102")
+              setTimeout(() => this.adharSkipped(), 500);
             // this._gstFetch(resp.result[0].gstinId);  // status 101
           }
         },

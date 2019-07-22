@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { setAdharManual } from "../../../actions/index";
 import { defaultLender, environment } from "../../../shared/constants";
+import { postMessage } from "../../../shared/commonLogic";
 
 const { PUBLIC_URL } = process.env;
 
@@ -48,6 +49,13 @@ class AppApproved extends Component {
     if (environment === "dev")
       if (location.state !== Object(location.state))
         location = { state: { status: loan_status } };
+
+    postMessage({
+      loan_status: credit_eligibility.loan_status,
+      loan_id:
+        preFlightResp === Object(preFlightResp) ? loan_application_id : "",
+      credit_limit: credit_eligibility.loan_amount_approved
+    });
 
     let iconCss = "fa checkCircle ";
     return (

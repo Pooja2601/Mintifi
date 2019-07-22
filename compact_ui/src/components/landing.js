@@ -5,11 +5,17 @@ import {
   baseUrl,
   landingPayload,
   environment,
-  app_id
+  app_id,
+  payMintifiUrl
 } from "../shared/constants";
 import { connect } from "react-redux";
 import { checkExists, setToken, changeLoader, setAnchorObj } from "../actions";
-import { alertModule, base64Logic, generateToken } from "../shared/commonLogic";
+import {
+  alertModule,
+  base64Logic,
+  generateToken,
+  postMessage
+} from "../shared/commonLogic";
 
 // const Timer = 10;
 const { PUBLIC_URL } = process.env;
@@ -47,8 +53,6 @@ class Login extends Component {
       if (payload === Object(payload) || payload) this._fetchAnchorDetail();
       // console.log(payload);
     }, 100);
-
-    console.log(window.host);
   }
 
   _fetchAnchorDetail() {

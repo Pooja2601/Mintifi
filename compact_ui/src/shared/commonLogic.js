@@ -133,3 +133,7 @@ export const generateToken = () => {
       }
     );
 };
+
+export const postMessage = obj => {
+  window.parent.postMessage({ action: "close", ...obj }, `*`);
+};
