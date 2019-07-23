@@ -81,7 +81,7 @@ class ENach extends Component {
 
   _triggerDigio = () => {
     // console.log(this.props.eNachPayload);
-    const { eNachPayload } = this.props;
+    const { eNachPayload, history } = this.props;
     let eNachPayDigio = eNachPayload;
     eNachPayDigio.code_mode = environment;
 
@@ -172,7 +172,7 @@ class ENach extends Component {
   componentDidMount() {
     let that = this;
 
-    const { eNachAttempt, eNachPayload } = this.props;
+    const { eNachAttempt, eNachPayload, history } = this.props;
     if (eNachAttempt) this.setState({ ctr: eNachAttempt });
     document.addEventListener("responseDigio", function(obj) {
       let { detail } = obj;
