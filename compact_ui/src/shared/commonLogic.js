@@ -135,5 +135,7 @@ export const generateToken = () => {
 };
 
 export const postMessage = obj => {
-  window.parent.postMessage({ action: "close", ...obj }, `*`);
+  window.setTimeout(() => {
+    window.parent.postMessage(obj, `*`);
+  }, 4000);
 };

@@ -53,6 +53,8 @@ class Login extends Component {
       if (payload === Object(payload) || payload) this._fetchAnchorDetail();
       // console.log(payload);
     }, 100);
+
+    // postMessage({ action: "close", loan_id: "XXXX" });
   }
 
   _fetchAnchorDetail() {

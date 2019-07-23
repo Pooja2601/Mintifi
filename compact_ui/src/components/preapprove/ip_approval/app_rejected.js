@@ -36,10 +36,11 @@ class AppRejected extends Component {
     if (environment === "dev")
       if (state !== Object(state)) state = { status: loan_status };
 
-    postMessage({
+    postMessage({ 
       loan_status: state.status,
       loan_id: "",
-      credit_limit: ""
+      credit_limit: "",
+      action: "close"
     });
 
     return (

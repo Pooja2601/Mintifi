@@ -6,7 +6,11 @@ import { postMessage } from "../../shared/commonLogic";
 
 const Success_URL = props => {
   // window.location.href = `${props.eNachPayload.success_url}`;
-  postMessage({ enach_status: "success" });
+  postMessage({
+    enach_status: "success",
+    loan_id: props.eNachPayload.loan_application_id,
+    action: "close"
+  });
   return (
     <>
       <i

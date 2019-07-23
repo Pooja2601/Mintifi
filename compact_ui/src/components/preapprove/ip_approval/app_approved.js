@@ -59,7 +59,8 @@ class AppApproved extends Component {
       loan_status: credit_eligibility.loan_status,
       loan_id:
         preFlightResp === Object(preFlightResp) ? loan_application_id : "",
-      credit_limit: credit_eligibility.loan_amount_approved
+      credit_limit: credit_eligibility.loan_amount_approved,
+      action: "continue"
     });
 
     let iconCss = "fa checkCircle ";

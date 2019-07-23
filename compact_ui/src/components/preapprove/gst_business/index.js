@@ -104,7 +104,8 @@ class BusinessDetail extends Component {
         });
         // console.log(ctrerror);
         missed_fields = (ctrerror !== 0);
-        this.setState({missed_fields}, () => console.log('All Fields Validated : ' + this.state.missed_fields));
+        this.setState({missed_fields});
+        // () => console.log('All Fields Validated : ' + this.state.missed_fields)
 
     };
 

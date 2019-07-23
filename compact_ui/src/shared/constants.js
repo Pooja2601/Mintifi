@@ -26,6 +26,8 @@ const anchorUrls = {
   error_url: `https://www.travelboutiqueonline.com/`
 };
 
+const { PUBLIC_URL } = process.env;
+
 module.exports = {
   environment: env_mode,
   app_id: "1", // For React
@@ -43,9 +45,9 @@ module.exports = {
   karza_key: "jdughfoP51majvjAUW6W",
   digio: "",
   ENachResponseUrl: {
-    success_url: `${payMintifiUrl}/enach/success_url`,
-    cancel_url: `${payMintifiUrl}/enach/cancel_url`,
-    error_url: `${payMintifiUrl}/enach/error_url`
+    success_url: `${PUBLIC_URL}/enach/success_url`,
+    cancel_url: `${PUBLIC_URL}/enach/cancel_url`,
+    error_url: `${PUBLIC_URL}/enach/error_url`
   },
   BusinessType: [
     { value: "", label: "Select Company type" },

@@ -200,7 +200,7 @@ class AppApproved extends Component {
                 {/*<input type="checkbox" checked={this.state.confirmed}
                                onChange={(e) =>
                                    this.setState(prevState => ({confirmed: !prevState.confirmed}))
-                               }/>*/}
+                }/>*/}
                 <label className="main">
                   I accept the terms of the credit eligibility as given above.
                   <input
