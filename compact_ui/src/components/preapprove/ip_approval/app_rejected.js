@@ -1,7 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { environment } from "../../../shared/constants";
+import {
+  environment,
+  mintifiMail,
+  mintifiMobile
+} from "../../../shared/constants";
 // import { alertModule } from "../../../shared/commonLogic";
 import {
   pan_adhar,
@@ -98,8 +102,8 @@ class AppRejected extends Component {
           </div>
           <div className={"blockquote-footer mt-2"}>
             In case of any query, please contact us at{" "}
-            <a href={"mailto:support@mintifi.com"}>support@mintifi.com</a> or{" "}
-            <a href={"tel:+919999999999"}>+91 9999999999</a>. <br />
+            <a href={`mailto:${mintifiMail}`}>{mintifiMail}</a> or{" "}
+            <a href={`tel:+91${mintifiMobile}`}>+91 {mintifiMobile}</a>. <br />
             Please mention your registered phone number and email in the
             request.
           </div>

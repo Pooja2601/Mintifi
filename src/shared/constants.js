@@ -21,9 +21,9 @@ const baseRootPath =
     : "https://pay.mintifi.com";
 
 const anchorUrls = {
-  success_url: `${baseRootPath}/`,
-  cancel_url: `${baseRootPath}/`,
-  error_url: `${baseRootPath}/`
+  success_url: `https://www.travelboutiqueonline.com/`,
+  cancel_url: `https://www.travelboutiqueonline.com/`,
+  error_url: `https://www.travelboutiqueonline.com/`
 };
 
 const { PUBLIC_URL } = process.env;
