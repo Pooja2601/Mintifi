@@ -138,9 +138,9 @@ class BankDetail extends Component {
           transfer_mode: "nach",
           micr_code: this.state.micr_code,
           account_type: this.state.acc_type,
-          success_url: `${payMintifiUrl}/enach/success_url`,
-          error_url: `${payMintifiUrl}/enach/error_url`,
-          cancel_url: `${payMintifiUrl}/enach/cancel_url`,
+          success_url: payload.success_url,
+          error_url: payload.error_url,
+          cancel_url: payload.cancel_url,
           timestamp: new Date()
         })
       })
@@ -150,20 +150,6 @@ class BankDetail extends Component {
             changeLoader(false);
             // success
             if (resp.response === Object(resp.response)) {
-              // resp.response.mandate_id
-              // ToDo : make it base64 payload
-              /* let payloadDecrypt = {
-                        ...payload,
-                        user_name: adharObj.f_name + ' ' + adharObj.l_name,
-                        user_mobile: adharObj.mobile,
-                        user_email: adharObj.email,
-                        mandate_id: resp.response.mandate_id,
-                        loan_application_id: preFlightResp.loan_application_id,
-                        company_id: preFlightResp.company_id,
-                        success_url: `${payMintifiUrl}/enach/success_url`,
-                        error_url: `${payMintifiUrl}/enach/error_url`,
-                        cancel_url: `${payMintifiUrl}/enach/cancel_url`
-                    }; */
               // ToDo : uncomment In Prod
               // let base64_encode = base64Logic(payloadDecrypt, 'encode');
               // ToDo : comment in Prod

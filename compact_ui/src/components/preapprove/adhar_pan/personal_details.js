@@ -161,8 +161,8 @@ class AdharPan extends Component {
                 let year = d.getFullYear();
                 let dob = `${year}-${month}-${date}`;
          */
-        let dobNew = new Date(dob);
-        this.setState({ dob: dobNew }, () => this.props.setAdharManual(this.state))
+        // let dobNew = new Date(dob);
+        this.setState({ dob }, () => this.props.setAdharManual(this.state))
     };
 
     render() {
