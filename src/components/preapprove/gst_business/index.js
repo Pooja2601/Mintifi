@@ -86,7 +86,7 @@ class BusinessDetail extends Component {
 
         if (ctrerror !== 0) {
             fieldTxt = (ctrerror > 1) ? 'field is ' : 'fields are ';
-            // alertModule(`Kindly check the form again, ${ctrerror / 2} ${fieldTxt} still having some issue !`, 'warn');
+            // this.props.showAlert(`Kindly check the form again, ${ctrerror / 2} ${fieldTxt} still having some issue !`, 'warn');
         }
     }
 

@@ -2,11 +2,11 @@ import React, {Component} from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
 import {baseUrl, otpUrl} from "../../../shared/constants";
 import {connect} from "react-redux";
-import {setAdharManual, changeLoader} from "../../../actions/index";
+import {setAdharManual, changeLoader, showAlert} from "../../../actions/index";
 import {Link, withRouter} from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import {alertModule} from "../../../shared/commonLogic";
+// import {alertModule} from "../../../shared/commonLogic";
 
 const {PUBLIC_URL} = process.env;
 
@@ -46,14 +46,10 @@ class AdharPan extends Component {
 
         const {payload, authObj, adharObj, changeLoader, setAdharManual, history, pan} = this.props;
         // console.log(typeof payload);
-        // var datePickerInput = document.getElementsByClassName('react-datepicker__input-container');
-        // var datePickerInputWrapper = document.getElementsByClassName('react-datepicker-wrapper');
         setTimeout(() => {
-            // datePickerInput.style.width = '100%';
-            // datePickerInputWrapper.style.width = '100%';
         }, 1000);
         // console.log(pan)
-        if (payload === Object(payload)  && payload) {
+        if (payload === Object(payload) && payload) {
             if (!pan)
                 history.push(`${PUBLIC_URL}/preapprove/adharpan`);
         }
@@ -135,7 +131,7 @@ class AdharPan extends Component {
         //http://postalpincode.in/api/pincode/
         //https://test.mintifi.com/api/v2/communications/pincode/400059
         let city, state;
-        const {setAdharManual, changeLoader} = this.props;
+        const {setAdharManual, changeLoader, showAlert} = this.props;
         if (this.state.pincode) {
             changeLoader(true);
 
@@ -150,13 +146,13 @@ class AdharPan extends Component {
                         this.setState({city, state}, () => setAdharManual(this.state));
                     }
                     if (resp.error === Object(resp.error)) {
-                        alertModule(resp.error.message, 'warn');
+                        showAlert(resp.error.message, 'warn');
                         this.setState({city: '', state: ''});
                     }
                     changeLoader(false);
                 }, () => {
                     changeLoader(false);
-                    alertModule();
+                    showAlert('net');
                 });
         }
     };
@@ -176,7 +172,7 @@ class AdharPan extends Component {
                 <Link to={`${PUBLIC_URL}/preapprove/adharpan`} className={"btn btn-link go-back-btn"}>Go
                     Back </Link>
                 <h4 className={"text-center "}>Personal Details </h4>
-                <h5 className="paragraph_styling  text-center secondLinePara" >
+                <h5 className="paragraph_styling  text-center secondLinePara">
                     <b> Enter your personal information to proceed.</b>
                 </h5>
                 <form
@@ -344,7 +340,7 @@ class AdharPan extends Component {
                                     <i
                                         className="fa fa-male"
                                     />
-                                    <small >Male</small>
+                                    <small>Male</small>
                                 </button>
                                 <button
                                     type="button"
@@ -360,7 +356,7 @@ class AdharPan extends Component {
                                     <i
                                         className="fa fa-female"
                                     />
-                                    <small >Female</small>
+                                    <small>Female</small>
                                 </button>
                             </div>
                         </div>
@@ -389,7 +385,7 @@ class AdharPan extends Component {
                                     <i
                                         className="fa fa-building"
                                     />
-                                    <small >Rented</small>
+                                    <small>Rented</small>
                                 </button>
                                 <button
                                     type="button"
@@ -405,7 +401,7 @@ class AdharPan extends Component {
                                     <i
                                         className="fa fa-home"
                                     />
-                                    <small >Owned</small>
+                                    <small>Owned</small>
                                 </button>
                             </div>
                         </div>
@@ -445,7 +441,7 @@ class AdharPan extends Component {
                                 <label htmlFor="dobDate" className="bmd-label-floating">
                                     Date of Birth
                                 </label>
-                                <div className={'d-block'} >
+                                <div className={'d-block'}>
                                     <DatePicker
                                         className="form-control font_weight"
                                         // placeholderText={"Date of Birth"}
@@ -532,11 +528,11 @@ class AdharPan extends Component {
                          }}>
                         <div className={"col-md-6 col-sm-6 col-xs-12 "}>
                             <label className={"form-control font_weight"}
-                                  >{this.state.city}</label>
+                            >{this.state.city}</label>
                         </div>
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <label className={"form-control font_weight"}
-                                  >{this.state.state}</label>
+                            >{this.state.state}</label>
                         </div>
                     </div>
                     {/*  <div className="form-group mb-3">
@@ -589,5 +585,5 @@ const mapStateToProps = state => ({
 
 export default withRouter(connect(
     mapStateToProps,
-    {setAdharManual, changeLoader}
+    {setAdharManual, changeLoader, showAlert}
 )(AdharPan));

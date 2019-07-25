@@ -326,8 +326,7 @@ class DocsUpload extends Component {
                                         <input type="file" id="idProofInput"
                                                onChange={(e) => this._onChangeFile(e, 'id_proof')}
                                                ref={ref => this.idProofInput = ref}/>
-                                        <button className="btn btn-raised uploadButton inputFilebutton"
-                                                onClick={() => this.idProofInput.click()}
+                                        <button className="btn btn-raised uploadButton inputFilebutton" 
                                                 id={"idProofBtn"}>
                                             <i className="fa fa-upload"></i>
                                         </button>

@@ -85,13 +85,13 @@ module.exports = {
     cancel_url: anchorUrls.cancel_url
   },
   eNachPayloadStatic: {
+    anchor_id: "05cc584e39f34d0e97fc4bb6cd1fa8aa",
     mandate_id: "ENA19061214540850995IU6FCU1LE1AP",
     document_id: "ENA19061214540850995IU6FCU1LE1AP",
     user_name: "Arun Garg",
     user_mobile: "9738361083",
     loan_application_id: 2369,
     company_id: 700,
-    anchor_id: "8186bc",
     success_url: anchorUrls.success_url,
     cancel_url: anchorUrls.cancel_url,
     error_url: anchorUrls.error_url

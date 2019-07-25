@@ -1,5 +1,6 @@
 export const types = {
     SHOW_ALERT: "SHOW_ALERT",
+    CHANGE_LOADER: "CHANGE_LOADER",
     //...................................Preapproval Flow
     // Exisiting User
     EXIST_SUMMARY: "EXIST_SUMMARY",
@@ -10,7 +11,6 @@ export const types = {
     // New User
     ANCHOR_PAYLOAD: 'ANCHOR_PAYLOAD',
     SET_TOKEN: "SET_TOKEN",
-    CHANGE_LOADER: "CHANGE_LOADER",
     PAN_ADHAR: "PAN_ADHAR",
     PERSONAL_DETAIL: "PERSONAL_DETAIL",
     GST_PROFILE: "GST_PROFILE",
@@ -34,20 +34,20 @@ export const types = {
     ENACH_ATTEMPT: 'ENACH_ATTEMPT'
 };
 
-export const showAlert = (alertMsg, alertType) => ({
+export const showAlert = (alertMsg = '', alertType = 'danger', alertShow = false) => ({
     type: types.SHOW_ALERT,
-    alertMsg, alertType
+    alertMsg, alertType, alertShow
+});
+
+export const changeLoader = loader => ({
+    type: types.CHANGE_LOADER,
+    loader
 });
 
 // ...........................................Existing User
 export const setExistSummary = summaryObj => ({
     type: types.EXIST_SUMMARY,
     summaryObj
-});
-
-export const changeLoader = loader => ({
-    type: types.CHANGE_LOADER,
-    loader
 });
 
 export const setAnchorObj = anchorObj => ({

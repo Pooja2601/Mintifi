@@ -12,6 +12,9 @@ export default (state = {}, action) => {
         case types.ENACH_ATTEMPT:
             return {...state, eNachAttempt: action.eNachAttempt};
 
+        // case types.PNACH_DATA:
+        //     return {...state, pNachData: action.pNachData};
+
         default:
             return state;
     }
