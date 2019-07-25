@@ -73,7 +73,7 @@ class Login extends Component {
                 },
                 resp => {
                     changeLoader(false);
-                    showAlert('net');
+                    // showAlert('net');
                 }
             );
     }

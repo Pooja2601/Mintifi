@@ -106,7 +106,7 @@ class ENach extends Component {
     _fetchAnchorDetail() {
         const {token, eNachPayload, setAnchorObj, showAlert, changeLoader} = this.props;
         changeLoader(true);
-        if (eNachPayload === Object(eNachPayload))
+        if (eNachPayload === Object(eNachPayload) && eNachPayload)
             fetch(
                 `${baseUrl}/merchants/${
                     eNachPayload.anchor_id
@@ -122,7 +122,6 @@ class ENach extends Component {
                         changeLoader(false);
                         if (resp.response === Object(resp.response))
                             setAnchorObj(resp.response);
-
                         //   console.log(resp.response);
                     },
                     resp => {
@@ -130,6 +129,7 @@ class ENach extends Component {
                         // showAlert('net');
                     }
                 );
+        else changeLoader(false);
     }
 
     componentWillMount() {
@@ -144,7 +144,7 @@ class ENach extends Component {
         if (environment === "local") base64_decode = eNachPayloadStatic;
 
         // ToDo : hide the 2 lines in prod
-        if (eNachPayload === Object(eNachPayload)) {
+        if (eNachPayload === Object(eNachPayload) && eNachPayload) {
             // coming from constant
             Object.assign(base64_decode, eNachPayload);
         }

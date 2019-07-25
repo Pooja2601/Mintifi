@@ -2895,7 +2895,7 @@ input[type=number]::-webkit-outer-spin-button {
     height: 64px;
     position: fixed;
     top: 45%;
-    left: 45.5%;
+    left: 47%;
 }
 
 .lds-ring div {
