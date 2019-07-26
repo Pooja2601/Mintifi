@@ -69,14 +69,15 @@ export const alertModule = (msg, type) => {
 export const base64Logic = (payload, action) => {
   let base64 = {};
   if (action === "decode") {
-    try {
+    base64 = eval(`(${Base64.atob(payload)})`);
+    /*     try {
       base64 = payload
         ? JSON.parse(new Buffer(payload, "base64").toString("ascii"))
         : {};
     } catch (e) {
       base64 = Base64.atob(payload);
       //   toast.error("Not a Valid JSON Response");
-    }
+    } */
   }
   if (action === " encode") {
     try {
@@ -131,4 +132,10 @@ export const generateToken = () => {
         return 30;
       }
     );
+};
+
+export const postMessage = obj => {
+  window.setTimeout(() => {
+    window.parent.postMessage(obj, `*`);
+  }, 4000);
 };

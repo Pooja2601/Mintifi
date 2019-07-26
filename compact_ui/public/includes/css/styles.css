@@ -874,7 +874,7 @@ li a:focus {
 
 .paragraph_styling {
     font-weight: 100;
-    font-size: 12px;
+    font-size: 11px;
     color: #5a5a5a;
 }
 
@@ -3123,3 +3123,10 @@ like a tickmark */
 
 
 }*/
+
+.toastError{
+    top: -0.5rem;
+    font-size: 13px;
+    position: absolute;
+    max-width: 350px;
+}

@@ -9,14 +9,11 @@ export default (state = {}, action) => {
         case types.D_SET_AUTH:
             return {...state, authObj: action.authObj};
 
-         case types.D_ANCHOR_PAYLOAD:
-             return {...state, anchorPayload: action.anchorPayload};
+        case types.D_ANCHOR_PAYLOAD:
+            return {...state, anchorPayload: action.anchorPayload};
 
         case types.D_SET_TOKEN:
             return {...state, token: action.token, payload: action.payload};
-
-        case types.CHANGE_LOADER:
-            return {...state, loader: action.loader};
 
         case types.D_SET_PREFLIGHT:
             return {...state, preFlightResp: action.preFlightResp};

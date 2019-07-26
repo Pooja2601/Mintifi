@@ -251,7 +251,7 @@ class AdharPan extends Component {
   _panFetch = () => {
     let checked = {};
     const { changeLoader, payload, pan, token } = this.props;
-    console.log(token);
+    // console.log(token);
     changeLoader(true);
     fetch(
       `${baseUrl}/companies/get_gst_details?app_id=${app_id}&anchor_id=${
@@ -276,7 +276,8 @@ class AdharPan extends Component {
             // console.log(this.state.gst_details);
           } else {
             alertModule(resp.error.message, "error");
-            setTimeout(() => this.adharSkipped(), 500);
+            if (resp.error.code !== "ER-AUTH-102")
+              setTimeout(() => this.adharSkipped(), 500);
             // this._gstFetch(resp.result[0].gstinId);  // status 101
           }
         },
@@ -289,7 +290,7 @@ class AdharPan extends Component {
 
   componentWillMount() {
     const { payload, changeLoader } = this.props;
-    if (payload !== Object(payload) && payload.length)
+    if (payload !== Object(payload) && payload)
       this.props.history.push(`${PUBLIC_URL}/preapprove/token`);
     changeLoader(false);
   }

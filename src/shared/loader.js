@@ -15,12 +15,12 @@ const Loader = (props) => {
                 <div></div>
             </div>
         </div>
-       
+
     </>);
 };
 
 const mapStateToProps = state => ({
-    loader: state.authPayload.loader,
+    loader: state.extraReducer.loader,
 });
 
 export default withRouter(connect(

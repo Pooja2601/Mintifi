@@ -1,7 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { environment } from "../../../shared/constants";
+import {
+  environment,
+  mintifiMail,
+  mintifiMobile
+} from "../../../shared/constants";
 // import { alertModule } from "../../../shared/commonLogic";
 import {
   pan_adhar,
@@ -34,86 +38,92 @@ class AppRejected extends Component {
     if (environment === "dev")
       if (state !== Object(state)) state = { status: loan_status };
 
-    return (
-      <>
-        {/* <button onClick={() => history.push(`${PUBLIC_URL}/preapprove/businessdetail`)} className={"btn btn-link"}>
+    if (payload === Object(payload))
+      if (state === Object(state))
+        return (
+          <>
+            {/* <button onClick={() => history.push(`${PUBLIC_URL}/preapprove/businessdetail`)} className={"btn btn-link"}>
                     Go Back
                 </button>*/}
-        <h4 className={"text-center"}>Credit Eligibility</h4>
-        <br />
-        {/*fa-exclamation-circle*/}
-        <i
-          style={{
-            fontSize: "60px",
-            color: state.status === "rejected" ? "crimson" : "gold"
-          }}
-          className={"fa fa-exclamation-triangle closeCircle"}
-        />
-        {/*<h5 className={"text-center"}> Application {(location.state.status === 'rejected') ? 'Rejected' : 'Error'}</h5>*/}
-        <br />
-        <div
-          className="paragraph_styling  text-center"
-          style={{ margin: "auto 5%" }}
-        >
-          <div
-            className={
-              state.status === "rejected"
-                ? "alert alert-danger"
-                : "alert alert-warning"
-            }
-            style={{
-              backgroundColor:
-                state.status !== "rejected" && "lightgoldenrodyellow"
-            }}
-            role="alert"
-          >
-            <h5 className="alert-heading">
-              {state.status === "rejected" ? (
-                <>
-                  {" "}
-                  Dear{" "}
-                  <b>
-                    <i>
-                      {" "}
-                      {adharObj.f_name} {adharObj.l_name}
-                    </i>
-                  </b>
-                </>
-              ) : (
-                "Something went wrong !"
-              )}
-            </h5>
-            We regret to inform you that your application can not be approved at
-            this point of time.
+            <h4 className={"text-center"}>Credit Eligibility</h4>
             <br />
-            <b>
-              {state.status === "rejected"
-                ? "You can try again with us after 6 months"
-                : "Kindly try again after some time"}
-            </b>
-          </div>
-          <div className={"blockquote-footer"}>
-            In case of any query, please contact us at{" "}
-            <a href={"mailto:support@mintifi.com"}>support@mintifi.com</a> or{" "}
-            <a href={"tel:+919999999999"}>+91 9999999999</a>. <br />
-            Please mention your registered phone number and email in the
-            request.
-          </div>
-        </div>
-        <div className="mt-5 mb-5 text-center ">
-          {/* ToDo : Applying the name of the anchor
-           */}
-          <button
-            type="button"
-            onClick={e => (window.location.href = `${payload.error_url}`)}
-            className="form-submit btn btn-raised greenButton"
-          >
-            Back to{" "}
-            {anchorObj === Object(anchorObj) ? anchorObj.anchor_name : "Yatra"}
-          </button>
-        </div>
-      </>
-    );
+            {/*fa-exclamation-circle*/}
+            <i
+              style={{
+                fontSize: "60px",
+                color: state.status === "rejected" ? "crimson" : "gold"
+              }}
+              className={"fa fa-exclamation-triangle closeCircle"}
+            />
+            {/*<h5 className={"text-center"}> Application {(location.state.status === 'rejected') ? 'Rejected' : 'Error'}</h5>*/}
+            <br />
+            <div
+              className="paragraph_styling  text-center"
+              style={{ margin: "auto 5%" }}
+            >
+              <div
+                className={
+                  state.status === "rejected"
+                    ? "alert alert-danger"
+                    : "alert alert-warning"
+                }
+                style={{
+                  backgroundColor:
+                    state.status !== "rejected" && "lightgoldenrodyellow"
+                }}
+                role="alert"
+              >
+                <h5 className="alert-heading">
+                  {state.status === "rejected" ? (
+                    <>
+                      {" "}
+                      Dear{" "}
+                      <b>
+                        <i>
+                          {" "}
+                          {adharObj.f_name} {adharObj.l_name}
+                        </i>
+                      </b>
+                    </>
+                  ) : (
+                    "Something went wrong !"
+                  )}
+                </h5>
+                We regret to inform you that your application can not be
+                approved at this point of time.
+                <br />
+                <b>
+                  {state.status === "rejected"
+                    ? "You can try again with us after 6 months"
+                    : "Kindly try again after some time"}
+                </b>
+              </div>
+              <div className={"blockquote-footer"}>
+                In case of any query, please contact us at{" "}
+                <a href={`mailto:${mintifiMail}`}>{mintifiMail}</a> or{" "}
+                <a href={`tel:+91${mintifiMobile}`}>+91 {mintifiMobile}</a>.{" "}
+                <br />
+                Please mention your registered phone number and email in the
+                request.
+              </div>
+            </div>
+            <div className="mt-5 mb-5 text-center ">
+              {/* ToDo : Applying the name of the anchor
+               */}
+              <button
+                type="button"
+                onClick={e => (window.location.href = `${payload.error_url}`)}
+                className="form-submit btn btn-raised greenButton"
+              >
+                Back to{" "}
+                {anchorObj === Object(anchorObj)
+                  ? anchorObj.anchor_name
+                  : "Anchor"}
+              </button>
+            </div>
+          </>
+        );
+      else return <></>;
   }
 }
 

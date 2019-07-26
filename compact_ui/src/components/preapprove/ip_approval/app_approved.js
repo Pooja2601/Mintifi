@@ -2,7 +2,13 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { setAdharManual } from "../../../actions/index";
-import { defaultLender, environment } from "../../../shared/constants";
+import {
+  defaultLender,
+  environment,
+  mintifiMail,
+  mintifiMobile
+} from "../../../shared/constants";
+import { postMessage } from "../../../shared/commonLogic";
 
 const { PUBLIC_URL } = process.env;
 
@@ -48,6 +54,14 @@ class AppApproved extends Component {
     if (environment === "dev")
       if (location.state !== Object(location.state))
         location = { state: { status: loan_status } };
+
+    postMessage({
+      loan_status: credit_eligibility.loan_status,
+      loan_id:
+        preFlightResp === Object(preFlightResp) ? loan_application_id : "",
+      credit_limit: credit_eligibility.loan_amount_approved,
+      action: "continue"
+    });
 
     let iconCss = "fa checkCircle ";
     return (
@@ -235,8 +249,9 @@ class AppApproved extends Component {
               style={{ marginTop: "-100px", fontSize: "0.6rem" }}
             >
               In case of any query, please contact us at{" "}
-              <a href={"mailto:support@mintifi.com"}>support@mintifi.com</a> or{" "}
-              <a href={"tel:+919999999999"}>+91 9999999999</a>. <br />
+              <a href={`mailto:${mintifiMail}`}>{mintifiMail}</a> or{" "}
+              <a href={`tel:+91${mintifiMobile}`}>+91 {mintifiMobile}</a>.{" "}
+              <br />
               Please mention your ( loan application id :{" "}
               {preFlightResp === Object(preFlightResp)
                 ? loan_application_id
@@ -255,7 +270,7 @@ class AppApproved extends Component {
                 Back to{" "}
                 {anchorObj === Object(anchorObj)
                   ? anchorObj.anchor_name
-                  : "Yatra"}
+                  : "Anchor"}
               </button>
             </div>
           </>

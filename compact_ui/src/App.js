@@ -59,7 +59,14 @@ const { store, persistor } = configureStore();
 
 // const store = configureStore();   // without redux-persist
 const { PUBLIC_URL } = process.env;
-const anchor_logo = `${PUBLIC_URL}/images/company/yatra.png`;
+// const anchor_logo = `${PUBLIC_URL}/images/company/yatra.png`;
+
+const toastError = {
+  top: "-0.5rem",
+  fontSize: "13px",
+  position: "absolute",
+  maxWidth: "350px"
+};
 
 class App extends Component {
   render() {
@@ -196,13 +203,7 @@ class App extends Component {
                       </div>
                       {/*<CustomAlerts/>*/}
                       <ToastContainer
-                        style={{
-                          margin: "-11px auto auto -5px",
-                          width: "92vw",
-                          fontSize: "14px",
-                          width: "92vw",
-                          position: "absolute"
-                        }}
+                        style={toastError}
                         autoClose={8000}
                         position={toast.POSITION.TOP_CENTER}
                       />

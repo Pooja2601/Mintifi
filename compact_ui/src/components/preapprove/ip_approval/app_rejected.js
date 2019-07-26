@@ -1,7 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { environment } from "../../../shared/constants";
+import {
+  environment,
+  mintifiMail,
+  mintifiMobile
+} from "../../../shared/constants";
 // import { alertModule } from "../../../shared/commonLogic";
 import {
   pan_adhar,
@@ -9,7 +13,7 @@ import {
   setBusinessDetail,
   changeLoader
 } from "../../../actions/index";
-
+import { postMessage } from "../../../shared/commonLogic";
 // const { PUBLIC_URL } = process.env;
 
 class AppRejected extends Component {
@@ -31,6 +35,13 @@ class AppRejected extends Component {
 
     if (environment === "dev")
       if (state !== Object(state)) state = { status: loan_status };
+
+    postMessage({ 
+      loan_status: state.status,
+      loan_id: "",
+      credit_limit: "",
+      action: "close"
+    });
 
     return (
       <>
@@ -92,8 +103,8 @@ class AppRejected extends Component {
           </div>
           <div className={"blockquote-footer mt-2"}>
             In case of any query, please contact us at{" "}
-            <a href={"mailto:support@mintifi.com"}>support@mintifi.com</a> or{" "}
-            <a href={"tel:+919999999999"}>+91 9999999999</a>. <br />
+            <a href={`mailto:${mintifiMail}`}>{mintifiMail}</a> or{" "}
+            <a href={`tel:+91${mintifiMobile}`}>+91 {mintifiMobile}</a>. <br />
             Please mention your registered phone number and email in the
             request.
           </div>
@@ -107,7 +118,7 @@ class AppRejected extends Component {
             className="form-submit btn btn-raised greenButton"
           >
             Back to{" "}
-            {anchorObj === Object(anchorObj) ? anchorObj.anchor_name : "Yatra"}
+            {anchorObj === Object(anchorObj) ? anchorObj.anchor_name : "Anchor"}
           </button>
         </div>
       </>

@@ -1,7 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { changeLoader, EnachsetPayload, EnachsetAttempt } from "../../actions";
+import {
+  changeLoader,
+  EnachsetPayload,
+  EnachsetAttempt,
+  setAnchorObj
+} from "../../actions";
 import {
   alertModule,
   base64Logic,
@@ -11,7 +16,8 @@ import {
   eNachPayloadStatic,
   baseUrl,
   app_id,
-  environment
+  environment,
+  ENachResponseUrl
 } from "../../shared/constants";
 
 // const { PUBLIC_URL } = process.env;
@@ -20,7 +26,7 @@ class ENach extends Component {
   state = { ctr: 0, errorMsg: false, backendError: 0 };
 
   _updateBackend = result => {
-    let { token, changeLoader, eNachPayload } = this.props;
+    let { token, changeLoader, eNachPayload, history } = this.props;
 
     changeLoader(true);
     fetch(`${baseUrl}/loans/enach_status`, {
@@ -45,7 +51,8 @@ class ENach extends Component {
             setTimeout(() => {
               // ToDo : Uncomment the below line in Prod
               if (environment === "prod" || environment === "dev")
-                window.location.href = eNachPayload.success_url;
+                history.push(ENachResponseUrl.success_url);
+              // window.location.href = ENachResponseUrl.success_url;
             }, 1000);
             this.setState({ backendError: 0 });
             return 1;
@@ -61,7 +68,8 @@ class ENach extends Component {
             setTimeout(() => {
               // ToDo : Uncomment the below line in Prod
               if (environment === "prod" || environment === "dev")
-                window.location.href = eNachPayload.cancel_url;
+                history.push(ENachResponseUrl.cancel_url);
+              // window.location.href = ENachResponseUrl.cancel_url;
             }, 1000);
         },
         resp => {
@@ -71,9 +79,38 @@ class ENach extends Component {
       );
   };
 
+  _fetchAnchorDetail() {
+    const { token, eNachPayload, setAnchorObj } = this.props;
+    changeLoader(true);
+    if (eNachPayload === Object(eNachPayload))
+      fetch(
+        `${baseUrl}/merchants/${
+          eNachPayload.anchor_id
+        }/get_details?app_id=${app_id}`,
+        {
+          method: "GET",
+          headers: { "Content-type": "application/json", token: token }
+        }
+      )
+        .then(resp => resp.json())
+        .then(
+          resp => {
+            changeLoader(false);
+            if (resp.response === Object(resp.response))
+              setAnchorObj(resp.response);
+
+            //   console.log(resp.response);
+          },
+          resp => {
+            changeLoader(false);
+            //   alertModule();
+          }
+        );
+  }
+
   _triggerDigio = () => {
     // console.log(this.props.eNachPayload);
-    const { eNachPayload } = this.props;
+    const { eNachPayload, history } = this.props;
     let eNachPayDigio = eNachPayload;
     eNachPayDigio.code_mode = environment;
 
@@ -89,7 +126,8 @@ class ENach extends Component {
       setTimeout(() => {
         // ToDo : Uncomment this line in Prod
         if (environment === "prod" || environment === "dev")
-          window.location.href = eNachPayload.error_url;
+          history.push(ENachResponseUrl.error_url);
+        // window.location.href = ENachResponseUrl.error_url;
       }, 1000);
     }
   };
@@ -126,22 +164,21 @@ class ENach extends Component {
       console.log(base64_decode);
     }
 
-    if (
-      base64_decode !== Object(base64_decode) &&
-      !base64_decode.length &&
-      !token.length
-    )
+    if (base64_decode !== Object(base64_decode) && !base64_decode && !token)
       alertModule(
         "You cannot access this page directly without Authorised Session !!",
         "error"
       );
-    else EnachsetPayload(token, base64_decode);
+    else {
+      EnachsetPayload(token, base64_decode);
+      this._fetchAnchorDetail();
+    }
   }
 
   componentDidMount() {
     let that = this;
 
-    const { eNachAttempt, eNachPayload } = this.props;
+    const { eNachAttempt, eNachPayload, history } = this.props;
     if (eNachAttempt) this.setState({ ctr: eNachAttempt });
     document.addEventListener("responseDigio", function(obj) {
       let { detail } = obj;
@@ -165,10 +202,14 @@ class ENach extends Component {
           if (environment === "prod" || environment === "dev")
             if (eNachPayload === Object(eNachPayload))
               if (detail.error_code !== "CANCELLED")
-                window.location.href = eNachPayload.error_url;
+                history.push(ENachResponseUrl.error_url);
+          // window.location.href = ENachResponseUrl.error_url;
         }, 1000);
       } else {
-        alertModule("Register successful for" + detail.digio_doc_id, "success");
+        alertModule(
+          "Register successful for " + detail.digio_doc_id,
+          "success"
+        );
         detail.mandate_id = detail.digio_doc_id;
         detail.status = "success";
       }
@@ -184,7 +225,7 @@ class ENach extends Component {
 
   render() {
     // let {payload, match} = this.props;
-    const { eNachPayload } = this.props;
+    const { eNachPayload, history } = this.props;
     return (
       <>
         {/*<i style={{fontSize: '60px'}} className={"fa fa-check-circle checkCircle"}></i>*/}
@@ -245,6 +286,6 @@ const mapStateToProps = state => ({
 export default withRouter(
   connect(
     mapStateToProps,
-    { changeLoader, EnachsetPayload, EnachsetAttempt }
+    { changeLoader, EnachsetPayload, EnachsetAttempt, setAnchorObj }
   )(ENach)
 );

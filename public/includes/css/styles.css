@@ -55,7 +55,7 @@ header {
     right: 25%;
     top: 18px;
     width: 85px;
-  }
+}
 
 @media (max-width: 768px) {
     .anchorLogo {
@@ -2763,7 +2763,12 @@ input[type=number]::-webkit-outer-spin-button {
     cursor: pointer;
 }
 
-.greenButton, .uploadButton {
+.downloadPNach {
+    max-width: 90% !important;
+    padding: 12px 30px !important;
+}
+
+.greenButton, .uploadButton, .uploadButtonIcon {
     background-color: #00bfa5;
     color: #fff;
     padding: 11px 64px 11px 64px;
@@ -2779,12 +2784,21 @@ input[type=number]::-webkit-outer-spin-button {
     box-shadow: 0 4px 10px #cccccc;
 }
 
-.uploadButton {
+.uploadButton, .uploadButtonIcon {
     padding: 8px !important;
     font-size: 12px !important;
     margin-bottom: 0px;
     opacity: 0.8;
+    min-width: 111px;
     text-transform: capitalize;
+}
+
+.uploadButtonIcon {
+    min-width: 60px !important;
+}
+
+.uploadButtonIcon i {
+    font-size: 16px;
 }
 
 .helperUploadTxt {
@@ -2881,7 +2895,7 @@ input[type=number]::-webkit-outer-spin-button {
     height: 64px;
     position: fixed;
     top: 45%;
-    left: 45.5%;
+    left: 47%;
 }
 
 .lds-ring div {
@@ -3018,7 +3032,6 @@ like a tickmark */
     transform: rotate(45deg);
 }
 
-
 /*@media (min-width: 769px) and (max-width: 1024px){
 .mob_display{display: none;}
 .shadow_in_navbar{margin-top: unset;}
@@ -3070,5 +3083,77 @@ like a tickmark */
 .color_of_butnn{background-color: #00BFA5; color: #fff; padding: 10px 80px 10px 80px; font-size: 33px; float: right; margin-right: 4rem; margin-top: 3rem;}
 .block_design{top: 0; left: 0;}
 
-
 }*/
+
+.devTool_AnchorTrans {
+    border-top: 1px solid;
+    margin-left: -3px;
+    margin-top: 10%;
+    width: 100%;
+}
+
+.devTool_AnchorTrans input {
+    margin: auto;
+    width: 55%;
+}
+
+.devTool_PayloadBtn {
+    width: 100%;
+}
+
+.devTool_PayloadBtn button {
+    padding: 5px 35px;
+    width: 40%;
+    display: block;
+    margin: 10px auto;
+}
+
+.devTool_PayloadBtn small {
+    margin: auto;
+}
+
+.OTPfield {
+    margin-top: -15px;
+}
+
+.OTPfield input {
+    margin-right: 5px;
+    font-size: 14px;
+}
+
+.resendOTPLabel {
+    font-size: small;
+    padding-top: 14px;
+    color: #bbb;
+}
+
+.secondLinePara {
+    font-size: 17px;
+    margin-bottom: 20px;
+}
+
+.go-back-btn {
+    margin-bottom: 10px;
+}
+
+.ToggleBtn button.btnLeft {
+    width: 90px;
+    border-bottom-left-radius: 25px;
+    border-top-left-radius: 25px;
+}
+
+.ToggleBtn button.btnRight {
+    width: 90px;
+    border-bottom-right-radius: 25px;
+    border-top-right-radius: 25px;
+}
+
+.ToggleBtn button i {
+    font-size: x-large;
+    display: block;
+    padding: 0px 10px;
+}
+
+.ToggleBtn button small {
+    font-size: 75%;
+}

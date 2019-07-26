@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
-import {changeLoader, DrawsetLoanPayload, DrawsetPreflight} from "../../actions";
+import {changeLoader, DrawsetLoanPayload, DrawsetPreflight, showAlert} from "../../actions";
 import {otpUrl, baseUrl, environment, app_id} from "../../shared/constants";
 import {PrivacyPolicy, TnCPolicy} from "../../shared/policy";
 import {alertModule} from "../../shared/commonLogic";
@@ -95,10 +95,10 @@ class Offers extends Component {
             if (resp.status === "success") {
                 DrawsetLoanPayload({loanOffers: null, loanStatus: null, creditLimit: resp});
             }
-            else alertModule('An error occurred while fetching credit limit', 'warn');
+            else showAlert('An error occurred while fetching credit limit', 'warn');
         }, (resp) => {
             changeLoader(false);
-            alertModule();
+            showAlert('net');
         });
 
         // Getting Loan Status
@@ -116,10 +116,10 @@ class Offers extends Component {
                     if (resp.status === "success") {
                         DrawsetLoanPayload({loanOffers: null, loanStatus: resp, creditLimit: loanPayload.creditLimit});
                     }
-                    else alertModule('An error occurred while fetching Loan Status', 'warn');
+                    else showAlert('An error occurred while fetching Loan Status', 'warn');
                 }, (resp) => {
                     changeLoader(false);
-                    alertModule();
+                    showAlert('net');
                 })
             }
             , 1000);
@@ -144,10 +144,10 @@ class Offers extends Component {
                             creditLimit: loanPayload.creditLimit
                         });
                     }
-                    else alertModule('An error occurred while fetching Loan Offers', 'warn');
+                    else showAlert('An error occurred while fetching Loan Offers', 'warn');
                 }, (resp) => {
                     changeLoader(false);
-                    alertModule();
+                    showAlert('net');
                 })
             }
             , 1500);
@@ -224,7 +224,7 @@ class Offers extends Component {
                 setTimeout(() => history.push(`${PUBLIC_URL}/drawdown/thankyou`), 500);
 
         }, resp => {
-            alertModule();
+            showAlert('net');
             changeLoader(false);
         })
     }

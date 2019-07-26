@@ -2,8 +2,14 @@ import React from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { changeLoader, EnachsetAttempt, EnachsetPayload } from "../../actions";
+import { postMessage } from "../../shared/commonLogic";
 
 const Cancel_URL = props => {
+  postMessage({
+    enach_status: "cancel",
+    action: "close",
+    loan_id: props.eNachPayload.loan_application_id
+  });
   return (
     <>
       <i

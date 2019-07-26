@@ -1,9 +1,9 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
-import { withRouter} from "react-router-dom";
+import {withRouter} from "react-router-dom";
 import {baseUrl, app_id, environment} from "../../../shared/constants";
-import {pan_adhar, setAdharManual, setBusinessDetail, changeLoader} from "../../../actions/index";
-import {alertModule} from "../../../shared/commonLogic";
+import {pan_adhar, setAdharManual, setBusinessDetail, changeLoader, showAlert} from "../../../actions/index";
+// import {alertModule} from "../../../shared/commonLogic";
 
 const file_msg = "Select a file";
 const {PUBLIC_URL} = process.env;
@@ -216,11 +216,11 @@ class DocsUpload extends Component {
 
     formSubmit() {
 
-        let {payload, token, preFlightResp, changeLoader, history} = this.props;
+        let {payload, token, preFlightResp, changeLoader, history, showAlert} = this.props;
         changeLoader(true);
 
-        if(environment === 'local')
-        preFlightResp = {loan_application_id: '1780'};
+        if (environment === 'local')
+            preFlightResp = {loan_application_id: '1780'};
 
         let ctr = 0;
 
@@ -253,10 +253,10 @@ class DocsUpload extends Component {
             .then(resp => resp.json())
             .then(
                 resp => {
-                    this.props.changeLoader(false);
+                    changeLoader(false);
                     // console.log(resp); // Handle the success response object
                     if (resp.error === Object(resp.error))
-                        alertModule("We couldn't upload the files, Kindly try again !", 'warn');
+                        showAlert("We couldn't upload the files, Kindly try again !", 'warn');
                     else if (resp.response === Object(resp.response))
                         history.push(`${PUBLIC_URL}/preapprove/bankdetail`);
                 }
@@ -264,7 +264,7 @@ class DocsUpload extends Component {
             error => {
                 changeLoader(false);
                 // console.log(error); // Handle the error response object
-                alertModule();
+                showAlert();
             }
         );
     }
@@ -276,7 +276,7 @@ class DocsUpload extends Component {
         if (!token)
             history.push(`${PUBLIC_URL}/preapprove/token`);
 
-        if (payload === Object(payload)  && payload) {
+        if (payload === Object(payload) && payload) {
             if (adharObj !== Object(adharObj))
                 history.push(`${PUBLIC_URL}/preapprove/personaldetail`);
 
@@ -304,16 +304,16 @@ class DocsUpload extends Component {
                     {/* <button onClick={() => this.props.history.push('${PUBLIC_URL}/preapprove/businessdetail`)} className={"btn btn-link"}>
                     Go Back
                 </button>*/}
-                    <br/>
                     {/*<i className={"fa fa-file-pdf checkCircle"} style={{color: 'cadetblue'}}></i>*/}
-                    <h3 className={"text-center"}> KYC Documents </h3>
-                    <br/>
+                    <h4 className={"text-center mt-5"}> KYC Documents </h4>
+                    <h5 className="secondLinePara paragraph_styling  text-center">
+                        Hi {f_name} {l_name}, Please upload following documents
+                        in
+                        pdf or png/jpg
+                        format.
+                    </h5>
 
                     <div className="alert " role="alert">
-                        <p className="alert-heading text-center">Hi {f_name} {l_name}, Please upload following documents
-                            in
-                            pdf or png/jpg
-                            format. </p>
                         <div className="paragraph_styling  text-center">
 
                             <div className={"row mb-4 mt-4"}>
@@ -324,14 +324,13 @@ class DocsUpload extends Component {
                                                onChange={(e) => this._onChangeFile(e, 'id_proof')}
                                                ref={ref => this.idProofInput = ref}/>
                                         <button className="btn btn-raised uploadButton inputFilebutton"
-                                                onClick={() => this.idProofInput.click()}
-                                                style={{minWidth: '111px'}}
                                                 id={"idProofBtn"}>
                                             ID Proof
                                         </button>
                                         <span className="helperUploadTxt">{this.state.id_proof_msg}</span>
                                     </div>
-                                    <small className="text-muted" style={{fontSize: 'x-small'}}>Upload a PAN or Passport.
+                                    <small className="text-muted" style={{fontSize: 'x-small'}}>Upload a PAN or
+                                        Passport.
                                     </small>
                                 </div>
                                 <div className={"col-md-6 col-sm-6 col-xs-12"}>
@@ -342,7 +341,6 @@ class DocsUpload extends Component {
                                                ref={ref => this.addProofInput = ref}/>
                                         <button className="btn btn-raised uploadButton inputFilebutton"
                                                 onClick={() => this._multiDimDocsUpload('add_proof')}
-                                                style={{minWidth: '111px'}}
                                                 id={"addressProofBtn"}>
                                             Address Proof
                                         </button>
@@ -386,7 +384,6 @@ class DocsUpload extends Component {
                                                ref={ref => this.entityProofInput = ref}/>
                                         <button className="btn btn-raised uploadButton inputFilebutton "
                                                 onClick={() => this._multiDimDocsUpload('entity_proof')}
-                                                style={{minWidth: '111px'}}
                                                 id={"addressProofBtn"}>
                                             Shop Registration
 
@@ -399,7 +396,7 @@ class DocsUpload extends Component {
                                         Registration Certificate.
                                     </small>
                                 </div>
-                                <div className={"col-md-6 col-sm-6 col-xs-12"}>
+                                <div className={"col-md-6 col-sm-6 col-xs-12 uploadContatiner"}>
                                     <div className="input-container text-left" style={{cursor: 'pointer'}}
                                          onClick={() => this._multiDimDocsUpload('caddr_proof')}>
                                         <input type="file" id="addressProofInput"
@@ -407,7 +404,6 @@ class DocsUpload extends Component {
                                                ref={ref => this.cAddressProofInput = ref}/>
                                         <button className="btn btn-raised uploadButton inputFilebutton "
                                                 onClick={() => this._multiDimDocsUpload('caddr_proof')}
-                                                style={{minWidth: '111px'}}
                                                 id={"addressProofBtn"}>
                                             Shop Address
                                         </button>
@@ -456,6 +452,6 @@ const mapStateToProps = state => ({
 export default withRouter(
     connect(
         mapStateToProps,
-        {setBusinessDetail, pan_adhar, setAdharManual, changeLoader}
+        {setBusinessDetail, pan_adhar, setAdharManual, changeLoader, showAlert}
     )(DocsUpload)
 );

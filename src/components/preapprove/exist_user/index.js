@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
-import {baseUrl,  otpUrl, OTP_Timer, app_id} from "../../../shared/constants";
+import {baseUrl, otpUrl, OTP_Timer, app_id} from "../../../shared/constants";
 import {connect} from "react-redux";
 import {
     setAuth,
@@ -12,7 +12,7 @@ import {
     pan_adhar, showAlert
 } from "../../../actions/index";
 import {Link, withRouter} from "react-router-dom";
-import {alertModule} from "../../../shared/commonLogic";
+// import {alertModule} from "../../../shared/commonLogic";
 
 const Timer = OTP_Timer;
 const {PUBLIC_URL} = process.env;
@@ -69,7 +69,7 @@ class Auth extends Component {
                 // console.log(JSON.stringify(resp));
                 changeLoader(false);
                 if (resp.error === Object(resp.error)) {
-                    alertModule(resp.error.message, 'warn');
+                    showAlert(resp.error.message, 'warn');
                     this.setState({loading: false, submitted: false, otp_sent: false});
                 }
                 else if (resp.response === Object(resp.response)) {
@@ -85,7 +85,7 @@ class Auth extends Component {
                     }, 1000);
                 }
             }, resp => {
-                alertModule();
+                showAlert('net');
                 changeLoader(false);
             });
         // this.props.sendOTP(this.state.mobile);
@@ -109,7 +109,7 @@ class Auth extends Component {
             changeLoader(false);
             this.setState({otp_sent: false});
             if (resp.error === Object(resp.error))
-                alertModule(resp.error.message, 'warn');
+                showAlert(resp.error.message, 'warn');
             else if (resp.response === Object(resp.response)) {
                 this.setState({verified: resp.response.is_otp_verified}, () => setAuth(this.state));
 
@@ -118,7 +118,7 @@ class Auth extends Component {
 
             }
         }, resp => {
-            alertModule();
+            showAlert('net');
             changeLoader(false);
         })
     }
@@ -132,7 +132,7 @@ class Auth extends Component {
             changeLoader(false);
             // console.log(resp.response);
             if (resp.error === Object(resp.error))
-                alertModule(resp.error.message, 'warn');
+                showAlert(resp.error.message, 'warn');
 
             if (resp.response === Object(resp.response)) {
                 let {borrowers, business_details} = resp.response;
@@ -176,14 +176,14 @@ class Auth extends Component {
             setTimeout(() => history.push(`${PUBLIC_URL}/preapprove/personaldetail`), 1500);
 
         }, () => {
-            alertModule();
+            showAlert('net');
             changeLoader(false);
         });
 
     }
 
     checkSummary = () => {
-        const {payload, authObj, token, changeLoader, history, setExistSummary} = this.props;
+        const {payload, authObj, token, changeLoader, history, setExistSummary, showAlert} = this.props;
         changeLoader(true);
         fetch(`${baseUrl}/loans/loan_summary?user_number=${authObj.mobile}&anchor_transaction_id=${payload.anchor_transaction_id}&app_id=${app_id}`, {
             method: 'GET',
@@ -191,30 +191,30 @@ class Auth extends Component {
         }).then(resp => resp.json()).then(resp => {
 
             if (resp.error === Object(resp.error))
-                alertModule(resp.error.message, 'warn');
+                showAlert(resp.error.message, 'warn');
 
             if (resp.response === Object(resp.response)) {
                 const {response} = resp;
                 setExistSummary(response);
                 if (response.loan_status === 'new_user') {
-                    alertModule('User doesn`t exist, redirecting you to the New User Portal...', 'info');
+                    showAlert('User doesn`t exist, redirecting you to the New User Portal...', 'info');
                     setTimeout(() => history.push(`${PUBLIC_URL}/preapprove/adharpan`), 3000);
                 }
                 else if (response.loan_status === 'user_exist') {
-                    alertModule(`Welcome Back ${response.user_name} , Let's create your Loan Application. Redirecting you in a while...`, 'success');
+                    showAlert(`Welcome Back ${response.user_name} , Let's create your Loan Application. Redirecting you in a while...`, 'success');
                     // ToDo : fetch User personal and business details
                     this._fetchUserInfo();
                     // ToDo : set inside the Redux Object for adhar and business
                 }
                 else {
-                    alertModule(`Welcome Back ${response.user_name}, redirecting you to the dashboard...`, 'success');
+                    showAlert(`Welcome Back ${response.user_name}, redirecting you to the dashboard...`, 'success');
                     setTimeout(() => history.push(`${PUBLIC_URL}/exist/dashboard`), 500);
                 }
             }
 
             changeLoader(false);
         }, () => {
-            alertModule();
+            showAlert('net');
             changeLoader(false);
         });
 
@@ -301,7 +301,8 @@ class Auth extends Component {
                                         pattern="^[0-9]{6}$"
                                         title="This field is required"
                                         id="otpVerify"
-                                        style={{ marginRight: '5px',
+                                        style={{
+                                            marginRight: '5px',
                                             fontSize: '17px'
                                         }}
                                         value={this.state.otp}

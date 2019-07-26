@@ -45,9 +45,9 @@ class AdharPan extends Component {
     componentDidMount() {
 
         const {payload, authObj, adharObj, changeLoader, setAdharManual, history, pan} = this.props;
-     
+
         // console.log(pan)
-        if (payload === Object(payload) && payload.length) {
+        if (payload === Object(payload) && payload) {
             if (!pan)
                 history.push(`${PUBLIC_URL}/preapprove/adharpan`);
         }
@@ -58,12 +58,12 @@ class AdharPan extends Component {
 
         // console.log(state);
 
-        if (authObj === Object(authObj) && authObj.length)
+        if (authObj === Object(authObj) && authObj)
             if (authObj.verified && state === Object(state))
                 if (state.mobile)
                     state.mobile = authObj.mobile;
 
-        if (state === Object(state) && state.length)
+        if (state === Object(state) && state)
             this.setState(state, () => {
                 Object.keys(this.state).map((val, key) => {
                     if (this.validate[val] !== undefined)
@@ -88,7 +88,7 @@ class AdharPan extends Component {
         if (gstProfile === Object(gstProfile)) {
             if (Array.isArray(gstProfile.mbr) && gstProfile.mbr.length > 0) {
                 tempName = gstProfile.mbr[0].split(' ');
-                console.log(tempName[0]);
+                // console.log(tempName[0]);
                 this.setState({
                     f_name: tempName[0],
                     m_name: (tempName[2]) ? tempName[1] : '',
@@ -118,10 +118,11 @@ class AdharPan extends Component {
             if (!val)
                 ++ctrerror;
             else --ctrerror;
-            console.log(val);
+            // console.log(val);
         });
         missed_fields = (ctrerror !== 0);
-        this.setState({missed_fields}, () => console.log('All Fields Validated : ' + this.state.missed_fields));
+        this.setState({missed_fields});
+        // () => console.log('All Fields Validated : ' + this.state.missed_fields)
     }
 
     _pincodeFetch = () => {
@@ -160,7 +161,8 @@ class AdharPan extends Component {
                 let year = d.getFullYear();
                 let dob = `${year}-${month}-${date}`;
          */
-        this.setState({dob}, () => this.props.setAdharManual(this.state))
+        // let dobNew = new Date(dob);
+        this.setState({ dob }, () => this.props.setAdharManual(this.state))
     };
 
     render() {

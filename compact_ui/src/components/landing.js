@@ -5,11 +5,17 @@ import {
   baseUrl,
   landingPayload,
   environment,
-  app_id
+  app_id,
+  payMintifiUrl
 } from "../shared/constants";
 import { connect } from "react-redux";
 import { checkExists, setToken, changeLoader, setAnchorObj } from "../actions";
-import { alertModule, base64Logic, generateToken } from "../shared/commonLogic";
+import {
+  alertModule,
+  base64Logic,
+  generateToken,
+  postMessage
+} from "../shared/commonLogic";
 
 // const Timer = 10;
 const { PUBLIC_URL } = process.env;
@@ -24,17 +30,18 @@ class Login extends Component {
     const { setToken, match, payload } = this.props;
     let base64_decode;
 
-    if (match.params === Object(match.params))
-      if (match.params.payload)
-        base64_decode = base64Logic(match.params.payload, "decode");
-
     if (environment === "dev" || environment === "local")
       if (!match.params.payload) base64_decode = landingPayload;
     // ToDo : hide it in Prod
 
+    if (match.params === Object(match.params))
+      if (match.params.payload)
+        base64_decode = base64Logic(match.params.payload, "decode");
+
     if (
       match.params.token === undefined &&
-      base64_decode !== Object(base64_decode)
+      base64_decode !== Object(base64_decode) &&
+      !base64_decode
     )
       alertModule(
         "You cannot access this page directly without Appropriate Permission!!",
@@ -42,9 +49,12 @@ class Login extends Component {
       );
     else setToken(match.params.token, base64_decode);
 
-    if (payload === Object(payload) && payload.length)
-      this._fetchAnchorDetail();
-    // console.log(this.props.token);
+    window.setTimeout(() => {
+      if (payload === Object(payload) || payload) this._fetchAnchorDetail();
+      // console.log(payload);
+    }, 100);
+
+    // postMessage({ action: "close", loan_id: "XXXX" });
   }
 
   _fetchAnchorDetail() {
@@ -64,7 +74,7 @@ class Login extends Component {
           if (resp.response === Object(resp.response))
             setAnchorObj(resp.response);
 
-          console.log(resp.response);
+          // console.log(resp.response);
         },
         resp => {
           changeLoader(false);
@@ -174,7 +184,7 @@ class Login extends Component {
           {/*   visibility:
                 payload !== Object(payload) && !match.params.token
                   ? "visible"
-                  : "hidden" */}
+          : "hidden" */}
           <button
             onClick={() => this._generateToken()}
             style={{

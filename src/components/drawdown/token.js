@@ -3,7 +3,7 @@ import {withRouter} from "react-router-dom";
 import {baseUrl, drawdownPayload, environment, app_id, user_id, auth_secret} from "../../shared/constants";
 import {alertModule, base64Logic, generateToken} from '../../shared/commonLogic';
 import {connect} from "react-redux";
-import {changeLoader, DrawsetToken} from "../../actions";
+import {changeLoader, DrawsetToken, showAlert} from "../../actions";
 
 const {PUBLIC_URL} = process.env;
 
@@ -11,8 +11,8 @@ class DrawLanding extends Component {
 
     componentDidMount() {
 
-        const {DrawsetToken, match, history, changeLoader} = this.props;
-        const {token, payload} = match.params;
+        const {DrawsetToken, match, history, changeLoader, location, showAlert} = this.props;
+        const {token, payload} = location.state;
         changeLoader(false);
 
         let base64_decode = base64Logic(payload, 'decode');
@@ -22,9 +22,9 @@ class DrawLanding extends Component {
             base64_decode = drawdownPayload;
 
         if (base64_decode !== Object(base64_decode))
-            alertModule('You cannot access this page directly without Authorised Session!!', 'error');
+            showAlert('You cannot access this page directly without Authorised Session!!', 'error');
         else if (token === undefined) {
-            alertModule('Token Invalid Kindly Retry the eNACH process!!', 'error');
+            showAlert('Token Invalid Kindly Retry the eNACH process!!', 'error');
             DrawsetToken(null, base64_decode);
             // console.log(this.props.payload);
         }
@@ -36,7 +36,7 @@ class DrawLanding extends Component {
     }
 
     async _generateToken() {
-        const {changeLoader, DrawsetToken, payload, history} = this.props;
+        const {changeLoader, DrawsetToken, payload, history, showAlert} = this.props;
 
         changeLoader(true);
         let authToken = await generateToken();
@@ -70,7 +70,7 @@ class DrawLanding extends Component {
                  }
              // setTimeout(() => console.log(this.props.token),2000)
          }, () => {
-             alertModule();
+             showAlert();
              changeLoader(false);
          });*/
     };
@@ -108,6 +108,6 @@ const mapStateToProps = state => ({
 
 export default withRouter(connect(
     mapStateToProps,
-    {DrawsetToken, changeLoader}
+    {DrawsetToken, changeLoader, showAlert}
 )(DrawLanding));
 

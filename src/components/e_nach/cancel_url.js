@@ -4,6 +4,9 @@ import { withRouter } from "react-router-dom";
 import { changeLoader, EnachsetAttempt, EnachsetPayload } from "../../actions";
 
 const Cancel_URL = props => {
+  window.setTimeout(() => {
+    window.location.href = `${props.eNachPayload.cancel_url}`;
+  }, 3000);
   return (
     <>
       <i

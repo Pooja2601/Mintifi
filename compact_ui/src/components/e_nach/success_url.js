@@ -2,8 +2,15 @@ import React from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { changeLoader, EnachsetAttempt, EnachsetPayload } from "../../actions";
+import { postMessage } from "../../shared/commonLogic";
 
 const Success_URL = props => {
+  // window.location.href = `${props.eNachPayload.success_url}`;
+  postMessage({
+    enach_status: "success",
+    loan_id: props.eNachPayload.loan_application_id,
+    action: "close"
+  });
   return (
     <>
       <i

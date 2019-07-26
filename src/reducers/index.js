@@ -4,6 +4,7 @@ import AdharReducer from "./adharReducer";
 import BusinessReducer from "./businessReducer";
 import DrawdownReducer from "./drawdownReducer";
 import EnachReducer from "./enachReducer";
+import ExtraReducer from "./extraReducer";
 
 const rootReducer = combineReducers({
     authPayload: AuthReducer,
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
     businessDetail: BusinessReducer,
     drawdownReducer: DrawdownReducer,
     eNachReducer: EnachReducer,
+    extraReducer: ExtraReducer,
 });
 
 export default rootReducer;
