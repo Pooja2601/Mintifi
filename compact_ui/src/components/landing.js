@@ -26,9 +26,10 @@ class Login extends Component {
   };
 
   componentDidMount() {
-    this.props.changeLoader(false);
-    const { setToken, match, payload } = this.props;
+    const { setToken, match, payload, changeLoader } = this.props;
     let base64_decode;
+    
+   changeLoader(false);
 
     if (environment === "dev" || environment === "local")
       if (!match.params.payload) base64_decode = landingPayload;
@@ -58,7 +59,7 @@ class Login extends Component {
   }
 
   _fetchAnchorDetail() {
-    const { token, payload, setAnchorObj } = this.props;
+    const { token, payload, setAnchorObj, changeLoader } = this.props;
     changeLoader(true);
     fetch(
       `${baseUrl}/merchants/${payload.anchor_id}/get_details?app_id=${app_id}`,
@@ -78,7 +79,7 @@ class Login extends Component {
         },
         resp => {
           changeLoader(false);
-          alertModule();
+          // alertModule();
         }
       );
   }

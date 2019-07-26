@@ -194,7 +194,7 @@ class Offers extends Component {
     _submitForm(e) {
         const {payload, token, changeLoader, authObj, loanPayload, history, DrawsetPreflight} = this.props;
         // e.preventDefault();
-        this.props.changeLoader(true);
+       changeLoader(true);
         fetch(`${baseUrl}/loans/${loanPayload.loanOffers.loan.loan_application_id}/drawdown/`, {
             method: "POST",
             headers: {'Content-Type': 'application/json', token: token},

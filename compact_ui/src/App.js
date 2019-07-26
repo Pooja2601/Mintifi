@@ -51,9 +51,9 @@ import SuccessUrl from "./components/e_nach/success_url";
 import ErrorUrl from "./components/e_nach/error_url";
 import CancelUrl from "./components/e_nach/cancel_url";
 
-import Headers from "./shared/header";
-import CustomAlerts from "./shared/custom_alerts";
-import AccessRoute from "./shared/test";
+// import Headers from "./shared/header";
+// import CustomAlerts from "./shared/custom_alerts";
+// import AccessRoute from "./shared/test";
 
 const { store, persistor } = configureStore();
 
