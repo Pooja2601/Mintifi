@@ -50,6 +50,7 @@ import ENach from "./components/e_nach";
 import SuccessUrl from "./components/e_nach/success_url";
 import ErrorUrl from "./components/e_nach/error_url";
 import CancelUrl from "./components/e_nach/cancel_url";
+import PNach from "./components/e_nach/pnach";
 
 // import Headers from "./shared/header";
 // import CustomAlerts from "./shared/custom_alerts";
@@ -195,6 +196,12 @@ class App extends Component {
                             exact
                             path={`${PUBLIC_URL}/enach/error_url`}
                             component={ErrorUrl}
+                          />
+
+                          <Route
+                            exact
+                            path={`${PUBLIC_URL}/enach/pnach`}
+                            component={PNach}
                           />
                           <Route component={Error} />
                         </Switch>
