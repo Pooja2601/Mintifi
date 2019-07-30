@@ -272,7 +272,7 @@ class BankDetail extends Component {
         <p className="paragraph_styling  text-center">
           <b>
             {" "}
-            Please submit your Bank details to help us to disburse your loan
+            Please submit your bank details to help us to disburse your loan
             into your account.
           </b>
           <br />
