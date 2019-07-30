@@ -254,7 +254,7 @@ class DocsUpload extends Component {
             .then(resp => resp.json())
             .then(
                 resp => {
-                    this.props.changeLoader(false);
+                   changeLoader(false);
                     // console.log(resp); // Handle the success response object
                     if (resp.error === Object(resp.error))
                         alertModule("We couldn't upload the files, Kindly try again !", 'warn');
@@ -316,7 +316,8 @@ class DocsUpload extends Component {
                         <p className="paragraph_styling text-center">Hi {f_name} {l_name}, Please upload following documents
                             in
                             pdf or png/jpg
-                            format. </p>
+                            format. 
+                        </p>
                         <div className="paragraph_styling  text-center">
 
                             <div className={"row mb-3 mt-3"}>

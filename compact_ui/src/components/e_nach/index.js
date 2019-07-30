@@ -80,9 +80,9 @@ class ENach extends Component {
   };
 
   _fetchAnchorDetail() {
-    const { token, eNachPayload, setAnchorObj } = this.props;
+    const { token, eNachPayload, setAnchorObj, changeLoader } = this.props;
     changeLoader(true);
-    if (eNachPayload === Object(eNachPayload))
+    if (eNachPayload === Object(eNachPayload) && eNachPayload)
       fetch(
         `${baseUrl}/merchants/${
           eNachPayload.anchor_id
@@ -106,6 +106,7 @@ class ENach extends Component {
             //   alertModule();
           }
         );
+    else changeLoader(false);
   }
 
   _triggerDigio = () => {
@@ -273,6 +274,16 @@ class ENach extends Component {
             Initiate E-NACH
           </button>
         </div>
+        {/* <div className={"text-right"}>
+                    <button type="button"
+                            disabled={
+                                eNachPayload !== Object(eNachPayload) || !eNachPayload.mandate_id
+                            } onClick={() => {
+                        this.props.history.push(`${PUBLIC_URL}/enach/pnach`);
+                    }} className={"btn btn-sm form-submit btn-default "}>
+                        Bank Not Listed
+                    </button>
+        </div>*/}
       </>
     );
   }
