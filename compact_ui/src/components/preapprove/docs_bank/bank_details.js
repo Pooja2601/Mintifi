@@ -275,6 +275,11 @@ class BankDetail extends Component {
             Please submit your Bank details to help us to disburse your loan
             into your account.
           </b>
+          <br />
+          <b>
+            Please ensure that you are providing the same account details from
+            which EMIs will be deducted.
+          </b>
         </p>
         {/*<h5 className={"text-center"}>{(gstProfile === Object(gstProfile)) ? gstProfile.lgnm : ''}</h5>*/}
 
