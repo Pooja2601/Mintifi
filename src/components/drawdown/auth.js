@@ -22,7 +22,7 @@ class MobileOtp extends Component {
         timer: Timer,
         mobile: "",
         otp: "",
-        otp_reference_code: "",
+        otp_reference_id: "",
         verified: false,
         mobile_correct: false
     };
@@ -59,7 +59,7 @@ class MobileOtp extends Component {
                     ) {
                         // alertModule(resp.success.message,'warn');
                         this.setState(
-                            {otp_reference_code: resp.response.otp_reference_code},
+                            {otp_reference_id: resp.response.otp_reference_code},
                             () => DrawsetAuth(this.state)
                         );
                         this.interval = setInterval(e => {
@@ -86,14 +86,14 @@ class MobileOtp extends Component {
 
     _verifyOTP(e) {
         e.preventDefault();
-        const {changeLoader, authObj, token, DrawsetAuth, showAlert} = this.props;
+        const {changeLoader, authObj, history, token, DrawsetAuth, showAlert} = this.props;
         changeLoader(true);
         fetch(`${otpUrl}/verify_otp`, {
             method: "POST",
             headers: {"Content-Type": "application/json", token: token},
             body: JSON.stringify({
                 app_id: app_id,
-                otp_reference_number: authObj.otp_reference_code,
+                otp_reference_number: authObj.otp_reference_id,
                 mobile_number: authObj.mobile,
                 otp: this.state.otp,
                 timestamp: new Date()
@@ -103,16 +103,17 @@ class MobileOtp extends Component {
             .then(
                 resp => {
                     changeLoader(false);
+                    let that = this;
                     if (resp.error === Object(resp.error))
                         showAlert(resp.error.message, "warn");
                     else if (resp.response === Object(resp.response)) {
                         this.setState({verified: resp.response.is_otp_verified}, () => {
-                            DrawsetAuth(this.state);
+                            DrawsetAuth(that.state);
                         });
                         // Goes to New Page
                         if (resp.response.is_otp_verified)
                             setTimeout(() => {
-                                this._fetchAnchorInfo();
+                                history.push(`${PUBLIC_URL}/drawdown/offers`);
                             }, 500);
                     }
                 },
@@ -128,37 +129,40 @@ class MobileOtp extends Component {
             changeLoader,
             authObj,
             token,
-            payload,
+            payload, history,
             DrawAnchorPayload, showAlert
         } = this.props;
         changeLoader(true);
-        fetch(`${baseUrl}/loans/${payload.company_id}/details`, {
-            method: "GET",
-            headers: {"Content-Type": "application/json", token: token},
-            body: JSON.stringify({
-                app_id: app_id,
-                anchor_id: payload.anchor_id,
-                mobile_number: authObj.mobile
+        if (payload === Object(payload) && payload)
+            fetch(`${baseUrl}/loans/${payload.company_id}/details`, {
+                method: "GET",
+                headers: {"Content-Type": "application/json", token: token},
+                body: JSON.stringify({
+                    app_id: app_id,
+                    anchor_id: payload.anchor_id,
+                    mobile_number: authObj.mobile
+                })
             })
-        })
-            .then(resp => resp.json())
-            .then(
-                resp => {
-                    changeLoader(false);
-                    if (resp.error === Object(resp.error))
-                        showAlert(resp.error.message, "error");
-                    if (resp.response === Object(resp.response)) {
-                        DrawAnchorPayload(resp.response);
-                        setTimeout(() =>
-                            this.props.history.push(`${PUBLIC_URL}/drawdown/offers`)
-                        );
+                .then(resp => resp.json())
+                .then(
+                    resp => {
+                        changeLoader(false);
+                        if (resp.error === Object(resp.error))
+                            showAlert(resp.error.message, "error");
+                        if (resp.response === Object(resp.response)) {
+                            DrawAnchorPayload(resp.response);
+                            setTimeout(() => {
+                                    history.push(`${PUBLIC_URL}/drawdown/offers`)
+                                }, 1000
+                            );
+                        }
+                    },
+                    resp => {
+                        showAlert('net');
+                        changeLoader(false);
                     }
-                },
-                resp => {
-                    showAlert('net');
-                    changeLoader(false);
-                }
-            );
+                );
+        else changeLoader(false);
     };
 
     //authObj
@@ -185,14 +189,22 @@ class MobileOtp extends Component {
     }
 
     componentDidMount() {
-        const {authObj, DrawsetAuth} = this.props;
-        if (authObj === Object(authObj))
-            if (authObj.mobile)
-                this.setState({
-                    mobile: authObj.mobile,
-                    mobile_correct: authObj.mobile.length !== 10
-                });
-            else DrawsetAuth(this.state);
+        const {authObj, payload, DrawsetAuth, history} = this.props;
+        if (payload === Object(payload) && payload) {
+            if (authObj === Object(authObj) && authObj) {
+                if (authObj.mobile)
+                    this.setState({
+                        mobile: authObj.mobile,
+                        mobile_correct: authObj.mobile.length !== 10
+                    });
+                else DrawsetAuth(this.state);
+            }
+            this._fetchAnchorInfo();
+            // else history.push(`${PUBLIC_URL}/drawdown/token`);
+        }
+        else history.push(`${PUBLIC_URL}/drawdown/token`);
+
+        // console.log(payload)
     }
 
     render() {

@@ -99,7 +99,9 @@ module.exports = {
     drawdownPayload: {
         anchor_id: "05cc584e39f34d0e97fc4bb6cd1fa8aa",
         loan_amount: "500000",
-        anchor_drawdown_id: "s65d7f8",
+        anchor_drawdown_id: Math.random()
+            .toString(36)
+            .substr(2, 6),
         loan_application_id: "8456",
         company_id: "629",
         drawdown_amount: "20000",

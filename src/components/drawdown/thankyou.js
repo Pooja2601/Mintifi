@@ -10,11 +10,11 @@ class ThankYou extends Component {
 
     componentWillMount() {
 
-        const {payload, authObj, changeLoader} = this.props;
-        if (payload !== Object(payload))
-            this.props.history.push(`${PUBLIC_URL}/drawdown/`);
-        if (authObj !== Object(authObj))
-            this.props.history.push(`${PUBLIC_URL}/drawdown/auth`);
+        const {payload, authObj, changeLoader, history} = this.props;
+        if (payload !== Object(payload) && !payload)
+            history.push(`${PUBLIC_URL}/drawdown/token`);
+        if (authObj !== Object(authObj) && !authObj)
+            history.push(`${PUBLIC_URL}/drawdown/auth`);
         changeLoader(false);
     }
 

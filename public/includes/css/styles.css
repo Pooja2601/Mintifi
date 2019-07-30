@@ -2461,11 +2461,13 @@ input[type="radio"]:after {
     .leftFixedCard {
         top: 15.3%;
         left: 7% !important;
+        max-width: 240px;
     }
 
     .leftFixedCard2 {
         top: 43.3%;
         left: 7% !important;
+        max-width: 240px;
     }
 }
 
@@ -2481,10 +2483,12 @@ input[type="radio"]:after {
 @media (min-width: 1024px) and (max-width: 1439px) {
     .leftFixedCard {
         top: 15.3%;
+        max-width: 240px;
     }
 
     .leftFixedCard2 {
         top: 43%;
+        max-width: 240px;
     }
 }
 

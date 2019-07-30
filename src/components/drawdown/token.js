@@ -12,16 +12,20 @@ class DrawLanding extends Component {
     componentDidMount() {
 
         const {DrawsetToken, match, history, changeLoader, location, showAlert} = this.props;
-        const {token, payload} = location.state;
+        const {token, payload} = match.params;
         changeLoader(false);
-
-        let base64_decode = base64Logic(payload, 'decode');
+        let base64_decode;
 
 // ToDo : comment in production
         if (environment === 'dev' || environment === 'local')
             base64_decode = drawdownPayload;
+        if (environment === 'dev' || environment === 'prod')
+            if (payload)
+                base64_decode = base64Logic(payload, 'decode');
 
-        if (base64_decode !== Object(base64_decode))
+        // console.log(base64_decode);
+
+        if (base64_decode !== Object(base64_decode) && !base64_decode)
             showAlert('You cannot access this page directly without Authorised Session!!', 'error');
         else if (token === undefined) {
             showAlert('Token Invalid Kindly Retry the eNACH process!!', 'error');
@@ -33,6 +37,8 @@ class DrawLanding extends Component {
             // console.log(this.props.payload);
             setTimeout(() => history.push(`${PUBLIC_URL}/drawdown/auth/`, {token: token, payload: base64_decode}), 500);
         }
+
+        // console.log(this.props.payload);
     }
 
     async _generateToken() {
@@ -48,40 +54,21 @@ class DrawLanding extends Component {
             payload: payload
         }), 500);
         // console.log(JSON.stringify(payload));
-        /* changeLoader(true);
-         fetch(`${baseUrl}/auth`, {
-             method: 'POST',
-             headers: {'Content-Type': 'application/json'},
-             body: JSON.stringify({
-                 user_id: user_id,// 'uyh65t',
-                 secret_key: auth_secret,
-                 app_id: app_id,
-                 type: "react_web_user"
-             })
-         }).then(resp => resp.json()).then(resp => {
-             changeLoader(false);
-             if (resp.response === Object(resp.response))
-                 if (resp.response.status === 'success') {
-                     DrawsetToken(resp.response.auth.token, payload);
-                     setTimeout(() => history.push(`${PUBLIC_URL}/drawdown/auth/`, {
-                         token: resp.response.auth.token,
-                         payload: payload
-                     }), 500);
-                 }
-             // setTimeout(() => console.log(this.props.token),2000)
-         }, () => {
-             showAlert();
-             changeLoader(false);
-         });*/
+
     };
 
     render() {
         const {payload, match, token} = this.props;
+        console.log(payload);
         return (<>
-            <div className={"alert alert-warning"}>You may not access this page as the session seems to be expired</div>
-            <div className={"text-center"}>
-                <a className={"btn btn-raised greenButton"} href={drawdownPayload.error_url}>Go Back</a>
+            <div style={{display: (payload !== Object(payload) && !token) ? 'block' : 'none'}}
+                 className={"alert alert-warning"}>You may not access this page as the session seems to be expired
             </div>
+            {/* <div className={"text-center"}>
+                <a className={"btn btn-raised greenButton"}
+                   style={{visibility: (payload !== Object(payload)) ? 'visible' : 'hidden'}} href={payload.error_url}>Go
+                    Back</a>
+            </div>*/}
             <button
                 onClick={() => this._generateToken()}
                 style={{visibility: (payload !== Object(payload) && !token) ? 'visible' : 'hidden'}}

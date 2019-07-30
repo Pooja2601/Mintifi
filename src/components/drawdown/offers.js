@@ -79,7 +79,7 @@ class Offers extends Component {
 
     _fetchInformation = () => {
 
-        const {token, payload, DrawsetLoanPayload, loanPayload, changeLoader} = this.props;
+        const {token, payload, DrawsetLoanPayload, loanPayload, showAlert, changeLoader} = this.props;
         changeLoader(true);
         // Getting Credit Limit
         fetch(`${baseUrl}/companies/${payload.company_id}/limit/`, {
@@ -87,8 +87,8 @@ class Offers extends Component {
             headers: {'Content-Type': 'application/json', token: token},
             body: JSON.stringify({
                 "app_id": app_id,
-                "anchor_id": "6iu89o",
-                "loan_application_id": "1975"
+                "anchor_id": payload.anchor_id,
+                "loan_application_id": payload.loan_application_id
             })
         }).then((resp) => {
             changeLoader(false);
@@ -109,7 +109,7 @@ class Offers extends Component {
                     headers: {'Content-Type': 'application/json', token: token},
                     body: JSON.stringify({
                         "app_id": app_id,
-                        "anchor_id": "6iu89o"
+                        "anchor_id": payload.anchor_id
                     })
                 }).then((resp) => {
                     changeLoader(false);
@@ -132,7 +132,7 @@ class Offers extends Component {
                     headers: {'Content-Type': 'application/json', token: token},
                     body: JSON.stringify({
                         "app_id": app_id,
-                        "anchor_id": "6iu89o",
+                        "anchor_id": payload.anchor_id,
                         "amount": payload.drawdown_amount,
                     })
                 }).then((resp) => {
@@ -177,7 +177,6 @@ class Offers extends Component {
                                     fontSize: 13,
                                     headSize: 1.5
                                 })}
-
                             </div>
                             <div className="modal-footer">
                                 {/*<button type="button" className="btn btn-primary">Save changes</button>*/}
@@ -192,10 +191,10 @@ class Offers extends Component {
     };
 
     _submitForm(e) {
-        const {payload, token, changeLoader, authObj, loanPayload, history, DrawsetPreflight} = this.props;
+        const {payload, token, changeLoader, authObj, showAlert, loanPayload, history, DrawsetPreflight} = this.props;
         // e.preventDefault();
         this.props.changeLoader(true);
-        fetch(`${baseUrl}/loans/${loanPayload.loanOffers.loan.loan_application_id}/drawdown/`, {
+        fetch(`${baseUrl}/loans/${payload.loan_application_id}/drawdown/`, {
             method: "POST",
             headers: {'Content-Type': 'application/json', token: token},
             body: JSON.stringify({
@@ -235,10 +234,11 @@ class Offers extends Component {
             this._fetchInformation();
         const {payload, authObj, changeLoader, history} = this.props;
 
-        if (authObj !== Object(authObj))
+        if (authObj !== Object(authObj) && !authObj)
             history.push(`${PUBLIC_URL}/drawdown/auth`);
-        if (payload !== Object(payload))
-            history.push(`${PUBLIC_URL}/drawdown/`);
+        if (payload !== Object(payload) && !payload) {
+            history.push(`${PUBLIC_URL}/drawdown/token`);
+        }
         changeLoader(false);
     }
 
@@ -260,9 +260,9 @@ class Offers extends Component {
         let {payload, loanPayload} = this.props;
 
         // ToDo :  uncomment in prod & make it const.
-        let {loanOffers, loanStatus, creditLimit} = loanPayload;
+        // let {loanOffers, loanStatus, creditLimit} = loanPayload;
 
-        if (payload === Object(payload)) {
+        if (payload === Object(payload) && payload) {
 
             let {f_name, l_name} = payload;
 
@@ -353,7 +353,7 @@ class Offers extends Component {
                 </div>
                 <div className="row" style={{overflowY: 'auto', width: '90%', margin: 'auto'}}>
                     {<div className="list-group flex-row" style={{padding: '0.2rem 5px'}}>
-                        {loanOffers.loan.offers.map((val, key) => (
+                        {(loanOffers === Object(loanOffers) && loanOffers) ? loanOffers.loan.offers.map((val, key) => (
                             <a href="#" key={key} onClick={e => {
                                 e.preventDefault();
                                 this.setState({selected: val});
@@ -383,7 +383,7 @@ class Offers extends Component {
                                     </li>
                                 </ul>
                             </a>
-                        ))}
+                        )) : <></>}
                     </div>}
                 </div>
 
@@ -429,5 +429,5 @@ const mapStateToProps = state => ({
 
 export default withRouter(connect(
     mapStateToProps,
-    {changeLoader, DrawsetLoanPayload, DrawsetPreflight}
+    {changeLoader, DrawsetLoanPayload, showAlert, DrawsetPreflight}
 )(Offers));
