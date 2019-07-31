@@ -3161,3 +3161,26 @@ like a tickmark */
 .ToggleBtn button small {
     font-size: 75%;
 }
+
+.fetchLoadPage i {
+    font-size: 60px;
+}
+
+.fetchLoadPage p {
+    font-size: 15px;
+    line-height: 22px;
+}
+
+.cardBox {
+    border-radius: 5px;
+    min-width: 185px;
+}
+
+.cardBox ul{
+    width: 100%;
+}
+
+.drawdownTable{
+    flex-wrap: inherit;
+    font-size: 13px;
+}

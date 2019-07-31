@@ -9,7 +9,7 @@ import {
 } from "../shared/constants";
 import {connect} from "react-redux";
 import {checkExists, setToken, changeLoader, setAnchorObj, showAlert} from "../actions";
-import {alertModule, base64Logic, generateToken} from "../shared/commonLogic";
+import {base64Logic, generateToken} from "../shared/commonLogic";
 
 // const Timer = 10;
 const {PUBLIC_URL} = process.env;
@@ -54,7 +54,7 @@ class Login extends Component {
     }
 
     _fetchAnchorDetail() {
-        const {token, payload, setAnchorObj, showAlert, changeLoader} = this.props;
+        const {token, payload, setAnchorObj, changeLoader} = this.props;
         changeLoader(true);
         fetch(
             `${baseUrl}/merchants/${payload.anchor_id}/get_details?app_id=${app_id}`,

@@ -72,7 +72,7 @@ class ThankYou extends Component {
                                 </tr>
                                 <tr>
                                     <td className={"tableDataRight"}>Loan Status</td>
-                                    <td>{loanStatus.loan_status}</td>
+                                    <td>{loanStatus.loan_application_status}</td>
                                 </tr>
                                 <tr>
                                     <td className={"tableDataRight"}>Lender</td>

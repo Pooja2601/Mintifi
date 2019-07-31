@@ -194,16 +194,12 @@ class ReviewBusinessDetail extends Component {
     render() {
         return (
             <>
-                <div className="justify-content-center text-center">
-                    <i className={"fa fa-clipboard-list"} style={{fontSize: "60px"}}/>
+                <div className="justify-content-center text-center fetchLoadPage">
+                    <i className={"fa fa-clipboard-list"}/>
                     <br/>
 
                     <div
                         className="lds-ellipsis"
-                        style={{
-                            marginTop: "-10px",
-                            marginBottom: "-18px"
-                        }}
                     >
                         <div/>
                         <div/>
@@ -212,7 +208,6 @@ class ReviewBusinessDetail extends Component {
                     </div>
                     <p
                         className="paragraph_section"
-                        style={{fontSize: "15px", lineHeight: "22px"}}
                     >
                         Processing your Application <br/>
                         Submitting your data to our server, Hold on !

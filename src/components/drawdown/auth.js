@@ -5,7 +5,7 @@ import {connect} from "react-redux";
 import {withRouter} from "react-router-dom";
 import {
     DrawsetAuth,
-    DrawsetToken,
+    DrawsetToken, setAnchorObj,
     changeLoader,
     DrawAnchorPayload, showAlert
 } from "../../actions";
@@ -86,7 +86,7 @@ class MobileOtp extends Component {
 
     _verifyOTP(e) {
         e.preventDefault();
-        const {changeLoader, authObj, history, token, DrawsetAuth, showAlert} = this.props;
+        const {changeLoader, authObj, token, DrawsetAuth, showAlert} = this.props;
         changeLoader(true);
         fetch(`${otpUrl}/verify_otp`, {
             method: "POST",
@@ -113,7 +113,8 @@ class MobileOtp extends Component {
                         // Goes to New Page
                         if (resp.response.is_otp_verified)
                             setTimeout(() => {
-                                history.push(`${PUBLIC_URL}/drawdown/offers`);
+                                this._fetchAnchorInfo();
+                                // history.push(`${PUBLIC_URL}/drawdown/offers`);
                             }, 500);
                     }
                 },
@@ -127,21 +128,18 @@ class MobileOtp extends Component {
     _fetchAnchorInfo = () => {
         const {
             changeLoader,
-            authObj,
+            authObj, setAnchorObj,
             token,
             payload, history,
             DrawAnchorPayload, showAlert
         } = this.props;
         changeLoader(true);
+        // `${baseUrl}/loans/${payload.company_id}/details/?app_id=${app_id}`,
         if (payload === Object(payload) && payload)
-            fetch(`${baseUrl}/loans/${payload.company_id}/details`, {
+            fetch(`${baseUrl}/merchants/${payload.anchor_id}/get_details?app_id=${app_id}`, {
                 method: "GET",
                 headers: {"Content-Type": "application/json", token: token},
-                body: JSON.stringify({
-                    app_id: app_id,
-                    anchor_id: payload.anchor_id,
-                    mobile_number: authObj.mobile
-                })
+
             })
                 .then(resp => resp.json())
                 .then(
@@ -151,11 +149,12 @@ class MobileOtp extends Component {
                             showAlert(resp.error.message, "error");
                         if (resp.response === Object(resp.response)) {
                             DrawAnchorPayload(resp.response);
-                            setTimeout(() => {
-                                    history.push(`${PUBLIC_URL}/drawdown/offers`)
-                                }, 1000
-                            );
+                            setAnchorObj(resp.response);
                         }
+                        setTimeout(() => {
+                                history.push(`${PUBLIC_URL}/drawdown/fetch_offers`);
+                            }, 1000
+                        );
                     },
                     resp => {
                         showAlert('net');
@@ -189,7 +188,7 @@ class MobileOtp extends Component {
     }
 
     componentDidMount() {
-        const {authObj, payload, DrawsetAuth, history} = this.props;
+        const {authObj, payload, DrawsetAuth, history, changeLoader} = this.props;
         if (payload === Object(payload) && payload) {
             if (authObj === Object(authObj) && authObj) {
                 if (authObj.mobile)
@@ -199,12 +198,11 @@ class MobileOtp extends Component {
                     });
                 else DrawsetAuth(this.state);
             }
-            this._fetchAnchorInfo();
             // else history.push(`${PUBLIC_URL}/drawdown/token`);
         }
         else history.push(`${PUBLIC_URL}/drawdown/token`);
-
         // console.log(payload)
+        changeLoader(false);
     }
 
     render() {
@@ -219,7 +217,7 @@ class MobileOtp extends Component {
                 </p>
                 <form id="serverless-contact-form">
                     <div className={"row"}>
-                        <div className={"col-md-8"} style={{margin: "auto"}}>
+                        <div className={"col-sm-11 col-md-8 m-auto"}>
                             <div className="form-group mb-3">
                                 <label htmlFor="numberMobile" className={"bmd-label-floating"}>
                                     Mobile Number *
@@ -252,7 +250,7 @@ class MobileOtp extends Component {
                                 </div>
                             </div>
                         </div>
-                        <div className={"col-md-8"} style={{margin: "auto"}}>
+                        <div className={"col-sm-11 col-md-8 m-auto"}>
                             <div
                                 className="form-group mb-3"
                                 style={{
@@ -265,15 +263,13 @@ class MobileOtp extends Component {
                                 <div className={"input-group"}>
                                     <input
                                         type="number"
-                                        className="form-control font_weight"
+                                        className="form-control font_weight mr-1"
                                         // placeholder="Enter the OTP"
                                         name="url"
                                         pattern="^[0-9]{6}$"
                                         title="This field is required"
                                         id="otpVerify"
-                                        style={{
-                                            marginRight: "5px"
-                                        }}
+
                                         value={this.state.otp}
                                         min={100000}
                                         max={999999}
@@ -296,11 +292,9 @@ class MobileOtp extends Component {
                     </div>
                     <div className={"text-center"}>
                         <label
+                            className={"resendOTPLabel"}
                             style={{
-                                fontSize: "small",
-                                paddingTop: "14px",
-                                color: "#bbb",
-                                visibility: this.state.submitted ? "visible" : "hidden"
+                                display: this.state.submitted ? "block" : "none"
                             }}
                         >
                             You can resend OTP after{" "}
@@ -354,6 +348,6 @@ const mapStateToProps = state => ({
 export default withRouter(
     connect(
         mapStateToProps,
-        {DrawsetAuth, DrawsetToken, changeLoader, DrawAnchorPayload, showAlert}
+        {DrawsetAuth, DrawsetToken, changeLoader, DrawAnchorPayload, showAlert, setAnchorObj}
     )(MobileOtp)
 );

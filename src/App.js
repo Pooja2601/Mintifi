@@ -43,6 +43,7 @@ import DrawIndex from "./components/drawdown/";
 import Drawdown from "./components/drawdown/token";
 import DrawAuth from "./components/drawdown/auth";
 import Offers from "./components/drawdown/offers";
+import FetchOffers from "./components/drawdown/fetch_offers";
 import DrawThankYou from "./components/drawdown/thankyou";
 
 //E-NACH
@@ -95,7 +96,7 @@ class App extends Component {
                                         >
                                             <CustomAlert/>
                                             <Loader/>
-                                            <div className="ml-2 mt-3" >
+                                            <div className="ml-2 mt-3">
                                                 {/*<TransitionGroup>*/}
                                                 {/* <CSSTransition
                                                 key={location.key}
@@ -178,6 +179,10 @@ class App extends Component {
                                                     <Route
                                                         path={`${PUBLIC_URL}/drawdown/auth`}
                                                         component={DrawAuth}
+                                                    />
+                                                    <Route
+                                                        path={`${PUBLIC_URL}/drawdown/fetch_offers`}
+                                                        component={FetchOffers}
                                                     />
                                                     <Route
                                                         path={`${PUBLIC_URL}/drawdown/offers`}

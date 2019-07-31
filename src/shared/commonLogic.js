@@ -124,12 +124,12 @@ export const generateToken = () => {
         if (resp.response === Object(resp.response)) {
           if (resp.response.status === "success")
             return resp.response.auth.token;
-        } else return 31;
+        } else return 30;
         // console.log(this.props.token);
       },
       () => {
         alertModule();
-        return 30;
+        return 31;
       }
     );
 };

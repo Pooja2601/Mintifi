@@ -18,17 +18,19 @@ class DrawLanding extends Component {
 
 // ToDo : comment in production
         if (environment === 'dev' || environment === 'local')
-            base64_decode = drawdownPayload;
+            if (!payload)
+                base64_decode = drawdownPayload;
+
         if (environment === 'dev' || environment === 'prod')
             if (payload)
                 base64_decode = base64Logic(payload, 'decode');
 
-        // console.log(base64_decode);
+        console.log(base64_decode);
 
         if (base64_decode !== Object(base64_decode) && !base64_decode)
-            showAlert('You cannot access this page directly without Authorised Session!!', 'error');
+            showAlert('You cannot access this page directly without Authorised Session/Payload!!', 'error');
         else if (token === undefined) {
-            showAlert('Token Invalid Kindly Retry the eNACH process!!', 'error');
+            showAlert('Token invalid or session invalid, kindly go back and retry the process !!', 'error');
             DrawsetToken(null, base64_decode);
             // console.log(this.props.payload);
         }
@@ -37,8 +39,6 @@ class DrawLanding extends Component {
             // console.log(this.props.payload);
             setTimeout(() => history.push(`${PUBLIC_URL}/drawdown/auth/`, {token: token, payload: base64_decode}), 500);
         }
-
-        // console.log(this.props.payload);
     }
 
     async _generateToken() {
@@ -59,9 +59,9 @@ class DrawLanding extends Component {
 
     render() {
         const {payload, match, token} = this.props;
-        console.log(payload);
+        // console.log(payload);
         return (<>
-            <div style={{display: (payload !== Object(payload) && !token) ? 'block' : 'none'}}
+            <div style={{visibility: ((payload !== Object(payload) && !payload) || !token) ? 'visible' : 'hidden'}}
                  className={"alert alert-warning"}>You may not access this page as the session seems to be expired
             </div>
             {/* <div className={"text-center"}>
@@ -69,19 +69,18 @@ class DrawLanding extends Component {
                    style={{visibility: (payload !== Object(payload)) ? 'visible' : 'hidden'}} href={payload.error_url}>Go
                     Back</a>
             </div>*/}
-            <button
-                onClick={() => this._generateToken()}
-                style={{visibility: (payload !== Object(payload) && !token) ? 'visible' : 'hidden'}}
-                style={{
-                    padding: "5px 35px", width: '100%',
-                    margin: '50px 0%'
-                }}
-                className="form-submit btn greenButton text-center"
-            >
-                Create TOKEN and PAYLOAD
-            </button>
-            <br/>
-            <small>(above button is for development use only)</small>
+            <div className={"devTool_PayloadBtn"}>
+                <button
+                    onClick={() => this._generateToken()}
+                    style={{display: (environment === 'dev' || environment === 'local') ? 'block' : 'none'}}
+
+                    className="form-submit btn greenButton text-center"
+                >
+                    Create PAYLOAD
+                </button>
+                <br/>
+                <small>(above button is for development use only)</small>
+            </div>
         </>)
     }
 }
