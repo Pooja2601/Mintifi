@@ -3130,3 +3130,42 @@ like a tickmark */
     position: absolute;
     max-width: 350px;
 }
+
+
+.thankYouPage .innerDiv {
+    margin: auto 5%;
+}
+
+.cardContainerOuter {
+    overflow-y: auto;
+    width: 90%;
+}
+
+.cardContainerOuter > div {
+    padding: 0.2rem 5px;
+}
+
+
+
+.fetchLoadPage i {
+    font-size: 55px;
+}
+
+.fetchLoadPage p {
+    font-size: 14px;
+    line-height: 22px;
+}
+
+.cardBox {
+    border-radius: 5px;
+    min-width: 185px;
+}
+
+.cardBox ul {
+    width: 100%;
+}
+
+.drawdownTable {
+    flex-wrap: inherit;
+    font-size: 13px;
+}

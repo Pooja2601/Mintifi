@@ -296,7 +296,7 @@ class Offers extends Component {
                   : "hidden"
             }}
           >
-            <label className="main">
+            <label className="main_tnc">
               I accept the{" "}
               <a
                 href={"#"}
