@@ -188,8 +188,8 @@ class MobileOtp extends Component {
     }
 
     componentDidMount() {
-        const {authObj, payload, DrawsetAuth, history, changeLoader} = this.props;
-        if (payload === Object(payload) && payload) {
+        const {authObj, payload, token, DrawsetAuth, history, changeLoader} = this.props;
+        if (payload === Object(payload) && payload && token) {
             if (authObj === Object(authObj) && authObj) {
                 if (authObj.mobile)
                     this.setState({

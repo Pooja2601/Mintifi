@@ -6,10 +6,8 @@ import { withRouter } from "react-router-dom";
 import {
   DrawsetAuth,
   DrawsetToken,
-  setAnchorObj,
   changeLoader,
-  DrawAnchorPayload,
-  showAlert
+  DrawAnchorPayload
 } from "../../actions";
 import { alertModule } from "../../shared/commonLogic";
 
@@ -24,7 +22,7 @@ class MobileOtp extends Component {
     timer: Timer,
     mobile: "",
     otp: "",
-    otp_reference_id: "",
+    otp_reference_code: "",
     verified: false,
     mobile_correct: false
   };
@@ -32,7 +30,7 @@ class MobileOtp extends Component {
   _formSubmit(e) {
     e.preventDefault();
     clearInterval(this.interval);
-    const { changeLoader, token, DrawsetAuth, showAlert } = this.props;
+    const { changeLoader, token, DrawsetAuth } = this.props;
     changeLoader(true);
 
     this.setState({ loading: true, submitted: true, timer: Timer });
@@ -54,7 +52,6 @@ class MobileOtp extends Component {
           changeLoader(false);
           if (resp.error === Object(resp.error)) {
             alertModule(resp.error.message, "warn");
-            // showAlert(resp.error.message, "warn");
             this.setState({ loading: false, submitted: false });
           } else if (
             resp.response === Object(resp.response) &&
@@ -62,7 +59,7 @@ class MobileOtp extends Component {
           ) {
             // alertModule(resp.success.message,'warn');
             this.setState(
-              { otp_reference_id: resp.response.otp_reference_code },
+              { otp_reference_code: resp.response.otp_reference_code },
               () => DrawsetAuth(this.state)
             );
             this.interval = setInterval(e => {
@@ -89,14 +86,14 @@ class MobileOtp extends Component {
 
   _verifyOTP(e) {
     e.preventDefault();
-    const { changeLoader, authObj, token, DrawsetAuth, showAlert } = this.props;
+    const { changeLoader, authObj, token, DrawsetAuth } = this.props;
     changeLoader(true);
     fetch(`${otpUrl}/verify_otp`, {
       method: "POST",
       headers: { "Content-Type": "application/json", token: token },
       body: JSON.stringify({
         app_id: app_id,
-        otp_reference_number: authObj.otp_reference_id,
+        otp_reference_number: authObj.otp_reference_code,
         mobile_number: authObj.mobile,
         otp: this.state.otp,
         timestamp: new Date()
@@ -106,18 +103,16 @@ class MobileOtp extends Component {
       .then(
         resp => {
           changeLoader(false);
-          let that = this;
           if (resp.error === Object(resp.error))
             alertModule(resp.error.message, "warn");
           else if (resp.response === Object(resp.response)) {
             this.setState({ verified: resp.response.is_otp_verified }, () => {
-              DrawsetAuth(that.state);
+              DrawsetAuth(this.state);
             });
             // Goes to New Page
             if (resp.response.is_otp_verified)
               setTimeout(() => {
                 this._fetchAnchorInfo();
-                // history.push(`${PUBLIC_URL}/drawdown/offers`);
               }, 500);
           }
         },
@@ -132,45 +127,38 @@ class MobileOtp extends Component {
     const {
       changeLoader,
       authObj,
-      setAnchorObj,
       token,
       payload,
-      history,
-      DrawAnchorPayload,
-      showAlert
+      DrawAnchorPayload
     } = this.props;
     changeLoader(true);
-    // `${baseUrl}/loans/${payload.company_id}/details/?app_id=${app_id}`,
-    if (payload === Object(payload) && payload)
-      fetch(
-        `${baseUrl}/merchants/${
-          payload.anchor_id
-        }/get_details?app_id=${app_id}`,
-        {
-          method: "GET",
-          headers: { "Content-Type": "application/json", token: token }
-        }
-      )
-        .then(resp => resp.json())
-        .then(
-          resp => {
-            changeLoader(false);
-            if (resp.error === Object(resp.error))
-              alertModule(resp.error.message, "error");
-            if (resp.response === Object(resp.response)) {
-              DrawAnchorPayload(resp.response);
-              setAnchorObj(resp.response);
-            }
-            setTimeout(() => {
-              history.push(`${PUBLIC_URL}/drawdown/fetch_offers`);
-            }, 1000);
-          },
-          resp => {
-            alertModule();
-            changeLoader(false);
+    fetch(`${baseUrl}/loans/${payload.company_id}/details`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json", token: token },
+      body: JSON.stringify({
+        app_id: app_id,
+        anchor_id: payload.anchor_id,
+        mobile_number: authObj.mobile
+      })
+    })
+      .then(resp => resp.json())
+      .then(
+        resp => {
+          changeLoader(false);
+          if (resp.error === Object(resp.error))
+            alertModule(resp.error.message, "error");
+          if (resp.response === Object(resp.response)) {
+            DrawAnchorPayload(resp.response);
+            setTimeout(() =>
+              this.props.history.push(`${PUBLIC_URL}/drawdown/offers`)
+            );
           }
-        );
-    else changeLoader(false);
+        },
+        resp => {
+          alertModule();
+          changeLoader(false);
+        }
+      );
   };
 
   //authObj
@@ -179,7 +167,7 @@ class MobileOtp extends Component {
     const { DrawsetAuth } = this.props;
 
     if (value.length <= 10) {
-      // console.log(value.length);
+      console.log(value.length);
       this.setState(
         { mobile: value, mobile_correct: value.length !== 10 },
         () => DrawsetAuth(this.state)
@@ -189,35 +177,21 @@ class MobileOtp extends Component {
 
   componentWillMount() {
     /*const {changeLoader, match, DrawsetToken} = this.props;
-            changeLoader(false);
-            const {token, payload} = match.params;
-            if (token === undefined && payload === Object(payload))
-                alertModule("You cannot access this page directly without Authorised session!! ", 'error');
-            else DrawsetToken(token, payload);*/
+        changeLoader(false);
+        const {token, payload} = match.params;
+        if (token === undefined && payload === Object(payload))
+            alertModule("You cannot access this page directly without Authorised session!! ", 'error');
+        else DrawsetToken(token, payload);*/
   }
 
   componentDidMount() {
-    const {
-      authObj,
-      payload,
-      token,
-      DrawsetAuth,
-      history,
-      changeLoader
-    } = this.props;
-    if (payload === Object(payload) && payload && token) {
-      if (authObj === Object(authObj) && authObj) {
-        if (authObj.mobile)
-          this.setState({
-            mobile: authObj.mobile,
-            mobile_correct: authObj.mobile.length !== 10
-          });
-        else DrawsetAuth(this.state);
-      }
-      // else history.push(`${PUBLIC_URL}/drawdown/token`);
-    } else history.push(`${PUBLIC_URL}/drawdown/token`);
-    // console.log(payload)
-    changeLoader(false);
+    const { authObj, DrawsetAuth } = this.props;
+    if (authObj === Object(authObj))
+      this.setState({
+        mobile: authObj.mobile,
+        mobile_correct: authObj.mobile.length !== 10
+      });
+    else DrawsetAuth(this.state);
   }
 
   render() {
@@ -232,7 +206,7 @@ class MobileOtp extends Component {
         </p>
         <form id="serverless-contact-form">
           <div className={"row"}>
-            <div className={"col-sm-11 col-md-8 m-auto"}>
+            <div className={"col-md-8"} style={{ margin: "auto" }}>
               <div className="form-group mb-3">
                 <label htmlFor="numberMobile" className={"bmd-label-floating"}>
                   Mobile Number *
@@ -265,7 +239,7 @@ class MobileOtp extends Component {
                 </div>
               </div>
             </div>
-            <div className={"col-sm-11 col-md-8 m-auto"}>
+            <div className={"col-md-8"} style={{ margin: "auto" }}>
               <div
                 className="form-group mb-3"
                 style={{
@@ -278,12 +252,16 @@ class MobileOtp extends Component {
                 <div className={"input-group"}>
                   <input
                     type="number"
-                    className="form-control font_weight mr-1"
+                    className="form-control font_weight"
                     // placeholder="Enter the OTP"
                     name="url"
                     pattern="^[0-9]{6}$"
                     title="This field is required"
                     id="otpVerify"
+                    style={{
+                      fontWeight: 600,
+                      marginRight: "5px"
+                    }}
                     value={this.state.otp}
                     min={100000}
                     max={999999}
@@ -306,9 +284,11 @@ class MobileOtp extends Component {
           </div>
           <div className={"text-center"}>
             <label
-              className={"resendOTPLabel"}
               style={{
-                display: this.state.submitted ? "block" : "none"
+                fontSize: "small",
+                paddingTop: "14px",
+                color: "#bbb",
+                visibility: this.state.submitted ? "visible" : "hidden"
               }}
             >
               You can resend OTP after{" "}
@@ -362,13 +342,6 @@ const mapStateToProps = state => ({
 export default withRouter(
   connect(
     mapStateToProps,
-    {
-      DrawsetAuth,
-      DrawsetToken,
-      changeLoader,
-      DrawAnchorPayload,
-      showAlert,
-      setAnchorObj
-    }
+    { DrawsetAuth, DrawsetToken, changeLoader, DrawAnchorPayload }
   )(MobileOtp)
 );

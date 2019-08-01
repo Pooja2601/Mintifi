@@ -3162,6 +3162,28 @@ like a tickmark */
     font-size: 75%;
 }
 
+.thankYouPage i {
+    font-size: 60px;
+}
+
+.thankYouPage table {
+    margin: auto 14%;
+    width: 100%;
+}
+
+.thankYouPage .innerDiv {
+    margin: auto 5%;
+}
+
+.cardContainerOuter {
+    overflow-y: auto;
+    width: 90%;
+}
+
+.cardContainerOuter > div {
+    padding: 0.2rem 5px;
+}
+
 .fetchLoadPage i {
     font-size: 60px;
 }
@@ -3176,11 +3198,11 @@ like a tickmark */
     min-width: 185px;
 }
 
-.cardBox ul{
+.cardBox ul {
     width: 100%;
 }
 
-.drawdownTable{
+.drawdownTable {
     flex-wrap: inherit;
     font-size: 13px;
 }

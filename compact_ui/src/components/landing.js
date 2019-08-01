@@ -28,8 +28,8 @@ class Login extends Component {
   componentDidMount() {
     const { setToken, match, payload, changeLoader } = this.props;
     let base64_decode;
-    
-   changeLoader(false);
+
+    changeLoader(false);
 
     if (environment === "dev" || environment === "local")
       if (!match.params.payload) base64_decode = landingPayload;
@@ -56,6 +56,7 @@ class Login extends Component {
     }, 100);
 
     // postMessage({ action: "close", loan_id: "XXXX" });
+    // console.log(window.location.hostname);
   }
 
   _fetchAnchorDetail() {

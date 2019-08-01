@@ -115,11 +115,9 @@ class Offers extends Component {
         let {payload, loanPayload} = this.props;
 
         // ToDo :  uncomment in prod & make it const.
-        let {loanOffers, loanStatus, creditLimit} = loanPayload;
+        // let {loanOffers, loanStatus, creditLimit} = loanPayload;
 
-        console.log(JSON.stringify(loanPayload.loanOffers.loan));
-
-        if (payload === Object(payload) && payload) {
+        if (payload === Object(payload) && payload && loanPayload) {
 
             // let {f_name, l_name} = payload;
             // ToDo :  comment this 2 line in prod.
@@ -127,14 +125,13 @@ class Offers extends Component {
                 // f_name = 'Mahesh';
                 // l_name = 'Pai';
             }
-
             return (<>
                 <h4 className={"text-center"}>Loan Offers</h4>
                 <br/>
-                {/*<h5 className={"text-center"}></h5>*/}
                 <div className="row justify-content-center mt-3 mb-3">
 
-                    <p className={"text-center"} style={{padding: '0 12px'}}>Dear {/*{f_name} {l_name}*/}, glad to see
+                    <p className={"text-center"} style={{padding: '0 12px'}}>
+                        {/*Dear {f_name} {l_name} ,*/} Glad to see
                         you
                         back
                         !<br/>Select
@@ -184,7 +181,7 @@ class Offers extends Component {
                                 Credit Approved
                             </div>
                             <div className="col-sm-5">
-                                Rs {creditLimit.approved_credit_limit}
+                                Rs {loanPayload.creditLimit.approved_credit_limit}
                             </div>
                         </div>
 
@@ -193,7 +190,7 @@ class Offers extends Component {
                                 Balance Credit
                             </div>
                             <div className="col-sm-5">
-                                Rs {creditLimit.balance_credit_limit}
+                                Rs {loanPayload.creditLimit.balance_credit_limit}
                             </div>
                         </div>
                     </div>
@@ -207,9 +204,9 @@ class Offers extends Component {
                     You have selected <strong
                     className="text-primary text-capitalize">`{(this.state.selected.product_type)} - {this.state.selected.tenor} Months`</strong>
                 </div>
-                <div className="row m-auto" style={{overflowY: 'auto', width: '90%'}}>
-                    <div className="list-group flex-row" style={{padding: '0.2rem 5px'}}>
-                        {(loanOffers.loan === Object(loanOffers.loan) && loanOffers.loan) ? loanOffers.loan.offers.map((val, key) => (
+                <div className="row m-auto cardContainerOuter">
+                    <div className="list-group flex-row ">
+                        {(loanPayload === Object(loanPayload) && loanPayload) ? loanPayload.loanOffers.loan.offers.map((val, key) => (
                             <a href="#" key={key} onClick={e => {
                                 e.preventDefault();
                                 this.setState({selected: val});

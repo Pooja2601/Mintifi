@@ -42,7 +42,8 @@ import Dashboard from "./components/preapprove/exist_user/dashboard";
 import DrawIndex from "./components/drawdown/";
 import Drawdown from "./components/drawdown/token";
 import DrawAuth from "./components/drawdown/auth";
-import Offers from "./components/drawdown/offers";
+import DrawOffers from "./components/drawdown/offers";
+import DrawFetchOffers from "./components/drawdown/fetch_offers";
 import DrawThankYou from "./components/drawdown/thankyou";
 
 //E-NACH
@@ -169,9 +170,14 @@ class App extends Component {
                             path={`${PUBLIC_URL}/drawdown/auth`}
                             component={DrawAuth}
                           />
+
+                          <Route
+                            path={`${PUBLIC_URL}/drawdown/fetch_offers`}
+                            component={DrawFetchOffers}
+                          />
                           <Route
                             path={`${PUBLIC_URL}/drawdown/offers`}
-                            component={Offers}
+                            component={DrawOffers}
                           />
                           <Route
                             path={`${PUBLIC_URL}/drawdown/thankyou`}

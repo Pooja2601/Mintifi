@@ -7,7 +7,6 @@ import {otpUrl, baseUrl, environment, app_id} from "../../shared/constants";
 const {PUBLIC_URL} = process.env;
 
 /*
-
 let creditLimit = {
     "status": "success",
     "error_code": "E000",
@@ -150,7 +149,6 @@ class FetchOffers extends Component {
             loanStatus: loanStatus,
             creditLimit: creditLimit
         });
-        
 
         if (creditLimit && loanStatus && loanOffers) {
             if (loanStatus.loan_application_status === 'to_settle')
