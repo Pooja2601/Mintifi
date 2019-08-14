@@ -10,11 +10,19 @@ import {
     DrawAnchorPayload, showAlert
 } from "../../actions";
 // import {alertModule} from "../../shared/commonLogic";
+import PropTypes from 'prop-types';
 
 const Timer = OTP_Timer;
 const {PUBLIC_URL} = process.env;
 
 class MobileOtp extends Component {
+    static propTypes = {
+        token: PropTypes.string.isRequired,
+        payload:PropTypes.object.isRequired,
+        changeLoader: PropTypes.func.isRequired,
+        showAlert: PropTypes.func.isRequired
+      };
+
     state = {
         submitted: false,
         loading: false,

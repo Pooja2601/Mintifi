@@ -52,9 +52,9 @@ header {
 
 .anchorLogo {
     position: absolute;
-    right: 25%;
+    right: 23%;
     top: 18px;
-    width: 85px;
+    width: 160px;
 }
 
 @media (max-width: 768px) {
@@ -1457,7 +1457,8 @@ input[type="radio"]:after {
     width: 100% !important;
 }
 
-.react-datepicker-wrapper, .react-datepicker__input-container {
+.react-datepicker-wrapper,
+.react-datepicker__input-container {
     width: 100% !important;
 }
 
@@ -2450,7 +2451,8 @@ input[type="radio"]:after {
     }
 }
 
-.leftFixedCard, .leftFixedCard2 {
+.leftFixedCard,
+.leftFixedCard2 {
     border-radius: 5px;
     box-shadow: 0px 0px 0px 0px;
     margin: auto 0;
@@ -2472,7 +2474,9 @@ input[type="radio"]:after {
 }
 
 @media (min-width: 1024px) {
-    .leftFixedCard, .leftFixedCard2 {
+
+    .leftFixedCard,
+    .leftFixedCard2 {
         box-shadow: 0 0 8px #cccccc;
         left: 1%;
         position: fixed;
@@ -2567,8 +2571,10 @@ input[type="radio"]:after {
 }
 
 #map {
-    height: 400px; /* The height is 400 pixels */
-    width: 100%; /* The width is the width of the web page */
+    height: 400px;
+    /* The height is 400 pixels */
+    width: 100%;
+    /* The width is the width of the web page */
 }
 
 .h4_para {
@@ -2606,7 +2612,8 @@ input[type="radio"]:after {
     border-top: 10px solid #00bfa5;
     width: 40px;
     height: 40px;
-    -webkit-animation: spin 1s linear infinite; /* Safari */
+    -webkit-animation: spin 1s linear infinite;
+    /* Safari */
     animation: spin 1s linear infinite;
 }
 
@@ -2615,6 +2622,7 @@ input[type="radio"]:after {
     0% {
         -webkit-transform: rotate(0deg);
     }
+
     100% {
         -webkit-transform: rotate(360deg);
     }
@@ -2624,6 +2632,7 @@ input[type="radio"]:after {
     0% {
         transform: rotate(0deg);
     }
+
     100% {
         transform: rotate(360deg);
     }
@@ -2682,16 +2691,50 @@ input[type=number]::-webkit-outer-spin-button {
     transition: opacity 250ms ease-in;
 }
 
-#numberPAN:valid, #numberMobile:valid, #numberAdhar:valid, #fullName:valid,
-#textEmail:valid, #numberPincode:valid, #dobDate:valid, #otpVerify:valid, #firstName:valid, #middleName:valid, #lastName:valid, #numberGST:valid, #avgTrans:valid, #textAddress1:valid, #textAddress2:valid, #dealerCode:valid, #ifscCode:valid, #numberAccount:valid,
+#numberPAN:valid,
+#numberMobile:valid,
+#numberAdhar:valid,
+#fullName:valid,
+#textEmail:valid,
+#numberPincode:valid,
+#dobDate:valid,
+#otpVerify:valid,
+#firstName:valid,
+#middleName:valid,
+#lastName:valid,
+#numberGST:valid,
+#avgTrans:valid,
+#textAddress1:valid,
+#textAddress2:valid,
+#dealerCode:valid,
+#ifscCode:valid,
+#numberAccount:valid,
 #micrCode:valid {
     color: black !important;
     border-color: black !important;
 }
 
-#numberPAN:invalid, #numberMobile:invalid, #numberAdhar:invalid,
-#fullName:invalid, #textEmail:invalid, #numberPincode:invalid, #dobDate:invalid, #otpVerify:invalid, #firstName:invalid, #middleName:invalid, #lastName:invalid, #numberGST:invalid, #avgTrans:invalid, #textAddress1:invalid, #textAddress2:invalid, #dealerCode:invalid, #ifscCode:invalid, #numberAccount:invalid, #micrCode:invalid {
-    color: crimson !important; /* indianred */
+#numberPAN:invalid,
+#numberMobile:invalid,
+#numberAdhar:invalid,
+#fullName:invalid,
+#textEmail:invalid,
+#numberPincode:invalid,
+#dobDate:invalid,
+#otpVerify:invalid,
+#firstName:invalid,
+#middleName:invalid,
+#lastName:invalid,
+#numberGST:invalid,
+#avgTrans:invalid,
+#textAddress1:invalid,
+#textAddress2:invalid,
+#dealerCode:invalid,
+#ifscCode:invalid,
+#numberAccount:invalid,
+#micrCode:invalid {
+    color: crimson !important;
+    /* indianred */
     border-color: crimson !important;
 }
 
@@ -2744,10 +2787,12 @@ input[type=number]::-webkit-outer-spin-button {
         transform: rotate(0);
         animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
     }
+
     50% {
         transform: rotate(900deg);
         animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
     }
+
     100% {
         transform: rotate(1800deg);
     }
@@ -2772,7 +2817,9 @@ input[type=number]::-webkit-outer-spin-button {
     padding: 12px 30px !important;
 }
 
-.greenButton, .uploadButton, .uploadButtonIcon {
+.greenButton,
+.uploadButton,
+.uploadButtonIcon {
     background-color: #00bfa5;
     color: #fff;
     padding: 11px 64px 11px 64px;
@@ -2784,11 +2831,13 @@ input[type=number]::-webkit-outer-spin-button {
     opacity: 0.7555;
 }
 
-.greenButton:hover, .uploadButton {
+.greenButton:hover,
+.uploadButton {
     box-shadow: 0 4px 10px #cccccc;
 }
 
-.uploadButton, .uploadButtonIcon {
+.uploadButton,
+.uploadButtonIcon {
     padding: 8px !important;
     font-size: 12px !important;
     margin-bottom: 0px;
@@ -2863,6 +2912,7 @@ input[type=number]::-webkit-outer-spin-button {
     0% {
         transform: scale(0);
     }
+
     100% {
         transform: scale(1);
     }
@@ -2872,6 +2922,7 @@ input[type=number]::-webkit-outer-spin-button {
     0% {
         transform: scale(1);
     }
+
     100% {
         transform: scale(0);
     }
@@ -2881,6 +2932,7 @@ input[type=number]::-webkit-outer-spin-button {
     0% {
         transform: translate(0, 0);
     }
+
     100% {
         transform: translate(19px, 0);
     }
@@ -2890,7 +2942,10 @@ input[type=number]::-webkit-outer-spin-button {
     cursor: pointer;
     padding: 10px;
     border-radius: 15%;
-    width: 9rem;
+    /* width: 8rem;     */
+    width: 40%;
+    min-width: 120px;
+    max-width: 125px;
 }
 
 .lds-ring {
@@ -2931,6 +2986,7 @@ input[type=number]::-webkit-outer-spin-button {
     0% {
         transform: rotate(0deg);
     }
+
     100% {
         transform: rotate(360deg);
     }
@@ -2991,19 +3047,19 @@ based on demand */
 
 /* Specify the background color to be
 shown when hovering over checkbox */
-.main:hover input ~ .geekmark {
+.main:hover input~.geekmark {
     background-color: darkgray;
 }
 
 /* Specify the background color to be
 shown when checkbox is active */
-.main input:active ~ .geekmark {
+.main input:active~.geekmark {
     background-color: darkgreen;
 }
 
 /* Specify the background color to be
 shown when checkbox is checked */
-.main input:checked ~ .geekmark {
+.main input:checked~.geekmark {
     background-color: teal;
 }
 
@@ -3016,7 +3072,7 @@ shown when checkbox is checked */
 }
 
 /* Display checkmark when checked */
-.main input:checked ~ .geekmark:after {
+.main input:checked~.geekmark:after {
     display: block;
 }
 
@@ -3180,7 +3236,7 @@ like a tickmark */
     width: 90%;
 }
 
-.cardContainerOuter > div {
+.cardContainerOuter>div {
     padding: 0.2rem 5px;
 }
 

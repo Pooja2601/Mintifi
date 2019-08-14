@@ -9,6 +9,7 @@ import {
     auth_secret
 } from "../../../shared/constants";
 import {connect} from "react-redux";
+import PropTypes from "prop-types";
 import {setBankDetail, changeLoader, setToken, showAlert} from "../../../actions";
 import {withRouter} from "react-router-dom";
 import {alertModule, retrieveParam} from "../../../shared/commonLogic";
@@ -19,6 +20,16 @@ import Select from "react-select";
 const {PUBLIC_URL} = process.env;
 
 class BankDetail extends Component {
+
+    static propTypes = {
+        adharObj: PropTypes.object.isRequired,
+        anchorObj: PropTypes.object,
+        payload: PropTypes.object.isRequired,
+        businessObj: PropTypes.object.isRequired,
+        gstProfile: PropTypes.object,
+        preFlightResp: PropTypes.object
+      };
+      
     state = {
         acc_type: "",
         bank_name: "",

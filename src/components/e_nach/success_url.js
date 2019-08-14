@@ -2,11 +2,20 @@ import React from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { changeLoader, EnachsetAttempt, EnachsetPayload } from "../../actions";
+import { postMessage } from "../../shared/commonLogic";
+import PropTypes from "prop-types";
 
 const Success_URL = props => {
-  window.setTimeout(() => {
-    window.location.href = `${props.eNachPayload.success_url}`;
-  }, 3000);
+  if (window.location !== window.parent.location)
+    postMessage({
+      enach_status: "success",
+      loan_id: props.eNachPayload.loan_application_id,
+      action: "close"
+    });
+  else
+    window.setTimeout(() => {
+      window.location.href = `${props.eNachPayload.success_url}`;
+    }, 3000);
 
   return (
     <>
@@ -23,6 +32,10 @@ const Success_URL = props => {
       </div>
     </>
   );
+};
+
+Success_URL.propTypes = {
+  eNachPayload: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({

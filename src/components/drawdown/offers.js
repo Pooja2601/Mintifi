@@ -4,6 +4,7 @@ import {connect} from "react-redux";
 import {changeLoader, DrawsetLoanPayload, DrawsetPreflight, showAlert} from "../../actions";
 import {otpUrl, baseUrl, environment, app_id} from "../../shared/constants";
 import {PrivacyPolicy, TnCPolicy} from "../../shared/policy";
+import {postMessage} from "../../shared/commonLogic";
 
 const {PUBLIC_URL} = process.env;
 
@@ -47,6 +48,7 @@ class Offers extends Component {
             </>);
     };
 
+
     _submitForm(e) {
         const {payload, token, changeLoader, authObj, showAlert, loanPayload, history, DrawsetPreflight} = this.props;
         // e.preventDefault();
@@ -84,6 +86,14 @@ class Offers extends Component {
                         window.location.href = `${PUBLIC_URL}/drawdown/token`;
                         // history.push(`${PUBLIC_URL}/drawdown/token`)
                     }, 2000);
+                if (window.location !== window.parent.location)
+                    postMessage({
+                        drawdown_status: "error",
+                        drawdown_offer: null,
+                        loan_id: payload.loan_application_id,
+                        drawdown_id: payload.anchor_drawdown_id,
+                        action: "close"
+                    });
             }
 
             // ToDo : comment this for production
@@ -240,7 +250,7 @@ class Offers extends Component {
                     </div>
                 </div>
 
-                <div className=" mt-4 ml-5 mr-3"
+                <div className="mt-4 ml-5 mr-3"
                      style={{visibility: (this.state.selected.product_type !== undefined) ? 'visible' : 'hidden'}}>
 
                     <label className="main">I accept the <a href={'#'} onClick={(e) => {

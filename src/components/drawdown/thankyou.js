@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import {Link, withRouter} from "react-router-dom";
 import {changeLoader, setAdharManual} from "../../actions";
 import {defaultLender, environment} from '../../shared/constants';
+import {postMessage} from "../../shared/commonLogic";
 
 const {PUBLIC_URL} = process.env;
 
@@ -34,10 +35,20 @@ class ThankYou extends Component {
             // ToDo : make it const in prod.
             // let {creditLimit, loanStatus, loanOffers} = loanPayload;
 
+
             if (preFlightResp === Object(preFlightResp)) {
                 loan_product = (preFlightResp.offer.product_type).split('_');
                 loan_product = loan_product[0] + ' ' + loan_product[1];
             }
+
+            if (window.location !== window.parent.location)
+                postMessage({
+                    drawdown_status: "success",
+                    drawdown_offer: preFlightResp.offer,
+                    loan_id: loanPayload.loanOffers.loan.loan_application_id,
+                    drawdown_id: preFlightResp.drawdown_id,
+                    action: "close"
+                });
 
             return (
                 <>

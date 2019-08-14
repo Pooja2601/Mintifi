@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {withRouter} from "react-router-dom";
+import PropTypes from "prop-types";
 import {baseUrl, app_id, environment} from "../../../shared/constants";
 import {pan_adhar, setAdharManual, setBusinessDetail, changeLoader, showAlert} from "../../../actions/index";
 // import {alertModule} from "../../../shared/commonLogic";
@@ -30,6 +31,15 @@ const doc_type_attr = [
 ];
 
 class DocsUpload extends Component {
+
+    static propTypes = {
+        adharObj: PropTypes.object.isRequired,
+        anchorObj: PropTypes.object,
+        payload: PropTypes.object.isRequired,
+        businessObj: PropTypes.object.isRequired,
+        gstProfile: PropTypes.object,
+        preFlightResp: PropTypes.object
+      };
 
     state = {
         id_proof_msg: file_msg,
