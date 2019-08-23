@@ -1,17 +1,17 @@
-import React, {Component} from "react";
-import {Provider} from "react-redux";
+import React, { Component } from "react";
+import { Provider } from "react-redux";
 import {
-    BrowserRouter,
-    Route,
-    Switch,
-    Link,
-    withRouter
+  BrowserRouter,
+  Route,
+  Switch,
+  Link,
+  withRouter
 } from "react-router-dom";
 import ScrollToTop from "./shared/scrollhack";
 
 import configureStore from "./store";
-import {PersistGate} from "redux-persist/integration/react";
-import {ToastContainer, toast} from "react-toastify";
+import { PersistGate } from "redux-persist/integration/react";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // import {TransitionGroup, CSSTransition} from "react-transition-group";
@@ -20,7 +20,6 @@ import "react-toastify/dist/ReactToastify.css";
 // import Footer from "./shared/footer";
 import Loader from "./shared/loader";
 import Error from "./shared/error";
-import Privacy from "./shared/privacy_policy";
 import Index from "./components/";
 import Login from "./components/landing";
 import AdharPan from "./components/preapprove/adhar_pan";
@@ -42,7 +41,8 @@ import Dashboard from "./components/preapprove/exist_user/dashboard";
 import DrawIndex from "./components/drawdown/";
 import Drawdown from "./components/drawdown/token";
 import DrawAuth from "./components/drawdown/auth";
-import Offers from "./components/drawdown/offers";
+import DrawOffers from "./components/drawdown/offers";
+import DrawFetchOffers from "./components/drawdown/fetch_offers";
 import DrawThankYou from "./components/drawdown/thankyou";
 
 //E-NACH
@@ -55,184 +55,184 @@ import PNach from "./components/e_nach/pnach";
 import Headers from "./shared/header";
 import CustomAlert from "./shared/custom_alerts";
 
-const {store, persistor} = configureStore();
+const { store, persistor } = configureStore();
 
 // const store = configureStore();   // without redux-persist
-const {PUBLIC_URL} = process.env;
+const { PUBLIC_URL } = process.env;
 // const anchor_logo = `${PUBLIC_URL}/images/company/yatra.png`;
+    
+const toastError = { marginTop: "-20px", position: "absolute" };
 
-const toastError = {marginTop: "-20px", position: "absolute"};
+const isIframe = window.location !== window.parent.location;
 
 class App extends Component {
-    render() {
-        return (
-            <Provider store={store}>
-                <PersistGate loading={null} persistor={persistor}>
-                    {/* ToDo : Change to sub Dir name in Prod (if placed in a sub) */}
-                    <BrowserRouter basename={"./"}>
-                        <Route
-                            render={({location}) => (
-                                <>
-                                    <ScrollToTop/>
-                                    {/*<AccessRoute/>*/}
-                                    <Headers/>
-                                    <div
-                                        className="row justify-content-center background-color"
-                                        style={{
-                                            marginTop: "180px",
-                                            marginLeft: 0,
-                                            marginRight: 0
-                                        }}
-                                    >
-                                        <div
-                                            className="col-11 col-md-6 ml-5 mr-5 mb-3 partner_section"
-                                            style={{
-                                                backgroundColor: "#fff",
-                                                border: "0px",
-                                                paddingLeft: "1%",
-                                                paddingRight: "1%"
-                                            }}
-                                        >
-                                            <CustomAlert/>
-                                            <Loader/>
-                                            <div className="ml-2 mt-3" >
-                                                {/*<TransitionGroup>*/}
-                                                {/* <CSSTransition
+  render() {
+    return (
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          {/* ToDo : Change to sub Dir name in Prod (if placed in a sub) */}
+          <BrowserRouter basename={"./"}>
+            <Route
+              render={({ location }) => (
+                <>
+                  <ScrollToTop />
+                  {/*<AccessRoute/>*/}
+                  <Headers />
+                  <div
+                    className="row justify-content-center background-color ml-0 mr-0"
+                    style={{
+                      marginTop: isIframe ? "100px" : "180px"
+                    }}
+                  >
+                    <div
+                      className="col-11 col-md-6 ml-5 mr-5 mb-3 partner_section"
+                      style={{
+                        backgroundColor: "#fff",
+                        border: "0px",
+                        paddingLeft: "1%",
+                        paddingRight: "1%"
+                      }}
+                    >
+                      <CustomAlert />
+                      <Loader />
+                      <div className="ml-2 mt-3">
+                        {/*<TransitionGroup>*/}
+                        {/* <CSSTransition
                                                 key={location.key}
                                                 classNames="fade"
                                                 timeout={50}>*/}
-                                                <Switch location={location}>
-                                                    <Route
-                                                        exact
-                                                        path={`${PUBLIC_URL}/`}
-                                                        component={Index}
-                                                    />
-                                                    <Route
-                                                        exact
-                                                        path={`${PUBLIC_URL}/preapprove/token/:token?/:payload?`}
-                                                        component={Login}
-                                                    />
-                                                    <Route
-                                                        path={`${PUBLIC_URL}/preapprove/auth/`}
-                                                        component={Auth}
-                                                    />
-                                                    <Route
-                                                        path={`${PUBLIC_URL}/preapprove/adharpan`}
-                                                        component={AdharPan}
-                                                    />
-                                                    <Route
-                                                        path={`${PUBLIC_URL}/preapprove/personaldetail`}
-                                                        component={PersonalDetail}
-                                                    />
-                                                    <Route
-                                                        path={`${PUBLIC_URL}/preapprove/mobileotp`}
-                                                        component={MobileOTP}
-                                                    />
-                                                    <Route
-                                                        path={`${PUBLIC_URL}/preapprove/businessdetail`}
-                                                        component={BusinessDetail}
-                                                    />
-                                                    <Route
-                                                        path={`${PUBLIC_URL}/preapprove/finalize`}
-                                                        component={Finalize}
-                                                    />
-                                                    {/*<Route path="/ReviewChanges" component={ReviewChanges}/>*/}
-                                                    <Route
-                                                        path={`${PUBLIC_URL}/preapprove/apprejected`}
-                                                        component={AppRejected}
-                                                    />
-                                                    <Route
-                                                        path={`${PUBLIC_URL}/preapprove/appapproved`}
-                                                        component={AppApproved}
-                                                    />
-                                                    <Route
-                                                        path={`${PUBLIC_URL}/preapprove/docsupload`}
-                                                        component={DocsUpload}
-                                                    />
-                                                    <Route
-                                                        path={`${PUBLIC_URL}/preapprove/bankdetail`}
-                                                        component={BankDetail}
-                                                    />
-                                                    <Route
-                                                        path={`${PUBLIC_URL}/preapprove/thankyou`}
-                                                        component={ThankYou}
-                                                    />
-                                                    <Route
-                                                        path={`${PUBLIC_URL}/preapprove/privacy`}
-                                                        component={Privacy}
-                                                    />
-                                                    <Route
-                                                        path={`${PUBLIC_URL}/exist/dashboard/`}
-                                                        component={Dashboard}
-                                                    />
-                                                    <Route
-                                                        exact
-                                                        path={`${PUBLIC_URL}/drawdown`}
-                                                        component={DrawIndex}
-                                                    />
-                                                    <Route
-                                                        exact
-                                                        path={`${PUBLIC_URL}/drawdown/token/:token?/:payload?`}
-                                                        component={Drawdown}
-                                                    />
-                                                    <Route
-                                                        path={`${PUBLIC_URL}/drawdown/auth`}
-                                                        component={DrawAuth}
-                                                    />
-                                                    <Route
-                                                        path={`${PUBLIC_URL}/drawdown/offers`}
-                                                        component={Offers}
-                                                    />
-                                                    <Route
-                                                        path={`${PUBLIC_URL}/drawdown/thankyou`}
-                                                        component={DrawThankYou}
-                                                    />
-                                                    <Route
-                                                        exact
-                                                        path={`${PUBLIC_URL}/enach`}
-                                                        component={ENach}
-                                                    />
-                                                    <Route
-                                                        exact
-                                                        path={`${PUBLIC_URL}/enach/success_url`}
-                                                        component={SuccessUrl}
-                                                    />
-                                                    <Route
-                                                        exact
-                                                        path={`${PUBLIC_URL}/enach/cancel_url`}
-                                                        component={CancelUrl}
-                                                    />
-                                                    <Route
-                                                        exact
-                                                        path={`${PUBLIC_URL}/enach/error_url`}
-                                                        component={ErrorUrl}
-                                                    />
-                                                    <Route
-                                                        exact
-                                                        path={`${PUBLIC_URL}/enach/pnach`}
-                                                        component={PNach}
-                                                    />
-                                                    <Route component={Error}/>
-                                                </Switch>
-                                                {/*</CSSTransition>*/}
-                                                {/*</TransitionGroup>*/}
-                                            </div>
-                                            {/*<CustomAlerts/>*/}
-                                            <ToastContainer
-                                                style={toastError}
-                                                autoClose={8000}
-                                                position={toast.POSITION.TOP_CENTER}
-                                            />
-                                        </div>
-                                    </div>
-                                </>
-                            )}
-                        />
-                    </BrowserRouter>
-                </PersistGate>
-            </Provider>
-        );
-    }
+                        <Switch location={location}>
+                          <Route
+                            exact
+                            path={`${PUBLIC_URL}/`}
+                            component={Index}
+                          />
+                          <Route
+                            exact
+                            path={`${PUBLIC_URL}/preapprove/token/:token?/:payload?`}
+                            component={Login}
+                          />
+                          <Route
+                            path={`${PUBLIC_URL}/preapprove/auth/`}
+                            component={Auth}
+                          />
+                          <Route
+                            path={`${PUBLIC_URL}/preapprove/adharpan`}
+                            component={AdharPan}
+                          />
+                          <Route
+                            path={`${PUBLIC_URL}/preapprove/personaldetail`}
+                            component={PersonalDetail}
+                          />
+                          <Route
+                            path={`${PUBLIC_URL}/preapprove/mobileotp`}
+                            component={MobileOTP}
+                          />
+                          <Route
+                            path={`${PUBLIC_URL}/preapprove/businessdetail`}
+                            component={BusinessDetail}
+                          />
+                          <Route
+                            path={`${PUBLIC_URL}/preapprove/finalize`}
+                            component={Finalize}
+                          />
+                          {/*<Route path="/ReviewChanges" component={ReviewChanges}/>*/}
+                          <Route
+                            path={`${PUBLIC_URL}/preapprove/apprejected`}
+                            component={AppRejected}
+                          />
+                          <Route
+                            path={`${PUBLIC_URL}/preapprove/appapproved`}
+                            component={AppApproved}
+                          />
+                          <Route
+                            path={`${PUBLIC_URL}/preapprove/docsupload`}
+                            component={DocsUpload}
+                          />
+                          <Route
+                            path={`${PUBLIC_URL}/preapprove/bankdetail`}
+                            component={BankDetail}
+                          />
+                          <Route
+                            path={`${PUBLIC_URL}/preapprove/thankyou`}
+                            component={ThankYou}
+                          />
+                          <Route
+                            path={`${PUBLIC_URL}/exist/dashboard/`}
+                            component={Dashboard}
+                          />
+                          <Route
+                            exact
+                            path={`${PUBLIC_URL}/drawdown`}
+                            component={DrawIndex}
+                          />
+                          <Route
+                            exact
+                            path={`${PUBLIC_URL}/drawdown/token/:token?/:payload?`}
+                            component={Drawdown}
+                          />
+                          <Route
+                            path={`${PUBLIC_URL}/drawdown/auth`}
+                            component={DrawAuth}
+                          />
+                          <Route
+                            path={`${PUBLIC_URL}/drawdown/fetch_offers`}
+                            component={DrawFetchOffers}
+                          />
+                          <Route
+                            path={`${PUBLIC_URL}/drawdown/offers`}
+                            component={DrawOffers}
+                          />
+                          <Route
+                            path={`${PUBLIC_URL}/drawdown/thankyou`}
+                            component={DrawThankYou}
+                          />
+                          <Route
+                            exact
+                            path={`${PUBLIC_URL}/enach`}
+                            component={ENach}
+                          />
+                          <Route
+                            exact
+                            path={`${PUBLIC_URL}/enach/success_url`}
+                            component={SuccessUrl}
+                          />
+                          <Route
+                            exact
+                            path={`${PUBLIC_URL}/enach/cancel_url`}
+                            component={CancelUrl}
+                          />
+                          <Route
+                            exact
+                            path={`${PUBLIC_URL}/enach/error_url`}
+                            component={ErrorUrl}
+                          />
+                          <Route
+                            exact
+                            path={`${PUBLIC_URL}/enach/pnach`}
+                            component={PNach}
+                          />
+                          <Route component={Error} />
+                        </Switch>
+                        {/*</CSSTransition>*/}
+                        {/*</TransitionGroup>*/}
+                      </div>
+                      {/*<CustomAlerts/>*/}
+                      <ToastContainer
+                        style={toastError}
+                        autoClose={8000}
+                        position={toast.POSITION.TOP_CENTER}
+                      />
+                    </div>
+                  </div>
+                </>
+              )}
+            />
+          </BrowserRouter>
+        </PersistGate>
+      </Provider>
+    );
+  }
 }
 
 export default App;

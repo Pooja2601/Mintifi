@@ -1,22 +1,30 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
+import PropTypes from "prop-types";
 import {
   environment,
   mintifiMail,
   mintifiMobile
 } from "../../../shared/constants";
-// import { alertModule } from "../../../shared/commonLogic";
 import {
   pan_adhar,
   setAdharManual,
   setBusinessDetail,
   changeLoader
 } from "../../../actions/index";
+import { postMessage } from "../../../shared/commonLogic";
 
 // const { PUBLIC_URL } = process.env;
 
 class AppRejected extends Component {
+  static propTypes = {
+    adharObj: PropTypes.object.isRequired,
+    // preFlightResp: PropTypes.object.isRequired,
+    anchorObj: PropTypes.object,
+    payload: PropTypes.object.isRequired
+  };
+
   componentWillMount() {
     const { changeLoader } = this.props;
     changeLoader(false);
@@ -34,6 +42,13 @@ class AppRejected extends Component {
     if (environment === "local") location = { state: { status: loan_status } };
 
     // console.log(state);
+    if (window.location !== window.parent.location)
+      postMessage({
+        loan_status: state.status,
+        loan_id: "",
+        credit_limit: "",
+        action: "close"
+      });
 
     if (environment === "dev")
       if (state !== Object(state)) state = { status: loan_status };

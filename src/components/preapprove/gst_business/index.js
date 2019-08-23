@@ -3,6 +3,7 @@ import React, {Component} from "react";
 import { BusinessType} from "../../../shared/constants";
 import {connect} from "react-redux";
 import {setBusinessDetail, changeLoader} from "../../../actions/index";
+import PropTypes from "prop-types";
 import { withRouter} from "react-router-dom";
 // import {alertModule} from "../../../shared/commonLogic";
 import {PrivacyPolicy, TnCPolicy} from "../../../shared/policy";
@@ -13,6 +14,13 @@ import Select from "react-select";
 const {PUBLIC_URL} = process.env;
 
 class BusinessDetail extends Component {
+
+    static propTypes = {
+        adharObj: PropTypes.object.isRequired,
+        anchorObj: PropTypes.object,
+        payload: PropTypes.object.isRequired,
+        gstProfile: PropTypes.object
+      };
 
     state = {
         companytype: '',

@@ -2,11 +2,21 @@ import React from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { changeLoader, EnachsetAttempt, EnachsetPayload } from "../../actions";
+import { postMessage } from "../../shared/commonLogic";
+import PropTypes from "prop-types";
 
 const Error_URL = props => {
-  window.setTimeout(() => {
-    window.location.href = `${props.eNachPayload.error_url}`;
-  }, 3000);
+  if (window.location !== window.parent.location)
+    postMessage({
+      enach_status: "error",
+      action: "close",
+      loan_id: props.eNachPayload.loan_application_id
+    });
+  else
+    window.setTimeout(() => {
+      window.location.href = `${props.eNachPayload.error_url}`;
+    }, 3000);
+
   return (
     <>
       <i className="fa fa-times-circle checkCircle" style={{ color: "red" }} />
@@ -23,6 +33,10 @@ const Error_URL = props => {
       </div>
     </>
   );
+};
+
+Error_URL.propTypes = {
+  eNachPayload: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({

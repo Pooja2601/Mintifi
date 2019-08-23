@@ -2,6 +2,7 @@ import React, {Component} from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
 import {baseUrl, otpUrl} from "../../../shared/constants";
 import {connect} from "react-redux";
+import PropTypes from 'prop-types';
 import {setAdharManual, changeLoader, showAlert} from "../../../actions/index";
 import {Link, withRouter} from "react-router-dom";
 import DatePicker from "react-datepicker";
@@ -10,7 +11,15 @@ import "react-datepicker/dist/react-datepicker.css";
 
 const {PUBLIC_URL} = process.env;
 
-class AdharPan extends Component {
+class PersonalDetail extends Component {
+    
+    static propTypes = {
+        authObj: PropTypes.object,
+        anchorObj: PropTypes.object,
+        payload: PropTypes.object.isRequired,
+        gstProfile: PropTypes.object
+      };
+
     state = {
         f_name: '',
         m_name: '',
@@ -586,4 +595,4 @@ const mapStateToProps = state => ({
 export default withRouter(connect(
     mapStateToProps,
     {setAdharManual, changeLoader, showAlert}
-)(AdharPan));
+)(PersonalDetail));

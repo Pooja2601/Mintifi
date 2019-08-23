@@ -8,12 +8,19 @@ import {
     setGstProfile,
     setBusinessDetail, showAlert
 } from "../../../actions/index";
+import PropTypes from 'prop-types';
 import {Link, withRouter} from "react-router-dom";
 // import {alertModule} from "../../../shared/commonLogic";
 
 const {PUBLIC_URL} = process.env;
 
 class AdharPan extends Component {
+    static propTypes = {
+        pan: PropTypes.string,
+        adhar: PropTypes.string,
+        payload: PropTypes.object.isRequired,
+      };
+      
     state = {
         pan: "",
         adhar: "",

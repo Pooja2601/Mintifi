@@ -107,8 +107,8 @@ export const DrawsetLoanPayload = loanPayload => ({
     type: types.D_SET_LOAN_PAYLOAD, loanPayload
 });
 
-export const DrawAnchorPayload = loanPayload => ({
-    type: types.D_SET_LOAN_PAYLOAD, loanPayload
+export const DrawAnchorPayload = anchorPayload => ({
+    type: types.D_ANCHOR_PAYLOAD, anchorPayload
 });
 
 //..................................... E-NACH

@@ -2,11 +2,22 @@ import React from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { changeLoader, EnachsetAttempt, EnachsetPayload } from "../../actions";
+import { postMessage } from "../../shared/commonLogic";
+import PropTypes from "prop-types";
 
 const Cancel_URL = props => {
-  window.setTimeout(() => {
-    window.location.href = `${props.eNachPayload.cancel_url}`;
-  }, 3000);
+  if (window.location !== window.parent.location) {
+    postMessage({
+      enach_status: "cancel",
+      action: "close",
+      loan_id: props.eNachPayload.loan_application_id
+    });
+  } else {
+    window.setTimeout(() => {
+      window.location.href = `${props.eNachPayload.cancel_url}`;
+    }, 3000);
+  }
+
   return (
     <>
       <i
@@ -26,6 +37,10 @@ const Cancel_URL = props => {
       </div>
     </>
   );
+};
+
+Cancel_URL.propTypes = {
+  eNachPayload: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
