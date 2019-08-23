@@ -26,8 +26,8 @@ const { PUBLIC_URL } = process.env;
 
 class ENach extends Component {
   static propTypes = {
-    eNachPayload: PropTypes.object.isRequired,
-    showAlert: PropTypes.func.isRequired,
+    eNachPayload: PropTypes.object,
+    showAlert: PropTypes.func,
     token: PropTypes.string.isRequired,
     changeLoader: PropTypes.func.isRequired
   };
@@ -191,8 +191,6 @@ class ENach extends Component {
   }
 
   componentDidMount() {
-    let that = this;
-
     const {
       eNachAttempt,
       eNachPayload,
@@ -201,8 +199,11 @@ class ENach extends Component {
       EnachsetAttempt
     } = this.props;
     if (eNachAttempt) this.setState({ ctr: eNachAttempt });
+    let that = this;
+
     document.addEventListener("responseDigio", function(obj) {
       let { detail } = obj;
+
       // console.log(JSON.stringify(detail));
       if (detail.error_code !== undefined) {
         showAlert(
@@ -303,6 +304,7 @@ class ENach extends Component {
     );
   }
 }
+
 const mapStateToProps = state => ({
   token: state.eNachReducer.token,
   eNachPayload: state.eNachReducer.eNachPayload

@@ -18,7 +18,7 @@ const { PUBLIC_URL } = process.env;
 
 class MobileOtp extends Component {
   static propTypes = {
-    authObj: PropTypes.object.isRequired,
+    authObj: PropTypes.object,
     anchorObj: PropTypes.object,
     adharObj: PropTypes.object.isRequired,
     payload: PropTypes.object.isRequired,

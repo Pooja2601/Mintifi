@@ -20,10 +20,9 @@ import { postMessage } from "../../../shared/commonLogic";
 class AppRejected extends Component {
   static propTypes = {
     adharObj: PropTypes.object.isRequired,
-    preFlightResp: PropTypes.object.isRequired,
+    // preFlightResp: PropTypes.object.isRequired,
     anchorObj: PropTypes.object,
-    payload: PropTypes.object.isRequired,
-    businessObj: PropTypes.object.isRequired
+    payload: PropTypes.object.isRequired
   };
 
   componentWillMount() {

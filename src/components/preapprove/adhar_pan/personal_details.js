@@ -11,10 +11,10 @@ import "react-datepicker/dist/react-datepicker.css";
 
 const {PUBLIC_URL} = process.env;
 
-class AdharPan extends Component {
+class PersonalDetail extends Component {
     
     static propTypes = {
-        authObj: PropTypes.object.isRequired,
+        authObj: PropTypes.object,
         anchorObj: PropTypes.object,
         payload: PropTypes.object.isRequired,
         gstProfile: PropTypes.object
@@ -595,4 +595,4 @@ const mapStateToProps = state => ({
 export default withRouter(connect(
     mapStateToProps,
     {setAdharManual, changeLoader, showAlert}
-)(AdharPan));
+)(PersonalDetail));

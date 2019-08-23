@@ -16,7 +16,7 @@ const {PUBLIC_URL} = process.env;
 
 class AdharPan extends Component {
     static propTypes = {
-        pan: PropTypes.string.isRequired,
+        pan: PropTypes.string,
         adhar: PropTypes.string,
         payload: PropTypes.object.isRequired,
       };
