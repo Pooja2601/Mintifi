@@ -12,6 +12,7 @@ import {
 } from "../../../actions/index";
 import { Link, withRouter } from "react-router-dom";
 // import {alertModule} from "../../../shared/commonLogic";
+import { fetchAPI, apiActions, postAPI } from '../../../api'
 
 const Timer = OTP_Timer;
 const { PUBLIC_URL } = process.env;
@@ -40,67 +41,59 @@ class MobileOtp extends Component {
 
   // obj = {mobile_correct: false};
 
-  _formSubmit(e) {
+  _formSubmit = async (e) => {
     e.preventDefault();
     clearInterval(this.interval);
     const { changeLoader, token, setAdharManual, showAlert } = this.props;
-    changeLoader(true);
 
     this.setState({ loading: true, submitted: true, timer: Timer });
 
-    fetch(`${otpUrl}/send_otp`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", token: token },
-      body: JSON.stringify({
+    changeLoader(true);
+
+    const options = {
+      token: token,
+      URL: `${otpUrl}/send_otp`,
+      data: {
         app_id: app_id,
         otp_type: "one_time_password",
         mobile_number: this.state.mobile,
         timestamp: new Date()
-      })
-    })
-      .then(resp => resp.json())
-      .then(
-        resp => {
-          // console.log(JSON.stringify(resp));
-          changeLoader(false);
-          if (resp.error === Object(resp.error)) {
-            showAlert(resp.error.message, "warn");
-            this.setState({ loading: false, submitted: false });
-          }
-          //     this.showSnackbary.click();
-          // showSnackbar(resp.error.message);
-          else if (
-            resp.response === Object(resp.response) &&
-            resp.response.status === "success"
-          ) {
-            // alertModule(resp.success.message,'success');
-            this.setState(
-              { otp_reference_id: resp.response.otp_reference_code },
-              () => setAdharManual(this.state)
-            );
-            this.interval = setInterval(e => {
-              this.setState({ timer: this.state.timer - 1 }, () => {
-                if (this.state.timer === 0) {
-                  this.setState({
-                    loading: false,
-                    submitted: false,
-                    timer: Timer
-                  });
-                  clearInterval(this.interval);
-                }
-              });
-            }, 1000);
-          }
-        },
-        resp => {
-          showAlert("net");
-          changeLoader(false);
-        }
+      },
+    }
+
+    const resp = await postAPI(options);
+
+    changeLoader(false);
+
+    if (resp.status === apiActions.ERROR_NET)
+      showAlert('net');
+
+    if (resp.status === apiActions.ERROR_RESPONSE) {
+      showAlert(resp.data.message, "warn");
+      this.setState({ loading: false, submitted: false });
+    }
+    else if (resp.status === apiActions.SUCCESS_RESPONSE) {
+      this.setState(
+        { otp_reference_id: resp.data.otp_reference_code },
+        () => setAdharManual(this.state)
       );
-    // this.props.sendOTP(this.state.mobile);
+      this.interval = setInterval(e => {
+        this.setState({ timer: this.state.timer - 1 }, () => {
+          if (this.state.timer === 0) {
+            this.setState({
+              loading: false,
+              submitted: false,
+              timer: Timer
+            });
+            clearInterval(this.interval);
+          }
+        });
+      }, 1000);
+    }
+
   }
 
-  _verifyOTP(e) {
+  _verifyOTP = async (e) => {
     const {
       adharObj,
       token,
@@ -111,46 +104,45 @@ class MobileOtp extends Component {
     } = this.props;
     e.preventDefault();
     changeLoader(true);
-    fetch(`${otpUrl}/verify_otp`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", token: token },
-      body: JSON.stringify({
+
+    const options = {
+      token: token,
+      URL: `${otpUrl}/verify_otp`,
+      data: {
         app_id: app_id,
         otp_reference_number: adharObj.otp_reference_id,
         mobile_number: adharObj.mobile,
         otp: this.state.otp,
         timestamp: new Date()
-      })
-    })
-      .then(resp => resp.json())
-      .then(
-        resp => {
-          changeLoader(false);
-          if (resp.error === Object(resp.error))
-            showAlert(resp.error.message, "warn");
-          else if (resp.response === Object(resp.response)) {
-            this.setState(
-              {
-                verified: resp.response.is_otp_verified,
-                verified_number: adharObj.mobile
-              },
-              () => {
-                setAdharManual(this.state);
-              }
-            );
-            if (resp.response.is_otp_verified)
-              //&& this.state.verified_number === adharObj.mobile
-              setTimeout(() => {
-                history.push(`${PUBLIC_URL}/preapprove/businessdetail`);
-              }, 500);
-            // Goes to New Page
-          }
+      },
+    }
+
+    const resp = await postAPI(options);
+
+    if (resp.status === apiActions.ERROR_NET)
+      showAlert('net');
+
+    if (resp.status === apiActions.ERROR_RESPONSE)
+      showAlert(resp.data.message, "warn");
+    else if(resp.status === apiActions.SUCCESS_RESPONSE) {
+      this.setState(
+        {
+          verified: resp.data.is_otp_verified,
+          verified_number: adharObj.mobile
         },
-        resp => {
-          showAlert("net");
-          changeLoader(false);
+        () => {
+          setAdharManual(this.state);
         }
       );
+      if (resp.data.is_otp_verified)
+        //&& this.state.verified_number === adharObj.mobile
+        setTimeout(() => {
+          history.push(`${PUBLIC_URL}/preapprove/businessdetail`);
+        }, 500);
+    }
+
+    changeLoader(false);
+
   }
 
   //authObj

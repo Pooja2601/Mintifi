@@ -24,3 +24,4 @@ yarn-error.log*
 
 .idea/
 /compact_ui/node_modules/
+.vscode/launch.json

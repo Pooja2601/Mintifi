@@ -6,6 +6,7 @@
   "dependencies": {
     "@material-ui/core": "^3.9.3",
     "axios": "^0.18.0",
+    "babel-eslint": "^9.0.0",
     "bootstrap": "^4.3.1",
     "create-react-class": "^15.6.3",
     "history": "^4.7.2",

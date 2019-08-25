@@ -1,26 +1,27 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
-import {baseUrl, BusinessType, app_id} from "../../../shared/constants";
-import {connect} from "react-redux";
+import { baseUrl, BusinessType, app_id } from "../../../shared/constants";
+import { connect } from "react-redux";
 import {
     pan_adhar,
     changeLoader,
     setGstProfile,
     setBusinessDetail, showAlert
-} from "../../../actions/index";
+} from "../../../actions";
 import PropTypes from 'prop-types';
-import {Link, withRouter} from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 // import {alertModule} from "../../../shared/commonLogic";
+import { apiActions, fetchAPI } from '../../../api';
 
-const {PUBLIC_URL} = process.env;
+const { PUBLIC_URL } = process.env;
 
 class AdharPan extends Component {
     static propTypes = {
         pan: PropTypes.string,
         adhar: PropTypes.string,
         payload: PropTypes.object.isRequired,
-      };
-      
+    };
+
     state = {
         pan: "",
         adhar: "",
@@ -47,7 +48,7 @@ class AdharPan extends Component {
             <>
                 <button
                     type="button"
-                    style={{visibility: "hidden"}}
+                    style={{ visibility: "hidden" }}
                     ref={ref => (this.triggerModalGST = ref)}
                     id={"triggerModalGST"}
                     data-toggle="modal"
@@ -66,7 +67,7 @@ class AdharPan extends Component {
                     <div
                         className="modal-dialog"
                         role="document"
-                        style={{margin: "5.75rem auto"}}
+                        style={{ margin: "5.75rem auto" }}
                     >
                         <div className="modal-content">
                             <div className="modal-header">
@@ -86,42 +87,42 @@ class AdharPan extends Component {
                                 <div className="checkbox">
                                     <div className={"row"}>
                                         {this.state.gst_details ===
-                                        Object(this.state.gst_details) &&
-                                        this.state.gst_details.length ? (
-                                            this.state.gst_details.map((val, key) => (
-                                                <div key={key} className={"col-sm-6"}>
-                                                    <label>
-                                                        <input
-                                                            type="radio"
-                                                            name={"gst_details"}
-                                                            checked={this.state.checked[key] || ""}
-                                                            onChange={e => {
-                                                                this.setState(prevState => ({
-                                                                    checked: {
-                                                                        [key]: true
-                                                                    },
-                                                                    selectedGST: val.gstinId
-                                                                }));
-                                                            }}
-                                                        />{" "}
-                                                        <b
-                                                            style={{
-                                                                marginLeft: "20px",
-                                                                fontSize: "13.5px",
-                                                                color: "black",
-                                                                cursor: "pointer",
-                                                                textTransform: "capitalize"
-                                                            }}
-                                                        >
-                                                            {val.gstinId}
-                                                        </b>
-                                                    </label>
-                                                </div>
-                                            ))
-                                        ) : (
-                                            <></>
-                                        )}
-                                        <br/>
+                                            Object(this.state.gst_details) &&
+                                            this.state.gst_details.length ? (
+                                                this.state.gst_details.map((val, key) => (
+                                                    <div key={key} className={"col-sm-6"}>
+                                                        <label>
+                                                            <input
+                                                                type="radio"
+                                                                name={"gst_details"}
+                                                                checked={this.state.checked[key] || ""}
+                                                                onChange={e => {
+                                                                    this.setState(prevState => ({
+                                                                        checked: {
+                                                                            [key]: true
+                                                                        },
+                                                                        selectedGST: val.gstinId
+                                                                    }));
+                                                                }}
+                                                            />{" "}
+                                                            <b
+                                                                style={{
+                                                                    marginLeft: "20px",
+                                                                    fontSize: "13.5px",
+                                                                    color: "black",
+                                                                    cursor: "pointer",
+                                                                    textTransform: "capitalize"
+                                                                }}
+                                                            >
+                                                                {val.gstinId}
+                                                            </b>
+                                                        </label>
+                                                    </div>
+                                                ))
+                                            ) : (
+                                                <></>
+                                            )}
+                                        <br />
                                     </div>
                                 </div>
                                 {/*{this.state.selectedGST}*/}
@@ -132,7 +133,7 @@ class AdharPan extends Component {
                                     className="btn greenButton btn-raised align-left"
                                     onClick={() => this._setGST()}
                                     disabled={!this.state.selectedGST.length}
-                                    style={{padding: "7px 11px 8px 11px"}}
+                                    style={{ padding: "7px 11px 8px 11px" }}
                                     data-dismiss="modal"
                                 >
                                     Select GST
@@ -165,7 +166,7 @@ class AdharPan extends Component {
         let regex = /^[a-zA-Z]{3}[pP][a-zA-Z]{1}([0-9]){4}[a-zA-Z]{1}?$/;
         if (e.target.value.length <= 10) {
             let pan_correct = regex.test(e.target.value);
-            this.setState({pan: e.target.value.toUpperCase(), pan_correct});
+            this.setState({ pan: e.target.value.toUpperCase(), pan_correct });
             this.props.pan_adhar(e.target.value.toUpperCase(), "");
         }
     };
@@ -174,7 +175,7 @@ class AdharPan extends Component {
         let regex = /^([0-9]){12}$/;
         if (e.target.value.length <= 12) {
             let adhar_correct = regex.test(e.target.value);
-            this.setState({adhar: e.target.value, adhar_correct});
+            this.setState({ adhar: e.target.value, adhar_correct });
             this.props.pan_adhar(this.props.pan, e.target.value);
         }
     };
@@ -194,7 +195,7 @@ class AdharPan extends Component {
         this.props.history.push(`${PUBLIC_URL}/preapprove/personaldetail`);
     };
 
-    _gstFetch = gstSelected => {
+    _gstFetch = async gstSelected => {
         const {
             changeLoader,
             //   history,
@@ -203,51 +204,46 @@ class AdharPan extends Component {
             payload,
             setBusinessDetail, showAlert
         } = this.props;
-        changeLoader(true);
-        fetch(
-            `${baseUrl}/companies/get_company_details_by_gstin?app_id=${app_id}&anchor_id=${
+
+        const options = {
+            URL: `${baseUrl}/companies/get_company_details_by_gstin?app_id=${app_id}&anchor_id=${
                 payload.anchor_id
                 }&gstin=${gstSelected}`,
-            {
-                method: "GET",
-                headers: {"Content-Type": "application/json", token: token}
-            }
-        )
-            .then(resp => resp.json())
-            .then(
-                resp => {
-                    changeLoader(false);
-                    //  ADDPA8664N -prop // AAKCM7569B -pvt
-                    if (resp.response !== Object(resp.response)) {
-                        // console.log("Could Not fetch GST Info"); // status 103
-                        showAlert(
-                            "Could Not fetch GST information, Something went wrong !",
-                            "warn"
-                        );
-                    } else {
-                        const {company_details} = resp.response;
-                        setGstProfile(company_details);
-                        BusinessType.map((val, key) => {
-                            if (company_details.ctb !== undefined)
-                                if (val.label.localeCompare(company_details.ctb) === 0)
-                                    this.gstDetails.companytype = val.value;
-                        });
+            token: token,
+        }
 
-                        this.gstDetails.lgnm = company_details.lgnm;
-                        // console.log(this.gstDetails);
-                        setBusinessDetail(this.gstDetails);
+        changeLoader(true);
+        const resp = await fetchAPI(options);
+        changeLoader(false);
 
-                        // console.log(this.gstDetails); // status 101
-                        // console.log(JSON.stringify(company_details)); // status 101
-                    }
-                    setTimeout(() => this.adharSkipped(), 500);
-                },
-                () => {
-                    changeLoader(false);
-                    showAlert('net');
-                }
+        if (resp.status === apiActions.ERROR_NET)
+            showAlert('net');
+
+        if (resp.status === apiActions.ERROR_RESPONSE)
+            showAlert(
+                "Could Not fetch GST information, Something went wrong !",
+                "warn"
             );
-    };
+        else if (resp.status === apiActions.SUCCESS_RESPONSE) {
+            const { company_details } = resp.data;
+            setGstProfile(company_details);
+            BusinessType.map((val, key) => {
+                if (company_details.ctb !== undefined)
+                    if (val.label.localeCompare(company_details.ctb) === 0)
+                        this.gstDetails.companytype = val.value;
+            });
+
+            this.gstDetails.lgnm = company_details.lgnm;
+            // console.log(this.gstDetails);
+            setBusinessDetail(this.gstDetails);
+
+        }
+        setTimeout(() => this.adharSkipped(), 500);
+
+
+    }
+
+
     /*
           body: JSON.stringify({
           app_id: app_id,
@@ -255,48 +251,45 @@ class AdharPan extends Component {
           pan: pan
       })*/
 
-    _panFetch = () => {
+    _panFetch = async () => {
         let checked = {};
-        const {changeLoader, payload, pan, token, showAlert} = this.props;
+        const { changeLoader, payload, pan, token, showAlert } = this.props;
         // console.log(token);
         changeLoader(true);
-        fetch(
-            `${baseUrl}/companies/get_gst_details?app_id=${app_id}&anchor_id=${
+
+        const options = {
+            token: token,
+            URL: `${baseUrl}/companies/get_gst_details?app_id=${app_id}&anchor_id=${
                 payload.anchor_id
-                }&pan=${pan}`,
-            {
-                method: "GET",
-                headers: {"Content-Type": "application/json", token: token}
-            }
-        )
-            .then(resp => resp.json())
-            .then(
-                resp => {
-                    changeLoader(false);
-                    //  ADDPA8664N -prop // AAKCM7569B -pvt
-                    if (resp.response === Object(resp.response)) {
-                        resp.response.gst_details.map((val, key) => {
-                            checked[key] = false;
-                        });
-                        this.setState({checked, gst_details: resp.response.gst_details});
-                        this.triggerModalGST.click();
-                        // console.log(this.state.gst_details);
-                    } else {
-                        showAlert(resp.error.message, "error");
-                        if (resp.error.code !== "ER-AUTH-102")
-                            setTimeout(() => this.adharSkipped(), 500);
-                        // this._gstFetch(resp.result[0].gstinId);  // status 101
-                    }
-                },
-                () => {
-                    changeLoader(false);
-                    showAlert('net');
-                }
-            );
+                }&pan=${pan}`
+        }
+
+        const resp = await fetchAPI(options);
+
+
+        if (resp.status === apiActions.ERROR_NET)
+            showAlert('net');
+
+        if (resp.status === apiActions.ERROR_RESPONSE) {
+            showAlert(resp.data.message, "error");
+            if (resp.data.code !== "ER-AUTH-102")
+                setTimeout(() => this.adharSkipped(), 500);
+        }
+        else if (resp.status === apiActions.SUCCESS_RESPONSE) {
+            resp.data.gst_details.map((val, key) => {
+                checked[key] = false;
+            });
+            this.setState({ checked, gst_details: resp.data.gst_details });
+            this.triggerModalGST.click();
+        }
+
+
+        changeLoader(false);
+
     };
 
     componentWillMount() {
-        const {payload} = this.props;
+        const { payload } = this.props;
         if (payload !== Object(payload) && !payload)
             this.props.history.push(`${PUBLIC_URL}/preapprove/token`);
 
@@ -304,8 +297,8 @@ class AdharPan extends Component {
     }
 
     componentDidMount() {
-        const {pan, changeLoader} = this.props;
-        if (pan) if (pan.length === 10) this.setState({pan_correct: true});
+        const { pan, changeLoader } = this.props;
+        if (pan) if (pan.length === 10) this.setState({ pan_correct: true });
         // console.log(this.props.token)
         changeLoader(false);
     }
@@ -346,7 +339,7 @@ class AdharPan extends Component {
                                     // ref={ref => (this.obj.pan = ref)}
                                     onChange={e => this._PANEnter(e)}
                                 />
-                                <br/>
+                                <br />
                             </div>
                         </div>
                         {/*<div className={"col-sm-11 col-md-8"} style={{ margin: 'auto 45%'}}>
@@ -390,10 +383,10 @@ class AdharPan extends Component {
                     </div>*/}
                                 </div>
                                 <span className="bmd-help">
-                  Don't have mobile linked with Aadhaar ?
+                                    Don't have mobile linked with Aadhaar ?
                 </span>
                                 <span className="bmd-help">
-                  No problem, you may skip it {/*on the right side*/}.
+                                    No problem, you may skip it {/*on the right side*/}.
                 </span>
                             </div>
                         </div>
@@ -428,6 +421,6 @@ const mapStateToProps = state => ({
 export default withRouter(
     connect(
         mapStateToProps,
-        {pan_adhar, changeLoader, setGstProfile, setBusinessDetail, showAlert}
+        { pan_adhar, changeLoader, setGstProfile, setBusinessDetail, showAlert }
     )(AdharPan)
 );
