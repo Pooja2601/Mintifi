@@ -13,6 +13,7 @@ import {
     base64Logic,
     retrieveParam
 } from "../../shared/commonLogic";
+import {fetchAPI, apiActions} from "../../api";
 import {
     eSignPayloadStatic,
     baseUrl,
@@ -26,10 +27,12 @@ const {PUBLIC_URL} = process.env;
 
 class ESign extends Component {
     static defaultProps = {
-        eSignPayload: {}
+        eSignPayload: null
     }
 
-    _fetchAnchorDetail() {
+    checkPayload = false
+
+    async _fetchAnchorDetail() {
         const {
             token,
             eSignPayload,
@@ -37,31 +40,24 @@ class ESign extends Component {
             showAlert,
             changeLoader
         } = this.props;
-        changeLoader(true);
-        if (eSignPayload === Object(eSignPayload) && eSignPayload)
-            fetch(
-                `${baseUrl}/merchants/${
+
+        if (this.checkPayload) {
+            changeLoader(true);
+
+            const options = {
+                URL: `${baseUrl}/merchants/${
                     eSignPayload.anchor_id
                     }/get_details?app_id=${app_id}`,
-                {
-                    method: "GET",
-                    headers: {"Content-type": "application/json", token: token}
-                }
-            )
-                .then(resp => resp.json())
-                .then(
-                    resp => {
-                        changeLoader(false);
-                        if (resp.response === Object(resp.response))
-                            setAnchorObj(resp.response);
-                        //   console.log(resp.response);
-                    },
-                    resp => {
-                        changeLoader(false);
-                        // showAlert('net');
-                    }
-                );
-        else changeLoader(false);
+                token: token,
+            }
+            const resp = await fetchAPI(options);
+
+            if (resp.status === apiActions.SUCCESS_RESPONSE)
+                setAnchorObj(resp.data);
+
+            changeLoader(false);
+        }
+
     }
 
     _triggerESign = () => {
@@ -85,10 +81,12 @@ class ESign extends Component {
             base64_decode = {},
             payload;
 
+        this.checkPayload = !!(eSignPayload === Object(eSignPayload) && eSignPayload.length)
+
         if (environment === "local") base64_decode = eSignPayloadStatic;
 
         // ToDo : hide the 2 lines in prod
-        if (eSignPayload === Object(eSignPayload) && eSignPayload) {
+        if (this.checkPayload) {
             // coming from constant
             Object.assign(base64_decode, eSignPayload);
         }
@@ -116,17 +114,17 @@ class ESign extends Component {
 
     render() {
         const {eSignPayload} = this.props;
+        // console.log(eSignPayload)
         return (
             <>
                 <h4 className={"text-center"}> e-SIGN Process</h4>
-                <small>(via Aadhaar)</small>
+                {/*<small >(via Aadhaar)</small>*/}
                 <br/>
 
                 <div className=" text-left " role="alert" style={{margin: "auto"}}>
-                    {eSignPayload === Object(eSignPayload) ? (
+                    {(this.checkPayload) ? (
                         <p className="paragraph_styling alert alert-info">
                             Kindly complete the eSIGN procedure by clicking the button below.
-                            Remember.
                         </p>
                     ) : (
                         <p className="paragraph_styling alert alert-danger">
@@ -154,7 +152,7 @@ class ESign extends Component {
                         type="button"
                         onClick={e => this._triggerESign()}
                         disabled={
-                            eSignPayload !== Object(eSignPayload)
+                            !this.checkPayload
                         }
                         className="form-submit btn btn-raised greenButton"
                     >

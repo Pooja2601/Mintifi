@@ -137,11 +137,11 @@ const routes = [
         component: PNach
     },
     {
-        path: 'enach/e_sign',
+        path: 'enach/esign',
         component: ESign
     },
     {
-        path: 'enach/e_sign_popup',
+        path: 'enach/esign_popup',
         component: ESignPopUp
     }
 ];
