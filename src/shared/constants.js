@@ -98,13 +98,13 @@ module.exports = {
     error_url: anchorUrls.error_url
   },
   drawdownPayload: {
-    anchor_id: "05cc584e39f34d0e97fc4bb6cd1fa8aa",
+    anchor_id: "8186bc",
     loan_amount: "500000",
     anchor_drawdown_id: Math.random()
       .toString(36)
       .substr(2, 6),
-    loan_application_id: "8456",
-    company_id: "629",
+    loan_application_id: "2971",
+    company_id: "745",
     drawdown_amount: "20000",
     disbursement_account_code: "sdtf78",
     success_url: anchorUrls.success_url,
