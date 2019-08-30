@@ -5,7 +5,7 @@ import {
     changeLoader,
     EsignsetPayload,
     EsignsetAttempt,
-    setAnchorObj,
+    setAnchorObj, EsignsetDocPayload,
     showAlert
 } from "../../../actions";
 import {
@@ -13,7 +13,7 @@ import {
     base64Logic,
     retrieveParam
 } from "../../../shared/commonLogic";
-import {fetchAPI, apiActions} from "../../../api";
+import {fetchAPI, apiActions, postAPI} from "../../../api";
 import {
     eSignPayloadStatic,
     baseUrl,
@@ -59,10 +59,54 @@ class ESign extends Component {
 
     }
 
-    _triggerESign = () => {
-        const {eSignPayload} = this.props;
-        const eSignPopUpPayload = base64Logic(eSignPayload, 'encode');
-        window.open(`${PUBLIC_URL}/enach/esign_popup?payload=${eSignPopUpPayload}`, 'ESign PopUp', "width=600,height=500,location=no,menubar=no,toolbar=no,titlebar=no")
+    _triggerESign = async () => {
+        const {eSignPayload, token, changeLoader, showAlert} = this.props;
+
+        const options = {
+            URL: `${baseUrl}/documents/esign_document`,
+            token: token,
+            data: {
+                app_id: app_id,
+                loan_application_id: eSignPayload.loan_application_id,
+                timestamp: new Date()
+            }
+        }
+        changeLoader(true);
+        const resp = await postAPI(options);
+        changeLoader(false);
+
+        if (resp.status === apiActions.ERROR_NET)
+            showAlert('net');
+        if (resp.status === apiActions.ERROR_RESPONSE)
+            showAlert(resp.data.message, 'warn');
+        if (resp.status === apiActions.SUCCESS_RESPONSE) {
+            EsignsetDocPayload(resp.data);
+            const eSignPopUpPayload = base64Logic(resp.data, 'encode');
+            // console.log(eSignPopUpPayload);
+            window.setTimeout(() => {
+                window.open(`${PUBLIC_URL}/esign/esign_popup?payload=${eSignPopUpPayload}`, 'ESign PopUp', "width=600,height=500,location=no,menubar=no,toolbar=no,titlebar=no")
+                this._pingDBStatus();
+            }, 2000);
+        }
+    }
+
+    _pingDBStatus = async () => {
+        const {eSignPayload, token, changeLoader, showAlert} = this.props;
+        const options = {
+            URL: `${baseUrl}/documents/esign_status`,
+            token: token,
+            data: {
+                app_id: app_id,
+                loan_application_id: eSignPayload.loan_application_id,
+                timestamp: new Date()
+            }
+        }
+        // changeLoader(true);
+        const resp = await postAPI(options);
+        // ToDo : Navigating to Bank Details Page
+        if (resp.status === apiActions.SUCCESS_RESPONSE) {
+            // resp.data.success &&
+        }
     }
 
     componentWillMount() {
@@ -83,11 +127,11 @@ class ESign extends Component {
         this.checkPayload = !!(eSignPayload === Object(eSignPayload) && eSignPayload.length)
 
         // Coming from constant
-        if (environment === "local") base64_decode = eSignPayloadStatic;
+        if (environment === "local" || environment === "dev")
+            base64_decode = eSignPayloadStatic;
 
         // ToDo : hide the 2 lines in prod
         if (this.checkPayload) {
-
             Object.assign(base64_decode, eSignPayload);
         }
 
@@ -97,7 +141,6 @@ class ESign extends Component {
             token = retrieveParam(href, "token") || undefined;
             if (payload) base64_decode = base64Logic(payload, "decode");
             // else this.setState({errorMsg: true});
-            // console.log(base64_decode);
         }
 
         if (base64_decode !== Object(base64_decode) && !base64_decode && !token)
@@ -107,6 +150,7 @@ class ESign extends Component {
             );
         else {
             EsignsetPayload(token, base64_decode);
+            this.checkPayload = !!base64_decode;
             this._fetchAnchorDetail();
         }
     }
@@ -173,6 +217,6 @@ const mapStateToProps = state => ({
 export default withRouter(
     connect(
         mapStateToProps,
-        {changeLoader, EsignsetPayload, EsignsetAttempt, setAnchorObj, showAlert}
+        {changeLoader, EsignsetPayload, EsignsetDocPayload, EsignsetAttempt, setAnchorObj, showAlert}
     )(ESign)
 );

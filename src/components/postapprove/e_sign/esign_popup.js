@@ -5,36 +5,38 @@ let adharForm = '';
 const TriggerPopUp = () => {
 
     const {href} = window.location;
-    const payload = payload && (retrieveParam(href, "payload") || undefined);
+    const payload = retrieveParam(href, "payload") || undefined;
+
     const payloadPopUp = payload && base64Logic(payload, 'decode');
 
-    let checkPayload = !!(payloadPopUp === Object(payloadPopUp) && payloadPopUp.length);
+
+    let checkPayload = !!(payloadPopUp === Object(payloadPopUp) && payloadPopUp);
 
     if (checkPayload)
         window.setTimeout(() => {
             adharForm.submit()
-        }, 1000);
+        }, 2000);
 
     return (<>
         <div className=" text-left " role="alert" style={{margin: "auto"}}>
             {(checkPayload) ? (
                 <form ref={ref => adharForm = ref} method="post"
-                      action="https://preprod.aadhaarbridge.com/api/_init">
-                    <input type="hidden" name="saCode" value="<your sa code>"/>
-                    <input type="hidden" name="api" value="ESIGN"/> >
-                    <input type="hidden" name="requestId" value="<request id which was sent in
-document upload api>"/>
-                    <input type="hidden" name="timeStamp" value="<timestamp in millisecond>"/>
-                    <input type="hidden" name="purpose" value="<purpose of doing Esign>"/>
-                    <input type="hidden" name=" otp " value="N/Y"/>
-                    <input type="hidden" name=" fingerPrint " value="N/Y"/>
-                    <input type="hidden" name=" iris " value="N/Y"/>
-                    <input type="hidden" name=" face " value="N/Y"/>
-                    <input type="hidden" name="channel" value="BOTH"/>
-                    <input type="hidden" name="esignName" value="abc"/>
-                    <input type="hidden" name="successUrl" value="<successUrl>"/>
-                    <input type="hidden" name="failureUrl" value="<failureUrl>"/>
-                    <input type="hidden" name="hash" value="<sha256 hash value>"/>
+                      action={payloadPopUp.url}>
+                    <input type="hidden" name="saCode" value={payloadPopUp.saCode}/>
+                    <input type="hidden" name="api" value={payloadPopUp.api}/>
+                    <input type="hidden" name="requestId" value={payloadPopUp.requestId}/>
+                    <input type="hidden" name="timeStamp" value={payloadPopUp.time_stamp}/>
+                    <input type="hidden" name="purpose" value={payloadPopUp.purpose}/>
+                    <input type="hidden" name=" otp " value={payloadPopUp.otp}/>
+                    <input type="hidden" name=" fingerPrint " value={payloadPopUp.fingerPrint}/>
+                    <input type="hidden" name=" iris " value={payloadPopUp.iris}/>
+                    <input type="hidden" name=" face " value={payloadPopUp.face}/>
+                    <input type="hidden" name="channel" value={payloadPopUp.channel}/>
+                    <input type="hidden" name="esignName" value={payloadPopUp.esignName}/>
+                    <input type="hidden" name="successUrl" value={payloadPopUp.successUrl}/>
+                    <input type="hidden" name="failureUrl" value={payloadPopUp.failureUrl}/>
+                    <input type="hidden" name="hash" value={payloadPopUp.hash}/>
+                    <p>Uploading data to server...</p>
                     <button type="submit" style={{visibility: 'hidden'}}>Proceed</button>
                 </form>
             ) : (
@@ -44,7 +46,6 @@ document upload api>"/>
                 </p>
             )}
         </div>
-
     </>)
 }
 
