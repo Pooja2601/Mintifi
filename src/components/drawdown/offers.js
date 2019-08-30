@@ -5,6 +5,7 @@ import {changeLoader, DrawsetLoanPayload, DrawsetPreflight, showAlert} from "../
 import {otpUrl, baseUrl, environment, app_id} from "../../shared/constants";
 import {PrivacyPolicy, TnCPolicy} from "../../shared/policy";
 import {postMessage} from "../../shared/commonLogic";
+import {fetchAPI, apiActions, postAPI} from "../../api";
 
 const {PUBLIC_URL} = process.env;
 
@@ -49,61 +50,114 @@ class Offers extends Component {
     };
 
 
-    _submitForm(e) {
+    _submitForm = async(e) => {
         const {payload, token, changeLoader, authObj, showAlert, loanPayload, history, DrawsetPreflight} = this.props;
         // e.preventDefault();
         changeLoader(true);
-        fetch(`${baseUrl}/loans/${payload.loan_application_id}/drawdown/`, {
-            method: "POST",
-            headers: {'Content-Type': 'application/json', token: token},
-            body: JSON.stringify({
-                    "app_id": app_id,
-                    "anchor_id": payload.anchor_id, //6iu89o
-                    "anchor_drawdown_id": payload.anchor_drawdown_id, //hy76543
-                    "drawdown_amount": payload.drawdown_amount,
-                    "otp_reference_id": authObj.otp_reference_id,
-                    "otp": authObj.otp,
-                    "offer": this.state.selected,
-                    "disbursement_account_code": payload.disbursement_account_code,
-                    "timestamp": new Date()
-                }
-            )
-        }).then(resp => resp.json()).then(resp => {
-            changeLoader(false);
-            if (resp.response === Object(resp.response)) {
-                // ToDo : uncomment this 2 lines for production
-                if (environment === 'prod' || environment === 'dev') {
-                    DrawsetPreflight(resp.response);
-                    setTimeout(() => history.push(`${PUBLIC_URL}/drawdown/thankyou`), 500);
-                }
-            }
+        // TODO: check postAPI function
+        const options = {
+                    token: null,
+                    URL: `${baseUrl}/loans/${payload.loan_application_id}/drawdown/`,
+                    data: {
+                          "app_id": app_id,
+                          "anchor_id": payload.anchor_id, //6iu89o
+                          "anchor_drawdown_id": payload.anchor_drawdown_id, //hy76543
+                          "drawdown_amount": payload.drawdown_amount,
+                          "otp_reference_id": authObj.otp_reference_id,
+                          "otp": authObj.otp,
+                          "offer": this.state.selected,
+                          "disbursement_account_code": payload.disbursement_account_code,
+                          "timestamp": new Date()
+                    }
+                };
+        const resp = await postAPI(options);
 
-            if (resp.error === Object(resp.error)) {
-                showAlert(resp.error.message);
+        changeLoader(false);
 
-                if (resp.error.code === 'ER-AUTH-102')
-                    setTimeout(() => {
-                        window.location.href = `${PUBLIC_URL}/drawdown/token`;
-                        // history.push(`${PUBLIC_URL}/drawdown/token`)
-                    }, 2000);
-                if (window.location !== window.parent.location)
-                    postMessage({
-                        drawdown_status: "error",
-                        drawdown_offer: null,
-                        loan_id: payload.loan_application_id,
-                        drawdown_id: payload.anchor_drawdown_id,
-                        action: "close"
-                    });
-            }
+        if (resp.status === apiActions.ERROR_NET)
+            showAlert("net");
 
-            // ToDo : comment this for production
-            if (environment === 'local')
-                setTimeout(() => history.push(`${PUBLIC_URL}/drawdown/thankyou`), 500);
+        if (resp.status === apiActions.ERROR_RESPONSE) {
+            showAlert(resp.data.message);
 
-        }, resp => {
-            showAlert('net');
-            changeLoader(false);
-        })
+           if (resp.data.code === 'ER-AUTH-102')
+               setTimeout(() => {
+                   window.location.href = `${PUBLIC_URL}/drawdown/token`;
+                   // history.push(`${PUBLIC_URL}/drawdown/token`)
+               }, 2000);
+           if (window.location !== window.parent.location)
+               postMessage({
+                   drawdown_status: "error",
+                   drawdown_offer: null,
+                   loan_id: payload.loan_application_id,
+                   drawdown_id: payload.anchor_drawdown_id,
+                   action: "close"
+               });
+        } else if (resp.status === apiActions.SUCCESS_RESPONSE) {
+          // ToDo : uncomment this 2 lines for production
+         if (environment === 'prod' || environment === 'dev') {
+             DrawsetPreflight(resp.response);
+             setTimeout(() => history.push(`${PUBLIC_URL}/drawdown/thankyou`), 500);
+         }
+        }
+
+      // ToDo : comment this for production
+        if (environment === 'local')
+            setTimeout(() => history.push(`${PUBLIC_URL}/drawdown/thankyou`), 500);
+
+
+
+//        fetch(`${baseUrl}/loans/${payload.loan_application_id}/drawdown/`, {
+//            method: "POST",
+//            headers: {'Content-Type': 'application/json', token: token},
+//            body: JSON.stringify({
+//                    "app_id": app_id,
+//                    "anchor_id": payload.anchor_id, //6iu89o
+//                    "anchor_drawdown_id": payload.anchor_drawdown_id, //hy76543
+//                    "drawdown_amount": payload.drawdown_amount,
+//                    "otp_reference_id": authObj.otp_reference_id,
+//                    "otp": authObj.otp,
+//                    "offer": this.state.selected,
+//                    "disbursement_account_code": payload.disbursement_account_code,
+//                    "timestamp": new Date()
+//                }
+//            )
+//        }).then(resp => resp.json()).then(resp => {
+//            changeLoader(false);
+//            if (resp.response === Object(resp.response)) {
+//                // ToDo : uncomment this 2 lines for production
+//                if (environment === 'prod' || environment === 'dev') {
+//                    DrawsetPreflight(resp.response);
+//                    setTimeout(() => history.push(`${PUBLIC_URL}/drawdown/thankyou`), 500);
+//                }
+//            }
+//
+//            if (resp.error === Object(resp.error)) {
+//                showAlert(resp.error.message);
+//
+//                if (resp.error.code === 'ER-AUTH-102')
+//                    setTimeout(() => {
+//                        window.location.href = `${PUBLIC_URL}/drawdown/token`;
+//                        // history.push(`${PUBLIC_URL}/drawdown/token`)
+//                    }, 2000);
+//                if (window.location !== window.parent.location)
+//                    postMessage({
+//                        drawdown_status: "error",
+//                        drawdown_offer: null,
+//                        loan_id: payload.loan_application_id,
+//                        drawdown_id: payload.anchor_drawdown_id,
+//                        action: "close"
+//                    });
+//            }
+//
+//            // ToDo : comment this for production
+//            if (environment === 'local')
+//                setTimeout(() => history.push(`${PUBLIC_URL}/drawdown/thankyou`), 500);
+//
+//        }, resp => {
+//            showAlert('net');
+//            changeLoader(false);
+//        })
     }
 
     componentWillMount() {
