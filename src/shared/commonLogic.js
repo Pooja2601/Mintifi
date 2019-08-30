@@ -87,7 +87,7 @@ export const base64Logic = (payload, action) => {
                     : {};
         } catch (e) {
             base64 = Base64.btoa(payload);
-            toast.error("Not a Valid Javascript Object");
+            // toast.error("Not a Valid Javascript Object");
         }
     }
     return base64;
@@ -128,7 +128,7 @@ export const generateToken = () => {
                 // console.log(this.props.token);
             },
             () => {
-                alertModule();
+                // alertModule();
                 return 31;
             }
         );

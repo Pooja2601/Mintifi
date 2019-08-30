@@ -24,7 +24,7 @@ export const fetchAPI = propsParam => {
         .then(
             resp => {
                 if (resp.response !== Object(resp.response)) {
-                    return { status: apiActions.ERROR_RESPONSE, data: resp.error.code };
+                    return { status: apiActions.ERROR_RESPONSE, data: resp.error };
                 } else {
                     return { status: apiActions.SUCCESS_RESPONSE, data: resp.response };
                 }

@@ -85,6 +85,23 @@ module.exports = {
     cancel_url: anchorUrls.cancel_url
   },
   //   66981240
+  eSignPayloadStatic: {
+    url: "https://preprod.aadhaarbridge.com/api/_init",
+    saCode: "b4237b",
+    api: "ESIGN",
+    requestId: "4fffe68a707c9d83",
+    time_stamp: "1566411759787",
+    purpose: "Agreement Signing",
+    otp: "Y",
+    fingerPrint: "N",
+    iris: "N",
+    face: "N",
+    channel: "BOTH",
+    esignName: "RENJITH THAMPAN THAMPAN",
+    successUrl: "http://test.mintifi.com/esigns/38934/success",
+    failureUrl: "http://test.mintifi.com/esigns/38934/failure",
+    hash: "8a908178b7f4fb6f7787ac6d71551cfe1535dd4a3284c7ce8ed94b8515f822d2"
+  },
   eNachPayloadStatic: {
     mandate_id: "ENA19061214540850995IU6FCU1LE1AP",
     document_id: "ENA19061214540850995IU6FCU1LE1AP",
