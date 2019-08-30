@@ -26,13 +26,15 @@ import DrawFetchOffers from "./components/drawdown/fetch_offers";
 import DrawThankYou from "./components/drawdown/thankyou";
 
 //E-NACH
-import ENach from "./components/e_nach";
-import SuccessUrl from "./components/e_nach/success_url";
-import ErrorUrl from "./components/e_nach/error_url";
-import CancelUrl from "./components/e_nach/cancel_url";
-import PNach from "./components/e_nach/pnach";
-import ESign from "./components/e_nach/esign";
-import ESignPopUp from "./components/e_nach/esign_popup";
+import ENach from "./components/postapprove/e_nach/";
+import SuccessUrl from "./components/postapprove/e_nach/success_url";
+import ErrorUrl from "./components/postapprove/e_nach/error_url";
+import CancelUrl from "./components/postapprove/e_nach/cancel_url";
+import PNach from "./components/postapprove/e_nach/pnach";
+
+// E-Sign
+import ESign from "./components/postapprove/e_sign";
+import ESignPopUp from "./components/postapprove/e_sign/esign_popup";
 
 
 const routes = [
@@ -137,11 +139,11 @@ const routes = [
         component: PNach
     },
     {
-        path: 'enach/esign',
+        path: 'esign',
         component: ESign
     },
     {
-        path: 'enach/esign_popup',
+        path: 'esign/esign_popup',
         component: ESignPopUp
     }
 ];

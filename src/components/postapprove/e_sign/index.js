@@ -37,7 +37,6 @@ class ESign extends Component {
             token,
             eSignPayload,
             setAnchorObj,
-            showAlert,
             changeLoader
         } = this.props;
 
@@ -83,11 +82,12 @@ class ESign extends Component {
 
         this.checkPayload = !!(eSignPayload === Object(eSignPayload) && eSignPayload.length)
 
+        // Coming from constant
         if (environment === "local") base64_decode = eSignPayloadStatic;
 
         // ToDo : hide the 2 lines in prod
         if (this.checkPayload) {
-            // coming from constant
+
             Object.assign(base64_decode, eSignPayload);
         }
 
