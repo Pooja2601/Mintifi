@@ -7,20 +7,20 @@ import {
     EsignsetAttempt,
     setAnchorObj,
     showAlert
-} from "../../actions";
+} from "../../../actions";
 import {
     // alertModule,
     base64Logic,
     retrieveParam
-} from "../../shared/commonLogic";
-import {fetchAPI, apiActions} from "../../api";
+} from "../../../shared/commonLogic";
+import {fetchAPI, apiActions} from "../../../api";
 import {
     eSignPayloadStatic,
     baseUrl,
     app_id,
     environment,
     ENachResponseUrl
-} from "../../shared/constants";
+} from "../../../shared/constants";
 import PropTypes from "prop-types";
 
 const {PUBLIC_URL} = process.env;

@@ -1,5 +1,5 @@
 import React from 'react';
-import {base64Logic, retrieveParam} from "../../shared/commonLogic";
+import {base64Logic, retrieveParam} from "../../../shared/commonLogic";
 
 let adharForm = '';
 const TriggerPopUp = () => {
