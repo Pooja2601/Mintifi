@@ -1,8 +1,8 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
-import {baseUrl, otpUrl, OTP_Timer, app_id} from "../../shared/constants";
-import {connect} from "react-redux";
-import {withRouter} from "react-router-dom";
+import { baseUrl, otpUrl, OTP_Timer, app_id } from "../../shared/constants";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 import {
     DrawsetAuth,
     DrawsetToken,
@@ -13,10 +13,10 @@ import {
 } from "../../actions";
 // import {alertModule} from "../../shared/commonLogic";
 import PropTypes from "prop-types";
-import {fetchAPI, apiActions, postAPI} from "../../api";
+import { fetchAPI, apiActions, postAPI } from "../../api";
 
 const Timer = OTP_Timer;
-const {PUBLIC_URL} = process.env;
+const { PUBLIC_URL } = process.env;
 
 class MobileOtp extends Component {
     static propTypes = {
@@ -41,9 +41,9 @@ class MobileOtp extends Component {
     _formSubmit = async e => {
         e.preventDefault();
         clearInterval(this.interval);
-        const {changeLoader, token, DrawsetAuth, showAlert} = this.props;
+        const { changeLoader, token, DrawsetAuth, showAlert } = this.props;
         changeLoader(true);
-        this.setState({loading: true, submitted: true, timer: Timer});
+        this.setState({ loading: true, submitted: true, timer: Timer });
         const options = {
             token: null,
             URL: `${otpUrl}/send_otp`,
@@ -63,15 +63,15 @@ class MobileOtp extends Component {
 
         if (resp.status === apiActions.ERROR_RESPONSE) {
             showAlert(resp.data.message, "warn");
-            this.setState({loading: false, submitted: false});
+            this.setState({ loading: false, submitted: false });
         } else if (resp.status === apiActions.SUCCESS_RESPONSE) {
             // alertModule(resp.success.message, "warn");
             this.setState(
-                {otp_reference_id: resp.data.otp_reference_code},
+                { otp_reference_id: resp.data.otp_reference_code },
                 () => DrawsetAuth(this.state)
             );
             this.interval = setInterval(e => {
-                this.setState({timer: this.state.timer - 1}, () => {
+                this.setState({ timer: this.state.timer - 1 }, () => {
                     if (this.state.timer === 0) {
                         this.setState({
                             loading: false,
@@ -85,83 +85,49 @@ class MobileOtp extends Component {
             // this.props.sendOTP(this.state.mobile);
         }
     }
-   // TODO: check post function
+
+    // TODO: check post function
     _verifyOTP = async (e) => {
         e.preventDefault();
-        const {changeLoader, authObj, token, DrawsetAuth, showAlert} = this.props;
+        const { changeLoader, authObj, token, DrawsetAuth, showAlert } = this.props;
         changeLoader(true);
-         const options = {
-                    token: null,
-                    URL: `${otpUrl}/verify_otp`,
-                    data: {
-                      app_id: app_id,
-                      otp_reference_number: authObj.otp_reference_id,
-                      mobile_number: authObj.mobile,
-                      otp: this.state.otp,
-                      timestamp: new Date()
-                    }
-                };
-                const resp = await postAPI(options);
+        const options = {
+            token: null,
+            URL: `${otpUrl}/verify_otp`,
+            data: {
+                app_id: app_id,
+                otp_reference_number: authObj.otp_reference_id,
+                mobile_number: authObj.mobile,
+                otp: this.state.otp,
+                timestamp: new Date()
+            }
+        };
+        const resp = await postAPI(options);
 
-                changeLoader(false);
+        changeLoader(false);
 
-                if (resp.status === apiActions.ERROR_NET)
-                    showAlert("net");
+        if (resp.status === apiActions.ERROR_NET)
+            showAlert("net");
 
-                if (resp.status === apiActions.ERROR_RESPONSE) {
-                    showAlert(resp.data.message, "warn");
-                    this.setState({loading: false, submitted: false});
-                } else if (resp.status === apiActions.SUCCESS_RESPONSE) {
-                    let that = this;
-                        this.setState({verified: resp.data.is_otp_verified}, () => {
-                            DrawsetAuth(that.state);
-                        });
-                        // Goes to New Page
-                        if (resp.data.is_otp_verified)
-                            setTimeout(() => {
-                                this._fetchAnchorInfo();
-                                // history.push(`${PUBLIC_URL}/drawdown/offers`);
-                            }, 500);
-                }
+        if (resp.status === apiActions.ERROR_RESPONSE) {
+            showAlert(resp.data.message, "warn");
+            this.setState({ loading: false, submitted: false });
+        } else if (resp.status === apiActions.SUCCESS_RESPONSE) {
+            let that = this;
+            this.setState({ verified: resp.data.is_otp_verified }, () => {
+                DrawsetAuth(that.state);
+            });
+            // Goes to New Page
+            if (resp.data.is_otp_verified)
+                setTimeout(() => {
+                    this._fetchAnchorInfo();
+                    // history.push(`${PUBLIC_URL}/drawdown/offers`);
+                }, 500);
+        }
 
-//        fetch(`${otpUrl}/verify_otp`, {
-//            method: "POST",
-//            headers: {"Content-Type": "application/json", token: token},
-//            body: JSON.stringify({
-//                app_id: app_id,
-//                otp_reference_number: authObj.otp_reference_id,
-//                mobile_number: authObj.mobile,
-//                otp: this.state.otp,
-//                timestamp: new Date()
-//            })
-//        })
-//            .then(resp => resp.json())
-//            .then(
-//                resp => {
-//                    changeLoader(false);
-//                    let that = this;
-//                    if (resp.error === Object(resp.error))
-//                        showAlert(resp.error.message, "warn");
-//                    else if (resp.response === Object(resp.response)) {
-//                        this.setState({verified: resp.response.is_otp_verified}, () => {
-//                            DrawsetAuth(that.state);
-//                        });
-//                        // Goes to New Page
-//                        if (resp.response.is_otp_verified)
-//                            setTimeout(() => {
-//                                this._fetchAnchorInfo();
-//                                // history.push(`${PUBLIC_URL}/drawdown/offers`);
-//                            }, 500);
-//                    }
-//                },
-//                resp => {
-//                    showAlert("net");
-//                    changeLoader(false);
-//                }
-//            );
     }
 
-    _fetchAnchorInfo = async() => {
+    _fetchAnchorInfo = async () => {
         const {
             changeLoader,
             authObj,
@@ -176,63 +142,38 @@ class MobileOtp extends Component {
         // `${baseUrl}/loans/${payload.company_id}/details/?app_id=${app_id}`,
 
         // TODO: check fetchAPI function
-        if (payload === Object(payload) && payload){
-         const options = {
-            token: token,
-            URL: `${baseUrl}/merchants/${payload.anchor_id}/get_details?app_id=${app_id}`,
-          };
-           const resp = await fetchAPI(options);
+        if (payload === Object(payload) && payload) {
+            const options = {
+                token: token,
+                URL: `${baseUrl}/merchants/${payload.anchor_id}/get_details?app_id=${app_id}`,
+            };
+            const resp = await fetchAPI(options);
             changeLoader(false);
-             if(resp.status === apiActions.ERROR_NET)
-               showAlert("net")
-             if(resp.status === apiActions.ERROR_RESPONSE)
-               showAlert(resp.data.message, "warn")
-             else if (resp.status === apiActions.SUCCESS_RESPONSE)
+            if (resp.status === apiActions.ERROR_NET)
+                showAlert("net")
+            if (resp.status === apiActions.ERROR_RESPONSE)
+                showAlert(resp.data.message, "warn")
+            else if (resp.status === apiActions.SUCCESS_RESPONSE) {
                 DrawAnchorPayload(resp.data);
                 setAnchorObj(resp.data);
-                 setTimeout(() => {
-                    history.push(`${PUBLIC_URL}/drawdown/fetch_offers`);
-                }, 1000);
+            }
+            setTimeout(() => {
+                history.push(`${PUBLIC_URL}/drawdown/fetch_offers`);
+            }, 1000);
+
         }
 
-//            fetch(
-//                `${baseUrl}/merchants/${payload.anchor_id}/get_details?app_id=${app_id}`,
-//                {
-//                    method: "GET",
-//                    headers: {"Content-Type": "application/json", token: token}
-//                }
-//            )
-//                .then(resp => resp.json())
-//                .then(
-//                    resp => {
-//                        changeLoader(false);
-//                        if (resp.error === Object(resp.error))
-//                            showAlert(resp.error.message, "error");
-//                        if (resp.response === Object(resp.response)) {
-//                            DrawAnchorPayload(resp.response);
-//                            setAnchorObj(resp.response);
-//                        }
-//                        setTimeout(() => {
-//                            history.push(`${PUBLIC_URL}/drawdown/fetch_offers`);
-//                        }, 1000);
-//                    },
-//                    resp => {
-//                        showAlert("net");
-//                        changeLoader(false);
-//                    }
-//                );
-        else changeLoader(false);
     };
 
     //authObj
     _setMobile = e => {
-        const {value} = e.target;
-        const {DrawsetAuth} = this.props;
+        const { value } = e.target;
+        const { DrawsetAuth } = this.props;
 
         if (value.length <= 10) {
             // console.log(value.length);
             this.setState(
-                {mobile: value, mobile_correct: value.length !== 10},
+                { mobile: value, mobile_correct: value.length !== 10 },
                 () => DrawsetAuth(this.state)
             );
         }
@@ -290,8 +231,8 @@ class MobileOtp extends Component {
                                 </label>
                                 <div className={"input-group"}>
                                     <div className="input-group-prepend">
-                    <span className="input-group-text" id="basic-addon3">
-                      +91
+                                        <span className="input-group-text" id="basic-addon3">
+                                            +91
                     </span>
                                     </div>
                                     <input
@@ -340,7 +281,7 @@ class MobileOtp extends Component {
                                         max={999999}
                                         onChange={e => {
                                             if (e.target.value.length <= 6)
-                                                this.setState({otp: e.target.value});
+                                                this.setState({ otp: e.target.value });
                                         }}
                                         aria-describedby="otp-area"
                                     />
@@ -383,7 +324,7 @@ class MobileOtp extends Component {
                         >
                             Send OTP
                         </button>
-                        <br/>
+                        <br />
 
                         <button
                             style={{

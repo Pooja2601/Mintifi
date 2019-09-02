@@ -1,29 +1,29 @@
-import React, {Component} from "react";
-import {withRouter} from "react-router-dom";
-import {connect} from "react-redux";
-import {changeLoader, DrawsetLoanPayload, DrawsetPreflight, showAlert} from "../../actions";
-import {otpUrl, baseUrl, environment, app_id} from "../../shared/constants";
-import {PrivacyPolicy, TnCPolicy} from "../../shared/policy";
-import {postMessage} from "../../shared/commonLogic";
-import {fetchAPI, apiActions, postAPI} from "../../api";
+import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+import { changeLoader, DrawsetLoanPayload, DrawsetPreflight, showAlert } from "../../actions";
+import { otpUrl, baseUrl, environment, app_id } from "../../shared/constants";
+import { PrivacyPolicy, TnCPolicy } from "../../shared/policy";
+import { postMessage } from "../../shared/commonLogic";
+import { fetchAPI, apiActions, postAPI } from "../../api";
 
-const {PUBLIC_URL} = process.env;
+const { PUBLIC_URL } = process.env;
 
 class Offers extends Component {
 
-    state = {tnc_consent: false, selected: {}};
+    state = { tnc_consent: false, selected: {} };
 
     RenderModalTnC = () => {
         return (
             <>
-                <button type="button" style={{visibility: 'hidden'}} ref={ref => this.triggerTnCModal = ref}
-                        id={"triggerTnCModal"} data-toggle="modal"
-                        data-target="#TnCMsgModal">
+                <button type="button" style={{ visibility: 'hidden' }} ref={ref => this.triggerTnCModal = ref}
+                    id={"triggerTnCModal"} data-toggle="modal"
+                    data-target="#TnCMsgModal">
                 </button>
 
                 <div className="modal fade" id={"TnCMsgModal"} tabIndex="-1"
-                     role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div className="modal-dialog modal-lg" role="document" style={{margin: '5.75rem auto'}}>
+                    role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog modal-lg" role="document" style={{ margin: '5.75rem auto' }}>
                         <div className="modal-content">
                             <div className="modal-header">
                                 <h5 className="modal-title">{(this.state.tncModal) ? 'Terms and Conditions' : 'Privacy policy'}</h5>
@@ -32,7 +32,7 @@ class Offers extends Component {
                                 </button>
                             </div>
                             <div className="modal-body">
-                                {(this.state.tncModal) ? TnCPolicy({fontSize: 13}) : PrivacyPolicy({
+                                {(this.state.tncModal) ? TnCPolicy({ fontSize: 13 }) : PrivacyPolicy({
                                     fontSize: 13,
                                     headSize: 1.5
                                 })}
@@ -40,7 +40,7 @@ class Offers extends Component {
                             <div className="modal-footer">
                                 {/*<button type="button" className="btn btn-primary">Save changes</button>*/}
                                 <button type="button" className="btn btn-primary" ref={ref => this.closeModal = ref}
-                                        data-dismiss="modal">Close
+                                    data-dismiss="modal">Close
                                 </button>
                             </div>
                         </div>
@@ -50,26 +50,26 @@ class Offers extends Component {
     };
 
 
-    _submitForm = async(e) => {
-        const {payload, token, changeLoader, authObj, showAlert, loanPayload, history, DrawsetPreflight} = this.props;
+    _submitForm = async (e) => {
+        const { payload, token, changeLoader, authObj, showAlert, loanPayload, history, DrawsetPreflight } = this.props;
         // e.preventDefault();
         changeLoader(true);
         // TODO: check postAPI function
         const options = {
-                    token: null,
-                    URL: `${baseUrl}/loans/${payload.loan_application_id}/drawdown/`,
-                    data: {
-                          "app_id": app_id,
-                          "anchor_id": payload.anchor_id, //6iu89o
-                          "anchor_drawdown_id": payload.anchor_drawdown_id, //hy76543
-                          "drawdown_amount": payload.drawdown_amount,
-                          "otp_reference_id": authObj.otp_reference_id,
-                          "otp": authObj.otp,
-                          "offer": this.state.selected,
-                          "disbursement_account_code": payload.disbursement_account_code,
-                          "timestamp": new Date()
-                    }
-                };
+            token: token,
+            URL: `${baseUrl}/loans/${payload.loan_application_id}/drawdown/`,
+            data: {
+                "app_id": app_id,
+                "anchor_id": payload.anchor_id, //6iu89o
+                "anchor_drawdown_id": payload.anchor_drawdown_id, //hy76543
+                "drawdown_amount": payload.drawdown_amount,
+                "otp_reference_id": authObj.otp_reference_id,
+                "otp": authObj.otp,
+                "offer": this.state.selected,
+                "disbursement_account_code": payload.disbursement_account_code,
+                "timestamp": new Date()
+            }
+        };
         const resp = await postAPI(options);
 
         changeLoader(false);
@@ -80,89 +80,36 @@ class Offers extends Component {
         if (resp.status === apiActions.ERROR_RESPONSE) {
             showAlert(resp.data.message);
 
-           if (resp.data.code === 'ER-AUTH-102')
-               setTimeout(() => {
-                   window.location.href = `${PUBLIC_URL}/drawdown/token`;
-                   // history.push(`${PUBLIC_URL}/drawdown/token`)
-               }, 2000);
-           if (window.location !== window.parent.location)
-               postMessage({
-                   drawdown_status: "error",
-                   drawdown_offer: null,
-                   loan_id: payload.loan_application_id,
-                   drawdown_id: payload.anchor_drawdown_id,
-                   action: "close"
-               });
+            if (resp.data.code === 'ER-AUTH-102')
+                setTimeout(() => {
+                    window.location.href = `${PUBLIC_URL}/drawdown/token`;
+                    // history.push(`${PUBLIC_URL}/drawdown/token`)
+                }, 2000);
+            if (window.location !== window.parent.location)
+                postMessage({
+                    drawdown_status: "error",
+                    drawdown_offer: null,
+                    loan_id: payload.loan_application_id,
+                    drawdown_id: payload.anchor_drawdown_id,
+                    action: "close"
+                });
         } else if (resp.status === apiActions.SUCCESS_RESPONSE) {
-          // ToDo : uncomment this 2 lines for production
-         if (environment === 'prod' || environment === 'dev') {
-             DrawsetPreflight(resp.response);
-             setTimeout(() => history.push(`${PUBLIC_URL}/drawdown/thankyou`), 500);
-         }
+            // ToDo : uncomment this 2 lines for production
+            if (environment === 'prod' || environment === 'dev') {
+                DrawsetPreflight(resp.response);
+                setTimeout(() => history.push(`${PUBLIC_URL}/drawdown/thankyou`), 500);
+            }
         }
 
-      // ToDo : comment this for production
+        // ToDo : comment this for production
         if (environment === 'local')
             setTimeout(() => history.push(`${PUBLIC_URL}/drawdown/thankyou`), 500);
 
-
-
-//        fetch(`${baseUrl}/loans/${payload.loan_application_id}/drawdown/`, {
-//            method: "POST",
-//            headers: {'Content-Type': 'application/json', token: token},
-//            body: JSON.stringify({
-//                    "app_id": app_id,
-//                    "anchor_id": payload.anchor_id, //6iu89o
-//                    "anchor_drawdown_id": payload.anchor_drawdown_id, //hy76543
-//                    "drawdown_amount": payload.drawdown_amount,
-//                    "otp_reference_id": authObj.otp_reference_id,
-//                    "otp": authObj.otp,
-//                    "offer": this.state.selected,
-//                    "disbursement_account_code": payload.disbursement_account_code,
-//                    "timestamp": new Date()
-//                }
-//            )
-//        }).then(resp => resp.json()).then(resp => {
-//            changeLoader(false);
-//            if (resp.response === Object(resp.response)) {
-//                // ToDo : uncomment this 2 lines for production
-//                if (environment === 'prod' || environment === 'dev') {
-//                    DrawsetPreflight(resp.response);
-//                    setTimeout(() => history.push(`${PUBLIC_URL}/drawdown/thankyou`), 500);
-//                }
-//            }
-//
-//            if (resp.error === Object(resp.error)) {
-//                showAlert(resp.error.message);
-//
-//                if (resp.error.code === 'ER-AUTH-102')
-//                    setTimeout(() => {
-//                        window.location.href = `${PUBLIC_URL}/drawdown/token`;
-//                        // history.push(`${PUBLIC_URL}/drawdown/token`)
-//                    }, 2000);
-//                if (window.location !== window.parent.location)
-//                    postMessage({
-//                        drawdown_status: "error",
-//                        drawdown_offer: null,
-//                        loan_id: payload.loan_application_id,
-//                        drawdown_id: payload.anchor_drawdown_id,
-//                        action: "close"
-//                    });
-//            }
-//
-//            // ToDo : comment this for production
-//            if (environment === 'local')
-//                setTimeout(() => history.push(`${PUBLIC_URL}/drawdown/thankyou`), 500);
-//
-//        }, resp => {
-//            showAlert('net');
-//            changeLoader(false);
-//        })
     }
 
     componentWillMount() {
 
-        const {payload, authObj, changeLoader, history} = this.props;
+        const { payload, authObj, changeLoader, history } = this.props;
 
         if (authObj !== Object(authObj) && !authObj)
             history.push(`${PUBLIC_URL}/drawdown/auth`);
@@ -176,7 +123,7 @@ class Offers extends Component {
 
         let cardBox = 'card card-body mt-1 ml-1 list-group-item list-group-item-action flex-column align-items-start cardBox';
         // ToDo :  make the line const in prod.
-        let {payload, loanPayload} = this.props;
+        let { payload, loanPayload } = this.props;
 
         // ToDo :  uncomment in prod & make it const.
         // let {loanOffers, loanStatus, creditLimit} = loanPayload;
@@ -191,14 +138,14 @@ class Offers extends Component {
             }
             return (<>
                 <h4 className={"text-center"}>Loan Offers</h4>
-                <br/>
+                <br />
                 <div className="row justify-content-center mt-3 mb-3">
 
-                    <p className={"text-center"} style={{padding: '0 12px'}}>
+                    <p className={"text-center"} style={{ padding: '0 12px' }}>
                         {/*Dear {f_name} {l_name} ,*/} Glad to see
                         you
                         back
-                        !<br/>Select
+                        !<br />Select
                         the below available EMI
                         option that best suits your needs</p>
                 </div>
@@ -261,21 +208,21 @@ class Offers extends Component {
 
                 </div>
                 <div className="alert alert-primary" role="alert"
-                     style={{
-                         display: (this.state.selected.product_type !== undefined) ? 'block' : 'none',
-                         margin: '2% 5%'
-                     }}>
+                    style={{
+                        display: (this.state.selected.product_type !== undefined) ? 'block' : 'none',
+                        margin: '2% 5%'
+                    }}>
                     You have selected <strong
-                    className="text-primary text-capitalize">`{(this.state.selected.product_type)} - {this.state.selected.tenor} Months`</strong>
+                        className="text-primary text-capitalize">`{(this.state.selected.product_type)} - {this.state.selected.tenor} Months`</strong>
                 </div>
                 <div className="row m-auto cardContainerOuter">
                     <div className="list-group flex-row ">
                         {(loanPayload === Object(loanPayload) && loanPayload) ? loanPayload.loanOffers.loan.offers.map((val, key) => (
                             <a href="#" key={key} onClick={e => {
                                 e.preventDefault();
-                                this.setState({selected: val});
+                                this.setState({ selected: val });
                             }}
-                               className={(this.state.selected.tenor === val.tenor) ? cardBox + ' active' : cardBox}
+                                className={(this.state.selected.tenor === val.tenor) ? cardBox + ' active' : cardBox}
                             >
                                 <div className="d-flex mr-0 w-100 justify-content-between">
                                     <h5 className="mb-1 mr-1 text-capitalize"
@@ -305,30 +252,30 @@ class Offers extends Component {
                 </div>
 
                 <div className="mt-4 ml-5 mr-3"
-                     style={{visibility: (this.state.selected.product_type !== undefined) ? 'visible' : 'hidden'}}>
+                    style={{ visibility: (this.state.selected.product_type !== undefined) ? 'visible' : 'hidden' }}>
 
                     <label className="main">I accept the <a href={'#'} onClick={(e) => {
                         e.preventDefault();
-                        this.setState({tncModal: true}, () => this.triggerTnCModal.click());
+                        this.setState({ tncModal: true }, () => this.triggerTnCModal.click());
                     }}>Terms &
                         Condition</a>, <a href={'#'} onClick={(e) => {
-                        e.preventDefault();
-                        this.setState({tncModal: false}, () => this.triggerTnCModal.click());
-                    }}>Privacy
+                            e.preventDefault();
+                            this.setState({ tncModal: false }, () => this.triggerTnCModal.click());
+                        }}>Privacy
                         Policy</a> of the Mintifi and agree upon the selected the EMI Tenure .
 
                         <input type="checkbox" checked={this.state.tnc_consent}
-                               onChange={(e) =>
-                                   this.setState(prevState => ({tnc_consent: !prevState.tnc_consent}))
-                               }/>
+                            onChange={(e) =>
+                                this.setState(prevState => ({ tnc_consent: !prevState.tnc_consent }))
+                            } />
                         <span className="geekmark"></span>
                     </label>
                 </div>
 
                 <div className={"row justify-content-center text-center mb-3 mt-3 "}
-                     style={{visibility: (this.state.selected.product_type !== undefined) ? 'visible' : 'hidden'}}>
+                    style={{ visibility: (this.state.selected.product_type !== undefined) ? 'visible' : 'hidden' }}>
                     <button className={"greenButton btn btn-raised"} onClick={(e) => this._submitForm(e)}
-                            disabled={!this.state.tnc_consent}>Proceed
+                        disabled={!this.state.tnc_consent}>Proceed
                     </button>
                 </div>
                 {this.RenderModalTnC()}
@@ -347,5 +294,5 @@ const mapStateToProps = state => ({
 
 export default withRouter(connect(
     mapStateToProps,
-    {changeLoader, DrawsetLoanPayload, showAlert, DrawsetPreflight}
+    { changeLoader, DrawsetLoanPayload, showAlert, DrawsetPreflight }
 )(Offers));
