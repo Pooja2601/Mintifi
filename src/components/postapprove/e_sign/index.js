@@ -1,11 +1,11 @@
-import React, {Component} from "react";
-import {connect} from "react-redux";
-import {withRouter} from "react-router-dom";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 import {
     changeLoader,
     EsignsetPayload,
-    EsignsetAttempt,
-    setAnchorObj, EsignsetDocPayload,
+    EsignsetAttempt, EsignsetBankDetail,
+    EsignsetAnchorPayload, EsignsetDocPayload,
     showAlert
 } from "../../../actions";
 import {
@@ -13,7 +13,7 @@ import {
     base64Logic,
     retrieveParam
 } from "../../../shared/commonLogic";
-import {fetchAPI, apiActions, postAPI} from "../../../api";
+import { fetchAPI, apiActions, postAPI } from "../../../api";
 import {
     eSignPayloadStatic,
     baseUrl,
@@ -23,7 +23,7 @@ import {
 } from "../../../shared/constants";
 import PropTypes from "prop-types";
 
-const {PUBLIC_URL} = process.env;
+const { PUBLIC_URL } = process.env;
 
 class ESign extends Component {
     static defaultProps = {
@@ -36,7 +36,7 @@ class ESign extends Component {
         const {
             token,
             eSignPayload,
-            setAnchorObj,
+            EsignsetAnchorPayload,
             changeLoader
         } = this.props;
 
@@ -52,7 +52,7 @@ class ESign extends Component {
             const resp = await fetchAPI(options);
 
             if (resp.status === apiActions.SUCCESS_RESPONSE)
-                setAnchorObj(resp.data);
+                EsignsetAnchorPayload(resp.data);
 
             changeLoader(false);
         }
@@ -60,7 +60,7 @@ class ESign extends Component {
     }
 
     _triggerESign = async () => {
-        const {eSignPayload, token, changeLoader, showAlert} = this.props;
+        const { eSignPayload, token, changeLoader, showAlert } = this.props;
 
         const options = {
             URL: `${baseUrl}/documents/esign_document`,
@@ -91,7 +91,7 @@ class ESign extends Component {
     }
 
     _pingDBStatus = async () => {
-        const {eSignPayload, token, changeLoader, showAlert} = this.props;
+        const { eSignPayload, token, changeLoader, showAlert, history, EsignsetBankDetail } = this.props;
         const options = {
             URL: `${baseUrl}/documents/esign_status`,
             token: token,
@@ -106,6 +106,14 @@ class ESign extends Component {
         // ToDo : Navigating to Bank Details Page
         if (resp.status === apiActions.SUCCESS_RESPONSE) {
             // resp.data.success &&
+            EsignsetBankDetail(resp.data)
+            setTimeout(
+                () =>
+                    history.push(
+                        `${PUBLIC_URL}/enach/bank_detail`
+                    ),
+                500
+            );
         }
     }
 
@@ -120,7 +128,7 @@ class ESign extends Component {
         changeLoader(false);
 
         // let token = `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyNiwidHlwZSI6InJlYWN0X3dlYl91c2VyIiwiZXhwIjoxNTYwMzMzNTYxfQ.yzD-pIyaf4Z7zsXEJZG-Hm0ka80CjMjMB74q6dpRSPM`;
-        let {href} = window.location,
+        let { href } = window.location,
             base64_decode = {},
             payload;
 
@@ -135,7 +143,7 @@ class ESign extends Component {
             Object.assign(base64_decode, eSignPayload);
         }
 
-        this.setState({errorMsg: false});
+        this.setState({ errorMsg: false });
         if (environment === "prod" || environment === "dev") {
             payload = retrieveParam(href, "payload") || undefined;
             token = retrieveParam(href, "token") || undefined;
@@ -157,27 +165,27 @@ class ESign extends Component {
 
 
     render() {
-        const {eSignPayload} = this.props;
+        const { eSignPayload } = this.props;
         // console.log(eSignPayload)
         return (
             <>
                 <h4 className={"text-center"}> e-SIGN Process</h4>
                 {/*<small >(via Aadhaar)</small>*/}
-                <br/>
+                <br />
 
-                <div className=" text-left " role="alert" style={{margin: "auto"}}>
+                <div className=" text-left " role="alert" style={{ margin: "auto" }}>
                     {(this.checkPayload) ? (
                         <p className="paragraph_styling alert alert-info">
                             Kindly complete the eSIGN procedure by clicking the button below.
                         </p>
                     ) : (
-                        <p className="paragraph_styling alert alert-danger">
-                            You may not access this page directly without appropriate
-                            payload/session.
+                            <p className="paragraph_styling alert alert-danger">
+                                You may not access this page directly without appropriate
+                                payload/session.
                         </p>
-                    )}
+                        )}
                 </div>
-                <br/>
+                <br />
                 <div
                     className=" text-left alert alert-danger"
                     role="alert"
@@ -217,6 +225,6 @@ const mapStateToProps = state => ({
 export default withRouter(
     connect(
         mapStateToProps,
-        {changeLoader, EsignsetPayload, EsignsetDocPayload, EsignsetAttempt, setAnchorObj, showAlert}
+        { changeLoader, EsignsetPayload, EsignsetDocPayload, EsignsetBankDetail, EsignsetAttempt, EsignsetAnchorPayload, showAlert }
     )(ESign)
 );
