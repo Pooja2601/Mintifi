@@ -185,7 +185,7 @@ class ESignBankDetail extends Component {
                         if (resp.response === Object(resp.response)) {
 
                             let base64_encode = retrieveParam(
-                                resp.response.nach_url,
+                                resp.response.payload,
                                 "payload"
                             );
                             this._createMandate(base64_encode);

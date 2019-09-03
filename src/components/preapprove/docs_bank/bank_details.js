@@ -159,18 +159,16 @@ class BankDetail extends Component {
                 showAlert("net");
 
             if (resp.status === apiActions.SUCCESS_RESPONSE) {
-                // ToDo : uncomment In Prod
-                // let base64_encode = base64Logic(payloadDecrypt, 'encode');
                 // ToDo : comment in Prod
                 let base64_encode = retrieveParam(
-                    resp.data.nach_url,
+                    resp.data.payload,
                     "payload"
                 );
-                this._genAuthToken(base64_encode);
-                /* setTimeout(() => history.push(`${PUBLIC_URL}/enach`, {
-                           token: token,
-                           payload: base64_decode
-                       }));*/
+                // this._genAuthToken(base64_encode);
+                setTimeout(() => history.push(`${PUBLIC_URL}/esign?payload=${base64_encode}&token=${token}`, {
+                    token: token,
+                    payload: base64_decode
+                }), 100);
             } else if (resp.status === apiActions.ERROR_RESPONSE) {
                 showAlert(resp.data.message, 'warn');
             }
