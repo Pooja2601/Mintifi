@@ -8,6 +8,7 @@ import {Link, withRouter} from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 // import {alertModule} from "../../../shared/commonLogic";
+import { fetchAPI, apiActions, postAPI } from "../../../api";
 
 const {PUBLIC_URL} = process.env;
 
@@ -136,33 +137,58 @@ class PersonalDetail extends Component {
         // this.setState({missed_fields}, () => console.log('All Fields Validated : ' + this.state.missed_fields));
     }
 
-    _pincodeFetch = () => {
+    _pincodeFetch = async() => {
         //http://postalpincode.in/api/pincode/
         //https://test.mintifi.com/api/v2/communications/pincode/400059
         let city, state;
         const {setAdharManual, changeLoader, showAlert} = this.props;
         if (this.state.pincode) {
             changeLoader(true);
+            const options={
+               token: null,
+               URL: `${otpUrl}/pincode/${this.state.pincode}`
+            }
 
-            fetch(`${otpUrl}/pincode/${this.state.pincode}`)
-                .then(resp => resp.json())
-                .then(resp => {
+            const resp = await fetchAPI(options);
+            changeLoader(false);
 
-                    let obj = resp.response;
-                    if (obj !== null && obj === Object(obj)) {
-                        city = obj.city;
-                        state = obj.state;
-                        this.setState({city, state}, () => setAdharManual(this.state));
-                    }
-                    if (resp.error === Object(resp.error)) {
-                        showAlert(resp.error.message, 'warn');
-                        this.setState({city: '', state: ''});
-                    }
-                    changeLoader(false);
-                }, () => {
-                    changeLoader(false);
-                    showAlert('net');
-                });
+            if (resp.status === apiActions.ERROR_NET) {
+                showAlert("net");
+              }
+              if (resp.status === apiActions.SUCCESS_RESPONSE) {
+                // TODO: Check for success response  
+                // let obj = resp.data;
+                // if (obj !== null && obj === Object(obj)) {
+                //     city = obj.city;
+                //     state = obj.state;
+                //     this.setState({city, state}, () => setAdharManual(this.state));
+                // }
+                city = resp.data.city;
+                state = resp.data.state;
+                this.setState({city, state}, ()=> setAdharManual(this.state));
+              } else if (resp.status === apiActions.ERROR_RESPONSE) {
+                showAlert(resp.error.message, 'warn');
+                this.setState({city: '', state: ''});
+              }
+            // fetch(`${otpUrl}/pincode/${this.state.pincode}`)
+            //     .then(resp => resp.json())
+            //     .then(resp => {
+
+            //         let obj = resp.response;
+            //         if (obj !== null && obj === Object(obj)) {
+            //             city = obj.city;
+            //             state = obj.state;
+            //             this.setState({city, state}, () => setAdharManual(this.state));
+            //         }
+            //         if (resp.error === Object(resp.error)) {
+            //             showAlert(resp.error.message, 'warn');
+            //             this.setState({city: '', state: ''});
+            //         }
+            //         changeLoader(false);
+            //     }, () => {
+            //         changeLoader(false);
+            //         showAlert('net');
+            //     });
         }
     };
 
