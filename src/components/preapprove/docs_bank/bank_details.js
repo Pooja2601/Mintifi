@@ -16,7 +16,7 @@ import {alertModule, retrieveParam} from "../../../shared/commonLogic";
 // import DatePicker from "react-datepicker";
 // import "react-datepicker/dist/react-datepicker.css";
 import Select from "react-select";
-import { fetchAPI, apiActions, postAPI } from "../../../api";
+import {fetchAPI, apiActions, postAPI} from "../../../api";
 
 const {PUBLIC_URL} = process.env;
 
@@ -29,8 +29,8 @@ class BankDetail extends Component {
         businessObj: PropTypes.object.isRequired,
         gstProfile: PropTypes.object,
         preFlightResp: PropTypes.object
-      };
-      
+    };
+
     state = {
         acc_type: "",
         bank_name: "",
@@ -88,10 +88,10 @@ class BankDetail extends Component {
              this.handleValidation();
          }*/
 
-    _genAuthToken = async(base64_encode) => {
+    _genAuthToken = async (base64_encode) => {
         const {history, changeLoader, showAlert} = this.props;
         changeLoader(true);
-        const options={
+        const options = {
             token: null,
             URL: `${baseUrl}/auth`,
             data: {
@@ -99,75 +99,39 @@ class BankDetail extends Component {
                 user_id: user_id,
                 secret_key: auth_secret,
                 type: "react_web_user"
-             }
             }
-         const resp = await postAPI(options);
-         changeLoader(false);
+        }
+        const resp = await postAPI(options);
+        changeLoader(false);
 
-         if(resp.status=== apiActions.ERROR_NET){
+        if (resp.status === apiActions.ERROR_NET)
             showAlert('net');
-         }
-         if(resp.status === apiActions.SUCCESS_RESPONSE){
-            if (resp.data.status === "success")
-            setTimeout(
-                () =>
-                    history.push(
-                        `${PUBLIC_URL}/enach?payload=${base64_encode}&token=${
-                            resp.data.auth.token
-                            }`
-                    ),
-                500
-            );
-         }
-         else if(resp.status === apiActions.ERROR_RESPONSE){
-            showAlert(resp.data.message, "warn");
-         }
 
-        // fetch(`${baseUrl}/auth`, {
-        //     method: "POST",
-        //     headers: {
-        //         "Content-Type": "application/json"
-        //     },
-        //     body: JSON.stringify({
-        //         app_id: app_id,
-        //         user_id: user_id,
-        //         secret_key: auth_secret,
-        //         type: "react_web_user"
-        //     })
-        // })
-        //     .then(resp => resp.json())
-        //     .then(
-        //         resp => {
-        //             changeLoader(false);
-        //             if (resp.response === Object(resp.response))
-        //                 if (resp.response.status === "success")
-        //                     setTimeout(
-        //                         () =>
-        //                             history.push(
-        //                                 `${PUBLIC_URL}/enach?payload=${base64_encode}&token=${
-        //                                     resp.response.auth.token
-        //                                     }`
-        //                             ),
-        //                         500
-        //                     );
-        //             //resp.response.auth.token
-        //             if (resp.error === Object(resp.error))
-        //                 showAlert(resp.error.message, "warn");
-        //         },
-        //         () => {
-        //             changeLoader(false);
-        //             showAlert('net');
-        //         }
-        //     );
+        if (resp.status === apiActions.SUCCESS_RESPONSE) {
+            if (resp.data.status === "success")
+                setTimeout(
+                    () =>
+                        history.push(
+                            `${PUBLIC_URL}/enach?payload=${base64_encode}&token=${
+                                resp.data.auth.token
+                                }`
+                        ),
+                    500
+                );
+        } else if (resp.status === apiActions.ERROR_RESPONSE) {
+            showAlert(resp.data.message, "warn");
+        }
+
     };
 
-    _formSubmit = async(e) => {
+    _formSubmit = async (e) => {
         e.preventDefault();
         const {changeLoader, token, payload, preFlightResp, showAlert} = this.props;
         // console.log(preFlightResp);
+        const {bank_name, acc_name, acc_number, acc_type, ifsc_code, micr_code} = this.state;
         if (preFlightResp === Object(preFlightResp)) {
             changeLoader(true);
-            const options={
+            const options = {
                 token: token,
                 URL: `${baseUrl}/bank_account`,
                 data: {
@@ -175,92 +139,42 @@ class BankDetail extends Component {
                     loan_application_id: preFlightResp.loan_application_id,
                     company_id: preFlightResp.company_id,
                     anchor_id: payload.anchor_id,
-                    bank_name: this.state.bank_name,
-                    account_number: this.state.acc_number,
-                    account_name: this.state.acc_name,
-                    ifsc_code: this.state.ifsc_code,
+                    bank_name: bank_name,
+                    account_number: acc_number,
+                    account_name: acc_name,
+                    ifsc_code: ifsc_code,
                     transfer_mode: "nach",
-                    micr_code: this.state.micr_code,
-                    account_type: this.state.acc_type,
+                    micr_code: micr_code,
+                    account_type: acc_type,
                     success_url: payload.success_url,
                     error_url: payload.error_url,
                     cancel_url: payload.cancel_url,
                     timestamp: new Date()
                 }
-             }
- 
-             const resp = await postAPI(options);
-             changeLoader(false);
-             if (resp.status === apiActions.ERROR_NET) {
+            }
+
+            const resp = await postAPI(options);
+            changeLoader(false);
+            if (resp.status === apiActions.ERROR_NET)
                 showAlert("net");
-              }
-              if (resp.status === apiActions.SUCCESS_RESPONSE) {
+
+            if (resp.status === apiActions.SUCCESS_RESPONSE) {
                 // ToDo : uncomment In Prod
-                            // let base64_encode = base64Logic(payloadDecrypt, 'encode');
-                            // ToDo : comment in Prod
-                            let base64_encode = retrieveParam(
-                                resp.data.nach_url,
-                                "payload"
-                            );
-                            this._genAuthToken(base64_encode);
-                            /* setTimeout(() => history.push(`${PUBLIC_URL}/enach`, {
-                                       token: token,
-                                       payload: base64_decode
-                                   }));*/
-              }
-              else if (resp.status === apiActions.ERROR_RESPONSE) {
+                // let base64_encode = base64Logic(payloadDecrypt, 'encode');
+                // ToDo : comment in Prod
+                let base64_encode = retrieveParam(
+                    resp.data.nach_url,
+                    "payload"
+                );
+                this._genAuthToken(base64_encode);
+                /* setTimeout(() => history.push(`${PUBLIC_URL}/enach`, {
+                           token: token,
+                           payload: base64_decode
+                       }));*/
+            } else if (resp.status === apiActions.ERROR_RESPONSE) {
                 showAlert(resp.data.message, 'warn');
-              }
-            // fetch(`${baseUrl}/bank_account`, {
-            //     method: "POST",
-            //     headers: {"Content-Type": "application/json", token: token},
-            //     body: JSON.stringify({
-            //         app_id: app_id,
-            //         loan_application_id: preFlightResp.loan_application_id,
-            //         company_id: preFlightResp.company_id,
-            //         anchor_id: payload.anchor_id,
-            //         bank_name: this.state.bank_name,
-            //         account_number: this.state.acc_number,
-            //         account_name: this.state.acc_name,
-            //         ifsc_code: this.state.ifsc_code,
-            //         transfer_mode: "nach",
-            //         micr_code: this.state.micr_code,
-            //         account_type: this.state.acc_type,
-            //         success_url: payload.success_url,
-            //         error_url: payload.error_url,
-            //         cancel_url: payload.cancel_url,
-            //         timestamp: new Date()
-            //     })
-            // })
-            //     .then(resp => resp.json())
-            //     .then(
-            //         resp => {
-            //             changeLoader(false);
-            //             // success
-            //             if (resp.response === Object(resp.response)) {
-            //                 // ToDo : uncomment In Prod
-            //                 // let base64_encode = base64Logic(payloadDecrypt, 'encode');
-            //                 // ToDo : comment in Prod
-            //                 let base64_encode = retrieveParam(
-            //                     resp.response.nach_url,
-            //                     "payload"
-            //                 );
-            //                 this._genAuthToken(base64_encode);
-            //                 /* setTimeout(() => history.push(`${PUBLIC_URL}/enach`, {
-            //                            token: token,
-            //                            payload: base64_decode
-            //                        }));*/
-            //             }
-            //             // error
-            //             if (resp.error === Object(resp.error)) {
-            //                 showAlert(resp.error.message, "warn");
-            //             }
-            //         },
-            //         resp => {
-            //             showAlert('net');
-            //             changeLoader(false);
-            //         }
-            //     );
+            }
+
         } else showAlert("Something went wrong with the Request", "warn");
     };
 
@@ -335,12 +249,12 @@ class BankDetail extends Component {
 
                 <h4 className={"text-center mt-5"}>Bank Details</h4>
                 <p className="paragraph_styling  text-center secondLinePara">
-                <b>
-            {" "}
-            Please submit your bank account details for loan disbursement.
-            Please note that same bank account will be used to set up
-            auto-debit/standing instructions for repayment of your loan amount.
-          </b>
+                    <b>
+                        {" "}
+                        Please submit your bank account details for loan disbursement.
+                        Please note that same bank account will be used to set up
+                        auto-debit/standing instructions for repayment of your loan amount.
+                    </b>
                 </p>
                 {/*<h5 className={"text-center"}>{(gstProfile === Object(gstProfile)) ? gstProfile.lgnm : ''}</h5>*/}
 
