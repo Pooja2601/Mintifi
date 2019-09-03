@@ -30,7 +30,7 @@ class ESign extends Component {
             changeLoader
         } = this.props;
 
-        if (this.checkPayload) {
+        if (eSignPayload === Object(eSignPayload) && eSignPayload) {
             changeLoader(true);
 
             const options = {
@@ -75,7 +75,7 @@ class ESign extends Component {
             // console.log(eSignPopUpPayload);
             window.setTimeout(() => {
                 window.open(`${PUBLIC_URL}/esign/esign_popup?payload=${eSignPopUpPayload}`, 'ESign PopUp', "width=600,height=500,location=no,menubar=no,toolbar=no,titlebar=no")
-                this._pingDBStatus();
+                window.setInterval(() => this._pingDBStatus(), 3000);
             }, 2000);
         }
     }
@@ -97,7 +97,7 @@ class ESign extends Component {
             (resp.data.success) && history.push(`${PUBLIC_URL}/esign/bank_detail`)
         }
         // ToDo : remove later : skips eISGN checks, only meant for testing
-        history.push(`${PUBLIC_URL}/esign/bank_detail`)
+        // history.push(`${PUBLIC_URL}/esign/bank_detail`)
     }
 
     componentWillMount() {
@@ -114,6 +114,7 @@ class ESign extends Component {
         let {href} = window.location,
             base64_decode = {},
             payload;
+        let that = this;
 
         this.checkPayload = !!(eSignPayload === Object(eSignPayload) && eSignPayload);
 
@@ -142,7 +143,9 @@ class ESign extends Component {
         else {
             EsignsetPayload(token, base64_decode);
             this.checkPayload = !!base64_decode;
-            this._fetchAnchorDetail();
+            window.setTimeout(() => {
+                that._fetchAnchorDetail()
+            }, 500);
         }
     }
 
