@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
 import {
     baseUrl,
@@ -8,27 +8,23 @@ import {
     user_id,
     auth_secret
 } from "../../../shared/constants";
-import { connect } from "react-redux";
+import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import { setBankDetail, changeLoader, setToken, showAlert } from "../../../actions";
-import { withRouter } from "react-router-dom";
-import { alertModule, retrieveParam } from "../../../shared/commonLogic";
+import {changeLoader, setToken, showAlert, EsignsetBankDetail, EnachsetPayload} from "../../../actions";
+import {withRouter} from "react-router-dom";
+import {alertModule, retrieveParam} from "../../../shared/commonLogic";
 // import DatePicker from "react-datepicker";
 // import "react-datepicker/dist/react-datepicker.css";
 import Select from "react-select";
-import { fetchAPI, apiActions } from "../../../api";
+import {fetchAPI, apiActions, postAPI} from "../../../api";
 
-const { PUBLIC_URL } = process.env;
+const {PUBLIC_URL} = process.env;
 
 class ESignBankDetail extends Component {
 
     static propTypes = {
-        adharObj: PropTypes.object.isRequired,
         anchorObj: PropTypes.object,
-        payload: PropTypes.object.isRequired,
-        businessObj: PropTypes.object.isRequired,
-        gstProfile: PropTypes.object,
-        preFlightResp: PropTypes.object
+        eSignPayload: PropTypes.object.isRequired,
     };
 
     state = {
@@ -54,7 +50,7 @@ class ESignBankDetail extends Component {
         let ctrerror = 4,
             fieldTxt;
         Object.values(this.validate).map((val, key) => {
-            if (!val)++ctrerror;
+            if (!val) ++ctrerror;
             else --ctrerror;
         });
         if (ctrerror !== 0) {
@@ -68,92 +64,112 @@ class ESignBankDetail extends Component {
             missed_fields;
         // let missed_fields = Object.keys(this.validate).some(x => this.validate[x]);
         Object.values(this.validate).map((val, key) => {
-            if (!val)++ctrerror;
+            if (!val) ++ctrerror;
             else --ctrerror;
             // console.log(val);
         });
         // console.log(ctrerror);
         missed_fields = ctrerror !== 0;
-        this.setState({ missed_fields });
+        this.setState({missed_fields});
         // this.setState({missed_fields}, () => console.log('All Fields Validated : ' + this.state.missed_fields));
     };
 
-    /*   businessGst(e) {
-             const {value} = e.target;
-             if (value.length <= 15) {
-                 let bpan = value.substr(2, 10);
-                 this.setState({gst: value, bpan}, () => this.props.setBusinessDetail(this.state))
-             }
-             this.validate.gst = (value.length === 15) ? true : false;
-             this.handleValidation();
-         }*/
 
-    _genAuthToken = base64_encode => {
-        const { history, changeLoader, showAlert } = this.props;
-        changeLoader(true);
-        fetch(`${baseUrl}/auth`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                app_id: app_id,
-                user_id: user_id,
-                secret_key: auth_secret,
-                type: "react_web_user"
-            })
-        })
-            .then(resp => resp.json())
-            .then(
-                resp => {
-                    changeLoader(false);
-                    if (resp.response === Object(resp.response))
-                        if (resp.response.status === "success")
-                            setTimeout(
-                                () =>
-                                    history.push(
-                                        `${PUBLIC_URL}/enach?payload=${base64_encode}&token=${
-                                        resp.response.auth.token
-                                        }`
-                                    ),
-                                500
-                            );
-                    //resp.response.auth.token
-                    if (resp.error === Object(resp.error))
-                        showAlert(resp.error.message, "warn");
+    /*
+        _genAuthToken = base64_encode => {
+            const {history, changeLoader, showAlert} = this.props;
+            changeLoader(true);
+            fetch(`${baseUrl}/auth`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
                 },
-                () => {
-                    changeLoader(false);
-                    showAlert('net');
-                }
-            );
-    };
+                body: JSON.stringify({
+                    app_id: app_id,
+                    user_id: user_id,
+                    secret_key: auth_secret,
+                    type: "react_web_user"
+                })
+            })
+                .then(resp => resp.json())
+                .then(
+                    resp => {
+                        changeLoader(false);
+                        if (resp.response === Object(resp.response))
+                            if (resp.response.status === "success")
+                                setTimeout(
+                                    () =>
+                                        history.push(
+                                            `${PUBLIC_URL}/enach?payload=${base64_encode}&token=${
+                                                resp.response.auth.token
+                                                }`
+                                        ),
+                                    500
+                                );
+                        //resp.response.auth.token
+                        if (resp.error === Object(resp.error))
+                            showAlert(resp.error.message, "warn");
+                    },
+                    () => {
+                        changeLoader(false);
+                        showAlert('net');
+                    }
+                );
+        };
+    */
 
+    _createMandate = async (base64_encode) => {
+        const {changeLoader, token, showAlert, history, eSignPayload, EnachsetPayload} = this.props;
+
+        changeLoader(true);
+        const options = {
+            URL: `${baseUrl}/setup_mandate`,
+            data: {
+                "app_id": app_id,
+                "loan_application_id": eSignPayload.loan_application_id,
+            },
+            token: token
+        };
+        const resp = await postAPI(options);
+        changeLoader(false);
+        if (resp.status === apiActions.ERROR_NET)
+            showAlert('net');
+        if (resp.status === apiActions.ERROR_RESPONSE)
+            showAlert('We couldn`t setup the mandate, you may try the physical NACH process', 'warn');
+        else if (resp.status === apiActions.SUCCESS_RESPONSE) {
+            showAlert('e-Mandate created successfully', 'success');
+            EnachsetPayload(resp.data);
+        }
+        setTimeout(() =>
+            history.push(
+                `${PUBLIC_URL}/enach?payload=${base64_encode}&token=${token}`), 500);
+    }
 
     _formSubmit = e => {
         e.preventDefault();
-        const { changeLoader, token, payload, preFlightResp, showAlert, history } = this.props;
+        const {changeLoader, token, showAlert, history, eSignPayload} = this.props;
         // console.log(preFlightResp);
-        if (preFlightResp === Object(preFlightResp)) {
+        if (eSignPayload === Object(eSignPayload) && eSignPayload) {
+            const {bank_name, acc_number, acc_name, ifsc_code, micr_code, acc_type} = this.state;
             changeLoader(true);
             fetch(`${baseUrl}/bank_account`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json", token: token },
+                headers: {"Content-Type": "application/json", token: token},
                 body: JSON.stringify({
                     app_id: app_id,
-                    loan_application_id: preFlightResp.loan_application_id,
-                    company_id: preFlightResp.company_id,
-                    anchor_id: payload.anchor_id,
-                    bank_name: this.state.bank_name,
-                    account_number: this.state.acc_number,
-                    account_name: this.state.acc_name,
-                    ifsc_code: this.state.ifsc_code,
+                    loan_application_id: eSignPayload.loan_application_id,
+                    company_id: eSignPayload.company_id,
+                    anchor_id: eSignPayload.anchor_id,
+                    bank_name: bank_name,
+                    account_number: acc_number,
+                    account_name: acc_name,
+                    ifsc_code: ifsc_code,
                     transfer_mode: "nach",
-                    micr_code: this.state.micr_code,
-                    account_type: this.state.acc_type,
-                    success_url: payload.success_url,
-                    error_url: payload.error_url,
-                    cancel_url: payload.cancel_url,
+                    micr_code: micr_code,
+                    account_type: acc_type,
+                    success_url: eSignPayload.success_url,
+                    error_url: eSignPayload.error_url,
+                    cancel_url: eSignPayload.cancel_url,
                     timestamp: new Date()
                 })
             })
@@ -163,20 +179,13 @@ class ESignBankDetail extends Component {
                         changeLoader(false);
                         // success
                         if (resp.response === Object(resp.response)) {
-                            // ToDo : uncomment In Prod
-                            // let base64_encode = base64Logic(payloadDecrypt, 'encode');
-                            // ToDo : comment in Prod
+
                             let base64_encode = retrieveParam(
                                 resp.response.nach_url,
                                 "payload"
                             );
-                            // this._genAuthToken(base64_encode);
-                            // ToDo : check payload from API
-                            setTimeout(() =>
-                                history.push(
-                                    `${PUBLIC_URL}/enach?payload=${base64_encode}&token=${
-                                    resp.response.auth.token
-                                    }`), 500);
+                            this._createMandate(base64_encode);
+
                         }
                         // error
                         if (resp.error === Object(resp.error)) {
@@ -192,7 +201,7 @@ class ESignBankDetail extends Component {
     };
 
     _fetchIFSC = async (ifsc) => {
-        const { changeLoader, showAlert } = this.props;
+        const {changeLoader, showAlert} = this.props;
         let bank_name, micr_code, branch_name;
 
         const options = {
@@ -209,8 +218,7 @@ class ESignBankDetail extends Component {
         if (resp.status === apiActions.ERROR_RESPONSE) {
             bank_name = micr_code = branch_name = "";
             showAlert("Make sure to enter correct IFSC code", "error");
-        }
-        else if (resp.status === apiActions.SUCCESS_RESPONSE) {
+        } else if (resp.status === apiActions.SUCCESS_RESPONSE) {
             bank_name = resp.BANK;
             // ifsc_code = resp.IFSC;
             micr_code = resp.MICR;
@@ -224,20 +232,57 @@ class ESignBankDetail extends Component {
     }
 
     // ToDo : Fetch bank details
-    _fetchBankDetails = () => {
+    _fetchBankDetails = async () => {
 
+        const {changeLoader, token, eSignPayload, showAlert, EsignsetBankDetail} = this.props;
+        const paramReq = `app_id=${app_id}&loan_application_id=${eSignPayload.loan_application_id}`;
+        const options = {URL: `${baseUrl}/bank_account_details?${paramReq}`, token: token};
+        changeLoader(true);
+        const resp = await fetchAPI(options);
+        changeLoader(false);
+
+        if (resp.status === apiActions.ERROR_NET)
+            showAlert('net');
+        // Doesn't require to check if error
+        // if(resp.status === apiActions.ERROR_RESPONSE)
+
+        if (resp.status === apiActions.SUCCESS_RESPONSE) {
+            const {
+                bank_name,
+                bank_account_name,
+                bank_account_number,
+                bank_ifsc_code,
+                transfer_mode,
+                account_type,
+                bank_micr_code,
+            } = resp.data;
+            this.setState({
+                acc_type: account_type && account_type,
+                transfer_mode,
+                bank_name,
+                acc_number: bank_account_number && bank_account_number,
+                acc_name: bank_account_name && bank_account_name,
+                ifsc_code: bank_ifsc_code && bank_ifsc_code,
+                micr_code: bank_micr_code && bank_micr_code,
+            });
+
+            if (bank_ifsc_code)
+                this._fetchIFSC(this.state.ifsc_code);
+            EsignsetBankDetail(this.state);
+        }
     }
 
     componentWillMount() {
-        const { eSignPayload, history } = this.props;
+        const {eSignPayload, history} = this.props;
 
         if (eSignPayload === Object(eSignPayload) && eSignPayload) {
             // history.push(`${PUBLIC_URL}/esign`);
+            this._fetchBankDetails();
         } else history.push(`${PUBLIC_URL}/esign`);
     }
 
     componentDidMount() {
-        const { bankObj, EsignsetBankDetail, changeLoader } = this.props;
+        const {bankObj, EsignsetBankDetail, changeLoader} = this.props;
 
         if (bankObj === Object(bankObj))
             this.setState(bankObj, () => {
@@ -291,9 +336,9 @@ class ESignBankDetail extends Component {
                                     onBlur={() => this.validationErrorMsg()}
                                     // ref={ref => (this.obj.pan = ref)}
                                     onChange={e => {
-                                        let { value } = e.target;
+                                        let {value} = e.target;
                                         this.validate.acc_name = value.length > 2;
-                                        this.setState({ acc_name: value }, () =>
+                                        this.setState({acc_name: value}, () =>
                                             this.props.setBankDetail(this.state)
                                         );
                                         this.handleValidation();
@@ -319,12 +364,12 @@ class ESignBankDetail extends Component {
                                     onBlur={() => this.validationErrorMsg()}
                                     // ref={ref => (this.obj.pan = ref)}
                                     onChange={e => {
-                                        let { value } = e.target;
+                                        let {value} = e.target;
                                         if (!isNaN(value)) {
                                             this.validate.acc_number =
                                                 value.length >= 9 && value.length <= 18;
                                             if (value.length <= 18) {
-                                                this.setState({ acc_number: value }, () =>
+                                                this.setState({acc_number: value}, () =>
                                                     this.props.setBankDetail(this.state)
                                                 );
                                                 this.handleValidation();
@@ -358,10 +403,10 @@ class ESignBankDetail extends Component {
                                         this._fetchIFSC(this.state.ifsc_code);
                                     }}
                                     onChange={e => {
-                                        let { value } = e.target;
+                                        let {value} = e.target;
                                         this.validate.ifsc_code = value.length === 11;
                                         if (value.length <= 11) {
-                                            this.setState({ ifsc_code: value }, () =>
+                                            this.setState({ifsc_code: value}, () =>
                                                 this.props.setBankDetail(this.state)
                                             );
                                             this.handleValidation();
@@ -382,8 +427,8 @@ class ESignBankDetail extends Component {
                                     inputId={"accountType"}
                                     onBlur={() => this.validationErrorMsg()}
                                     onChange={e => {
-                                        let { value } = e;
-                                        this.setState({ acc_type: value }, () =>
+                                        let {value} = e;
+                                        this.setState({acc_type: value}, () =>
                                             this.props.setBankDetail(this.state)
                                         );
                                         this.validate.acc_type = value.length > 0;
@@ -416,7 +461,7 @@ class ESignBankDetail extends Component {
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div
                                 className="form-group mb-3"
-                                style={{ display: this.state.bank_name ? "block" : "none" }}
+                                style={{display: this.state.bank_name ? "block" : "none"}}
                             >
                                 <label htmlFor="nameBank" className={"bmd-label-floating"}>
                                     Bank Name *
@@ -431,21 +476,21 @@ class ESignBankDetail extends Component {
                                     required={true}
                                     disabled={true}
                                     value={this.state.bank_name}
-                                // onBlur={() => this.validationErrorMsg()}
-                                // ref={ref => (this.obj.pan = ref)}
-                                /*onChange={(e) => {
-                                                      let {value} = e.target;
-                                                      this.setState({bank_name: value}, () => this.props.setBankDetail(this.state));
-                                                      this.validate.bank_name = (value.length > 0);
-                                                      this.handleValidation();
-                                                  }}*/
+                                    // onBlur={() => this.validationErrorMsg()}
+                                    // ref={ref => (this.obj.pan = ref)}
+                                    /*onChange={(e) => {
+                                                          let {value} = e.target;
+                                                          this.setState({bank_name: value}, () => this.props.setBankDetail(this.state));
+                                                          this.validate.bank_name = (value.length > 0);
+                                                          this.handleValidation();
+                                                      }}*/
                                 />
                             </div>
                         </div>
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div
                                 className="form-group mb-3"
-                                style={{ display: this.state.micr_code ? "block" : "none" }}
+                                style={{display: this.state.micr_code ? "block" : "none"}}
                             >
                                 <label htmlFor="micrCode" className="bmd-label-floating">
                                     MICR Code
@@ -462,10 +507,10 @@ class ESignBankDetail extends Component {
                                     // ref={ref => (this.obj.pan = ref)}
                                     // onBlur={() => this.validationErrorMsg()}
                                     onChange={e => {
-                                        let { value } = e.target;
+                                        let {value} = e.target;
                                         this.validate.micr_code = value.length === 9;
                                         if (value.length <= 9 && !isNaN(value)) {
-                                            this.setState({ micr_code: value }, () =>
+                                            this.setState({micr_code: value}, () =>
                                                 this.props.setBankDetail(this.state)
                                             );
                                             // this.handleValidation();
@@ -477,7 +522,7 @@ class ESignBankDetail extends Component {
                     </div>
                     <div
                         className={"row"}
-                        style={{ display: this.state.branch_name ? "block" : "none" }}
+                        style={{display: this.state.branch_name ? "block" : "none"}}
                     >
                         <div className={"col-sm-12"}>
                             <div className="form-group mb-3 ">
@@ -528,12 +573,13 @@ class ESignBankDetail extends Component {
 const mapStateToProps = state => ({
     token: state.eSignReducer.token,
     eSignPayload: state.eSignReducer.eSignPayload,
-    bankObj: state.eSignReducer.bankObj
+    bankObj: state.eNachReducer.bankObj,
+    anchorObj: state.eSignReducer.anchorObj
 });
 
 export default withRouter(
     connect(
         mapStateToProps,
-        { setBankDetail, changeLoader, setToken, showAlert }
+        {EsignsetBankDetail, changeLoader, setToken, showAlert, EnachsetPayload}
     )(ESignBankDetail)
 );

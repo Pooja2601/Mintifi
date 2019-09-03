@@ -27,10 +27,10 @@ const TriggerPopUp = () => {
                     <input type="hidden" name="requestId" value={payloadPopUp.requestId}/>
                     <input type="hidden" name="timeStamp" value={payloadPopUp.time_stamp}/>
                     <input type="hidden" name="purpose" value={payloadPopUp.purpose}/>
-                    <input type="hidden" name=" otp " value={payloadPopUp.otp}/>
-                    <input type="hidden" name=" fingerPrint " value={payloadPopUp.fingerPrint}/>
-                    <input type="hidden" name=" iris " value={payloadPopUp.iris}/>
-                    <input type="hidden" name=" face " value={payloadPopUp.face}/>
+                    <input type="hidden" name="otp" value={payloadPopUp.otp}/>
+                    <input type="hidden" name="fingerPrint" value={payloadPopUp.fingerPrint}/>
+                    <input type="hidden" name="iris" value={payloadPopUp.iris}/>
+                    <input type="hidden" name="face" value={payloadPopUp.face}/>
                     <input type="hidden" name="channel" value={payloadPopUp.channel}/>
                     <input type="hidden" name="esignName" value={payloadPopUp.esignName}/>
                     <input type="hidden" name="successUrl" value={payloadPopUp.successUrl}/>

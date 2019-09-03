@@ -21,7 +21,7 @@ export default (state = {}, action) => {
             return { ...state, docStatusObj: action.docStatusObj };
 
         case types.ESIGN_ANCHOR_PAYLOAD:
-            return { ...state, anchorPayload: action.anchorPayload };
+            return { ...state, anchorObj: action.anchorObj };
 
 
         default:

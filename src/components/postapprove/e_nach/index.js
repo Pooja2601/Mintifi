@@ -5,7 +5,6 @@ import {
     changeLoader,
     EnachsetPayload,
     EnachsetAttempt,
-    setAnchorObj,
     showAlert
 } from "../../../actions";
 import {
@@ -112,40 +111,6 @@ class ENach extends Component {
         }
     };
 
-    _fetchAnchorDetail() {
-        const {
-            token,
-            eNachPayload,
-            setAnchorObj,
-            showAlert,
-            changeLoader
-        } = this.props;
-        changeLoader(true);
-        if (eNachPayload === Object(eNachPayload) && eNachPayload)
-            fetch(
-                `${baseUrl}/merchants/${
-                    eNachPayload.anchor_id
-                    }/get_details?app_id=${app_id}`,
-                {
-                    method: "GET",
-                    headers: {"Content-type": "application/json", token: token}
-                }
-            )
-                .then(resp => resp.json())
-                .then(
-                    resp => {
-                        changeLoader(false);
-                        if (resp.response === Object(resp.response))
-                            setAnchorObj(resp.response);
-                        //   console.log(resp.response);
-                    },
-                    resp => {
-                        changeLoader(false);
-                        // showAlert('net');
-                    }
-                );
-        else changeLoader(false);
-    }
 
     componentWillMount() {
         let {
@@ -184,10 +149,10 @@ class ENach extends Component {
                 "You cannot access this page directly without Authorised Session !!",
                 "error"
             );
-        else {
-            EnachsetPayload(token, base64_decode);
-            this._fetchAnchorDetail();
-        }
+        /* else {
+             // ToDo : need to look
+             EnachsetPayload(token, base64_decode);
+         }*/
     }
 
     componentDidMount() {
@@ -307,12 +272,13 @@ class ENach extends Component {
 
 const mapStateToProps = state => ({
     token: state.eNachReducer.token,
-    eNachPayload: state.eNachReducer.eNachPayload
+    eNachPayload: state.eNachReducer.eNachPayload,
+    bankObj: state.eNachReducer.bankObj
 });
 
 export default withRouter(
     connect(
         mapStateToProps,
-        {changeLoader, EnachsetPayload, EnachsetAttempt, setAnchorObj, showAlert}
+        {changeLoader, EnachsetPayload, EnachsetAttempt, showAlert}
     )(ENach)
 );

@@ -88,7 +88,7 @@ export const setBusinessDetail = businessObj => ({
     businessObj
 });
 
-export const setBankDetail = bankObj => ({ type: types.BANK_DETAIL, bankObj });
+export const setBankDetail = bankObj => ({type: types.BANK_DETAIL, bankObj});
 
 export const setGstProfile = gstProfile => ({
     type: types.GST_PROFILE,
@@ -174,12 +174,12 @@ export const EsignsetBankDetail = bankObj => ({
     bankObj
 });
 
-export const EsignsetDocPayload = bankObj => ({
+export const EsignsetDocPayload = eSigndocObj => ({
     type: types.ESIGN_DOC_PAYLOAD,
-    bankObj
+    eSigndocObj
 });
 
-export const EsignsetAnchorPayload = bankObj => ({
+export const EsignsetAnchorPayload = anchorObj => ({
     type: types.ESIGN_ANCHOR_PAYLOAD,
-    bankObj
+    anchorObj
 });

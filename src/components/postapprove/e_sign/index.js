@@ -32,7 +32,7 @@ class ESign extends Component {
 
     checkPayload = false
 
-    async _fetchAnchorDetail() {
+     _fetchAnchorDetail = async ()=> {
         const {
             token,
             eSignPayload,
