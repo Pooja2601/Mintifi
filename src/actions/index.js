@@ -36,7 +36,8 @@ export const types = {
     ESIGN_PAYLOAD: "ESIGN_PAYLOAD",
     ESIGN_ATTEMPT: "ENACH_ATTEMPT",
     ESIGN_BANK_DETAIL: "ESIGN_BANK_DETAIL",
-    ESIGN_DOC_PAYLOAD: "ESIGN_DOC_PAYLOAD"
+    ESIGN_DOC_PAYLOAD: "ESIGN_DOC_PAYLOAD",
+    ESIGN_ANCHOR_PAYLOAD: "ESIGN_ANCHOR_PAYLOAD",
 };
 
 export const showAlert = (
@@ -87,7 +88,7 @@ export const setBusinessDetail = businessObj => ({
     businessObj
 });
 
-export const setBankDetail = bankObj => ({type: types.BANK_DETAIL, bankObj});
+export const setBankDetail = bankObj => ({ type: types.BANK_DETAIL, bankObj });
 
 export const setGstProfile = gstProfile => ({
     type: types.GST_PROFILE,
@@ -175,5 +176,10 @@ export const EsignsetBankDetail = bankObj => ({
 
 export const EsignsetDocPayload = bankObj => ({
     type: types.ESIGN_DOC_PAYLOAD,
+    bankObj
+});
+
+export const EsignsetAnchorPayload = bankObj => ({
+    type: types.ESIGN_ANCHOR_PAYLOAD,
     bankObj
 });

@@ -4,8 +4,8 @@ import {withRouter} from "react-router-dom";
 import {
     changeLoader,
     EsignsetPayload,
-    EsignsetAttempt,
-    setAnchorObj, EsignsetDocPayload,
+    EsignsetAttempt, EsignsetBankDetail,
+    EsignsetAnchorPayload, EsignsetDocPayload,
     showAlert
 } from "../../../actions";
 import {
@@ -36,7 +36,7 @@ class ESign extends Component {
         const {
             token,
             eSignPayload,
-            setAnchorObj,
+            EsignsetAnchorPayload,
             changeLoader
         } = this.props;
 
@@ -52,7 +52,7 @@ class ESign extends Component {
             const resp = await fetchAPI(options);
 
             if (resp.status === apiActions.SUCCESS_RESPONSE)
-                setAnchorObj(resp.data);
+                EsignsetAnchorPayload(resp.data);
 
             changeLoader(false);
         }
@@ -91,7 +91,9 @@ class ESign extends Component {
     }
 
     _pingDBStatus = async () => {
+
         const {eSignPayload, token, changeLoader, showAlert, history} = this.props;
+
         const options = {
             URL: `${baseUrl}/documents/esign_status`,
             token: token,
@@ -119,15 +121,16 @@ class ESign extends Component {
         } = this.props;
         changeLoader(false);
 
-        // let token = `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyNiwidHlwZSI6InJlYWN0X3dlYl91c2VyIiwiZXhwIjoxNTYwMzMzNTYxfQ.yzD - pIyaf4Z7zsXEJZG - Hm0ka80CjMjMB74q6dpRSPM`;
+
+        // let token = `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyNiwidHlwZSI6InJlYWN0X3dlYl91c2VyIiwiZXhwIjoxNTYwMzMzNTYxfQ.yzD-pIyaf4Z7zsXEJZG-Hm0ka80CjMjMB74q6dpRSPM`;
         let {href} = window.location,
             base64_decode = {},
             payload;
 
-        this.checkPayload = !!(eSignPayload === Object(eSignPayload) && eSignPayload)
+        this.checkPayload = !!(eSignPayload === Object(eSignPayload) && eSignPayload);
 
         // Coming from constant
-        if (environment === "local" || environment === "dev")
+        if (environment === "local")
             base64_decode = eSignPayloadStatic;
 
         // ToDo : hide the 2 lines in prod
@@ -217,6 +220,14 @@ const mapStateToProps = state => ({
 export default withRouter(
     connect(
         mapStateToProps,
-        {changeLoader, EsignsetPayload, EsignsetDocPayload, EsignsetAttempt, setAnchorObj, showAlert}
+        {
+            changeLoader,
+            EsignsetPayload,
+            EsignsetDocPayload,
+            EsignsetBankDetail,
+            EsignsetAttempt,
+            EsignsetAnchorPayload,
+            showAlert
+        }
     )(ESign)
 );

@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
 import {
     baseUrl,
@@ -8,16 +8,17 @@ import {
     user_id,
     auth_secret
 } from "../../../shared/constants";
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import {setBankDetail, changeLoader, setToken, showAlert} from "../../../actions";
-import {withRouter} from "react-router-dom";
-import {alertModule, retrieveParam} from "../../../shared/commonLogic";
+import { setBankDetail, changeLoader, setToken, showAlert } from "../../../actions";
+import { withRouter } from "react-router-dom";
+import { alertModule, retrieveParam } from "../../../shared/commonLogic";
 // import DatePicker from "react-datepicker";
 // import "react-datepicker/dist/react-datepicker.css";
 import Select from "react-select";
+import { fetchAPI, apiActions } from "../../../api";
 
-const {PUBLIC_URL} = process.env;
+const { PUBLIC_URL } = process.env;
 
 class ESignBankDetail extends Component {
 
@@ -53,7 +54,7 @@ class ESignBankDetail extends Component {
         let ctrerror = 4,
             fieldTxt;
         Object.values(this.validate).map((val, key) => {
-            if (!val) ++ctrerror;
+            if (!val)++ctrerror;
             else --ctrerror;
         });
         if (ctrerror !== 0) {
@@ -67,13 +68,13 @@ class ESignBankDetail extends Component {
             missed_fields;
         // let missed_fields = Object.keys(this.validate).some(x => this.validate[x]);
         Object.values(this.validate).map((val, key) => {
-            if (!val) ++ctrerror;
+            if (!val)++ctrerror;
             else --ctrerror;
             // console.log(val);
         });
         // console.log(ctrerror);
         missed_fields = ctrerror !== 0;
-        this.setState({missed_fields});
+        this.setState({ missed_fields });
         // this.setState({missed_fields}, () => console.log('All Fields Validated : ' + this.state.missed_fields));
     };
 
@@ -88,7 +89,7 @@ class ESignBankDetail extends Component {
          }*/
 
     _genAuthToken = base64_encode => {
-        const {history, changeLoader, showAlert} = this.props;
+        const { history, changeLoader, showAlert } = this.props;
         changeLoader(true);
         fetch(`${baseUrl}/auth`, {
             method: "POST",
@@ -112,8 +113,8 @@ class ESignBankDetail extends Component {
                                 () =>
                                     history.push(
                                         `${PUBLIC_URL}/enach?payload=${base64_encode}&token=${
-                                            resp.response.auth.token
-                                            }`
+                                        resp.response.auth.token
+                                        }`
                                     ),
                                 500
                             );
@@ -128,15 +129,16 @@ class ESignBankDetail extends Component {
             );
     };
 
+
     _formSubmit = e => {
         e.preventDefault();
-        const {changeLoader, token, payload, preFlightResp, showAlert} = this.props;
+        const { changeLoader, token, payload, preFlightResp, showAlert, history } = this.props;
         // console.log(preFlightResp);
         if (preFlightResp === Object(preFlightResp)) {
             changeLoader(true);
             fetch(`${baseUrl}/bank_account`, {
                 method: "POST",
-                headers: {"Content-Type": "application/json", token: token},
+                headers: { "Content-Type": "application/json", token: token },
                 body: JSON.stringify({
                     app_id: app_id,
                     loan_application_id: preFlightResp.loan_application_id,
@@ -168,11 +170,13 @@ class ESignBankDetail extends Component {
                                 resp.response.nach_url,
                                 "payload"
                             );
-                            this._genAuthToken(base64_encode);
-                            /* setTimeout(() => history.push(`${PUBLIC_URL}/enach`, {
-                                       token: token,
-                                       payload: base64_decode
-                                   }));*/
+                            // this._genAuthToken(base64_encode);
+                            // ToDo : check payload from API
+                            setTimeout(() =>
+                                history.push(
+                                    `${PUBLIC_URL}/enach?payload=${base64_encode}&token=${
+                                    resp.response.auth.token
+                                    }`), 500);
                         }
                         // error
                         if (resp.error === Object(resp.error)) {
@@ -187,52 +191,53 @@ class ESignBankDetail extends Component {
         } else showAlert("Something went wrong with the Request", "warn");
     };
 
-    _fetchIFSC(ifsc) {
-        const {changeLoader, showAlert} = this.props;
+    _fetchIFSC = async (ifsc) => {
+        const { changeLoader, showAlert } = this.props;
         let bank_name, micr_code, branch_name;
+
+        const options = {
+            URL: `https://ifsc.razorpay.com/${ifsc}`,
+            token: null
+        }
         changeLoader(true);
-        fetch(`https://ifsc.razorpay.com/${ifsc}`)
-            .then(resp => resp.json())
-            .then(
-                resp => {
-                    changeLoader(false);
-                    if (resp === Object(resp)) {
-                        bank_name = resp.BANK;
-                        // ifsc_code = resp.IFSC;
-                        micr_code = resp.MICR;
-                        branch_name = resp.BRANCH;
-                    } else {
-                        bank_name = micr_code = branch_name = "";
-                        showAlert("Make sure to enter correct IFSC code", "error");
-                    }
-                    this.setState({
-                        bank_name,
-                        micr_code,
-                        branch_name
-                    });
-                    // console.log(resp);
-                },
-                resp => {
-                    showAlert('net');
-                    changeLoader(false);
-                }
-            );
+        const resp = await fetchAPI(options);
+
+        changeLoader(false);
+
+        if (resp.status === apiActions.ERROR_NET)
+            showAlert('net');
+        if (resp.status === apiActions.ERROR_RESPONSE) {
+            bank_name = micr_code = branch_name = "";
+            showAlert("Make sure to enter correct IFSC code", "error");
+        }
+        else if (resp.status === apiActions.SUCCESS_RESPONSE) {
+            bank_name = resp.BANK;
+            // ifsc_code = resp.IFSC;
+            micr_code = resp.MICR;
+            branch_name = resp.BRANCH;
+        }
+        this.setState({
+            bank_name,
+            micr_code,
+            branch_name
+        });
+    }
+
+    // ToDo : Fetch bank details
+    _fetchBankDetails = () => {
+
     }
 
     componentWillMount() {
-        const {payload, adharObj, history, businessObj} = this.props;
+        const { eSignPayload, history } = this.props;
 
-        if (payload === Object(payload) && payload) {
-            if (adharObj !== Object(adharObj))
-                history.push(`${PUBLIC_URL}/preapprove/personaldetail`);
-
-            if (businessObj !== Object(businessObj))
-                history.push(`${PUBLIC_URL}/preapprove/businessdetail`);
-        } else history.push(`${PUBLIC_URL}/preapprove/token`);
+        if (eSignPayload === Object(eSignPayload) && eSignPayload) {
+            // history.push(`${PUBLIC_URL}/esign`);
+        } else history.push(`${PUBLIC_URL}/esign`);
     }
 
     componentDidMount() {
-        const {bankObj, setBankDetail, changeLoader} = this.props;
+        const { bankObj, EsignsetBankDetail, changeLoader } = this.props;
 
         if (bankObj === Object(bankObj))
             this.setState(bankObj, () => {
@@ -242,16 +247,16 @@ class ESignBankDetail extends Component {
                     // console.log(this.validate);
                 });
             });
-        else setBankDetail(this.state);
+        else EsignsetBankDetail(this.state);
 
-        // console.log(this.props.gstProfile)
+        // ToDo : Integrate Fetch bank details
+
         changeLoader(false);
         setTimeout(() => this.handleValidation(), 500);
-        // console.log(this.props.adharObj);
     }
 
     render() {
-        // const gstProfile = this.props.gstProfile;
+
         return (
             <>
                 {/*<Link to={`${PUBLIC_URL}/preapprove/personaldetails`} className={"btn btn-link"}>Go Back </Link>*/}
@@ -286,9 +291,9 @@ class ESignBankDetail extends Component {
                                     onBlur={() => this.validationErrorMsg()}
                                     // ref={ref => (this.obj.pan = ref)}
                                     onChange={e => {
-                                        let {value} = e.target;
+                                        let { value } = e.target;
                                         this.validate.acc_name = value.length > 2;
-                                        this.setState({acc_name: value}, () =>
+                                        this.setState({ acc_name: value }, () =>
                                             this.props.setBankDetail(this.state)
                                         );
                                         this.handleValidation();
@@ -314,12 +319,12 @@ class ESignBankDetail extends Component {
                                     onBlur={() => this.validationErrorMsg()}
                                     // ref={ref => (this.obj.pan = ref)}
                                     onChange={e => {
-                                        let {value} = e.target;
+                                        let { value } = e.target;
                                         if (!isNaN(value)) {
                                             this.validate.acc_number =
                                                 value.length >= 9 && value.length <= 18;
                                             if (value.length <= 18) {
-                                                this.setState({acc_number: value}, () =>
+                                                this.setState({ acc_number: value }, () =>
                                                     this.props.setBankDetail(this.state)
                                                 );
                                                 this.handleValidation();
@@ -353,10 +358,10 @@ class ESignBankDetail extends Component {
                                         this._fetchIFSC(this.state.ifsc_code);
                                     }}
                                     onChange={e => {
-                                        let {value} = e.target;
+                                        let { value } = e.target;
                                         this.validate.ifsc_code = value.length === 11;
                                         if (value.length <= 11) {
-                                            this.setState({ifsc_code: value}, () =>
+                                            this.setState({ ifsc_code: value }, () =>
                                                 this.props.setBankDetail(this.state)
                                             );
                                             this.handleValidation();
@@ -377,8 +382,8 @@ class ESignBankDetail extends Component {
                                     inputId={"accountType"}
                                     onBlur={() => this.validationErrorMsg()}
                                     onChange={e => {
-                                        let {value} = e;
-                                        this.setState({acc_type: value}, () =>
+                                        let { value } = e;
+                                        this.setState({ acc_type: value }, () =>
                                             this.props.setBankDetail(this.state)
                                         );
                                         this.validate.acc_type = value.length > 0;
@@ -411,7 +416,7 @@ class ESignBankDetail extends Component {
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div
                                 className="form-group mb-3"
-                                style={{display: this.state.bank_name ? "block" : "none"}}
+                                style={{ display: this.state.bank_name ? "block" : "none" }}
                             >
                                 <label htmlFor="nameBank" className={"bmd-label-floating"}>
                                     Bank Name *
@@ -426,21 +431,21 @@ class ESignBankDetail extends Component {
                                     required={true}
                                     disabled={true}
                                     value={this.state.bank_name}
-                                    // onBlur={() => this.validationErrorMsg()}
-                                    // ref={ref => (this.obj.pan = ref)}
-                                    /*onChange={(e) => {
-                                                          let {value} = e.target;
-                                                          this.setState({bank_name: value}, () => this.props.setBankDetail(this.state));
-                                                          this.validate.bank_name = (value.length > 0);
-                                                          this.handleValidation();
-                                                      }}*/
+                                // onBlur={() => this.validationErrorMsg()}
+                                // ref={ref => (this.obj.pan = ref)}
+                                /*onChange={(e) => {
+                                                      let {value} = e.target;
+                                                      this.setState({bank_name: value}, () => this.props.setBankDetail(this.state));
+                                                      this.validate.bank_name = (value.length > 0);
+                                                      this.handleValidation();
+                                                  }}*/
                                 />
                             </div>
                         </div>
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div
                                 className="form-group mb-3"
-                                style={{display: this.state.micr_code ? "block" : "none"}}
+                                style={{ display: this.state.micr_code ? "block" : "none" }}
                             >
                                 <label htmlFor="micrCode" className="bmd-label-floating">
                                     MICR Code
@@ -457,10 +462,10 @@ class ESignBankDetail extends Component {
                                     // ref={ref => (this.obj.pan = ref)}
                                     // onBlur={() => this.validationErrorMsg()}
                                     onChange={e => {
-                                        let {value} = e.target;
+                                        let { value } = e.target;
                                         this.validate.micr_code = value.length === 9;
                                         if (value.length <= 9 && !isNaN(value)) {
-                                            this.setState({micr_code: value}, () =>
+                                            this.setState({ micr_code: value }, () =>
                                                 this.props.setBankDetail(this.state)
                                             );
                                             // this.handleValidation();
@@ -472,7 +477,7 @@ class ESignBankDetail extends Component {
                     </div>
                     <div
                         className={"row"}
-                        style={{display: this.state.branch_name ? "block" : "none"}}
+                        style={{ display: this.state.branch_name ? "block" : "none" }}
                     >
                         <div className={"col-sm-12"}>
                             <div className="form-group mb-3 ">
@@ -521,18 +526,14 @@ class ESignBankDetail extends Component {
 }
 
 const mapStateToProps = state => ({
-    token: state.authPayload.token,
-    adharObj: state.adharDetail.adharObj,
-    payload: state.authPayload.payload,
-    preFlightResp: state.businessDetail.preFlightResp,
-    businessObj: state.businessDetail.businessObj,
-    gstProfile: state.businessDetail.gstProfile,
-    bankObj: state.businessDetail.bankObj
+    token: state.eSignReducer.token,
+    eSignPayload: state.eSignReducer.eSignPayload,
+    bankObj: state.eSignReducer.bankObj
 });
 
 export default withRouter(
     connect(
         mapStateToProps,
-        {setBankDetail, changeLoader, setToken, showAlert}
+        { setBankDetail, changeLoader, setToken, showAlert }
     )(ESignBankDetail)
 );
