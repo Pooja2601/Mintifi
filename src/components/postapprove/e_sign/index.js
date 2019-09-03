@@ -91,7 +91,7 @@ class ESign extends Component {
     }
 
     _pingDBStatus = async () => {
-        const {eSignPayload, token, changeLoader, showAlert} = this.props;
+        const {eSignPayload, token, changeLoader, showAlert, history} = this.props;
         const options = {
             URL: `${baseUrl}/documents/esign_status`,
             token: token,
@@ -105,7 +105,7 @@ class ESign extends Component {
         const resp = await postAPI(options);
         // ToDo : Navigating to Bank Details Page
         if (resp.status === apiActions.SUCCESS_RESPONSE) {
-            // resp.data.success &&
+            (resp.data.success) && history.push(`${PUBLIC_URL}/esign/bank_detail`)
         }
     }
 
@@ -119,12 +119,12 @@ class ESign extends Component {
         } = this.props;
         changeLoader(false);
 
-        // let token = `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyNiwidHlwZSI6InJlYWN0X3dlYl91c2VyIiwiZXhwIjoxNTYwMzMzNTYxfQ.yzD-pIyaf4Z7zsXEJZG-Hm0ka80CjMjMB74q6dpRSPM`;
+        // let token = `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyNiwidHlwZSI6InJlYWN0X3dlYl91c2VyIiwiZXhwIjoxNTYwMzMzNTYxfQ.yzD - pIyaf4Z7zsXEJZG - Hm0ka80CjMjMB74q6dpRSPM`;
         let {href} = window.location,
             base64_decode = {},
             payload;
 
-        this.checkPayload = !!(eSignPayload === Object(eSignPayload) && eSignPayload.length)
+        this.checkPayload = !!(eSignPayload === Object(eSignPayload) && eSignPayload)
 
         // Coming from constant
         if (environment === "local" || environment === "dev")
