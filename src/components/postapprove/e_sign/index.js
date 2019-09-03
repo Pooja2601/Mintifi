@@ -3,25 +3,15 @@ import {connect} from "react-redux";
 import {withRouter} from "react-router-dom";
 import {
     changeLoader,
+    setAnchorObj,
+    EsignsetAttempt,
+    EsignsetDocPayload,
     EsignsetPayload,
-    EsignsetAttempt, EsignsetBankDetail,
-    EsignsetAnchorPayload, EsignsetDocPayload,
     showAlert
 } from "../../../actions";
-import {
-    // alertModule,
-    base64Logic,
-    retrieveParam
-} from "../../../shared/commonLogic";
-import {fetchAPI, apiActions, postAPI} from "../../../api";
-import {
-    eSignPayloadStatic,
-    baseUrl,
-    app_id,
-    environment,
-    ENachResponseUrl
-} from "../../../shared/constants";
-import PropTypes from "prop-types";
+import {base64Logic, retrieveParam} from "../../../shared/commonLogic";
+import {apiActions, fetchAPI, postAPI} from "../../../api";
+import {app_id, baseUrl, environment, eSignPayloadStatic} from "../../../shared/constants";
 
 const {PUBLIC_URL} = process.env;
 
@@ -32,11 +22,11 @@ class ESign extends Component {
 
     checkPayload = false
 
-     _fetchAnchorDetail = async ()=> {
+    _fetchAnchorDetail = async () => {
         const {
             token,
             eSignPayload,
-            EsignsetAnchorPayload,
+            setAnchorObj,
             changeLoader
         } = this.props;
 
@@ -52,7 +42,7 @@ class ESign extends Component {
             const resp = await fetchAPI(options);
 
             if (resp.status === apiActions.SUCCESS_RESPONSE)
-                EsignsetAnchorPayload(resp.data);
+                setAnchorObj(resp.data);
 
             changeLoader(false);
         }
@@ -94,21 +84,20 @@ class ESign extends Component {
 
         const {eSignPayload, token, changeLoader, showAlert, history} = this.props;
 
+        const reqParam = `app_id=${app_id}&loan_application_id=${eSignPayload.loan_application_id}`;
         const options = {
-            URL: `${baseUrl}/documents/esign_status`,
+            URL: `${baseUrl}/documents/esign_status?${reqParam}`,
             token: token,
-            data: {
-                app_id: app_id,
-                loan_application_id: eSignPayload.loan_application_id,
-                timestamp: new Date()
-            }
-        }
+        };
         // changeLoader(true);
-        const resp = await postAPI(options);
+        const resp = await fetchAPI(options);
+        // changeLoader(false)
         // ToDo : Navigating to Bank Details Page
         if (resp.status === apiActions.SUCCESS_RESPONSE) {
             (resp.data.success) && history.push(`${PUBLIC_URL}/esign/bank_detail`)
         }
+        // ToDo : remove later : skips eISGN checks, only meant for testing
+        history.push(`${PUBLIC_URL}/esign/bank_detail`)
     }
 
     componentWillMount() {
@@ -120,7 +109,6 @@ class ESign extends Component {
             showAlert
         } = this.props;
         changeLoader(false);
-
 
         // let token = `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyNiwidHlwZSI6InJlYWN0X3dlYl91c2VyIiwiZXhwIjoxNTYwMzMzNTYxfQ.yzD-pIyaf4Z7zsXEJZG-Hm0ka80CjMjMB74q6dpRSPM`;
         let {href} = window.location,
@@ -224,9 +212,8 @@ export default withRouter(
             changeLoader,
             EsignsetPayload,
             EsignsetDocPayload,
-            EsignsetBankDetail,
             EsignsetAttempt,
-            EsignsetAnchorPayload,
+            setAnchorObj,
             showAlert
         }
     )(ESign)

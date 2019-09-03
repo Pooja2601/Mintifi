@@ -145,9 +145,8 @@ export const DrawAnchorPayload = anchorPayload => ({
 });
 
 //..................................... E-NACH
-export const EnachsetPayload = (token, eNachPayload) => ({
+export const EnachsetPayload = ( eNachPayload) => ({
     type: types.ENACH_PAYLOAD,
-    token,
     eNachPayload
 });
 
@@ -179,7 +178,9 @@ export const EsignsetDocPayload = eSigndocObj => ({
     eSigndocObj
 });
 
+/*
 export const EsignsetAnchorPayload = anchorObj => ({
     type: types.ESIGN_ANCHOR_PAYLOAD,
     anchorObj
 });
+*/

@@ -37,6 +37,7 @@ class ENach extends Component {
         let {token, changeLoader, eNachPayload, history, showAlert} = this.props;
 
         changeLoader(true);
+        // const resp = await
         fetch(`${baseUrl}/loans/enach_status`, {
             method: "POST",
             headers: {"Content-Type": "application/json", token: token},
@@ -136,21 +137,21 @@ class ENach extends Component {
         }
 
         this.setState({errorMsg: false});
-        if (environment === "prod" || environment === "dev") {
-            payload = retrieveParam(href, "payload") || undefined;
-            token = retrieveParam(href, "token") || undefined;
-            if (payload) base64_decode = base64Logic(payload, "decode");
-            // else this.setState({errorMsg: true});
-            // console.log(base64_decode);
-        }
+        /* if (environment === "prod" || environment === "dev") {
+             payload = retrieveParam(href, "payload") || undefined;
+             token = retrieveParam(href, "token") || undefined;
+             if (payload) base64_decode = base64Logic(payload, "decode");
+             // else this.setState({errorMsg: true});
+             // console.log(base64_decode);
+         }*/
 
-        if (base64_decode !== Object(base64_decode) && !base64_decode && !token)
+        if (eNachPayload !== Object(eNachPayload) && !eNachPayload && !token)
             showAlert(
                 "You cannot access this page directly without Authorised Session !!",
                 "error"
             );
         /* else {
-             // ToDo : need to look
+             // ToDo : need to look later
              EnachsetPayload(token, base64_decode);
          }*/
     }
@@ -271,7 +272,7 @@ class ENach extends Component {
 }
 
 const mapStateToProps = state => ({
-    token: state.eNachReducer.token,
+    token: state.eSignReducer.token,
     eNachPayload: state.eNachReducer.eNachPayload,
     bankObj: state.eNachReducer.bankObj
 });

@@ -12,6 +12,7 @@ const TriggerPopUp = () => {
 
     let checkPayload = !!(payloadPopUp === Object(payloadPopUp) && payloadPopUp);
 
+    // alert(JSON.stringify(payloadPopUp));
     if (checkPayload)
         window.setTimeout(() => {
             adharForm.submit()

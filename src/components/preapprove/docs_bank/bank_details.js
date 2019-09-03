@@ -28,8 +28,8 @@ class BankDetail extends Component {
         businessObj: PropTypes.object.isRequired,
         gstProfile: PropTypes.object,
         preFlightResp: PropTypes.object
-      };
-      
+    };
+
     state = {
         acc_type: "",
         bank_name: "",
@@ -258,12 +258,12 @@ class BankDetail extends Component {
 
                 <h4 className={"text-center mt-5"}>Bank Details</h4>
                 <p className="paragraph_styling  text-center secondLinePara">
-                <b>
-            {" "}
-            Please submit your bank account details for loan disbursement.
-            Please note that same bank account will be used to set up
-            auto-debit/standing instructions for repayment of your loan amount.
-          </b>
+                    <b>
+                        {" "}
+                        Please submit your bank account details for loan disbursement.
+                        Please note that same bank account will be used to set up
+                        auto-debit/standing instructions for repayment of your loan amount.
+                    </b>
                 </p>
                 {/*<h5 className={"text-center"}>{(gstProfile === Object(gstProfile)) ? gstProfile.lgnm : ''}</h5>*/}
 

@@ -25,6 +25,8 @@ class ESignBankDetail extends Component {
     static propTypes = {
         anchorObj: PropTypes.object,
         eSignPayload: PropTypes.object.isRequired,
+        showAlert: PropTypes.func,
+        changeLoader: PropTypes.func
     };
 
     state = {
@@ -68,7 +70,7 @@ class ESignBankDetail extends Component {
             else --ctrerror;
             // console.log(val);
         });
-        // console.log(ctrerror);
+        console.log(ctrerror);
         missed_fields = ctrerror !== 0;
         this.setState({missed_fields});
         // this.setState({missed_fields}, () => console.log('All Fields Validated : ' + this.state.missed_fields));
@@ -121,6 +123,7 @@ class ESignBankDetail extends Component {
     _createMandate = async (base64_encode) => {
         const {changeLoader, token, showAlert, history, eSignPayload, EnachsetPayload} = this.props;
 
+        let nachObject = {}
         changeLoader(true);
         const options = {
             URL: `${baseUrl}/setup_mandate`,
@@ -138,7 +141,8 @@ class ESignBankDetail extends Component {
             showAlert('We couldn`t setup the mandate, you may try the physical NACH process', 'warn');
         else if (resp.status === apiActions.SUCCESS_RESPONSE) {
             showAlert('e-Mandate created successfully', 'success');
-            EnachsetPayload(resp.data);
+            nachObject = Object.assign(eSignPayload, resp.data);
+            EnachsetPayload(nachObject);
         }
         setTimeout(() =>
             history.push(
@@ -201,34 +205,38 @@ class ESignBankDetail extends Component {
     };
 
     _fetchIFSC = async (ifsc) => {
-        const {changeLoader, showAlert} = this.props;
+        const {changeLoader, showAlert, EsignsetBankDetail} = this.props;
         let bank_name, micr_code, branch_name;
 
-        const options = {
-            URL: `https://ifsc.razorpay.com/${ifsc}`,
-            token: null
-        }
         changeLoader(true);
-        const resp = await fetchAPI(options);
+
+        // ToDo : Suggestion : Only meant for External URL
+        fetch(`https://ifsc.razorpay.com/${ifsc}`)
+            .then(resp => resp.json())
+            .then(resp => {
+                if (resp !== Object(resp)) {
+                    bank_name = micr_code = branch_name = "";
+                    showAlert("Make sure to enter correct IFSC code", "error");
+                } else {
+                    bank_name = resp.BANK;
+                    // ifsc_code = resp.IFSC;
+                    micr_code = resp.MICR;
+                    branch_name = resp.BRANCH;
+                }
+                this.setState({
+                    bank_name,
+                    micr_code,
+                    branch_name
+                }, () => EsignsetBankDetail(this.state));
+
+                changeLoader(false);
+            }, () => {
+                changeLoader(false);
+            });
 
         changeLoader(false);
 
-        if (resp.status === apiActions.ERROR_NET)
-            showAlert('net');
-        if (resp.status === apiActions.ERROR_RESPONSE) {
-            bank_name = micr_code = branch_name = "";
-            showAlert("Make sure to enter correct IFSC code", "error");
-        } else if (resp.status === apiActions.SUCCESS_RESPONSE) {
-            bank_name = resp.BANK;
-            // ifsc_code = resp.IFSC;
-            micr_code = resp.MICR;
-            branch_name = resp.BRANCH;
-        }
-        this.setState({
-            bank_name,
-            micr_code,
-            branch_name
-        });
+
     }
 
     // ToDo : Fetch bank details
@@ -237,6 +245,7 @@ class ESignBankDetail extends Component {
         const {changeLoader, token, eSignPayload, showAlert, EsignsetBankDetail} = this.props;
         const paramReq = `app_id=${app_id}&loan_application_id=${eSignPayload.loan_application_id}`;
         const options = {URL: `${baseUrl}/bank_account_details?${paramReq}`, token: token};
+        let that = this;
         changeLoader(true);
         const resp = await fetchAPI(options);
         changeLoader(false);
@@ -266,9 +275,20 @@ class ESignBankDetail extends Component {
                 micr_code: bank_micr_code && bank_micr_code,
             });
 
-            if (bank_ifsc_code)
-                this._fetchIFSC(this.state.ifsc_code);
-            EsignsetBankDetail(this.state);
+            window.setTimeout(() => {
+
+                if (bank_ifsc_code) {
+                    that._fetchIFSC(that.state.ifsc_code);
+                    that.validate.ifsc_code = that.state.ifsc_code.length === 11;
+                    that.validate.acc_name = that.state.acc_name.length > 2;
+                    that.validate.acc_number =
+                        that.state.acc_number.length >= 9 && that.state.acc_number.length <= 18;
+                    that.validate.acc_type = false;
+                }
+                window.setTimeout(() => that.handleValidation(), 50);
+                EsignsetBankDetail(that.state);
+            }, 50);
+
         }
     }
 
@@ -293,8 +313,6 @@ class ESignBankDetail extends Component {
                 });
             });
         else EsignsetBankDetail(this.state);
-
-        // ToDo : Integrate Fetch bank details
 
         changeLoader(false);
         setTimeout(() => this.handleValidation(), 500);
@@ -339,7 +357,7 @@ class ESignBankDetail extends Component {
                                         let {value} = e.target;
                                         this.validate.acc_name = value.length > 2;
                                         this.setState({acc_name: value}, () =>
-                                            this.props.setBankDetail(this.state)
+                                            this.props.EsignsetBankDetail(this.state)
                                         );
                                         this.handleValidation();
                                     }}
@@ -370,7 +388,7 @@ class ESignBankDetail extends Component {
                                                 value.length >= 9 && value.length <= 18;
                                             if (value.length <= 18) {
                                                 this.setState({acc_number: value}, () =>
-                                                    this.props.setBankDetail(this.state)
+                                                    this.props.EsignsetBankDetail(this.state)
                                                 );
                                                 this.handleValidation();
                                             }
@@ -407,7 +425,7 @@ class ESignBankDetail extends Component {
                                         this.validate.ifsc_code = value.length === 11;
                                         if (value.length <= 11) {
                                             this.setState({ifsc_code: value}, () =>
-                                                this.props.setBankDetail(this.state)
+                                                this.props.EsignsetBankDetail(this.state)
                                             );
                                             this.handleValidation();
                                         }
@@ -429,7 +447,7 @@ class ESignBankDetail extends Component {
                                     onChange={e => {
                                         let {value} = e;
                                         this.setState({acc_type: value}, () =>
-                                            this.props.setBankDetail(this.state)
+                                            this.props.EsignsetBankDetail(this.state)
                                         );
                                         this.validate.acc_type = value.length > 0;
                                         this.handleValidation();
@@ -440,7 +458,7 @@ class ESignBankDetail extends Component {
                                         value={this.state.acc_type} required={true}
                                         onChange={(e) => {
                                             let {value} = e.target;
-                                            this.setState({acc_type: value}, () => this.props.setBankDetail(this.state));
+                                            this.setState({acc_type: value}, () => this.props.EsignsetBankDetail(this.state));
                                             this.validate.acc_type = (value.length > 0);
                                             this.handleValidation();
                                         }}
@@ -480,7 +498,7 @@ class ESignBankDetail extends Component {
                                     // ref={ref => (this.obj.pan = ref)}
                                     /*onChange={(e) => {
                                                           let {value} = e.target;
-                                                          this.setState({bank_name: value}, () => this.props.setBankDetail(this.state));
+                                                          this.setState({bank_name: value}, () => this.props.EsignsetBankDetail(this.state));
                                                           this.validate.bank_name = (value.length > 0);
                                                           this.handleValidation();
                                                       }}*/
@@ -511,7 +529,7 @@ class ESignBankDetail extends Component {
                                         this.validate.micr_code = value.length === 9;
                                         if (value.length <= 9 && !isNaN(value)) {
                                             this.setState({micr_code: value}, () =>
-                                                this.props.setBankDetail(this.state)
+                                                this.props.EsignsetBankDetail(this.state)
                                             );
                                             // this.handleValidation();
                                         }
