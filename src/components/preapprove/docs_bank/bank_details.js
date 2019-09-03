@@ -126,7 +126,7 @@ class BankDetail extends Component {
 
     _formSubmit = async (e) => {
         e.preventDefault();
-        const {changeLoader, token, payload, preFlightResp, showAlert} = this.props;
+        const {changeLoader, token, payload, preFlightResp, history, showAlert} = this.props;
         // console.log(preFlightResp);
         const {bank_name, acc_name, acc_number, acc_type, ifsc_code, micr_code} = this.state;
         if (preFlightResp === Object(preFlightResp)) {
@@ -167,7 +167,7 @@ class BankDetail extends Component {
                 // this._genAuthToken(base64_encode);
                 setTimeout(() => history.push(`${PUBLIC_URL}/esign?payload=${base64_encode}&token=${token}`, {
                     token: token,
-                    payload: base64_decode
+                    payload: base64_encode
                 }), 100);
             } else if (resp.status === apiActions.ERROR_RESPONSE) {
                 showAlert(resp.data.message, 'warn');
