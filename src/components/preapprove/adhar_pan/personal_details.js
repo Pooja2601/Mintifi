@@ -167,7 +167,7 @@ class PersonalDetail extends Component {
                 state = resp.data.state;
                 this.setState({city, state}, ()=> setAdharManual(this.state));
               } else if (resp.status === apiActions.ERROR_RESPONSE) {
-                showAlert(resp.error.message, 'warn');
+                showAlert(resp.data.message, 'warn');
                 this.setState({city: '', state: ''});
               }
             // fetch(`${otpUrl}/pincode/${this.state.pincode}`)
