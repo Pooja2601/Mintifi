@@ -21,6 +21,8 @@ class ESign extends Component {
     }
 
     checkPayload = false
+    popUpWindow = ''
+    intervalPing = ''
 
     _fetchAnchorDetail = async () => {
         const {
@@ -74,8 +76,8 @@ class ESign extends Component {
             const eSignPopUpPayload = base64Logic(resp.data, 'encode');
             // console.log(eSignPopUpPayload);
             window.setTimeout(() => {
-                window.open(`${PUBLIC_URL}/esign/esign_popup?payload=${eSignPopUpPayload}`, 'ESign PopUp', "width=600,height=500,location=no,menubar=no,toolbar=no,titlebar=no")
-                window.setInterval(() => this._pingDBStatus(), 3000);
+                this.popUpWindow = window.open(`${PUBLIC_URL}/esign/esign_popup?payload=${eSignPopUpPayload}`, 'ESign PopUp', "width=600,height=500,location=no,menubar=no,toolbar=no,titlebar=no")
+                this.intervalPing = window.setInterval(() => this._pingDBStatus(), 3000);
             }, 2000);
         }
     }
@@ -94,10 +96,19 @@ class ESign extends Component {
         // changeLoader(false)
         // ToDo : Navigating to Bank Details Page
         if (resp.status === apiActions.SUCCESS_RESPONSE) {
-            (resp.data.success) && history.push(`${PUBLIC_URL}/esign/bank_detail`)
+            if (resp.data.success) {
+                this.popUpWindow.close();
+                window.setTimeout(() => history.push(`${PUBLIC_URL}/esign/bank_detail`), 1000);
+            }
         }
-        // ToDo : remove later : skips eISGN checks, only meant for testing
-        // history.push(`${PUBLIC_URL}/esign/bank_detail`)
+        // ToDo : remove later : skips eSIGN checks, only meant for testing
+        if (environment === 'local')
+            history.push(`${PUBLIC_URL}/esign/bank_detail`)
+    }
+
+    componentWillUnmount() {
+        if (this.intervalPing)
+            window.clearInterval(this.intervalPing);
     }
 
     componentWillMount() {
@@ -110,7 +121,6 @@ class ESign extends Component {
         } = this.props;
         changeLoader(false);
 
-        // let token = `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyNiwidHlwZSI6InJlYWN0X3dlYl91c2VyIiwiZXhwIjoxNTYwMzMzNTYxfQ.yzD-pIyaf4Z7zsXEJZG-Hm0ka80CjMjMB74q6dpRSPM`;
         let {href} = window.location,
             base64_decode = {},
             payload;
@@ -149,6 +159,9 @@ class ESign extends Component {
         }
     }
 
+    componentDidMount() {
+        window.setTimeout(() => this._triggerESign(), 1000);
+    }
 
     render() {
         const {eSignPayload} = this.props;

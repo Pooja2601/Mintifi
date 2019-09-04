@@ -77,53 +77,10 @@ class ESignBankDetail extends Component {
     };
 
 
-    /*
-        _genAuthToken = base64_encode => {
-            const {history, changeLoader, showAlert} = this.props;
-            changeLoader(true);
-            fetch(`${baseUrl}/auth`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    app_id: app_id,
-                    user_id: user_id,
-                    secret_key: auth_secret,
-                    type: "react_web_user"
-                })
-            })
-                .then(resp => resp.json())
-                .then(
-                    resp => {
-                        changeLoader(false);
-                        if (resp.response === Object(resp.response))
-                            if (resp.response.status === "success")
-                                setTimeout(
-                                    () =>
-                                        history.push(
-                                            `${PUBLIC_URL}/enach?payload=${base64_encode}&token=${
-                                                resp.response.auth.token
-                                                }`
-                                        ),
-                                    500
-                                );
-                        //resp.response.auth.token
-                        if (resp.error === Object(resp.error))
-                            showAlert(resp.error.message, "warn");
-                    },
-                    () => {
-                        changeLoader(false);
-                        showAlert('net');
-                    }
-                );
-        };
-    */
-
     _createMandate = async (base64_encode) => {
         const {changeLoader, token, showAlert, history, eSignPayload, EnachsetPayload} = this.props;
 
-        let nachObject = {}
+        let nachObject = {};
         changeLoader(true);
         const options = {
             URL: `${baseUrl}/setup_mandate`,
@@ -146,20 +103,21 @@ class ESignBankDetail extends Component {
         }
         setTimeout(() =>
             history.push(
-                `${PUBLIC_URL}/enach?payload=${base64_encode}&token=${token}`), 500);
+                `${PUBLIC_URL}/enach?payload=${nachObject}&token=${token}`), 50);
     }
 
-    _formSubmit = e => {
+    _formSubmit = async e => {
         e.preventDefault();
         const {changeLoader, token, showAlert, history, eSignPayload} = this.props;
         // console.log(preFlightResp);
         if (eSignPayload === Object(eSignPayload) && eSignPayload) {
             const {bank_name, acc_number, acc_name, ifsc_code, micr_code, acc_type} = this.state;
             changeLoader(true);
-            fetch(`${baseUrl}/bank_account`, {
-                method: "POST",
-                headers: {"Content-Type": "application/json", token: token},
-                body: JSON.stringify({
+
+            const options = {
+                URL: `${baseUrl}/bank_account`,
+                token: token,
+                data: {
                     app_id: app_id,
                     loan_application_id: eSignPayload.loan_application_id,
                     company_id: eSignPayload.company_id,
@@ -175,32 +133,24 @@ class ESignBankDetail extends Component {
                     error_url: eSignPayload.error_url,
                     cancel_url: eSignPayload.cancel_url,
                     timestamp: new Date()
-                })
-            })
-                .then(resp => resp.json())
-                .then(
-                    resp => {
-                        changeLoader(false);
-                        // success
-                        if (resp.response === Object(resp.response)) {
+                }
+            }
 
-                            let base64_encode = retrieveParam(
-                                resp.response.payload,
-                                "payload"
-                            );
-                            this._createMandate(base64_encode);
+            const resp = await postAPI(options);
+            changeLoader(false);
 
-                        }
-                        // error
-                        if (resp.error === Object(resp.error)) {
-                            showAlert(resp.error.message, "warn");
-                        }
-                    },
-                    resp => {
-                        showAlert('net');
-                        changeLoader(false);
-                    }
+            if (resp.status === apiActions.ERROR_NET)
+                showAlert('net');
+            if (resp.status === apiActions.ERROR_RESPONSE) {
+                showAlert(resp.data.message, "warn");
+            } else if (resp.status === apiActions.SUCCESS_RESPONSE) {
+                let base64_encode = retrieveParam(
+                    resp.data.payload,
+                    "payload"
                 );
+                this._createMandate(base64_encode);
+            }
+
         } else showAlert("Something went wrong with the Request", "warn");
     };
 

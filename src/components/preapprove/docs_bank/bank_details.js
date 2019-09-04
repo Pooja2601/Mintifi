@@ -112,7 +112,7 @@ class BankDetail extends Component {
                 setTimeout(
                     () =>
                         history.push(
-                            `${PUBLIC_URL}/enach?payload=${base64_encode}&token=${
+                            `${PUBLIC_URL}/esign?payload=${base64_encode}&token=${
                                 resp.data.auth.token
                                 }`
                         ),
@@ -164,11 +164,11 @@ class BankDetail extends Component {
                     resp.data.payload,
                     "payload"
                 );
-                // this._genAuthToken(base64_encode);
-                setTimeout(() => history.push(`${PUBLIC_URL}/esign?payload=${base64_encode}&token=${token}`, {
+                this._genAuthToken(base64_encode);
+                /*setTimeout(() => history.push(`${PUBLIC_URL}/esign?payload=${base64_encode}&token=${token}`, {
                     token: token,
                     payload: base64_encode
-                }), 100);
+                }), 100);*/
             } else if (resp.status === apiActions.ERROR_RESPONSE) {
                 showAlert(resp.data.message, 'warn');
             }

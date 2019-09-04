@@ -20,6 +20,7 @@ import {
     ENachResponseUrl
 } from "../../../shared/constants";
 import PropTypes from "prop-types";
+import {apiActions, postAPI} from "../../../api";
 
 const {PUBLIC_URL} = process.env;
 
@@ -33,59 +34,43 @@ class ENach extends Component {
 
     state = {ctr: 0, errorMsg: false, backendError: 0};
 
-    _updateBackend = result => {
+    _updateBackend = async result => {
         let {token, changeLoader, eNachPayload, history, showAlert} = this.props;
-
-        changeLoader(true);
-        // const resp = await
-        fetch(`${baseUrl}/loans/enach_status`, {
-            method: "POST",
-            headers: {"Content-Type": "application/json", token: token},
-            body: JSON.stringify({
+        let redirectURL = '';
+        const options = {
+            URL: `${baseUrl}/loans/enach_status`,
+            data: {
                 app_id: app_id,
                 status: result.status, // result.message
                 mandate_id: result.mandate_id,
                 anchor_id: eNachPayload.anchor_id,
                 loan_application_id: eNachPayload.loan_application_id,
                 company_id: eNachPayload.company_id
-            })
-        })
-            .then(resp => resp.json())
-            .then(
-                resp => {
-                    // showAlert(resp.status);
-                    changeLoader(false);
+            },
+            token: token
+        }
+        changeLoader(true);
 
-                    if (resp.response === Object(resp.response)) {
-                        setTimeout(() => {
-                            // ToDo : Uncomment the below line in Prod
-                            if (environment === "prod" || environment === "dev")
-                                history.push(ENachResponseUrl.success_url);
-                            // window.location.href = ENachResponseUrl.success_url;
-                        }, 1000);
-                        // this.setState({ backendError: 0 });
-                        // return 1;
-                    } else if (resp.error === Object(resp.error)) {
-                        showAlert(resp.error.message, "warn");
-                        // this.setState({ backendError: this.state.backendError + 1 });
-                        setTimeout(() => {
-                            // ToDo : Uncomment the below line in Prod
-                            if (environment === "prod" || environment === "dev")
-                                history.push(ENachResponseUrl.cancel_url);
-                            // window.location.href = ENachResponseUrl.cancel_url;
-                        }, 1000);
-                    }
-                    /*  if (this.state.backendError < 2)
-                                setTimeout(() => {
-                                  this._updateBackend(result);
-                                }, 500);
-                              else */
-                },
-                resp => {
-                    showAlert("net");
-                    changeLoader(false);
-                }
-            );
+        const resp = await postAPI(options);
+
+        if (resp.status === apiActions.ERROR_NET)
+            showAlert("net");
+        if (resp.status === apiActions.ERROR_RESPONSE) {
+            showAlert(resp.data.message, "warn");
+            // this.setState({ backendError: this.state.backendError + 1 });
+            redirectURL = ENachResponseUrl.cancel_url;
+
+        } else if (resp.status === apiActions.SUCCESS_RESPONSE) {
+            redirectURL = ENachResponseUrl.success_url;
+        }
+        window.setTimeout(() => {
+            // ToDo : Uncomment the below line in Prod
+            if (environment === "prod" || environment === "dev")
+                history.push(redirectURL);
+        }, 1000);
+
+        changeLoader(false);
+
     };
 
     _triggerDigio = () => {
@@ -107,7 +92,6 @@ class ENach extends Component {
                 // ToDo : Uncomment this line in Prod
                 if (environment === "prod" || environment === "dev")
                     history.push(ENachResponseUrl.error_url);
-                // window.location.href = ENachResponseUrl.error_url;
             }, 1000);
         }
     };
@@ -123,20 +107,19 @@ class ENach extends Component {
         } = this.props;
         changeLoader(false);
 
-        // let token = `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyNiwidHlwZSI6InJlYWN0X3dlYl91c2VyIiwiZXhwIjoxNTYwMzMzNTYxfQ.yzD-pIyaf4Z7zsXEJZG-Hm0ka80CjMjMB74q6dpRSPM`;
         let {href} = window.location,
             base64_decode = {},
             payload;
 
-        if (environment === "local") base64_decode = eNachPayloadStatic;
+        /*    if (environment === "local") base64_decode = eNachPayloadStatic;
 
-        // ToDo : hide the 2 lines in prod
-        if (eNachPayload === Object(eNachPayload) && eNachPayload) {
-            // coming from constant
-            Object.assign(base64_decode, eNachPayload);
-        }
+            // ToDo : hide the 2 lines in prod
+            if (eNachPayload === Object(eNachPayload) && eNachPayload) {
+                // coming from constant
+                Object.assign(base64_decode, eNachPayload);
+            }*/
 
-        this.setState({errorMsg: false});
+        // this.setState({errorMsg: false});
         /* if (environment === "prod" || environment === "dev") {
              payload = retrieveParam(href, "payload") || undefined;
              token = retrieveParam(href, "token") || undefined;
@@ -170,7 +153,7 @@ class ENach extends Component {
         document.addEventListener("responseDigio", function (obj) {
             let {detail} = obj;
 
-            // console.log(JSON.stringify(detail));
+            console.log(JSON.stringify(detail));
             if (detail.error_code !== undefined) {
                 showAlert(
                     `Failed to register with error :  ${detail.message}`,
@@ -191,7 +174,6 @@ class ENach extends Component {
                         if (eNachPayload === Object(eNachPayload))
                             if (detail.error_code !== "CANCELLED")
                                 history.push(ENachResponseUrl.error_url);
-                    // window.location.href = ENachResponseUrl.error_url;
                 }, 1000);
             } else {
                 showAlert("Register successful for e-NACH", "success");
