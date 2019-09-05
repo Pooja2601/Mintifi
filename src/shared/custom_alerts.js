@@ -7,7 +7,7 @@ let alertTimer = '';
 // const {PUBLIC_URL} = process.env;
 const CustomAlerts = (props) => {
 
-    const {alertMsg, alertType, alertShow, showAlert} = props;
+    const {alertMsg, alertType, showAlert} = props;
     const types = {
         'error': 'danger',
         'danger': 'danger',
@@ -36,7 +36,7 @@ const CustomAlerts = (props) => {
 const mapStateToProps = state => ({
     alertMsg: state.extraReducer.alertMsg,
     alertType: state.extraReducer.alertType,
-    alertShow: state.extraReducer.alertShow,
+    // alertShow: state.extraReducer.alertShow,
 });
 
 export default withRouter(

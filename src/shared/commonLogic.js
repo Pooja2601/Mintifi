@@ -67,27 +67,26 @@ export const alertModule = (msg, type) => {
 };
 
 export const base64Logic = (payload, action) => {
-    let base64 = {};
+    let base64 = {}, newPayload = payload;
     if (action === "decode") {
-        base64 = eval(`(${Base64.atob(payload)})`);
+        base64 = eval(`(${Base64.atob(newPayload)})`);
         /* try {
-          base64 = payload
-            ? JSON.parse(new Buffer(payload, "base64").toString("ascii"))
+          base64 = newPayload
+            ? JSON.parse(new Buffer(newPayload, "base64").toString("ascii"))
             : {};
         } catch (e) {
-          base64 = Base64.atob(payload);
-          //   toast.error("Not a Valid JSON Response");
+          base64 = Base64.atob(newPayload);
         } */
     }
-    if (action === " encode") {
+    if (action === "encode") {
+        newPayload = JSON.stringify(newPayload);
         try {
             base64 =
-                payload === Object(payload)
-                    ? JSON.stringify(new Buffer(payload).toString("base64"))
+                newPayload
+                    ? new Buffer(newPayload).toString("base64")
                     : {};
         } catch (e) {
-            base64 = Base64.btoa(payload);
-            toast.error("Not a Valid Javascript Object");
+            base64 = Base64.btoa(newPayload);
         }
     }
     return base64;
@@ -128,7 +127,7 @@ export const generateToken = () => {
                 // console.log(this.props.token);
             },
             () => {
-                alertModule();
+                // alertModule();
                 return 31;
             }
         );
