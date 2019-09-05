@@ -9,7 +9,7 @@ import {
     EsignsetPayload,
     showAlert
 } from "../../../actions";
-import {base64Logic, retrieveParam} from "../../../shared/commonLogic";
+import {base64Logic, retrieveParam} from "../../../shared/common_logic";
 import {apiActions, fetchAPI, postAPI} from "../../../api";
 import {app_id, baseUrl, environment, eSignPayloadStatic} from "../../../shared/constants";
 
@@ -33,20 +33,19 @@ class ESign extends Component {
         } = this.props;
 
         if (eSignPayload === Object(eSignPayload) && eSignPayload) {
-            changeLoader(true);
 
             const options = {
                 URL: `${baseUrl}/merchants/${
                     eSignPayload.anchor_id
                     }/get_details?app_id=${app_id}`,
                 token: token,
+                changeLoader: changeLoader
             }
             const resp = await fetchAPI(options);
 
             if (resp.status === apiActions.SUCCESS_RESPONSE)
                 setAnchorObj(resp.data);
 
-            changeLoader(false);
         }
 
     }
@@ -61,14 +60,13 @@ class ESign extends Component {
                 app_id: app_id,
                 loan_application_id: eSignPayload.loan_application_id,
                 timestamp: new Date()
-            }
+            },
+            showAlert: showAlert,
+            changeLoader: changeLoader
         }
-        changeLoader(true);
-        const resp = await postAPI(options);
-        changeLoader(false);
 
-        if (resp.status === apiActions.ERROR_NET)
-            showAlert('net');
+        const resp = await postAPI(options);
+
         if (resp.status === apiActions.ERROR_RESPONSE)
             showAlert(resp.data.message, 'warn');
         if (resp.status === apiActions.SUCCESS_RESPONSE) {
@@ -90,10 +88,12 @@ class ESign extends Component {
         const options = {
             URL: `${baseUrl}/documents/esign_status?${reqParam}`,
             token: token,
+            // showAlert: showAlert,
+            // changeLoader: changeLoader
         };
-        // changeLoader(true);
+
         const resp = await fetchAPI(options);
-        // changeLoader(false)
+
         // ToDo : Navigating to Bank Details Page
         if (resp.status === apiActions.SUCCESS_RESPONSE) {
             if (resp.data.success) {

@@ -13,7 +13,7 @@ import {
   setBusinessDetail,
   changeLoader
 } from "../../../actions/index";
-import { postMessage } from "../../../shared/commonLogic";
+import { postMessage } from "../../../shared/common_logic";
 
 // const { PUBLIC_URL } = process.env;
 

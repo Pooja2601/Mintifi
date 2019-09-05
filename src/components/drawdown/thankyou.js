@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import {Link, withRouter} from "react-router-dom";
 import {changeLoader, setAdharManual} from "../../actions";
 import {defaultLender, environment} from '../../shared/constants';
-import {postMessage} from "../../shared/commonLogic";
+import {postMessage} from "../../shared/common_logic";
 
 const {PUBLIC_URL} = process.env;
 

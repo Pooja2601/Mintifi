@@ -15,7 +15,7 @@ import {
   setAnchorObj,
   showAlert
 } from "../actions";
-import { base64Logic, generateToken } from "../shared/commonLogic";
+import { base64Logic, generateToken } from "../shared/common_logic";
 
 // const Timer = 10;
 const { PUBLIC_URL } = process.env;

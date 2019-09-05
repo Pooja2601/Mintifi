@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {withRouter} from "react-router-dom";
 import {baseUrl, drawdownPayload, environment, app_id, user_id, auth_secret} from "../../shared/constants";
-import {alertModule, base64Logic, generateToken} from '../../shared/commonLogic';
+import {alertModule, base64Logic, generateToken} from '../../shared/common_logic';
 import {connect} from "react-redux";
 import {changeLoader, DrawsetToken, showAlert} from "../../actions";
 
@@ -33,8 +33,7 @@ class DrawLanding extends Component {
             showAlert('Token invalid or session invalid, kindly go back and retry the process !!', 'error');
             DrawsetToken(null, base64_decode);
             // console.log(this.props.payload);
-        }
-        else {
+        } else {
             DrawsetToken(token, base64_decode);
             // console.log(this.props.payload);
             setTimeout(() => history.push(`${PUBLIC_URL}/drawdown/auth/`, {token: token, payload: base64_decode}), 500);

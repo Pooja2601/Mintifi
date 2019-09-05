@@ -5,7 +5,7 @@ import {connect} from "react-redux";
 import {setBusinessDetail, changeLoader} from "../../../actions/index";
 import PropTypes from "prop-types";
 import { withRouter} from "react-router-dom";
-// import {alertModule} from "../../../shared/commonLogic";
+// import {alertModule} from "../../../shared/common_logic";
 import {PrivacyPolicy, TnCPolicy} from "../../../shared/policy";
 import Select from "react-select";
 // import DatePicker from "react-datepicker";

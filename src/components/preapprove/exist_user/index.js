@@ -12,7 +12,7 @@ import {
     pan_adhar, showAlert
 } from "../../../actions/index";
 import {Link, withRouter} from "react-router-dom";
-// import {alertModule} from "../../../shared/commonLogic";
+// import {alertModule} from "../../../shared/common_logic";
 
 const Timer = OTP_Timer;
 const {PUBLIC_URL} = process.env;

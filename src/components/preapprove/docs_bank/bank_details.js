@@ -12,7 +12,7 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {setBankDetail, changeLoader, setToken, showAlert} from "../../../actions";
 import {withRouter} from "react-router-dom";
-import {alertModule, retrieveParam} from "../../../shared/commonLogic";
+import {alertModule, retrieveParam, generateToken} from "../../../shared/common_logic";
 // import DatePicker from "react-datepicker";
 // import "react-datepicker/dist/react-datepicker.css";
 import Select from "react-select";
@@ -91,17 +91,17 @@ class BankDetail extends Component {
     _genAuthToken = async (base64_encode) => {
         const {history, changeLoader, showAlert} = this.props;
         changeLoader(true);
-        const options = {
-            token: null,
-            URL: `${baseUrl}/auth`,
-            data: {
-                app_id: app_id,
-                user_id: user_id,
-                secret_key: auth_secret,
-                type: "react_web_user"
-            }
-        }
-        const resp = await postAPI(options);
+        /*        const options = {
+                    token: null,
+                    URL: `${baseUrl}/auth`,
+                    data: {
+                        app_id: app_id,
+                        user_id: user_id,
+                        secret_key: auth_secret,
+                        type: "react_web_user"
+                    }
+                }*/
+        const resp = await generateToken();
         changeLoader(false);
 
         if (resp.status === apiActions.ERROR_NET)
@@ -130,7 +130,7 @@ class BankDetail extends Component {
         // console.log(preFlightResp);
         const {bank_name, acc_name, acc_number, acc_type, ifsc_code, micr_code} = this.state;
         if (preFlightResp === Object(preFlightResp)) {
-            changeLoader(true);
+
             const options = {
                 token: token,
                 URL: `${baseUrl}/bank_account`,
@@ -150,13 +150,12 @@ class BankDetail extends Component {
                     error_url: payload.error_url,
                     cancel_url: payload.cancel_url,
                     timestamp: new Date()
-                }
+                },
+                showAlert: showAlert,
+                changeLoader: changeLoader
             }
 
             const resp = await postAPI(options);
-            changeLoader(false);
-            if (resp.status === apiActions.ERROR_NET)
-                showAlert("net");
 
             if (resp.status === apiActions.SUCCESS_RESPONSE) {
                 // ToDo : comment in Prod

@@ -4,7 +4,7 @@ import {withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
 import {baseUrl, app_id, environment} from "../../../shared/constants";
 import {pan_adhar, setAdharManual, setBusinessDetail, changeLoader, showAlert} from "../../../actions/index";
-// import {alertModule} from "../../../shared/commonLogic";
+// import {alertModule} from "../../../shared/common_logic";
 
 const file_msg = "Select a file";
 const {PUBLIC_URL} = process.env;
@@ -39,7 +39,7 @@ class DocsUpload extends Component {
         businessObj: PropTypes.object.isRequired,
         gstProfile: PropTypes.object,
         preFlightResp: PropTypes.object
-      };
+    };
 
     state = {
         id_proof_msg: file_msg,
@@ -292,8 +292,7 @@ class DocsUpload extends Component {
 
             if (businessObj !== Object(businessObj))
                 history.push(`${PUBLIC_URL}/preapprove/businessdetail`);
-        }
-        else history.push(`${PUBLIC_URL}/preapprove/token`);
+        } else history.push(`${PUBLIC_URL}/preapprove/token`);
 
         // console.log(adharObj);
         // console.log(payload);
@@ -445,8 +444,7 @@ class DocsUpload extends Component {
                     </div>
                 </>
             )
-        }
-        else return null;
+        } else return null;
     }
 }
 

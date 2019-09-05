@@ -9,7 +9,7 @@ import {
     mintifiMobile,
     mintifiMail
 } from "../../../shared/constants";
-import {postMessage} from "../../../shared/commonLogic";
+import {postMessage} from "../../../shared/common_logic";
 
 const {PUBLIC_URL} = process.env;
 

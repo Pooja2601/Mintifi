@@ -11,7 +11,7 @@ import {
     // alertModule,
     base64Logic,
     retrieveParam
-} from "../../../shared/commonLogic";
+} from "../../../shared/common_logic";
 import {
     eNachPayloadStatic,
     baseUrl,
@@ -47,14 +47,13 @@ class ENach extends Component {
                 loan_application_id: eNachPayload.loan_application_id,
                 company_id: eNachPayload.company_id
             },
-            token: token
+            token: token,
+            showAlert: showAlert,
+            changeLoader: changeLoader
         }
-        changeLoader(true);
 
         const resp = await postAPI(options);
 
-        if (resp.status === apiActions.ERROR_NET)
-            showAlert("net");
         if (resp.status === apiActions.ERROR_RESPONSE) {
             showAlert(resp.data.message, "warn");
             // this.setState({ backendError: this.state.backendError + 1 });
@@ -68,8 +67,6 @@ class ENach extends Component {
             if (environment === "prod" || environment === "dev")
                 history.push(redirectURL);
         }, 1000);
-
-        changeLoader(false);
 
     };
 

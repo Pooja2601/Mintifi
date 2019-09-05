@@ -14,7 +14,7 @@ import {
     setAdharManual,
     setBusinessDetail
 } from "../../../actions/index";
-import {base64Logic} from "../../../shared/commonLogic";
+import {base64Logic} from "../../../shared/common_logic";
 
 const {PUBLIC_URL} = process.env;
 

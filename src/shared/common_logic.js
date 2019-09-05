@@ -3,53 +3,64 @@
 // import {changeLoader,  DrawsetToken} from "../../actions";
 import {toast} from "react-toastify";
 import {app_id, auth_secret, baseUrl, user_id} from "./constants";
+import {apiActions, postAPI} from "../api";
 
 const chars =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 export const Base64 = {
     btoa: (input = "") => {
-        let str = input;
-        let output = "";
+        try {
 
-        for (
-            let block = 0, charCode, i = 0, map = chars;
-            str.charAt(i | 0) || ((map = "="), i % 1);
-            output += map.charAt(63 & (block >> (8 - (i % 1) * 8)))
-        ) {
-            charCode = str.charCodeAt((i += 3 / 4));
+            let str = input;
+            let output = "";
 
-            if (charCode > 0xff) {
-                throw new Error(
-                    "'btoa' failed: The string to be encoded contains characters outside of the Latin1 range."
-                );
+            for (
+                let block = 0, charCode, i = 0, map = chars;
+                str.charAt(i | 0) || ((map = "="), i % 1);
+                output += map.charAt(63 & (block >> (8 - (i % 1) * 8)))
+            ) {
+                charCode = str.charCodeAt((i += 3 / 4));
+
+                if (charCode > 0xff) {
+                    throw new Error(
+                        "'btoa' failed: The string to be encoded contains characters outside of the Latin1 range."
+                    );
+                }
+
+                block = (block << 8) | charCode;
             }
 
-            block = (block << 8) | charCode;
+            return output;
+        } catch (e) {
+            return null
         }
-
-        return output;
     },
 
     atob: (input = "") => {
-        let str = input.replace(/=+$/, "");
-        let output = "";
+        try {
 
-        if (str.length % 4 === 1) {
-            throw new Error(
-                "'atob' failed: The string to be decoded is not correctly encoded."
-            );
-        }
-        for (
-            let bc = 0, bs = 0, buffer, i = 0;
-            (buffer = str.charAt(i++));
-            ~buffer && ((bs = bc % 4 ? bs * 64 + buffer : buffer), bc++ % 4)
-                ? (output += String.fromCharCode(255 & (bs >> ((-2 * bc) & 6))))
-                : 0
-        ) {
-            buffer = chars.indexOf(buffer);
-        }
+            let str = input.replace(/=+$/, "");
+            let output = "";
 
-        return output;
+            if (str.length % 4 === 1) {
+                throw new Error(
+                    "'atob' failed: The string to be decoded is not correctly encoded."
+                );
+            }
+            for (
+                let bc = 0, bs = 0, buffer, i = 0;
+                (buffer = str.charAt(i++));
+                ~buffer && ((bs = bc % 4 ? bs * 64 + buffer : buffer), bc++ % 4)
+                    ? (output += String.fromCharCode(255 & (bs >> ((-2 * bc) & 6))))
+                    : 0
+            ) {
+                buffer = chars.indexOf(buffer);
+            }
+
+            return output;
+        } catch (e) {
+            return null;
+        }
     }
 };
 
@@ -69,7 +80,12 @@ export const alertModule = (msg, type) => {
 export const base64Logic = (payload, action) => {
     let base64 = {}, newPayload = payload;
     if (action === "decode") {
-        base64 = eval(`(${Base64.atob(newPayload)})`);
+        try {
+            base64 = eval(`(${Base64.atob(newPayload)})`);
+        } catch (e) {
+            base64 = {};
+        }
+
         /* try {
           base64 = newPayload
             ? JSON.parse(new Buffer(newPayload, "base64").toString("ascii"))
@@ -104,33 +120,27 @@ export const retrieveParam = (urlToParse, key) => {
     }
 };
 
-export const generateToken = () => {
-    // ToDo : make it const in Prod
+export const generateToken = async () => {
 
-    return fetch(`${baseUrl}/auth`, {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({
+    const options = {
+        URL: `${baseUrl}/auth`,
+        data: {
             user_id: user_id,
             secret_key: auth_secret,
             app_id: app_id,
             type: "react_web_user"
-        })
-    })
-        .then(resp => resp.json())
-        .then(
-            resp => {
-                if (resp.response === Object(resp.response)) {
-                    if (resp.response.status === "success")
-                        return resp.response.auth.token;
-                } else return 30;
-                // console.log(this.props.token);
-            },
-            () => {
-                // alertModule();
-                return 31;
-            }
-        );
+        }
+    }
+
+    const resp = await postAPI(options);
+
+    if (resp.status === apiActions.ERROR_RESPONSE)
+        return 30;
+    else if (resp.status === apiActions.SUCCESS_RESPONSE)
+        return resp.data.auth.token;
+
+    return 31;
+
 };
 
 export const postMessage = obj => {

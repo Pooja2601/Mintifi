@@ -13,7 +13,7 @@ import {
     alertModule,
     base64Logic,
     retrieveParam
-} from "../../../shared/commonLogic";
+} from "../../../shared/common_logic";
 
 import {
     eNachPayloadStatic,

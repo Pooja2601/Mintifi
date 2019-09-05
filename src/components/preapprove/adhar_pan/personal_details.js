@@ -7,7 +7,7 @@ import {setAdharManual, changeLoader, showAlert} from "../../../actions/index";
 import {Link, withRouter} from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-// import {alertModule} from "../../../shared/commonLogic";
+// import {alertModule} from "../../../shared/common_logic";
 import {fetchAPI, apiActions, postAPI} from "../../../api";
 
 const {PUBLIC_URL} = process.env;
@@ -142,17 +142,15 @@ class PersonalDetail extends Component {
         let city, state;
         const {setAdharManual, changeLoader, showAlert} = this.props;
         if (this.state.pincode) {
-            changeLoader(true);
             const options = {
                 token: null,
-                URL: `${otpUrl}/pincode/${this.state.pincode}`
+                URL: `${otpUrl}/pincode/${this.state.pincode}`,
+                showAlert: showAlert,
+                changeLoader: changeLoader
             }
 
             const resp = await fetchAPI(options);
-            changeLoader(false);
 
-            if (resp.status === apiActions.ERROR_NET)
-                showAlert("net");
 
             if (resp.status === apiActions.SUCCESS_RESPONSE) {
                 // TODO: Check for success response  

@@ -11,8 +11,12 @@ export const apiActions = {
 export const fetchAPI = propsParam => {
     const {
         URL,
-        token,
+        token, showAlert, changeLoader
     } = propsParam;
+    let isLoader = typeof changeLoader === 'function';
+    let isAlert = typeof showAlert === 'function';
+
+    isLoader && changeLoader(true);
     return fetch(
         `${URL}`,
         {
@@ -23,6 +27,7 @@ export const fetchAPI = propsParam => {
         .then(resp => resp.json())
         .then(
             resp => {
+                isLoader && changeLoader(false);
                 if (resp.response !== Object(resp.response)) {
                     return {status: apiActions.ERROR_RESPONSE, data: resp.error};
                 } else {
@@ -30,10 +35,13 @@ export const fetchAPI = propsParam => {
                 }
             },
             () => {
+                isLoader && changeLoader(false);
+                isAlert && showAlert('net');
                 return {status: apiActions.ERROR_NET};
             }
         ).catch(e => {
-            // { status: apiActions.ERROR_NET }
+            isLoader && changeLoader(false);
+            isAlert && showAlert('net');
             const error = new Error()
             error.code = e.code
             error.status = apiActions.ERROR_NET
@@ -47,8 +55,12 @@ export const postAPI = propsParam => {
     const {
         URL,
         token,
-        data
+        data, showAlert, changeLoader
     } = propsParam;
+    let isLoader = typeof changeLoader === 'function';
+    let isAlert = typeof showAlert === 'function';
+
+    isLoader && changeLoader(true);
     return fetch(
         `${URL}`,
         {
@@ -60,6 +72,7 @@ export const postAPI = propsParam => {
         .then(resp => resp.json())
         .then(
             resp => {
+                isLoader && changeLoader(false);
                 if (resp.response !== Object(resp.response)) {
                     return {status: apiActions.ERROR_RESPONSE, data: resp.error};
                 } else {
@@ -67,15 +80,18 @@ export const postAPI = propsParam => {
                 }
             },
             () => {
+                isLoader && changeLoader(false);
+                isAlert && showAlert('net');
                 return {status: apiActions.ERROR_NET};
             }
         ).catch(e => {
-            // { status: apiActions.ERROR_NET }
-            const error = new Error()
-            error.code = e.code
-            error.status = apiActions.ERROR_NET
-            error.message = e.message
-            error.response = e.responseError
+            isLoader && changeLoader(false);
+            isAlert && showAlert('net');
+            const error = new Error();
+            error.code = e.code;
+            error.status = apiActions.ERROR_NET;
+            error.message = e.message;
+            error.response = e.responseError;
             throw error
         });
 };

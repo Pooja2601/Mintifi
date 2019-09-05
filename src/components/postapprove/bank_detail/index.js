@@ -12,7 +12,7 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {changeLoader, setToken, showAlert, EsignsetBankDetail, EnachsetPayload} from "../../../actions";
 import {withRouter} from "react-router-dom";
-import {alertModule, retrieveParam} from "../../../shared/commonLogic";
+import {alertModule, retrieveParam} from "../../../shared/common_logic";
 // import DatePicker from "react-datepicker";
 // import "react-datepicker/dist/react-datepicker.css";
 import Select from "react-select";
@@ -81,19 +81,19 @@ class ESignBankDetail extends Component {
         const {changeLoader, token, showAlert, history, eSignPayload, EnachsetPayload} = this.props;
 
         let nachObject = {};
-        changeLoader(true);
+
         const options = {
             URL: `${baseUrl}/setup_mandate`,
             data: {
                 "app_id": app_id,
                 "loan_application_id": eSignPayload.loan_application_id,
             },
-            token: token
+            token: token,
+            showAlert: showAlert,
+            changeLoader: changeLoader
         };
         const resp = await postAPI(options);
-        changeLoader(false);
-        if (resp.status === apiActions.ERROR_NET)
-            showAlert('net');
+
         if (resp.status === apiActions.ERROR_RESPONSE)
             showAlert('We couldn`t setup the mandate, you may try the physical NACH process', 'warn');
         else if (resp.status === apiActions.SUCCESS_RESPONSE) {
@@ -112,7 +112,6 @@ class ESignBankDetail extends Component {
         // console.log(preFlightResp);
         if (eSignPayload === Object(eSignPayload) && eSignPayload) {
             const {bank_name, acc_number, acc_name, ifsc_code, micr_code, acc_type} = this.state;
-            changeLoader(true);
 
             const options = {
                 URL: `${baseUrl}/bank_account`,
@@ -133,14 +132,13 @@ class ESignBankDetail extends Component {
                     error_url: eSignPayload.error_url,
                     cancel_url: eSignPayload.cancel_url,
                     timestamp: new Date()
-                }
+                },
+                showAlert: showAlert,
+                changeLoader: changeLoader
             }
 
             const resp = await postAPI(options);
-            changeLoader(false);
 
-            if (resp.status === apiActions.ERROR_NET)
-                showAlert('net');
             if (resp.status === apiActions.ERROR_RESPONSE) {
                 showAlert(resp.data.message, "warn");
             } else if (resp.status === apiActions.SUCCESS_RESPONSE) {
@@ -194,14 +192,15 @@ class ESignBankDetail extends Component {
 
         const {changeLoader, token, eSignPayload, showAlert, EsignsetBankDetail} = this.props;
         const paramReq = `app_id=${app_id}&loan_application_id=${eSignPayload.loan_application_id}`;
-        const options = {URL: `${baseUrl}/bank_account_details?${paramReq}`, token: token};
+        const options = {
+            URL: `${baseUrl}/bank_account_details?${paramReq}`, token: token,
+            showAlert: showAlert,
+            changeLoader: changeLoader
+        };
         let that = this;
-        changeLoader(true);
-        const resp = await fetchAPI(options);
-        changeLoader(false);
 
-        if (resp.status === apiActions.ERROR_NET)
-            showAlert('net');
+        const resp = await fetchAPI(options);
+
         // Doesn't require to check if error
         // if(resp.status === apiActions.ERROR_RESPONSE)
 
