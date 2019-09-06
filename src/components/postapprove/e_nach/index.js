@@ -144,7 +144,7 @@ class ENach extends Component {
             showAlert,
             EnachsetAttempt
         } = this.props;
-        if (eNachAttempt) this.setState({ctr: eNachAttempt});
+        // if (eNachAttempt) this.setState({ctr: eNachAttempt});
         let that = this;
 
         document.addEventListener("responseDigio", function (obj) {

@@ -27,7 +27,7 @@ class PersonalDetail extends Component {
         l_name: '',
         mobile: '',
         email: '',
-        dob: new Date(1980, 1, 1),
+        dob: new Date(315577770),
         gender: 'm',
         ownership: 'rented',
         pincode: '',
@@ -171,7 +171,9 @@ class PersonalDetail extends Component {
                 let year = d.getFullYear();
                 let dob = `${year}-${month}-${date}`;
          */
-        this.setState({dob}, () => this.props.setAdharManual(this.state))
+        let doby = new Date(dob)
+        // console.log(doby)
+        this.setState({dob: doby}, () => this.props.setAdharManual(this.state))
     };
 
     render() {
@@ -453,7 +455,7 @@ class PersonalDetail extends Component {
                                     <DatePicker
                                         className="form-control font_weight"
                                         // placeholderText={"Date of Birth"}
-                                        selected={this.state.dob}
+                                        selected={new Date(this.state.dob)}
                                         id={"dobDate"}
                                         pattern={"^[0-9]{2}/[0-9]{2}/[0-9]{4}$"}
                                         scrollableYearDropdown
