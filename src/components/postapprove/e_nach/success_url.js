@@ -15,7 +15,7 @@ const Success_URL = props => {
     else
         window.setTimeout(() => {
             window.location.href = `${props.eNachPayload.success_url}`;
-        }, 3000);
+        }, 5000);
 
     return (
         <>

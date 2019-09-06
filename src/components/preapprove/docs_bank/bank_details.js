@@ -104,22 +104,24 @@ class BankDetail extends Component {
         const resp = await generateToken();
         changeLoader(false);
 
-        if (resp.status === apiActions.ERROR_NET)
+        // console.log(JSON.stringify(resp));
+        if (resp == 31)
             showAlert('net');
 
-        if (resp.status === apiActions.SUCCESS_RESPONSE) {
-            if (resp.data.status === "success")
+        if (resp === Object(resp)) {
+            // console.log(JSON.stringify(resp.data))
+            if (resp.status === "success")
                 setTimeout(
                     () =>
                         history.push(
                             `${PUBLIC_URL}/esign?payload=${base64_encode}&token=${
-                                resp.data.auth.token
+                                resp.auth.token
                                 }`
                         ),
                     500
                 );
-        } else if (resp.status === apiActions.ERROR_RESPONSE) {
-            showAlert(resp.data.message, "warn");
+        } else if (resp == 30) {
+            showAlert("Something went while creating Token", "warn");
         }
 
     };
@@ -163,6 +165,7 @@ class BankDetail extends Component {
                     resp.data.payload,
                     "payload"
                 );
+                // console.log(base64_encode);
                 this._genAuthToken(base64_encode);
                 /*setTimeout(() => history.push(`${PUBLIC_URL}/esign?payload=${base64_encode}&token=${token}`, {
                     token: token,
@@ -176,7 +179,7 @@ class BankDetail extends Component {
     };
 
     _fetchIFSC(ifsc) {
-        const {changeLoader, showAlert} = this.props;
+        const {changeLoader, showAlert, setBankDetail} = this.props;
         let bank_name, micr_code, branch_name;
         changeLoader(true);
         fetch(`https://ifsc.razorpay.com/${ifsc}`)
@@ -197,8 +200,9 @@ class BankDetail extends Component {
                         bank_name,
                         micr_code,
                         branch_name
-                    });
+                    }, () => setBankDetail(this.state));
                     // console.log(resp);
+
                 },
                 resp => {
                     showAlert('net');
@@ -220,17 +224,26 @@ class BankDetail extends Component {
     }
 
     componentDidMount() {
-        const {bankObj, setBankDetail, changeLoader} = this.props;
+        const {bankObj, setBankDetail, changeLoader, adharObj} = this.props;
 
         if (bankObj === Object(bankObj))
             this.setState(bankObj, () => {
                 Object.keys(this.state).map((val, key) => {
                     if (this.validate[val] !== undefined)
                         this.validate[val] = this.state[val].length > 0;
+                    if (val == 'acc_type')
+                        this.validate[val] = false;
                     // console.log(this.validate);
                 });
             });
         else setBankDetail(this.state);
+
+        if (adharObj === Object(adharObj) && adharObj) {
+            const {f_name, l_name} = adharObj;
+            this.setState({acc_name: `${f_name} ${l_name}`}, () => setBankDetail(this.state));
+
+        }
+
 
         // console.log(this.props.gstProfile)
         changeLoader(false);

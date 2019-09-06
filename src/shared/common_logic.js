@@ -137,7 +137,7 @@ export const generateToken = async () => {
     if (resp.status === apiActions.ERROR_RESPONSE)
         return 30;
     else if (resp.status === apiActions.SUCCESS_RESPONSE)
-        return resp.data.auth.token;
+        return resp.data; // ToDo : issue need to look
 
     return 31;
 

@@ -1,10 +1,10 @@
 import React, {Component} from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
-import { BusinessType} from "../../../shared/constants";
+import {BusinessType} from "../../../shared/constants";
 import {connect} from "react-redux";
 import {setBusinessDetail, changeLoader} from "../../../actions/index";
 import PropTypes from "prop-types";
-import { withRouter} from "react-router-dom";
+import {withRouter} from "react-router-dom";
 // import {alertModule} from "../../../shared/common_logic";
 import {PrivacyPolicy, TnCPolicy} from "../../../shared/policy";
 import Select from "react-select";
@@ -20,7 +20,7 @@ class BusinessDetail extends Component {
         anchorObj: PropTypes.object,
         payload: PropTypes.object.isRequired,
         gstProfile: PropTypes.object
-      };
+    };
 
     state = {
         companytype: '',
@@ -126,13 +126,12 @@ class BusinessDetail extends Component {
     }
 
     componentWillMount() {
-        const { payload, adharObj, changeLoader, history} = this.props;
+        const {payload, adharObj, changeLoader, history} = this.props;
 
-        if (payload === Object(payload)  && payload) {
+        if (payload === Object(payload) && payload) {
             if (adharObj !== Object(adharObj))
                 history.push(`${PUBLIC_URL}/preapprove/personaldetail`);
-        }
-        else history.push(`${PUBLIC_URL}/preapprove/token`);
+        } else history.push(`${PUBLIC_URL}/preapprove/token`);
 
         // console.log(this.props.gstProfile)
         changeLoader(false);
@@ -140,38 +139,40 @@ class BusinessDetail extends Component {
     }
 
     componentDidMount() {
-        const {businessObj, payload,  setBusinessDetail} = this.props;
+        const {businessObj, payload, setBusinessDetail} = this.props;
         setTimeout(() => this.handleValidation(), 1000);
         // console.log(adharObj);
 
-            if (businessObj === Object(businessObj)) {
-                this.businessGst(businessObj.gst);
-                this.setState(businessObj, () => {
-                    Object.keys(this.state).map((val, key) => {
-                        if (this.validate[val] !== undefined)
-                            this.validate[val] = (this.state[val].length > 0);
-                        // console.log(this.validate);
-                    });
+        if (businessObj === Object(businessObj)) {
+            this.businessGst(businessObj.gst);
+
+            this.setState(businessObj, () => {
+                Object.keys(this.state).map((val, key) => {
+                    if (this.validate[val] !== undefined)
+                        this.validate[val] = (this.state[val].length > 0);
+                    if (val == 'companytype')
+                        this.validate.companytype = false; // Clearing the dropdown validation
                 });
+            });
+
+        } else setBusinessDetail(this.state);
+
+        try {
+            /*  if (gstProfile === Object(gstProfile))
+                  if (gstProfile.length) {
+                      BusinessType.map((val, key) => {
+                          (`/${val}/gi`).test(gstProfile.ctb);
+                      });
+                      this.setState({gst: gstProfile.gstin, lgnm: gstProfile.lgnm});
+                  }*/
+            if (payload === Object(payload) && payload) {
+                this.setState({dealercode: payload.distributor_dealer_code}, () => setBusinessDetail(this.state));
             }
-            else setBusinessDetail(this.state);
-    
-            try {
-                /*  if (gstProfile === Object(gstProfile))
-                      if (gstProfile.length) {
-                          BusinessType.map((val, key) => {
-                              (`/${val}/gi`).test(gstProfile.ctb);
-                          });
-                          this.setState({gst: gstProfile.gstin, lgnm: gstProfile.lgnm});
-                      }*/
-                if (payload === Object(payload) && payload) {
-                    this.setState({dealercode: payload.distributor_dealer_code}, () => setBusinessDetail(this.state));
-                }
-    
-            }
-            catch (e) {
-                console.log(e);
-            }
+
+        } catch (e) {
+            console.log(e);
+        }
+
     }
 
     render() {
@@ -179,7 +180,7 @@ class BusinessDetail extends Component {
         return (
             <>
                 {/*<Link to={`${PUBLIC_URL}/preapprove/personaldetails`} className={"btn btn-link"}>Go Back </Link>*/}
-               
+
                 <h4 className={"text-center mt-5"}>Business Details</h4>
                 <h5 className="paragraph_styling  text-center secondLinePara">
                     <b> Please submit your business details to complete the loan application.</b>
@@ -191,7 +192,8 @@ class BusinessDetail extends Component {
                     id="serverless-contact-form"
                     onSubmit={e => this._formSubmit(e)}
                 >
-                    <div className={"row"}>
+                    <div className={"row"}
+                         style={{visibility: (gstProfile === Object(gstProfile) && gstProfile.lgnm) ? 'visible' : 'hidden'}}>
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             {/*<h5 className={"text-center"}>{(gstProfile === Object(gstProfile)) ? gstProfile.lgnm : ''}</h5>*/}
                             <input
@@ -349,22 +351,22 @@ class BusinessDetail extends Component {
                         </div>
                     </div>
                     <div className=" mt-5">
-                       
-                            <label className="main">I accept the <a href={'#'} onClick={(e) => {
-                                e.preventDefault();
-                                this.setState({tncModal: true}, () => this.triggerTnCModal.click());
-                            }}>Terms &
-                                Condition</a>, <a href={'#'} onClick={(e) => {
-                                e.preventDefault();
-                                this.setState({tncModal: false}, () => this.triggerTnCModal.click());
-                            }}>Privacy
-                                Policy</a> of the Mintifi and provide the
-                                consent to retrieve the Bureau information for checking my Credit worthiness .
-                                <input type="checkbox" onChange={(e) =>
-                                    this.setState(prevState => ({tnc_consent: !prevState.tnc_consent}))
-                                } checked={this.state.tnc_consent}/>
-                                <span className="geekmark"></span>
-                            </label>
+
+                        <label className="main">I accept the <a href={'#'} onClick={(e) => {
+                            e.preventDefault();
+                            this.setState({tncModal: true}, () => this.triggerTnCModal.click());
+                        }}>Terms &
+                            Condition</a>, <a href={'#'} onClick={(e) => {
+                            e.preventDefault();
+                            this.setState({tncModal: false}, () => this.triggerTnCModal.click());
+                        }}>Privacy
+                            Policy</a> of the Mintifi and provide the
+                            consent to retrieve the Bureau information for checking my Credit worthiness .
+                            <input type="checkbox" onChange={(e) =>
+                                this.setState(prevState => ({tnc_consent: !prevState.tnc_consent}))
+                            } checked={this.state.tnc_consent}/>
+                            <span className="geekmark"></span>
+                        </label>
                     </div>
 
                     <div className="mt-5 mb-5 text-center">

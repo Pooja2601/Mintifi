@@ -27,7 +27,7 @@ class PersonalDetail extends Component {
         l_name: '',
         mobile: '',
         email: '',
-        dob: new Date(1980, 0, 1),
+        dob: new Date(1980, 1, 1),
         gender: 'm',
         ownership: 'rented',
         pincode: '',
@@ -150,7 +150,6 @@ class PersonalDetail extends Component {
             }
 
             const resp = await fetchAPI(options);
-
 
             if (resp.status === apiActions.SUCCESS_RESPONSE) {
                 // TODO: Check for success response  

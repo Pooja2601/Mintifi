@@ -44,14 +44,17 @@ class DrawLanding extends Component {
         const {changeLoader, DrawsetToken, payload, history, showAlert} = this.props;
 
         changeLoader(true);
-        let authToken = await generateToken();
+        let resp = await generateToken();
         changeLoader(false);
 
-        DrawsetToken(authToken, payload);
-        setTimeout(() => history.push(`${PUBLIC_URL}/drawdown/auth/`, {
-            token: authToken,
-            payload: payload
-        }), 500);
+        if (resp === Object(resp)) {
+            DrawsetToken(resp.auth.token, payload);
+            setTimeout(() => history.push(`${PUBLIC_URL}/drawdown/auth/`, {
+                token: resp.auth.token,
+                payload: payload
+            }), 500);
+        }
+
         // console.log(JSON.stringify(payload));
 
     };

@@ -15,7 +15,7 @@ const Error_URL = props => {
     else
         window.setTimeout(() => {
             window.location.href = `${props.eNachPayload.error_url}`;
-        }, 3000);
+        }, 4000);
 
     return (
         <>

@@ -175,7 +175,8 @@ class ESign extends Component {
                 <div className=" text-left " role="alert" style={{margin: "auto"}}>
                     {(this.checkPayload) ? (
                         <p className="paragraph_styling alert alert-info">
-                            Kindly complete the eSIGN procedure by clicking the button below.
+                            Kindly complete the eSIGN procedure by clicking the button below. <br/>
+                            <small>Make sure to enable pop-up for ESign to proceed</small>
                         </p>
                     ) : (
                         <p className="paragraph_styling alert alert-danger">

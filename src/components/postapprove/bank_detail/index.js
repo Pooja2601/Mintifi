@@ -146,6 +146,7 @@ class ESignBankDetail extends Component {
                     resp.data.payload,
                     "payload"
                 );
+                // ToDo : need to send valid payload, curr via redux
                 this._createMandate(base64_encode);
             }
 

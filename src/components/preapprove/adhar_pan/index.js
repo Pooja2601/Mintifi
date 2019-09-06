@@ -239,13 +239,6 @@ class AdharPan extends Component {
 
     }
 
-    /*
-          body: JSON.stringify({
-          app_id: app_id,
-          anchor_id: '8186bc', //8186bc
-          pan: pan
-      })*/
-
     _panFetch = async () => {
         let checked = {};
         const {changeLoader, payload, pan, token, showAlert} = this.props;

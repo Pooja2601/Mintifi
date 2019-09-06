@@ -15,7 +15,7 @@ const Cancel_URL = props => {
   } else {
     window.setTimeout(() => {
       window.location.href = `${props.eNachPayload.cancel_url}`;
-    }, 3000);
+    }, 4000);
   }
 
   return (

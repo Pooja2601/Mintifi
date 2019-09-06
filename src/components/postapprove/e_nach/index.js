@@ -89,7 +89,7 @@ class ENach extends Component {
                 // ToDo : Uncomment this line in Prod
                 if (environment === "prod" || environment === "dev")
                     history.push(ENachResponseUrl.error_url);
-            }, 1000);
+            }, 3000);
         }
     };
 
@@ -150,7 +150,7 @@ class ENach extends Component {
         document.addEventListener("responseDigio", function (obj) {
             let {detail} = obj;
 
-            console.log(JSON.stringify(detail));
+            // console.log(JSON.stringify(detail));
             if (detail.error_code !== undefined) {
                 showAlert(
                     `Failed to register with error :  ${detail.message}`,
@@ -165,20 +165,23 @@ class ENach extends Component {
 
                 detail.mandate_id = detail.digio_doc_id;
                 detail.status = detail.error_code === "CANCELLED" ? "cancel" : "error";
-                setTimeout(() => {
-                    // ToDo : uncomment in prod
-                    if (environment === "prod" || environment === "dev")
-                        if (eNachPayload === Object(eNachPayload))
-                            if (detail.error_code !== "CANCELLED")
+                console.log(JSON.stringify(detail));
+                if (detail.error_code !== "CANCELLED")
+                    setTimeout(() => {
+                        // ToDo : uncomment in prod
+                        if (environment === "prod" || environment === "dev")
+                            if (eNachPayload === Object(eNachPayload))
                                 history.push(ENachResponseUrl.error_url);
-                }, 1000);
+                    }, 1000);
             } else {
                 showAlert("Register successful for e-NACH", "success");
                 detail.mandate_id = detail.digio_doc_id;
                 detail.status = "success";
             }
-            // console.log(eNachPayload);
-            that._updateBackend(detail);
+
+            if (detail.error_code !== "CANCELLED")
+                that._updateBackend(detail);
+
         });
 
         // ToDo : uncomment in prod
