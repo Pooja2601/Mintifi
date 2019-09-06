@@ -87,7 +87,6 @@ module.exports = {
         "cancel_url": anchorUrls.error_url,
         "error_url": anchorUrls.cancel_url
     },
-
     eSignDocsPayloadStatic: {
         url: "https://preprod.aadhaarbridge.com/api/_init",
         saCode: "b4237b",
