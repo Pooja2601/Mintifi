@@ -9,7 +9,7 @@ import {
     EsignsetPayload,
     showAlert
 } from "../../../actions";
-import {base64Logic, retrieveParam} from "../../../shared/common_logic";
+import {base64Logic, checkObject, retrieveParam} from "../../../shared/common_logic";
 import {apiActions, fetchAPI, postAPI} from "../../../api";
 import {app_id, baseUrl, environment, eSignPayloadStatic} from "../../../shared/constants";
 
@@ -17,12 +17,14 @@ const {PUBLIC_URL} = process.env;
 
 class ESign extends Component {
     static defaultProps = {
-        eSignPayload: null
+        eSignPayload: null,
+        token: null
     }
 
     checkPayload = false
     popUpWindow = ''
     intervalPing = ''
+    counterPing = 5
 
     _fetchAnchorDetail = async () => {
         const {
@@ -32,7 +34,7 @@ class ESign extends Component {
             changeLoader
         } = this.props;
 
-        if (eSignPayload === Object(eSignPayload) && eSignPayload) {
+        if (checkObject(eSignPayload)) {
 
             const options = {
                 URL: `${baseUrl}/merchants/${
@@ -53,36 +55,41 @@ class ESign extends Component {
     _triggerESign = async () => {
         const {eSignPayload, token, changeLoader, showAlert} = this.props;
 
-        const options = {
-            URL: `${baseUrl}/documents/esign_document`,
-            token: token,
-            data: {
-                app_id: app_id,
-                loan_application_id: eSignPayload.loan_application_id,
-                timestamp: new Date()
-            },
-            showAlert: showAlert,
-            changeLoader: changeLoader
-        }
+        if (checkObject(eSignPayload) && token) {
 
-        const resp = await postAPI(options);
+            const options = {
+                URL: `${baseUrl}/documents/esign_document`,
+                token: token,
+                data: {
+                    app_id: app_id,
+                    loan_application_id: eSignPayload.loan_application_id,
+                    timestamp: new Date()
+                },
+                showAlert: showAlert,
+                changeLoader: changeLoader
+            }
 
-        if (resp.status === apiActions.ERROR_RESPONSE)
-            showAlert(resp.data.message, 'warn');
-        if (resp.status === apiActions.SUCCESS_RESPONSE) {
-            EsignsetDocPayload(resp.data);
-            const eSignPopUpPayload = base64Logic(resp.data, 'encode');
-            // console.log(eSignPopUpPayload);
-            window.setTimeout(() => {
-                this.popUpWindow = window.open(`${PUBLIC_URL}/esign/esign_popup?payload=${eSignPopUpPayload}`, 'ESign PopUp', "width=600,height=500,location=no,menubar=no,toolbar=no,titlebar=no")
-                this.intervalPing = window.setInterval(() => this._pingDBStatus(), 3000);
-            }, 2000);
+            const resp = await postAPI(options);
+
+            if (resp.status === apiActions.ERROR_RESPONSE)
+                showAlert(resp.data.message, 'warn');
+            if (resp.status === apiActions.SUCCESS_RESPONSE) {
+                EsignsetDocPayload(resp.data);
+                const eSignPopUpPayload = base64Logic(resp.data, 'encode');
+                // console.log(eSignPopUpPayload);
+                window.setTimeout(() => {
+                    this.popUpWindow = window.open(`${PUBLIC_URL}/esign/esign_popup?payload=${eSignPopUpPayload}`, 'ESign PopUp', "width=600,height=500,location=no,menubar=no,toolbar=no,titlebar=no")
+                    this.intervalPing = window.setInterval(() => this._pingDBStatus(), 10000);
+                }, 2000);
+            }
         }
     }
 
     _pingDBStatus = async () => {
 
         const {eSignPayload, token, changeLoader, showAlert, history} = this.props;
+
+        this.counterPing -= 1;
 
         const reqParam = `app_id=${app_id}&loan_application_id=${eSignPayload.loan_application_id}`;
         const options = {
@@ -94,16 +101,25 @@ class ESign extends Component {
 
         const resp = await fetchAPI(options);
 
-        // ToDo : Navigating to Bank Details Page
+        if (resp.status === apiActions.ERROR_RESPONSE) {
+            showAlert(resp.data.message, 'warn');
+            window.setTimeout(() => window.location.href = `${eSignPayload.error_url}`, 3000);
+        }
+
+        // ToDo : Navigating to anchor urls
         if (resp.status === apiActions.SUCCESS_RESPONSE) {
             if (resp.data.success) {
                 this.popUpWindow.close();
-                window.setTimeout(() => history.push(`${PUBLIC_URL}/esign/bank_detail`), 1000);
+                window.setTimeout(() => window.location.href = `${eSignPayload.success_url}`, 3000);
             }
         }
         // ToDo : remove later : skips eSIGN checks, only meant for testing
-        if (environment === 'local')
-            history.push(`${PUBLIC_URL}/esign/bank_detail`)
+        // if (environment === 'local')
+        //     history.push(`${PUBLIC_URL}/esign/bank_detail`);
+
+        if (this.counterPing === 0)
+            if (this.intervalPing)
+                window.clearInterval(this.intervalPing);
     }
 
     componentWillUnmount() {
@@ -126,26 +142,25 @@ class ESign extends Component {
             payload;
         let that = this;
 
-        this.checkPayload = !!(eSignPayload === Object(eSignPayload) && eSignPayload);
+        this.checkPayload = !!(checkObject(eSignPayload));
 
         // Coming from constant
         if (environment === "local")
             base64_decode = eSignPayloadStatic;
 
-        // ToDo : hide the 2 lines in prod
-        if (this.checkPayload) {
+        // coming from redux
+        if (checkObject(eSignPayload)) {
             Object.assign(base64_decode, eSignPayload);
         }
 
-        this.setState({errorMsg: false});
+        // console.log(token)
         if (environment === "prod" || environment === "dev") {
             payload = retrieveParam(href, "payload") || undefined;
             token = retrieveParam(href, "token") || undefined;
             if (payload) base64_decode = base64Logic(payload, "decode");
-            // else this.setState({errorMsg: true});
         }
 
-        if (base64_decode !== Object(base64_decode) && !base64_decode && !token)
+        if (!checkObject(base64_decode) || !token)
             showAlert(
                 "You cannot access this page directly without Authorised Session !!",
                 "error"
@@ -164,7 +179,7 @@ class ESign extends Component {
     }
 
     render() {
-        const {eSignPayload} = this.props;
+        const {eSignPayload, token} = this.props;
         // console.log(eSignPayload)
         return (
             <>
@@ -173,7 +188,7 @@ class ESign extends Component {
                 <br/>
 
                 <div className=" text-left " role="alert" style={{margin: "auto"}}>
-                    {(this.checkPayload) ? (
+                    {(checkObject(eSignPayload) && token) ? (
                         <p className="paragraph_styling alert alert-info">
                             Kindly complete the eSIGN procedure by clicking the button below. <br/>
                             <small>Make sure to enable pop-up for ESign to proceed</small>
@@ -186,25 +201,12 @@ class ESign extends Component {
                     )}
                 </div>
                 <br/>
-                <div
-                    className=" text-left alert alert-danger"
-                    role="alert"
-                    style={{
-                        margin: "auto",
-                        display: this.state.errorMsg ? "block" : "none"
-                    }}
-                >
-                    <p className="paragraph_styling">
-                        You have tried more than twice, Redirecting you back to Anchor
-                        Portal...
-                    </p>
-                </div>
                 <div className="mt-5 mb-4 text-center">
                     <button
                         type="button"
                         onClick={e => this._triggerESign()}
                         disabled={
-                            !this.checkPayload
+                            !checkObject(eSignPayload) || !token
                         }
                         className="form-submit btn btn-raised greenButton"
                     >

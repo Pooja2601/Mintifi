@@ -103,7 +103,7 @@ class PersonalDetail extends Component {
                 this.setState({
                     f_name: tempName[0],
                     m_name: (tempName[2]) ? tempName[1] : '',
-                    l_name: (tempName[2]) ? tempName[2] : ''
+                    l_name: (tempName[2]) ? tempName[2] : (tempName[1] || '')
                 }, () => setAdharManual(this.state));
             }
             if (Array.isArray(gstProfile.pradr) && gstProfile.pradr.length > 0) {

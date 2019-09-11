@@ -6,21 +6,21 @@ import {
     EnachsetPayload,
     EnachsetAttempt,
     showAlert
-} from "../../../actions";
+} from "../../../../actions";
 import {
     // alertModule,
-    base64Logic,
+    base64Logic, checkObject,
     retrieveParam
-} from "../../../shared/common_logic";
+} from "../../../../shared/common_logic";
 import {
     eNachPayloadStatic,
     baseUrl,
     app_id,
     environment,
     ENachResponseUrl
-} from "../../../shared/constants";
+} from "../../../../shared/constants";
 import PropTypes from "prop-types";
-import {apiActions, postAPI} from "../../../api";
+import {apiActions, postAPI} from "../../../../api";
 
 const {PUBLIC_URL} = process.env;
 
@@ -125,7 +125,7 @@ class ENach extends Component {
              // console.log(base64_decode);
          }*/
 
-        if (eNachPayload !== Object(eNachPayload) && !eNachPayload && !token)
+        if (!checkObject(eNachPayload) || !token)
             showAlert(
                 "You cannot access this page directly without Authorised Session !!",
                 "error"
@@ -165,12 +165,12 @@ class ENach extends Component {
 
                 detail.mandate_id = detail.digio_doc_id;
                 detail.status = detail.error_code === "CANCELLED" ? "cancel" : "error";
-                console.log(JSON.stringify(detail));
+                // console.log(JSON.stringify(detail));
                 if (detail.error_code !== "CANCELLED")
                     setTimeout(() => {
                         // ToDo : uncomment in prod
                         if (environment === "prod" || environment === "dev")
-                            if (eNachPayload === Object(eNachPayload))
+                            if (checkObject(eNachPayload))
                                 history.push(ENachResponseUrl.error_url);
                     }, 1000);
             } else {
@@ -186,7 +186,7 @@ class ENach extends Component {
 
         // ToDo : uncomment in prod
         if (environment === "prod" || environment === "dev")
-            if (eNachPayload === Object(eNachPayload) && eNachPayload.mandate_id)
+            if (checkObject(eNachPayload) && eNachPayload.mandate_id)
                 setTimeout(() => this._triggerDigio(), 1000);
     }
 
@@ -200,7 +200,7 @@ class ENach extends Component {
                 <br/>
 
                 <div className=" text-left " role="alert" style={{margin: "auto"}}>
-                    {eNachPayload === Object(eNachPayload) && eNachPayload.mandate_id ? (
+                    {checkObject(eNachPayload) && eNachPayload.mandate_id ? (
                         <p className="paragraph_styling alert alert-info">
                             Kindly complete the eNACH procedure by clicking the button below.
                             Remember, you may only try twice.
@@ -231,7 +231,7 @@ class ENach extends Component {
                         type="button"
                         onClick={e => this._triggerDigio()}
                         disabled={
-                            eNachPayload !== Object(eNachPayload) || !eNachPayload.mandate_id
+                            !checkObject(eNachPayload) || !eNachPayload.mandate_id
                         }
                         className="form-submit btn btn-raised greenButton"
                     >

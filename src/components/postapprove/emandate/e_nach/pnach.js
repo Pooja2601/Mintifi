@@ -7,13 +7,13 @@ import {
     EnachsetAttempt,
     setAnchorObj,
     showAlert
-} from "../../../actions";
+} from "../../../../actions";
 
 import {
     alertModule,
-    base64Logic,
+    base64Logic, checkObject,
     retrieveParam
-} from "../../../shared/common_logic";
+} from "../../../../shared/common_logic";
 
 import {
     eNachPayloadStatic,
@@ -21,7 +21,7 @@ import {
     app_id,
     environment,
     ENachResponseUrl
-} from "../../../shared/constants";
+} from "../../../../shared/constants";
 
 import PropTypes from "prop-types";
 
@@ -105,9 +105,9 @@ class PNach extends Component {
             .then(resp => {
                 changeLoader(false);
                 // console.log(resp); // Handle the success response object
-                if (resp.error === Object(resp.error))
+                if (checkObject(resp.error))
                     showAlert("We couldn't upload the file, Kindly try again !", "error");
-                else if (resp.response === Object(resp.response)) {
+                else if (checkObject(resp.response)) {
                     this.setState({disableUpload: true});
                     history.push(ENachResponseUrl.success_url);
                 }

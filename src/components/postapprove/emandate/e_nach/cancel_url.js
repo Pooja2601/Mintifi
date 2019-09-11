@@ -1,8 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { changeLoader, EnachsetAttempt, EnachsetPayload } from "../../../actions";
-import { postMessage } from "../../../shared/common_logic";
+import { changeLoader, EnachsetAttempt, EnachsetPayload } from "../../../../actions";
+import { postMessage } from "../../../../shared/common_logic";
 import PropTypes from "prop-types";
 
 const Cancel_URL = props => {

@@ -148,3 +148,23 @@ export const postMessage = obj => {
         window.parent.postMessage(obj, `*`);
     }, 4000);
 };
+
+
+export const checkObject = obj => {
+    try {
+        if (obj === null)
+            return false;
+        if (obj === undefined)
+            return false;
+        if (obj !== Object(obj))
+            return false;
+
+        for (var key in obj) {
+            if (obj.hasOwnProperty(key))
+                return true;
+        }
+    } catch (e) {
+        return false;
+    }
+    // return true;
+}

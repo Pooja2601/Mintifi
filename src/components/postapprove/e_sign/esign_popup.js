@@ -1,5 +1,5 @@
 import React from 'react';
-import {base64Logic, retrieveParam} from "../../../shared/common_logic";
+import {base64Logic, checkObject, retrieveParam} from "../../../shared/common_logic";
 
 let adharForm = '';
 const TriggerPopUp = () => {
@@ -9,18 +9,17 @@ const TriggerPopUp = () => {
 
     const payloadPopUp = payload && base64Logic(payload, 'decode');
 
-
-    let checkPayload = !!(payloadPopUp === Object(payloadPopUp) && payloadPopUp);
+    // let checkPayload = !!(payloadPopUp === Object(payloadPopUp) && payloadPopUp);
 
     // alert(JSON.stringify(payloadPopUp));
-    if (checkPayload)
+    if (checkObject(payloadPopUp))
         window.setTimeout(() => {
             adharForm.submit()
         }, 2000);
 
     return (<>
         <div className=" text-left " role="alert" style={{margin: "auto"}}>
-            {(checkPayload) ? (
+            {(checkObject(payloadPopUp)) ? (
                 <form ref={ref => adharForm = ref} method="post"
                       action={payloadPopUp.url}>
                     <input type="hidden" name="saCode" value={payloadPopUp.saCode}/>
