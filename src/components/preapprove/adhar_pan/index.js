@@ -181,9 +181,10 @@ class AdharPan extends Component {
     };
 
     _setGST = () => {
-        Object.keys(this.state.checked).map(val => {
-            this.gstDetails.gst = this.state.gst_details[val].gstinId;
-        });
+        /* Object.keys(this.state.checked).map(val => { //0, 1, 2, 3
+             this.gstDetails.gst = this.state.gst_details[val].gstinId;
+         });*/
+        this.gstDetails.gst = this.state.selectedGST;
         this.props.setBusinessDetail(this.gstDetails);
         this._gstFetch(this.gstDetails.gst);
         // setTimeout(() => console.log(JSON.stringify(this.props.businessObj)), 1000);
@@ -257,7 +258,7 @@ class AdharPan extends Component {
 
         if (resp.status === apiActions.ERROR_RESPONSE) {
             showAlert(resp.data.message, "error");
-            if (resp.data.code !== "ER-AUTH-102")
+            if (resp.data.code !== "ER-AUTH-102") // token expire
                 setTimeout(() => this.adharSkipped(), 500);
         } else if (resp.status === apiActions.SUCCESS_RESPONSE) {
             resp.data.gst_details.map((val, key) => {

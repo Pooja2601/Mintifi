@@ -5,6 +5,7 @@ import { changeLoader } from "../actions";
 
 const { PUBLIC_URL } = process.env;
 const Header = props => {
+  const {anchorObj} = props;
   if (window.location === window.parent.location)
     return (
       <>
@@ -18,9 +19,9 @@ const Header = props => {
                 className={"logoHeader"}
               />
               {/*<b className={"anchorText"}>Anchor Merchant</b>*/}
-              {props.anchorObj === Object(props.anchorObj) ? (
+              {(anchorObj === Object(anchorObj) && anchorObj) ? (
                 <img
-                  src={props.anchorObj.anchor_logo}
+                  src={anchorObj.anchor_logo}
                   alt="Anchor Logo"
                   className={"anchorLogo"}
                 />
