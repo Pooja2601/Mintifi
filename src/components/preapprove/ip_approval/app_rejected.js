@@ -13,7 +13,7 @@ import {
   setBusinessDetail,
   changeLoader
 } from "../../../actions/index";
-import { postMessage } from "../../../shared/common_logic";
+import { postMessage, checkObject } from "../../../shared/common_logic";
 
 // const { PUBLIC_URL } = process.env;
 
@@ -51,10 +51,10 @@ class AppRejected extends Component {
       });
 
     if (environment === "dev")
-      if (state !== Object(state)) state = { status: loan_status };
+      if (checkObject(state)) state = { status: loan_status };
 
-    if (payload === Object(payload))
-      if (state === Object(state))
+    if (checkObject(payload))
+      if (checkObject(state))
         return (
           <>
             {/* <button onClick={() => history.push(`${PUBLIC_URL}/preapprove/businessdetail`)} className={"btn btn-link"}>
@@ -131,9 +131,7 @@ class AppRejected extends Component {
                 className="form-submit btn btn-raised greenButton"
               >
                 Back to{" "}
-                {anchorObj === Object(anchorObj)
-                  ? anchorObj.anchor_name
-                  : "Anchor"}
+                {checkObject(anchorObj) ? anchorObj.anchor_name : "Anchor"}
               </button>
             </div>
           </>

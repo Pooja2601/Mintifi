@@ -17,6 +17,8 @@ import {alertModule, retrieveParam, generateToken} from "../../../shared/common_
 // import "react-datepicker/dist/react-datepicker.css";
 import Select from "react-select";
 import {fetchAPI, apiActions, postAPI} from "../../../api";
+import { checkObject } from "../../../shared/common_logic";
+
 
 const {PUBLIC_URL} = process.env;
 
@@ -108,7 +110,7 @@ class BankDetail extends Component {
         if (resp == 31)
             showAlert('net');
 
-        if (resp === Object(resp)) {
+        if (checkObject(resp)) {
             // console.log(JSON.stringify(resp.data))
             if (resp.status === "success")
                 setTimeout(
@@ -131,7 +133,7 @@ class BankDetail extends Component {
         const {changeLoader, token, payload, preFlightResp, history, showAlert} = this.props;
         // console.log(preFlightResp);
         const {bank_name, acc_name, acc_number, acc_type, ifsc_code, micr_code} = this.state;
-        if (preFlightResp === Object(preFlightResp)) {
+        if (checkObject(preFlightResp)) {
 
             const options = {
                 token: token,
@@ -187,7 +189,7 @@ class BankDetail extends Component {
             .then(
                 resp => {
                     changeLoader(false);
-                    if (resp === Object(resp)) {
+                    if (checkObject(resp)) {
                         bank_name = resp.BANK;
                         // ifsc_code = resp.IFSC;
                         micr_code = resp.MICR;
@@ -214,11 +216,11 @@ class BankDetail extends Component {
     componentWillMount() {
         const {payload, adharObj, history, businessObj} = this.props;
 
-        if (payload === Object(payload) && payload) {
-            if (adharObj !== Object(adharObj))
+        if (checkObject(payload) && payload) {
+            if (!checkObject(adharObj))
                 history.push(`${PUBLIC_URL}/preapprove/personaldetail`);
 
-            if (businessObj !== Object(businessObj))
+            if (!checkObject(businessObj))
                 history.push(`${PUBLIC_URL}/preapprove/businessdetail`);
         } else history.push(`${PUBLIC_URL}/preapprove/token`);
     }
@@ -226,7 +228,7 @@ class BankDetail extends Component {
     componentDidMount() {
         const {bankObj, setBankDetail, changeLoader, adharObj} = this.props;
 
-        if (bankObj === Object(bankObj))
+        if (checkObject(bankObj))
             this.setState(bankObj, () => {
                 Object.keys(this.state).map((val, key) => {
                     if (this.validate[val] !== undefined)
@@ -238,7 +240,7 @@ class BankDetail extends Component {
             });
         else setBankDetail(this.state);
 
-        if (adharObj === Object(adharObj) && adharObj) {
+        if (checkObject(adharObj)) {
             const {f_name, l_name} = adharObj;
             this.setState({acc_name: `${f_name} ${l_name}`}, () => setBankDetail(this.state));
 

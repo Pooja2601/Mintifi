@@ -10,6 +10,7 @@ import {PrivacyPolicy, TnCPolicy} from "../../../shared/policy";
 import Select from "react-select";
 // import DatePicker from "react-datepicker";
 // import "react-datepicker/dist/react-datepicker.css";
+import { checkObject } from "../../../shared/common_logic";
 
 const {PUBLIC_URL} = process.env;
 
@@ -128,9 +129,10 @@ class BusinessDetail extends Component {
     componentWillMount() {
         const {payload, adharObj, changeLoader, history} = this.props;
 
-        if (payload === Object(payload) && payload) {
-            if (adharObj !== Object(adharObj))
+        if (checkObject(payload)) {
+            if (!checkObject(adharObj))
                 history.push(`${PUBLIC_URL}/preapprove/personaldetail`);
+                
         } else history.push(`${PUBLIC_URL}/preapprove/token`);
 
         // console.log(this.props.gstProfile)
@@ -143,7 +145,7 @@ class BusinessDetail extends Component {
         setTimeout(() => this.handleValidation(), 1000);
         // console.log(adharObj);
 
-        if (businessObj === Object(businessObj)) {
+        if (checkObject(businessObj)) {
             this.businessGst(businessObj.gst);
 
             this.setState(businessObj, () => {
@@ -165,7 +167,7 @@ class BusinessDetail extends Component {
                       });
                       this.setState({gst: gstProfile.gstin, lgnm: gstProfile.lgnm});
                   }*/
-            if (payload === Object(payload) && payload) {
+            if (checkObject(payload)) {
                 this.setState({dealercode: payload.distributor_dealer_code}, () => setBusinessDetail(this.state));
             }
 
@@ -176,6 +178,7 @@ class BusinessDetail extends Component {
     }
 
     render() {
+        
         const gstProfile = this.props.gstProfile;
         return (
             <>
@@ -193,7 +196,7 @@ class BusinessDetail extends Component {
                     onSubmit={e => this._formSubmit(e)}
                 >
                     <div className={"row"}
-                         style={{visibility: (gstProfile === Object(gstProfile) && gstProfile.lgnm) ? 'visible' : 'hidden'}}>
+                         style={{visibility: (checkObject(gstProfile) && gstProfile.lgnm) ? 'visible' : 'hidden'}}>
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             {/*<h5 className={"text-center"}>{(gstProfile === Object(gstProfile)) ? gstProfile.lgnm : ''}</h5>*/}
                             <input
@@ -203,7 +206,7 @@ class BusinessDetail extends Component {
                                 autoCapitalize="characters"
                                 id="companyName"
                                 required={true}
-                                value={(gstProfile === Object(gstProfile)) ? gstProfile.lgnm : ''}
+                                value={(checkObject(gstProfile)) ? gstProfile.lgnm : ''}
                                 readOnly={true}
                                 disabled={true}
                             />

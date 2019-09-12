@@ -9,6 +9,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 // import {alertModule} from "../../../shared/common_logic";
 import {fetchAPI, apiActions, postAPI} from "../../../api";
+import { checkObject } from "../../../shared/common_logic";
 
 const {PUBLIC_URL} = process.env;
 
@@ -59,7 +60,7 @@ class PersonalDetail extends Component {
         setTimeout(() => {
         }, 1000);
         // console.log(pan)
-        if (payload === Object(payload) && payload) {
+        if (checkObject(payload)) {
             if (!pan)
                 history.push(`${PUBLIC_URL}/preapprove/adharpan`);
         } else
@@ -69,12 +70,12 @@ class PersonalDetail extends Component {
 
         // console.log(state);
 
-        if (authObj === Object(authObj) && authObj)
-            if (authObj.verified && state === Object(state))
+        if (checkObject(authObj))
+            if (authObj.verified && checkObject(state))
                 if (state.mobile)
                     state.mobile = authObj.mobile;
 
-        if (state === Object(state) && state)
+        if (checkObject(state))
             this.setState(state, () => {
                 Object.keys(this.state).map((val, key) => {
                     if (this.validate[val] !== undefined)
@@ -96,7 +97,7 @@ class PersonalDetail extends Component {
     _loadGstProfile() {
         const {gstProfile, setAdharManual} = this.props;
         let tempName;
-        if (gstProfile === Object(gstProfile)) {
+        if (checkObject(gstProfile)) {
             if (Array.isArray(gstProfile.mbr) && gstProfile.mbr.length > 0) {
                 tempName = gstProfile.mbr[0].split(' ');
                 // console.log(tempName[0]);
@@ -120,6 +121,7 @@ class PersonalDetail extends Component {
         setTimeout(() => {
             this.props.history.push(`${PUBLIC_URL}/preapprove/mobileotp`);
         }, 500);
+        
     }
 
     handleValidation() {
