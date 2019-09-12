@@ -64,8 +64,10 @@ class EMandate extends Component {
                 redirect = true;
             }
             if (resp.status === apiActions.ERROR_RESPONSE)
-                if (resp.data.code !== 'ER-AUTH-102')
-                    redirect = true;
+                if (resp.data.code === 'ER-AUTH-102') {
+                    redirect = false;
+                    showAlert('Session expired, please try again');
+                } else redirect = true;
 
             if (redirect)
                 window.setTimeout(() => {
