@@ -12,7 +12,7 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {changeLoader, setToken, showAlert, EnachsetBankDetail, EnachsetPayload} from "../../../../actions";
 import {withRouter} from "react-router-dom";
-import {alertModule, checkObject, retrieveParam} from "../../../../shared/common_logic";
+import {alertModule, checkObject, retrieveParam, base64Logic} from "../../../../shared/common_logic";
 // import DatePicker from "react-datepicker";
 // import "react-datepicker/dist/react-datepicker.css";
 import Select from "react-select";
@@ -20,7 +20,7 @@ import {fetchAPI, apiActions, postAPI} from "../../../../api";
 
 const {PUBLIC_URL} = process.env;
 
-class ESignBankDetail extends Component {
+class ENachBankDetail extends Component {
 
     static propTypes = {
         anchorObj: PropTypes.object,
@@ -101,9 +101,11 @@ class ESignBankDetail extends Component {
             nachObject = Object.assign(eNachPayload, resp.data);
             EnachsetPayload(token, nachObject);
         }
+        nachObject = base64Logic(nachObject, 'encode');
+        // ToDo : payload & token append , needs to be reomved
         setTimeout(() =>
             history.push(
-                `${PUBLIC_URL}/enach?payload=${nachObject}&token=${token}`), 50);
+                `${PUBLIC_URL}/enach?payload=${nachObject}&token=${token}`), 1000);
     }
 
     _formSubmit = async e => {
@@ -147,6 +149,7 @@ class ESignBankDetail extends Component {
                      resp.data.payload,
                      "payload"
                  );*/
+                // ToDo : uncomment after the doc/API are updated
                 if (resp.data.status === 'success')
                     this._createMandate();
             }
@@ -164,7 +167,7 @@ class ESignBankDetail extends Component {
         fetch(`https://ifsc.razorpay.com/${ifsc}`)
             .then(resp => resp.json())
             .then(resp => {
-                if (checkObject(resp)) {
+                if (!checkObject(resp)) {
                     bank_name = micr_code = branch_name = "";
                     showAlert("Make sure to enter correct IFSC code", "error");
                 } else {
@@ -185,7 +188,6 @@ class ESignBankDetail extends Component {
             });
 
         changeLoader(false);
-
 
     }
 
@@ -228,14 +230,15 @@ class ESignBankDetail extends Component {
 
             window.setTimeout(() => {
 
-                if (bank_ifsc_code) {
+                if (bank_ifsc_code)
                     that._fetchIFSC(that.state.ifsc_code);
-                    that.validate.ifsc_code = that.state.ifsc_code.length === 11;
-                    that.validate.acc_name = that.state.acc_name.length > 2;
-                    that.validate.acc_number =
-                        that.state.acc_number.length >= 9 && that.state.acc_number.length <= 18;
-                    that.validate.acc_type = false;
-                }
+
+                that.validate.ifsc_code = that.state.ifsc_code.length === 11;
+                that.validate.acc_name = that.state.acc_name.length > 2;
+                that.validate.acc_number =
+                    that.state.acc_number.length >= 9 && that.state.acc_number.length <= 18;
+                that.validate.acc_type = false;
+
                 window.setTimeout(() => that.handleValidation(), 50);
                 EnachsetBankDetail(that.state);
             }, 50);
@@ -549,5 +552,5 @@ export default withRouter(
     connect(
         mapStateToProps,
         {EnachsetBankDetail, changeLoader, setToken, showAlert, EnachsetPayload}
-    )(ESignBankDetail)
+    )(ENachBankDetail)
 );

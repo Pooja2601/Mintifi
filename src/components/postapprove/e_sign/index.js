@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {withRouter} from "react-router-dom";
+import PropTypes from 'prop-types';
 import {
     changeLoader,
     setAnchorObj,
@@ -21,10 +22,15 @@ class ESign extends Component {
         token: null
     }
 
-    checkPayload = false
-    popUpWindow = ''
-    intervalPing = ''
-    counterPing = 5
+    static propTypes = {
+        setAnchorObj: PropTypes.func.isRequired,
+        changeLoader: PropTypes.func.isRequired,
+        showAlert: PropTypes.func.isRequired
+    }
+
+    popUpWindow = '';
+    intervalPing = '';
+    counterPing = 5;
 
     _fetchAnchorDetail = async () => {
         const {
@@ -47,13 +53,11 @@ class ESign extends Component {
 
             if (resp.status === apiActions.SUCCESS_RESPONSE)
                 setAnchorObj(resp.data);
-
         }
-
     }
 
     _triggerESign = async () => {
-        const {eSignPayload, token, changeLoader, showAlert} = this.props;
+        const {eSignPayload, token, changeLoader, showAlert, EsignsetDocPayload} = this.props;
 
         if (checkObject(eSignPayload) && token) {
 
@@ -95,7 +99,7 @@ class ESign extends Component {
         const options = {
             URL: `${baseUrl}/documents/esign_status?${reqParam}`,
             token: token,
-            // showAlert: showAlert,
+            showAlert: showAlert,
             // changeLoader: changeLoader
         };
 
@@ -103,19 +107,19 @@ class ESign extends Component {
 
         if (resp.status === apiActions.ERROR_RESPONSE) {
             showAlert(resp.data.message, 'warn');
-            window.setTimeout(() => window.location.href = `${eSignPayload.error_url}`, 3000);
+            // ToDo : need to look after it
+            // this.popUpWindow.close();
+            // window.setTimeout(() => window.location.href = `${eSignPayload.error_url}`, 5000);
         }
 
         // ToDo : Navigating to anchor urls
         if (resp.status === apiActions.SUCCESS_RESPONSE) {
             if (resp.data.success) {
+                showAlert("Looks like we're done with eSign, redirecting you to Anchor portal", 'success');
                 this.popUpWindow.close();
-                window.setTimeout(() => window.location.href = `${eSignPayload.success_url}`, 3000);
+                window.setTimeout(() => window.location.href = `${eSignPayload.success_url}`, 5000);
             }
         }
-        // ToDo : remove later : skips eSIGN checks, only meant for testing
-        // if (environment === 'local')
-        //     history.push(`${PUBLIC_URL}/esign/bank_detail`);
 
         if (this.counterPing === 0)
             if (this.intervalPing)
@@ -142,8 +146,6 @@ class ESign extends Component {
             payload;
         let that = this;
 
-        this.checkPayload = !!(checkObject(eSignPayload));
-
         // Coming from constant
         if (environment === "local")
             base64_decode = eSignPayloadStatic;
@@ -167,7 +169,6 @@ class ESign extends Component {
             );
         else {
             EsignsetPayload(token, base64_decode);
-            this.checkPayload = !!base64_decode;
             window.setTimeout(() => {
                 that._fetchAnchorDetail()
             }, 500);

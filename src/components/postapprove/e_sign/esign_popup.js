@@ -9,14 +9,13 @@ const TriggerPopUp = () => {
 
     const payloadPopUp = payload && base64Logic(payload, 'decode');
 
-    // let checkPayload = !!(payloadPopUp === Object(payloadPopUp) && payloadPopUp);
-
-    // alert(JSON.stringify(payloadPopUp));
+    // console.log(JSON.stringify(payloadPopUp));
     if (checkObject(payloadPopUp))
         window.setTimeout(() => {
             adharForm.submit()
         }, 2000);
 
+    // ToDo : need to put input fields in for loop , with array destructuring of payload
     return (<>
         <div className=" text-left " role="alert" style={{margin: "auto"}}>
             {(checkObject(payloadPopUp)) ? (

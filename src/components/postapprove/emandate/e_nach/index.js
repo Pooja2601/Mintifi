@@ -97,43 +97,17 @@ class ENach extends Component {
     componentWillMount() {
         let {
             changeLoader,
-            EnachsetPayload,
             token,
             eNachPayload,
             showAlert
         } = this.props;
         changeLoader(false);
 
-        let {href} = window.location,
-            base64_decode = {},
-            payload;
-
-        /*    if (environment === "local") base64_decode = eNachPayloadStatic;
-
-            // ToDo : hide the 2 lines in prod
-            if (eNachPayload === Object(eNachPayload) && eNachPayload) {
-                // coming from constant
-                Object.assign(base64_decode, eNachPayload);
-            }*/
-
-        // this.setState({errorMsg: false});
-        /* if (environment === "prod" || environment === "dev") {
-             payload = retrieveParam(href, "payload") || undefined;
-             token = retrieveParam(href, "token") || undefined;
-             if (payload) base64_decode = base64Logic(payload, "decode");
-             // else this.setState({errorMsg: true});
-             // console.log(base64_decode);
-         }*/
-
-        if (!checkObject(eNachPayload) || !token)
+        if (!checkObject(eNachPayload) && !token)
             showAlert(
                 "You cannot access this page directly without Authorised Session !!",
                 "error"
             );
-        /* else {
-             // ToDo : need to look later
-             EnachsetPayload(token, base64_decode);
-         }*/
     }
 
     componentDidMount() {

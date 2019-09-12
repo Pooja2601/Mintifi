@@ -39,26 +39,38 @@ class EMandate extends Component {
 
     _fetchAnchorDetail = async () => {
         const {
+            history,
             token,
             eNachPayload,
             setAnchorObj,
-            changeLoader
+            changeLoader,
+            showAlert
         } = this.props;
 
-        if (checkObject(eNachPayload)) {
-
+        if (checkObject(eNachPayload) && token) {
+            let redirect = false;
             const options = {
                 URL: `${baseUrl}/merchants/${
                     eNachPayload.anchor_id
                     }/get_details?app_id=${app_id}`,
                 token: token,
-                changeLoader: changeLoader
+                changeLoader: changeLoader,
+                showAlert: showAlert
             }
             const resp = await fetchAPI(options);
 
-            if (resp.status === apiActions.SUCCESS_RESPONSE)
+            if (resp.status === apiActions.SUCCESS_RESPONSE) {
                 setAnchorObj(resp.data);
+                redirect = true;
+            }
+            if (resp.status === apiActions.ERROR_RESPONSE)
+                if (resp.data.code !== 'ER-AUTH-102')
+                    redirect = true;
 
+            if (redirect)
+                window.setTimeout(() => {
+                    history.push(`${PUBLIC_URL}/enach/bank_detail`);
+                }, 2000)
         }
 
     }
@@ -84,16 +96,16 @@ class EMandate extends Component {
         if (checkObject(eNachPayload)) {
             Object.assign(base64_decode, eNachPayload);
         }
-
         // coming from URl payload
         if (environment === "prod" || environment === "dev") {
             payload = retrieveParam(href, "payload") || undefined;
             token = retrieveParam(href, "token") || undefined;
             if (payload) base64_decode = base64Logic(payload, "decode");
-            // console.log(base64_decode);
+            // console.log(payload);
+            console.log(base64_decode);
         }
 
-        if (!checkObject(eNachPayload) || !token)
+        if (!checkObject(base64_decode) && !token)
             showAlert(
                 "You cannot access this page directly without Authorised Session !!",
                 "error"
@@ -109,10 +121,8 @@ class EMandate extends Component {
 
     componentDidMount() {
         const {history, eNachPayload, token} = this.props;
-        if (checkObject(eNachPayload) && token)
-            window.setTimeout(() => {
-                history.push(`${PUBLIC_URL}/enach/bank_detail`);
-            }, 2000)
+        // console.log(token)
+
     }
 
     render() {
@@ -124,7 +134,7 @@ class EMandate extends Component {
             <div className=" text-left " role="alert" style={{margin: "auto"}}>
                 {checkObject(eNachPayload) && token ? (
                     <p className="paragraph_styling alert alert-info">
-                        Redirecting you towards eMandate Flow...
+                        Welcome to Mintifi's eMandate Flow
                     </p>
                 ) : (
                     <p className="paragraph_styling alert alert-danger">

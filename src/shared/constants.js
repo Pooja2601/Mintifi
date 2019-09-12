@@ -80,12 +80,12 @@ module.exports = {
         cancel_url: anchorUrls.cancel_url
     },
     eSignPayloadStatic: {
-        "loan_application_id": 3211,
-        "company_id": 12259,
-        "anchor_id": anchor_id,
-        "success_url": anchorUrls.success_url,
-        "cancel_url": anchorUrls.error_url,
-        "error_url": anchorUrls.cancel_url
+        loan_application_id: 3211,
+        company_id: 12259,
+        anchor_id: anchor_id,
+        success_url: anchorUrls.success_url,
+        cancel_url: anchorUrls.error_url,
+        error_url: anchorUrls.cancel_url
     },
     eSignDocsPayloadStatic: {
         url: "https://preprod.aadhaarbridge.com/api/_init",
