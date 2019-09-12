@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {withRouter} from "react-router-dom";
 import {baseUrl, drawdownPayload, environment, app_id, user_id, auth_secret} from "../../shared/constants";
-import {alertModule, base64Logic, generateToken} from '../../shared/common_logic';
+import {alertModule, base64Logic, generateToken, checkObject} from '../../shared/common_logic';
 import {connect} from "react-redux";
 import {changeLoader, DrawsetToken, showAlert} from "../../actions";
 
@@ -28,7 +28,7 @@ class DrawLanding extends Component {
         // console.log(JSON.stringify(base64_decode));
         // console.log(token);
 
-        if (base64_decode !== Object(base64_decode) && !base64_decode)
+        if (!checkObject(base64_decode))
             showAlert('You cannot access this page directly without Authorised Session/Payload!!', 'error');
         else if (!token) {
             showAlert('Token invalid or session invalid, kindly go back and retry the process !!', 'error');
@@ -48,7 +48,7 @@ class DrawLanding extends Component {
         let resp = await generateToken();
         changeLoader(false);
 
-        if (resp === Object(resp)) {
+        if (checkObject(resp)) {
             DrawsetToken(resp.auth.token, payload);
             setTimeout(() => history.push(`${PUBLIC_URL}/drawdown/auth/`, {
                 token: resp.auth.token,
@@ -63,7 +63,7 @@ class DrawLanding extends Component {
         const {payload, match, token} = this.props;
         // console.log(payload);
         return (<>
-            <div style={{visibility: ((payload !== Object(payload) && !payload) || !token) ? 'visible' : 'hidden'}}
+            <div style={{visibility: ((!checkObject(payload)) || !token) ? 'visible' : 'hidden'}}
                  className={"alert alert-warning"}>You may not access this page as the session seems to be expired
             </div>
             {/* <div className={"text-center"}>

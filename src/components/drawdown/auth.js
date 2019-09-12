@@ -11,9 +11,9 @@ import {
     DrawAnchorPayload,
     showAlert
 } from "../../actions";
-// import {alertModule} from "../../shared/common_logic";
 import PropTypes from "prop-types";
 import {fetchAPI, apiActions, postAPI} from "../../api";
+import {checkObject} from "../../shared/common_logic";
 
 const Timer = OTP_Timer;
 const {PUBLIC_URL} = process.env;
@@ -134,7 +134,7 @@ class MobileOtp extends Component {
         // `${baseUrl}/loans/${payload.company_id}/details/?app_id=${app_id}`,
 
         // TODO: check fetchAPI function
-        if (payload === Object(payload) && payload) {
+        if (checkObject(payload)) {
             const options = {
                 URL: `${baseUrl}/merchants/${payload.anchor_id}/get_details?app_id=${app_id}`,
                 token: token,
@@ -173,7 +173,7 @@ class MobileOtp extends Component {
         /*const {changeLoader, match, DrawsetToken} = this.props;
                     changeLoader(false);
                     const {token, payload} = match.params;
-                    if (token === undefined && payload === Object(payload))
+                    if (!token &&  !checkObject(payload))
                         alertModule("You cannot access this page directly without Authorised session!! ", 'error');
                     else DrawsetToken(token, payload);*/
     }
@@ -187,8 +187,8 @@ class MobileOtp extends Component {
             history,
             changeLoader
         } = this.props;
-        if (payload === Object(payload) && payload && token) {
-            if (authObj === Object(authObj) && authObj) {
+        if (checkObject(payload) && token) {
+            if (checkObject(authObj)) {
                 if (authObj.mobile)
                     this.setState({
                         mobile: authObj.mobile,

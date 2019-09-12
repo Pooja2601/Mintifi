@@ -4,6 +4,7 @@ import {connect} from "react-redux";
 import {changeLoader, DrawsetLoanPayload, showAlert} from "../../actions";
 import {otpUrl, baseUrl, environment, app_id} from "../../shared/constants";
 import {fetchAPI, apiActions, postAPI} from "../../api";
+import {checkObject} from "../../shared/common_logic";
 
 const {PUBLIC_URL} = process.env;
 
@@ -172,9 +173,9 @@ class FetchOffers extends Component {
     componentWillMount() {
         const {payload, authObj, changeLoader, history} = this.props;
         changeLoader(true);
-        if (authObj !== Object(authObj) && !authObj)
+        if (!checkObject(authObj))
             history.push(`${PUBLIC_URL}/drawdown/auth`);
-        if (payload !== Object(payload) && !payload) {
+        if (!checkObject(payload)) {
             history.push(`${PUBLIC_URL}/drawdown/token`);
         }
     }
@@ -190,7 +191,8 @@ class FetchOffers extends Component {
         /*  if (environment === 'local') {
                   DrawsetLoanPayload({loanOffers: loanOffers, loanStatus: loanStatus, creditLimit: creditLimit});
                   DrawsetPreflight(preFlightResp);
-              }*/
+              }
+        */
     }
 
     render() {
