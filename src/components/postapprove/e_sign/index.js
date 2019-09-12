@@ -31,17 +31,20 @@ class ESign extends Component {
     popUpWindow = '';
     intervalPing = '';
     counterPing = 5;
+    eSignAttempt = 0;
+
 
     _fetchAnchorDetail = async () => {
         const {
             token,
             eSignPayload,
             setAnchorObj,
+            showAlert,
             changeLoader
         } = this.props;
 
         if (checkObject(eSignPayload)) {
-
+            let triggerEsign = false;
             const options = {
                 URL: `${baseUrl}/merchants/${
                     eSignPayload.anchor_id
@@ -51,8 +54,19 @@ class ESign extends Component {
             }
             const resp = await fetchAPI(options);
 
-            if (resp.status === apiActions.SUCCESS_RESPONSE)
+            if (resp.status === apiActions.SUCCESS_RESPONSE) {
                 setAnchorObj(resp.data);
+                triggerEsign = true;
+            }
+
+            if (resp.status === apiActions.ERROR_RESPONSE)
+                if (resp.data.code === 'ER-AUTH-102') {
+                    triggerEsign = false;
+                    showAlert('Session expired, please try again');
+                } else triggerEsign = true;
+
+            if (triggerEsign)
+                window.setTimeout(() => this._triggerESign(), 1000);
         }
     }
 
@@ -60,7 +74,7 @@ class ESign extends Component {
         const {eSignPayload, token, changeLoader, showAlert, EsignsetDocPayload} = this.props;
 
         if (checkObject(eSignPayload) && token) {
-
+            EsignsetAttempt(this.eSignAttempt++);
             const options = {
                 URL: `${baseUrl}/documents/esign_document`,
                 token: token,
@@ -73,6 +87,12 @@ class ESign extends Component {
                 changeLoader: changeLoader
             }
 
+            if (this.eSignAttempt > 3) {
+                this.popUpWindow.close();
+                window.setTimeout(() => window.location.href = `${eSignPayload.error_url}`, 5000);
+
+            }
+
             const resp = await postAPI(options);
 
             if (resp.status === apiActions.ERROR_RESPONSE)
@@ -81,10 +101,12 @@ class ESign extends Component {
                 EsignsetDocPayload(resp.data);
                 const eSignPopUpPayload = base64Logic(resp.data, 'encode');
                 // console.log(eSignPopUpPayload);
+                // ToDo : ideal for checking esign_status before Ahdarbridge opens up
+                this._pingDBStatus();
                 window.setTimeout(() => {
                     this.popUpWindow = window.open(`${PUBLIC_URL}/esign/esign_popup?payload=${eSignPopUpPayload}`, 'ESign PopUp', "width=600,height=500,location=no,menubar=no,toolbar=no,titlebar=no")
-                    this.intervalPing = window.setInterval(() => this._pingDBStatus(), 10000);
-                }, 2000);
+                    this.intervalPing = window.setInterval(() => this._pingDBStatus(), 20000);
+                }, 1000);
             }
         }
     }
@@ -129,6 +151,7 @@ class ESign extends Component {
     componentWillUnmount() {
         if (this.intervalPing)
             window.clearInterval(this.intervalPing);
+
     }
 
     componentWillMount() {
@@ -162,7 +185,7 @@ class ESign extends Component {
             if (payload) base64_decode = base64Logic(payload, "decode");
         }
 
-        if (!checkObject(base64_decode) || !token)
+        if (!checkObject(base64_decode) && !token)
             showAlert(
                 "You cannot access this page directly without Authorised Session !!",
                 "error"
@@ -170,13 +193,15 @@ class ESign extends Component {
         else {
             EsignsetPayload(token, base64_decode);
             window.setTimeout(() => {
-                that._fetchAnchorDetail()
+
+                that._fetchAnchorDetail();
             }, 500);
         }
     }
 
     componentDidMount() {
-        window.setTimeout(() => this._triggerESign(), 1000);
+        // window.setTimeout(() => this._triggerESign(), 1000);
+        this.props.EsignsetAttempt(0);
     }
 
     render() {
@@ -192,7 +217,7 @@ class ESign extends Component {
                     {(checkObject(eSignPayload) && token) ? (
                         <p className="paragraph_styling alert alert-info">
                             Kindly complete the eSIGN procedure by clicking the button below. <br/>
-                            <small>Make sure to enable pop-up for ESign to proceed</small>
+                            <small>Make sure to enable pop-up in your browser, for ESign to proceed</small>
                         </p>
                     ) : (
                         <p className="paragraph_styling alert alert-danger">
@@ -222,7 +247,8 @@ class ESign extends Component {
 
 const mapStateToProps = state => ({
     token: state.eSignReducer.token,
-    eSignPayload: state.eSignReducer.eSignPayload
+    eSignPayload: state.eSignReducer.eSignPayload,
+    eSignAttempt: state.eSignReducer.eSignAttempt
 });
 
 export default withRouter(
