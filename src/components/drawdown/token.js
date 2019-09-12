@@ -25,11 +25,12 @@ class DrawLanding extends Component {
             if (payload)
                 base64_decode = base64Logic(payload, 'decode');
 
-        console.log(base64_decode);
+        // console.log(JSON.stringify(base64_decode));
+        // console.log(token);
 
         if (base64_decode !== Object(base64_decode) && !base64_decode)
             showAlert('You cannot access this page directly without Authorised Session/Payload!!', 'error');
-        else if (token === undefined) {
+        else if (!token) {
             showAlert('Token invalid or session invalid, kindly go back and retry the process !!', 'error');
             DrawsetToken(null, base64_decode);
             // console.log(this.props.payload);
@@ -56,7 +57,6 @@ class DrawLanding extends Component {
         }
 
         // console.log(JSON.stringify(payload));
-
     };
 
     render() {

@@ -46,7 +46,7 @@ class MobileOtp extends Component {
         this.setState({loading: true, submitted: true, timer: Timer});
         const options = {
             URL: `${otpUrl}/send_otp`,
-            token: null,
+            token: token,
             data: {
                 app_id: app_id,
                 otp_type: "drawdown",
@@ -89,7 +89,7 @@ class MobileOtp extends Component {
 
         const options = {
             URL: `${otpUrl}/verify_otp`,
-            token: null,
+            token: token,
             data: {
                 app_id: app_id,
                 otp_reference_number: authObj.otp_reference_id,
