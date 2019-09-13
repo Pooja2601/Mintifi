@@ -9,7 +9,8 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 // import {alertModule} from "../../../shared/common_logic";
 import {fetchAPI, apiActions, postAPI} from "../../../api";
-import { checkObject } from "../../../shared/common_logic";
+import {checkObject} from "../../../shared/common_logic";
+import {validation} from "./validation";
 
 const {PUBLIC_URL} = process.env;
 
@@ -121,7 +122,7 @@ class PersonalDetail extends Component {
         setTimeout(() => {
             this.props.history.push(`${PUBLIC_URL}/preapprove/mobileotp`);
         }, 500);
-        
+
     }
 
     handleValidation() {
@@ -137,6 +138,7 @@ class PersonalDetail extends Component {
         this.setState({missed_fields});
         // this.setState({missed_fields}, () => console.log('All Fields Validated : ' + this.state.missed_fields));
     }
+
 
     _pincodeFetch = async () => {
         //http://postalpincode.in/api/pincode/
@@ -167,18 +169,89 @@ class PersonalDetail extends Component {
         }
     };
 
-    changeDob = (dob) => {
-        /*        let date = d.getDate();
-                let month = d.getMonth();
-                let year = d.getFullYear();
-                let dob = `${year}-${month}-${date}`;
-         */
-        let doby = new Date(dob)
-        // console.log(doby)
-        this.setState({dob: doby}, () => this.props.setAdharManual(this.state))
-    };
+    fieldsType = Object.assign({}, validation);
+
+    // ToDo : should be independent of a field
+    validationHandler = () => {
+        const {showAlert} = this.props;
+        Object.entries(this.fieldsType).map((val, key) => {
+            if (val[1].required) {
+                let regexTest = (val[1].pattern).test(this.state[val[1].slug]);
+                // console.log(regexTest);
+                if (!regexTest) {
+                    showAlert(val[1].error);
+                    // return regexTest;
+                } else {
+                    showAlert();
+                    // return regexTest;
+                }
+                this.setState({misses_fields: regexTest});
+            }
+        });
+    }
+
+    onChangeHandler = (field, value) => {
+        let that = this, regex, doby;
+
+        const {F_NAME, M_NAME, L_NAME, MOBILE, DOB, ADDRESS2, ADDRESS1, EMAIL, GENDER, OWNERSHIP, PINCODE} = this.fieldsType;
+
+        // console.log(F_NAME.pattern)
+        switch (field) {
+            case F_NAME:
+                this.setState({f_name: value});
+                break;
+            case M_NAME:
+                this.setState({m_name: value});
+                break;
+            case L_NAME:
+                this.setState({l_name: value});
+                break;
+            case MOBILE:
+                if (value.length <= 10)
+                    this.setState({mobile: value});
+                break;
+            case EMAIL:
+                this.setState({email: value});
+                break;
+            case GENDER:
+                this.setState({gender: value});
+                break;
+            case OWNERSHIP:
+                this.setState({ownership: value});
+                break;
+            case ADDRESS1:
+                this.setState({address1: value});
+                break;
+            case ADDRESS2:
+                this.setState({address2: value});
+                break;
+            case DOB:
+                this.setState({dob: doby});
+                break;
+            case PINCODE:
+                if (value.length <= 6) {
+                    this.setState({pincode: value});
+                }
+                // if (value.length > 3)
+                this._pincodeFetch();
+                break;
+        }
+
+        window.setTimeout(() => {
+            that.props.setAdharManual(that.state);
+            this.validationHandler();
+        }, 10)
+
+    }
+
+    regexTrim = (regex) => {
+        var str = `${regex}`;
+        return (str.split('/')[1]);
+    }
 
     render() {
+        const {F_NAME, M_NAME, L_NAME, MOBILE, DOB, ADDRESS2, ADDRESS1, EMAIL, GENDER, OWNERSHIP, PINCODE} = this.fieldsType;
+
         return (
             <>
                 <Link to={`${PUBLIC_URL}/preapprove/adharpan`} className={"btn btn-link go-back-btn"}>Go
@@ -194,69 +267,54 @@ class PersonalDetail extends Component {
                     <div className={"row"}>
                         <div className={"col-md-4 col-sm-4 col-xs-12"}>
                             <div className="form-group mb-3 ">
-                                <label htmlFor="firstName" className={"bmd-label-floating"}>First Name *</label>
+                                <label htmlFor={F_NAME.id} className={"bmd-label-floating"}>First Name *</label>
                                 <input
-                                    type="text"
+                                    type={F_NAME.type}
                                     className="form-control font_weight"
                                     // placeholder="Full Name"
-                                    pattern="^[a-zA-Z]+$"
-                                    title="Please enter First Name"
-                                    autoCapitalize="characters"
-                                    id="firstName"
-                                    required={true}
+                                    pattern={this.regexTrim(F_NAME.pattern)}
+                                    title={F_NAME.title}
+                                    autoCapitalize={F_NAME.autoCapitalize}
+                                    id={F_NAME.id}
+                                    required={F_NAME.required}
                                     value={this.state.f_name}
-                                    onBlur={() => {
-                                        // this.props.setAdharManual(this.state);
-                                        this.handleValidation()
-                                    }}
                                     // ref={ref => (this.obj.pan = ref)}
-                                    onChange={(e) => {
-                                        this.setState({f_name: e.target.value}, () => this.props.setAdharManual(this.state));
-                                        this.validate.f_name = (e.target.value.length >= 2) ? true : false;
-                                    }}
+                                    onChange={(e) => this.onChangeHandler(F_NAME, e.target.value)}
                                 />
                             </div>
                         </div>
                         <div className={"col-md-4 col-sm-4 col-xs-12"}>
                             <div className="form-group mb-3 ">
-                                <label htmlFor="middleName" className={"bmd-label-floating"}>Middle Name </label>
+                                <label htmlFor={M_NAME.id} className={"bmd-label-floating"}>Middle Name </label>
                                 <input
-                                    type="text"
+                                    type={M_NAME.type}
                                     className="form-control font_weight"
                                     // placeholder="Full Name"
-                                    pattern="^[a-zA-Z]+$"
-                                    title="Please enter Middle Name"
-                                    autoCapitalize="characters"
-                                    id="middleName"
+                                    pattern={this.regexTrim(M_NAME.pattern)}
+                                    title={M_NAME.title}
+                                    autoCapitalize={M_NAME.autoCapitalize}
+                                    id={M_NAME.id}
                                     value={this.state.m_name}
-                                    // onBlur={() => this.props.setAdharManual(this.state)}
                                     // ref={ref => (this.obj.pan = ref)}
-                                    onChange={(e) => this.setState({m_name: e.target.value}, () => this.props.setAdharManual(this.state))}
+                                    onChange={(e) => this.onChangeHandler(M_NAME, e.target.value)}
                                 />
                             </div>
                         </div>
                         <div className={"col-md-4 col-sm-4 col-xs-12"}>
                             <div className="form-group mb-3 ">
-                                <label htmlFor="lastName" className={"bmd-label-floating"}>Last Name *</label>
+                                <label htmlFor={L_NAME.id} className={"bmd-label-floating"}>Last Name *</label>
                                 <input
-                                    type="text"
+                                    type={L_NAME.type}
                                     className="form-control font_weight"
                                     // placeholder="Full Name"
-                                    pattern="^[a-zA-Z]+$"
-                                    title="Please enter Last Name"
-                                    autoCapitalize="characters"
-                                    id="lastName"
-                                    required={true}
+                                    pattern={this.regexTrim(L_NAME.pattern)}
+                                    title={L_NAME.title}
+                                    autoCapitalize={L_NAME.autoCapitalize}
+                                    id={L_NAME.id}
+                                    required={L_NAME.required}
                                     value={this.state.l_name}
-                                    onBlur={() => {
-                                        // this.props.setAdharManual(this.state);
-                                        this.handleValidation()
-                                    }}
                                     // ref={ref => (this.obj.pan = ref)}
-                                    onChange={(e) => {
-                                        this.setState({l_name: e.target.value}, () => this.props.setAdharManual(this.state));
-                                        this.validate.l_name = (e.target.value.length >= 2) ? true : false;
-                                    }}
+                                    onChange={(e) => this.onChangeHandler(L_NAME, e.target.value)}
                                 />
                             </div>
                         </div>
@@ -264,7 +322,7 @@ class PersonalDetail extends Component {
                     <div className={"row"}>
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3">
-                                <label htmlFor="numberMobile"
+                                <label htmlFor={MOBILE.id}
                                        className={"bmd-label-floating"}>Mobile
                                     Number *</label>
                                 <div className={"input-group"}>
@@ -274,76 +332,55 @@ class PersonalDetail extends Component {
                   </span>
                                     </div>
                                     <input
-                                        type="number"
+                                        type={MOBILE.type}
                                         className="form-control font_weight prependInput"
                                         // placeholder="Mobile Number"
-                                        pattern="^[0-9]{10}+$"
-                                        title="Please enter Mobile Number"
-                                        id="numberMobile"
-                                        required={true}
+                                        pattern={this.regexTrim(MOBILE.pattern)}
+                                        title={MOBILE.title}
+                                        id={MOBILE.id}
+                                        required={MOBILE.required}
                                         value={this.state.mobile}
-                                        onBlur={() => {
-                                            // this.props.setAdharManual(this.state);
-                                            this.handleValidation()
-                                        }}
                                         // ref={ref => (this.obj.pan = ref)}
-                                        onChange={(e) => {
-                                            let {value} = e.target;
-                                            if (value.length <= 10)
-                                                this.setState({mobile: value}, () => this.props.setAdharManual(this.state));
-                                            this.validate.mobile = (value.length === 10 || value.length === 11) ? true : false;
-                                            // console.log(value.length);
-                                        }}
+                                        onChange={(e) => this.onChangeHandler(MOBILE, e.target.value)}
                                     />
                                 </div>
                             </div>
                         </div>
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3 ">
-                                <label htmlFor="textEmail" className={"bmd-label-floating"}>Email ID *</label>
+                                <label htmlFor={EMAIL.id} className={"bmd-label-floating"}>Email ID *</label>
                                 <input
-                                    type="text"
+                                    type={EMAIL.type}
                                     className="form-control font_weight"
                                     // placeholder="Email"
-                                    pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
-                                    title="Please enter Email"
-                                    autoCapitalize="characters"
-                                    id="textEmail"
-                                    required={true}
+                                    pattern={this.regexTrim(EMAIL.pattern)}
+                                    title={EMAIL.title}
+                                    autoCapitalize={EMAIL.autoCapitalize}
+                                    id={EMAIL.id}
+                                    required={EMAIL.required}
                                     value={this.state.email}
-                                    onBlur={() => {
-                                        // this.props.setAdharManual(this.state);
-                                        this.handleValidation();
-                                    }}
                                     // ref={ref => (this.obj.pan = ref)}
-                                    onChange={(e) => {
-                                        let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-                                        this.setState({email: e.target.value}, () => this.props.setAdharManual(this.state));
-                                        this.validate.email = (regex.test(e.target.value)) ? true : false;
-                                    }}
+                                    onChange={(e) => this.onChangeHandler(EMAIL, e.target.value)}
                                 />
                             </div>
                         </div>
                     </div>
 
-
                     <div className={"row"}>
                         <div className={"col-sm-6 col-xs-12 col-md-6 text-left"}>
-                            <label htmlFor="ResidenceOwnership" className="d-block bmd-label">
+                            <label htmlFor={GENDER.id} className="d-block bmd-label">
                                 Gender *
                             </label>
                             <div
                                 className="btn-group ToggleBtn"
-                                id="proprietorship"
+                                id={GENDER.id}
                                 role="groupProperty"
                                 aria-label="..."
                             >
                                 <button
-                                    type="button"
+                                    type={GENDER.type}
                                     className="btn btn-default btnLeft"
-                                    onClick={() => {
-                                        this.setState({gender: 'm'}, () => this.props.setAdharManual(this.state));
-                                    }}
+                                    onClick={() => this.onChangeHandler(GENDER, 'm')}
                                     style={{
                                         border:
                                             this.state.gender === "m" && "2px solid #00bfa5",
@@ -355,11 +392,9 @@ class PersonalDetail extends Component {
                                     <small>Male</small>
                                 </button>
                                 <button
-                                    type="button"
+                                    type={GENDER.type}
                                     className="btn btn-default btnRight"
-                                    onClick={() => {
-                                        this.setState({gender: 'f'}, () => this.props.setAdharManual(this.state));
-                                    }}
+                                    onClick={() => this.onChangeHandler(GENDER, 'f')}
                                     style={{
                                         border:
                                             this.state.gender === "f" && "2px solid #00bfa5",
@@ -373,22 +408,20 @@ class PersonalDetail extends Component {
                             </div>
                         </div>
                         <div className={"col-sm-6 col-xs-12 col-md-6 text-left"}>
-                            <label htmlFor="ResidenceOwnership" className="d-block bmd-label">
+                            <label htmlFor={OWNERSHIP.id} className="d-block bmd-label">
                                 Ownership *
                             </label>
                             <div
                                 className="btn-group ToggleBtn"
-                                id="proprietorship"
+                                id={OWNERSHIP.id}
                                 role="groupProperty"
                                 aria-label="..."
                             >
 
                                 <button
-                                    type="button"
+                                    type={OWNERSHIP.type}
                                     className="btn btn-default btnLeft"
-                                    onClick={() => {
-                                        this.setState({ownership: 'rented'}, () => this.props.setAdharManual(this.state));
-                                    }}
+                                    onClick={() => this.onChangeHandler(OWNERSHIP, 'rented')}
                                     style={{
                                         border:
                                             this.state.ownership === "rented" && "2px solid #00bfa5",
@@ -400,11 +433,9 @@ class PersonalDetail extends Component {
                                     <small>Rented</small>
                                 </button>
                                 <button
-                                    type="button"
+                                    type={OWNERSHIP.type}
                                     className="btn btn-default btnRight"
-                                    onClick={() => {
-                                        this.setState({ownership: 'owned'}, () => this.props.setAdharManual(this.state));
-                                    }}
+                                    onClick={() => this.onChangeHandler(OWNERSHIP, 'owned')}
                                     style={{
                                         border:
                                             this.state.ownership === "owned" && "2px solid #00bfa5",
@@ -422,35 +453,27 @@ class PersonalDetail extends Component {
                     <div className={"row"}>
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3 ">
-                                <label htmlFor="textAddress1" className="bmd-label-floating">
+                                <label htmlFor={ADDRESS1.id} className="bmd-label-floating">
                                     Address 1 *
                                 </label>
                                 <input
-                                    type="text"
+                                    type={ADDRESS1.type}
                                     className="form-control font_weight"
                                     // placeholder="Pincode"
-                                    title="Please enter Address 1"
-                                    // pattern={"^[A-Za-z0-9'\\.\\-\\s\\,]{3,}"}
-                                    autoCapitalize="characters"
-                                    id="textAddress1"
-                                    required={true}
+                                    title={ADDRESS1.title}
+                                    pattern={this.regexTrim(ADDRESS1.pattern)}
+                                    autoCapitalize={ADDRESS1.autoCapitalize}
+                                    id={ADDRESS1.id}
+                                    required={ADDRESS1.required}
                                     value={this.state.address1}
-                                    onBlur={() => {
-                                        // this.props.setAdharManual(this.state);
-                                        this.handleValidation();
-                                    }}
                                     // ref={ref => (this.obj.pan = ref)}
-                                    onChange={(e) => {
-                                        const {value} = e.target;
-                                        this.setState({address1: value}, () => this.props.setAdharManual(this.state));
-                                        this.validate.address1 = (value);
-                                    }}
+                                    onChange={(e) => this.onChangeHandler(ADDRESS1, e.target.value)}
                                 />
                             </div>
                         </div>
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3">
-                                <label htmlFor="dobDate" className="bmd-label-floating">
+                                <label htmlFor={DOB.id} className="bmd-label-floating">
                                     Date of Birth
                                 </label>
                                 <div className={'d-block'}>
@@ -458,14 +481,14 @@ class PersonalDetail extends Component {
                                         className="form-control font_weight"
                                         // placeholderText={"Date of Birth"}
                                         selected={new Date(this.state.dob)}
-                                        id={"dobDate"}
-                                        pattern={"^[0-9]{2}/[0-9]{2}/[0-9]{4}$"}
+                                        id={DOB.id}
+                                        pattern={this.regexTrim(DOB.pattern)}
                                         scrollableYearDropdown
                                         showMonthDropdown
-                                        required={true}
+                                        required={DOB.required}
                                         showYearDropdown
-                                        dateFormat={'dd/MM/yyyy'}
-                                        onChange={(date) => this.changeDob(date)}
+                                        dateFormat={DOB.dateFormat}
+                                        onChange={(date) => this.onChangeHandler(DOB, date)}
                                     />
                                 </div>
                             </div>
@@ -475,60 +498,42 @@ class PersonalDetail extends Component {
                     <div className={"row"}>
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3 ">
-                                <label htmlFor="textAddress2" className="bmd-label-floating">
+                                <label htmlFor={ADDRESS2.id} className="bmd-label-floating">
                                     Address 2
                                 </label>
                                 <input
-                                    type="text"
+                                    type={ADDRESS2.type}
                                     className="form-control font_weight"
                                     // placeholder="Pincode"
-                                    title="Please enter Address 2"
-                                    autoCapitalize="characters"
-                                    // pattern={"^.+{3,}"}
-                                    id="textAddress2"
-                                    required={true}
+                                    title={ADDRESS2.title}
+                                    autoCapitalize={ADDRESS2.autoCapitalize}
+                                    pattern={this.regexTrim(ADDRESS2.pattern)}
+                                    id={ADDRESS2.id}
+                                    required={ADDRESS2.required}
                                     value={this.state.address2}
-                                    onBlur={() => {
-                                        // this.props.setAdharManual(this.state);
-                                        // this.handleValidation();
-                                    }}
                                     // ref={ref => (this.obj.pan = ref)}
-                                    onChange={(e) => {
-                                        const {value} = e.target;
-                                        this.setState({address2: value}, () => this.props.setAdharManual(this.state));
-                                        // this.validate.address2 = (value);
-                                    }}
+                                    onChange={(e) => this.onChangeHandler(ADDRESS2, e.target.value)}
                                 />
                             </div>
 
                         </div>
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3">
-                                <label htmlFor="numberPincode" className="bmd-label-floating">
+                                <label htmlFor={PINCODE.id} className="bmd-label-floating">
                                     Pincode *
                                 </label>
                                 <input
-                                    type="number"
+                                    type={PINCODE.type}
                                     className="form-control font_weight"
                                     // placeholder="Pincode"
-                                    pattern="^[0-9]{6}$"
-                                    title="Please enter Pincode"
-                                    autoCapitalize="characters"
-                                    id="numberPincode"
-                                    required={true}
+                                    pattern={this.regexTrim(PINCODE.pattern)}
+                                    title={PINCODE.title}
+                                    autoCapitalize={PINCODE.autoCapitalize}
+                                    id={PINCODE.id}
+                                    required={PINCODE.required}
                                     value={this.state.pincode}
-                                    onBlur={() => {
-                                        // this.props.setAdharManual(this.state);
-                                        this._pincodeFetch();
-                                        this.handleValidation();
-                                    }}
                                     // ref={ref => (this.obj.pan = ref)}
-                                    onChange={(e) => {
-                                        let regex = /^[0-9]{6,7}$/;
-                                        if (e.target.value.length <= 6)
-                                            this.setState({pincode: e.target.value}, () => this.props.setAdharManual(this.state));
-                                        this.validate.pincode = (regex.test(e.target.value));
-                                    }}
+                                    onChange={(e) => this.onChangeHandler(PINCODE, e.target.value)}
                                 />
                             </div>
 

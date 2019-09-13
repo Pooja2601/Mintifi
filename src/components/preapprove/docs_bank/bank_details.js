@@ -17,7 +17,7 @@ import {alertModule, retrieveParam, generateToken} from "../../../shared/common_
 // import "react-datepicker/dist/react-datepicker.css";
 import Select from "react-select";
 import {fetchAPI, apiActions, postAPI} from "../../../api";
-import { checkObject } from "../../../shared/common_logic";
+import {checkObject} from "../../../shared/common_logic";
 
 
 const {PUBLIC_URL} = process.env;
@@ -290,7 +290,7 @@ class BankDetail extends Component {
                                     // ref={ref => (this.obj.pan = ref)}
                                     onChange={e => {
                                         let {value} = e.target;
-                                        this.validate.acc_name = value.length > 2;
+                                        this.validate.acc_name = value.length > 3;
                                         this.setState({acc_name: value}, () =>
                                             this.props.setBankDetail(this.state)
                                         );
