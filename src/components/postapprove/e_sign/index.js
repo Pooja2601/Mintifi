@@ -167,8 +167,10 @@ class ESign extends Component {
             // window.setTimeout(() => window.location.href = `${eSignPayload.error_url}`, 5000);
         }
 
+
         // ToDo : Navigating to anchor urls
         if (resp.status === apiActions.SUCCESS_RESPONSE) {
+            let redLocation = `${eSignPayload.success_url}`;
             if (resp.data.success) {
                 showAlert(
                     "Looks like we're done with eSign, redirecting you to Anchor portal",
@@ -176,8 +178,11 @@ class ESign extends Component {
                 );
                 this.popUpWindow.close();
                 this.setState({checkStatus: false});
+                if (checkObject(this.props.payload)) {
+                    redLocation = `${PUBLIC_URL}/emandate?payload=${eSignPayload}&token=${token}`;
+                }
                 window.setTimeout(
-                    () => (window.location.href = `${eSignPayload.success_url}`),
+                    () => (window.location.href = `${redLocation}`),
                     4000
                 );
             }
@@ -278,14 +283,21 @@ class ESign extends Component {
                 </div>
                 <br/>
                 <div className="mt-5 mb-4 text-center">
-                    <button
-                        type="button"
-                        onClick={e => this._triggerESign()}
-                        disabled={!checkObject(eSignPayload) || !token}
-                        className="form-submit btn btn-raised greenButton"
-                    >
-                        {this.state.checkStatus ? "Check E-SIGN Status" : "Initiate E-SIGN"}
-                    </button>
+                    {this.state.checkStatus ?
+                        <button type="button"
+                                onClick={e => this._pingDBStatus()}
+                                disabled={!checkObject(eSignPayload) || !token}
+                                className="form-submit btn btn-raised greenButton">
+                            Check E-SIGN Status
+                        </button> : <button
+                            type="button"
+                            onClick={e => this._triggerESign()}
+                            disabled={!checkObject(eSignPayload) || !token}
+                            className="form-submit btn btn-raised greenButton"
+                        >
+                            Initiate E-SIGN
+                        </button>}
+
                 </div>
             </>
         );
@@ -295,7 +307,8 @@ class ESign extends Component {
 const mapStateToProps = state => ({
     token: state.eSignReducer.token,
     eSignPayload: state.eSignReducer.eSignPayload,
-    eSignAttempt: state.eSignReducer.eSignAttempt
+    eSignAttempt: state.eSignReducer.eSignAttempt,
+    payload: state.authPayload.payload,
 });
 
 export default withRouter(

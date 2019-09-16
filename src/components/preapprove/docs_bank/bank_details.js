@@ -17,7 +17,7 @@ import {alertModule, retrieveParam, generateToken, base64Logic} from "../../../s
 // import "react-datepicker/dist/react-datepicker.css";
 import Select from "react-select";
 import {fetchAPI, apiActions, postAPI} from "../../../api";
-import { checkObject } from "../../../shared/common_logic";
+import {checkObject} from "../../../shared/common_logic";
 
 
 const {PUBLIC_URL} = process.env;
@@ -92,17 +92,17 @@ class BankDetail extends Component {
 
     _genAuthToken = async () => {
         const {history, changeLoader, showAlert, payload, preFlightResp} = this.props;
-        
+
         changeLoader(true);
-      let payloadData={
-        anchor_id: payload.anchor_id,
-        loan_application_id: preFlightResp.loan_application_id,
-        company_id: preFlightResp.company_id,
-        success_url: payload.success_url,
-        error_url: payload.error_url,
-        cancel_url: payload.cancel_url,
-      }
-      let base64_encode = base64Logic(payloadData, 'encode');
+        let payloadData = {
+            anchor_id: payload.anchor_id,
+            loan_application_id: preFlightResp.loan_application_id,
+            company_id: preFlightResp.company_id,
+            success_url: payload.success_url,
+            error_url: payload.error_url,
+            cancel_url: payload.cancel_url,
+        }
+        let base64_encode = base64Logic(payloadData, 'encode');
         const resp = await generateToken();
         changeLoader(false);
 
@@ -123,7 +123,7 @@ class BankDetail extends Component {
                     500
                 );
         } else if (resp == 30) {
-            showAlert("Something went while creating Token", "warn");
+            showAlert("Something went wrong while creating Token", "warn");
         }
 
     };
@@ -246,12 +246,11 @@ class BankDetail extends Component {
 
         }
 
-
         // console.log(this.props.gstProfile)
         changeLoader(false);
         setTimeout(() => this.handleValidation(), 500);
         // console.log(this.props.adharObj);
-        
+
     }
 
     render() {
