@@ -228,6 +228,10 @@ class BankDetail extends Component {
     componentDidMount() {
         const {bankObj, setBankDetail, changeLoader, adharObj} = this.props;
 
+        if (checkObject(adharObj)) {
+            const {f_name, l_name} = adharObj;
+            this.setState({acc_name: `${f_name} ${l_name}`}, () => setBankDetail(this.state));
+        }
         if (checkObject(bankObj))
             this.setState(bankObj, () => {
                 Object.keys(this.state).map((val, key) => {
@@ -241,13 +245,7 @@ class BankDetail extends Component {
                 });
             });
         else setBankDetail(this.state);
-
-        if (checkObject(adharObj)) {
-            const {f_name, l_name} = adharObj;
-            this.setState({acc_name: `${f_name} ${l_name}`}, () => setBankDetail(this.state));
-
-        }
-
+        
         // console.log(this.props.gstProfile)
         changeLoader(false);
         setTimeout(() => this.handleValidation(), 2000);
