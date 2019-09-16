@@ -212,7 +212,7 @@ class MobileOtp extends Component {
                     {/*<br/>*/}
                     Please verify your mobile number.
                 </p>
-                <form id="serverless-contact-form">
+                <div id="serverless-contact-form">
                     <div className={"row"}>
                         <div className={"col-sm-11 col-md-8 m-auto"}>
                             <div className="form-group mb-3">
@@ -300,7 +300,6 @@ class MobileOtp extends Component {
 
                     <div className="mt-3 mb-2 text-center ">
                         <button
-                            type="submit"
                             name="submit"
                             style={{
                                 visibility:
@@ -329,7 +328,7 @@ class MobileOtp extends Component {
                             Verify OTP
                         </button>
                     </div>
-                </form>
+                </div>
             </>
         );
     }

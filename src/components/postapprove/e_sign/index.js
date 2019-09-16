@@ -147,6 +147,7 @@ class ESign extends Component {
             history
         } = this.props;
 
+        let base64_encoded = ''
         this.counterPing -= 1;
 
         const reqParam = `loan_application_id=${eSignPayload.loan_application_id}&document_type=agreement_document`;
@@ -178,8 +179,9 @@ class ESign extends Component {
                 );
                 this.popUpWindow.close();
                 this.setState({checkStatus: false});
-                if (checkObject(this.props.payload)) {
-                    redLocation = `${PUBLIC_URL}/emandate?payload=${eSignPayload}&token=${token}`;
+                if (checkObject(this.props.payload)) { /// check if coming from React Flow
+                    base64_encoded = base64Logic(eSignPayload, 'encode');
+                    redLocation = `${PUBLIC_URL}/emandate?payload=${base64_encoded}&token=${token}`;
                 }
                 window.setTimeout(
                     () => (window.location.href = `${redLocation}`),

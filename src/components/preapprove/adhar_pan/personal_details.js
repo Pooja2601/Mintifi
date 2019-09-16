@@ -175,6 +175,7 @@ class PersonalDetail extends Component {
                     this.setState({city: '', state: ''});
                 }
 
+
             }
     };
 
@@ -225,6 +226,7 @@ class PersonalDetail extends Component {
                 this.tempState[field.slug] = value;
                 break
         }
+
 
         this.setState({...this.state, ...this.tempState});
 
@@ -443,6 +445,7 @@ class PersonalDetail extends Component {
                     </div>
 
                     <div className={"row"}>
+
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3 ">
                                 <label htmlFor={ADDRESS1.id} className="bmd-label-floating">
@@ -463,6 +466,7 @@ class PersonalDetail extends Component {
                                 />
                             </div>
                         </div>
+
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3">
                                 <label htmlFor={DOB.id} className="bmd-label-floating">
@@ -485,18 +489,18 @@ class PersonalDetail extends Component {
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div className={"row"}>
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3 ">
+
                                 <label htmlFor={ADDRESS2.id} className="bmd-label-floating">
                                     Address 2
+
                                 </label>
                                 <input
                                     type={ADDRESS2.type}
                                     className="form-control font_weight"
                                     // placeholder="Pincode"
+
                                     title={ADDRESS2.title}
                                     autoCapitalize={ADDRESS2.autoCapitalize}
                                     pattern={this.regexTrim(ADDRESS2.pattern)}
@@ -505,10 +509,14 @@ class PersonalDetail extends Component {
                                     value={this.state.address2}
                                     // ref={ref => (this.obj.pan = ref)}
                                     onChange={(e) => this.onChangeHandler(ADDRESS2, e.target.value)}
+
                                 />
                             </div>
-
                         </div>
+                    </div>
+
+                    <div className={"row"}>
+
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3">
                                 <label htmlFor={PINCODE.id} className="bmd-label-floating">
@@ -526,6 +534,7 @@ class PersonalDetail extends Component {
                                     value={this.state.pincode}
                                     // ref={ref => (this.obj.pan = ref)}
                                     onChange={(e) => this.onChangeHandler(PINCODE, e.target.value)}
+
                                 />
                             </div>
 
