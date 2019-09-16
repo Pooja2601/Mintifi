@@ -41,6 +41,8 @@ class PersonalDetail extends Component {
         missed_fields: true
     };
 
+    tempState = this.state;
+
     validate = {
         f_name: false,
         // m_name: false,
@@ -95,6 +97,7 @@ class PersonalDetail extends Component {
 
     }
 
+    // incoming from GST profile
     _loadGstProfile() {
         const {gstProfile, setAdharManual} = this.props;
         let tempName;
@@ -180,12 +183,13 @@ class PersonalDetail extends Component {
                 // console.log(regexTest);
                 if (!regexTest) {
                     showAlert(val[1].error);
-                    // return regexTest;
+                    this.setState({misses_fields: regexTest});
+                    return regexTest;
                 } else {
                     showAlert();
                     // return regexTest;
                 }
-                this.setState({misses_fields: regexTest});
+
             }
         });
     }
@@ -195,47 +199,25 @@ class PersonalDetail extends Component {
 
         const {F_NAME, M_NAME, L_NAME, MOBILE, DOB, ADDRESS2, ADDRESS1, EMAIL, GENDER, OWNERSHIP, PINCODE} = this.fieldsType;
 
-        // console.log(F_NAME.pattern)
         switch (field) {
-            case F_NAME:
-                this.setState({f_name: value});
-                break;
-            case M_NAME:
-                this.setState({m_name: value});
-                break;
-            case L_NAME:
-                this.setState({l_name: value});
-                break;
+
             case MOBILE:
                 if (value.length <= 10)
-                    this.setState({mobile: value});
+                    this.tempState['mobile'] = value;
                 break;
-            case EMAIL:
-                this.setState({email: value});
-                break;
-            case GENDER:
-                this.setState({gender: value});
-                break;
-            case OWNERSHIP:
-                this.setState({ownership: value});
-                break;
-            case ADDRESS1:
-                this.setState({address1: value});
-                break;
-            case ADDRESS2:
-                this.setState({address2: value});
-                break;
-            case DOB:
-                this.setState({dob: doby});
-                break;
+
             case PINCODE:
-                if (value.length <= 6) {
-                    this.setState({pincode: value});
-                }
+                if (value.length <= 6)
+                    this.tempState['pincode'] = value;
+
                 // if (value.length > 3)
-                this._pincodeFetch();
+                // this._pincodeFetch();
                 break;
+            default:
+                this.tempState[field.slug] = value;
         }
+
+        this.setState({...this.state, ...this.tempState});
 
         window.setTimeout(() => {
             that.props.setAdharManual(that.state);
