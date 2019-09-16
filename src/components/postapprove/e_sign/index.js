@@ -244,13 +244,19 @@ class ESign extends Component {
         // window.setTimeout(() => this._triggerESign(), 1000);
         this.props.EsignsetAttempt(0);
         window.setInterval(() => {
-            if (this.popUpWindow.closed) {
+            try {
+                if (this.popUpWindow)
+                    if (this.popUpWindow.closed) {
+                        this.setState({checkStatus: false});
+                    } else if (this.popUpWindow.closed === undefined) {
+                        this.setState({checkStatus: false});
+                    } else {
+                        this.setState({checkStatus: true});
+                    }
+            } catch (e) {
                 this.setState({checkStatus: false});
-            } else if (this.popUpWindow.closed === undefined) {
-                this.setState({checkStatus: false});
-            } else {
-                this.setState({checkStatus: true});
             }
+
         }, 10000);
     }
 

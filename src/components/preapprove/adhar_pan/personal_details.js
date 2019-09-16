@@ -10,7 +10,9 @@ import "react-datepicker/dist/react-datepicker.css";
 // import {alertModule} from "../../../shared/common_logic";
 import {fetchAPI, apiActions, postAPI} from "../../../api";
 import {checkObject} from "../../../shared/common_logic";
+
 import {validation} from "./validation";
+
 
 const {PUBLIC_URL} = process.env;
 
@@ -83,7 +85,7 @@ class PersonalDetail extends Component {
             this.setState(state, () => {
                 Object.keys(this.state).map((val, key) => {
                     if (this.validate[val] !== undefined)
-                        this.validate[val] = (this.state[val].length > 0);
+                        this.validate[val] = (this.state[val].length);
                     // console.log(this.validate);
                 });
             });

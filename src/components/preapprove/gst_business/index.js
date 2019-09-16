@@ -10,7 +10,7 @@ import {PrivacyPolicy, TnCPolicy} from "../../../shared/policy";
 import Select from "react-select";
 // import DatePicker from "react-datepicker";
 // import "react-datepicker/dist/react-datepicker.css";
-import { checkObject } from "../../../shared/common_logic";
+import {checkObject} from "../../../shared/common_logic";
 
 const {PUBLIC_URL} = process.env;
 
@@ -132,7 +132,7 @@ class BusinessDetail extends Component {
         if (checkObject(payload)) {
             if (!checkObject(adharObj))
                 history.push(`${PUBLIC_URL}/preapprove/personaldetail`);
-                
+
         } else history.push(`${PUBLIC_URL}/preapprove/token`);
 
         // console.log(this.props.gstProfile)
@@ -142,7 +142,6 @@ class BusinessDetail extends Component {
 
     componentDidMount() {
         const {businessObj, payload, setBusinessDetail} = this.props;
-        setTimeout(() => this.handleValidation(), 1000);
         // console.log(adharObj);
 
         if (checkObject(businessObj)) {
@@ -151,9 +150,10 @@ class BusinessDetail extends Component {
             this.setState(businessObj, () => {
                 Object.keys(this.state).map((val, key) => {
                     if (this.validate[val] !== undefined)
-                        this.validate[val] = (this.state[val].length > 0);
+                        this.validate[val] = (this.state[val].length);
                     if (val == 'companytype')
                         this.validate.companytype = false; // Clearing the dropdown validation
+
                 });
             });
 
@@ -175,10 +175,12 @@ class BusinessDetail extends Component {
             console.log(e);
         }
 
+        setTimeout(() => this.handleValidation(), 2000);
+
     }
 
     render() {
-        
+
         const gstProfile = this.props.gstProfile;
         return (
             <>
