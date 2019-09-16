@@ -447,27 +447,6 @@ class PersonalDetail extends Component {
                     <div className={"row"}>
 
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
-                            <div className="form-group mb-3 ">
-                                <label htmlFor={ADDRESS1.id} className="bmd-label-floating">
-                                    Address 1 *
-                                </label>
-                                <input
-                                    type={ADDRESS1.type}
-                                    className="form-control font_weight"
-                                    // placeholder="Pincode"
-                                    title={ADDRESS1.title}
-                                    pattern={this.regexTrim(ADDRESS1.pattern)}
-                                    autoCapitalize={ADDRESS1.autoCapitalize}
-                                    id={ADDRESS1.id}
-                                    required={ADDRESS1.required}
-                                    value={this.state.address1}
-                                    // ref={ref => (this.obj.pan = ref)}
-                                    onChange={(e) => this.onChangeHandler(ADDRESS1, e.target.value)}
-                                />
-                            </div>
-                        </div>
-
-                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3">
                                 <label htmlFor={DOB.id} className="bmd-label-floating">
                                     Date of Birth
@@ -491,28 +470,25 @@ class PersonalDetail extends Component {
                         </div>
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3 ">
-
-                                <label htmlFor={ADDRESS2.id} className="bmd-label-floating">
-                                    Address 2
-
+                                <label htmlFor={ADDRESS1.id} className="bmd-label-floating">
+                                    Address 1 *
                                 </label>
                                 <input
-                                    type={ADDRESS2.type}
+                                    type={ADDRESS1.type}
                                     className="form-control font_weight"
                                     // placeholder="Pincode"
-
-                                    title={ADDRESS2.title}
-                                    autoCapitalize={ADDRESS2.autoCapitalize}
-                                    pattern={this.regexTrim(ADDRESS2.pattern)}
-                                    id={ADDRESS2.id}
-                                    required={ADDRESS2.required}
-                                    value={this.state.address2}
+                                    title={ADDRESS1.title}
+                                    pattern={this.regexTrim(ADDRESS1.pattern)}
+                                    autoCapitalize={ADDRESS1.autoCapitalize}
+                                    id={ADDRESS1.id}
+                                    required={ADDRESS1.required}
+                                    value={this.state.address1}
                                     // ref={ref => (this.obj.pan = ref)}
-                                    onChange={(e) => this.onChangeHandler(ADDRESS2, e.target.value)}
-
+                                    onChange={(e) => this.onChangeHandler(ADDRESS1, e.target.value)}
                                 />
                             </div>
                         </div>
+                        
                     </div>
 
                     <div className={"row"}>
@@ -538,6 +514,30 @@ class PersonalDetail extends Component {
                                 />
                             </div>
 
+                        </div>
+                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
+                            <div className="form-group mb-3 ">
+
+                                <label htmlFor={ADDRESS2.id} className="bmd-label-floating">
+                                    Address 2
+
+                                </label>
+                                <input
+                                    type={ADDRESS2.type}
+                                    className="form-control font_weight"
+                                    // placeholder="Pincode"
+
+                                    title={ADDRESS2.title}
+                                    autoCapitalize={ADDRESS2.autoCapitalize}
+                                    pattern={this.regexTrim(ADDRESS2.pattern)}
+                                    id={ADDRESS2.id}
+                                    required={ADDRESS2.required}
+                                    value={this.state.address2}
+                                    // ref={ref => (this.obj.pan = ref)}
+                                    onChange={(e) => this.onChangeHandler(ADDRESS2, e.target.value)}
+
+                                />
+                            </div>
                         </div>
                     </div>
                     <div className={"row mt-4"}
