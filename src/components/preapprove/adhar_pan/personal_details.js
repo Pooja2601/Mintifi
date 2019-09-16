@@ -217,10 +217,10 @@ class PersonalDetail extends Component {
                 break;
 
             case PINCODE:
-                if (value.length <= 6)
+                if (value.length <= 6) {
                     this.tempState['pincode'] = value;
-
-                this._pincodeFetch();
+                    this._pincodeFetch();
+                }
                 break;
             default:
                 this.tempState[field.slug] = value;
@@ -488,7 +488,7 @@ class PersonalDetail extends Component {
                                 />
                             </div>
                         </div>
-                        
+
                     </div>
 
                     <div className={"row"}>
@@ -508,6 +508,7 @@ class PersonalDetail extends Component {
                                     id={PINCODE.id}
                                     required={PINCODE.required}
                                     value={this.state.pincode}
+                                    onBlur={() => this._pincodeFetch()}
                                     // ref={ref => (this.obj.pan = ref)}
                                     onChange={(e) => this.onChangeHandler(PINCODE, e.target.value)}
 
