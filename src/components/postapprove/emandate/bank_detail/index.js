@@ -241,7 +241,7 @@ class ENachBankDetail extends Component {
 
                 window.setTimeout(() => that.handleValidation(), 50);
                 EnachsetBankDetail(that.state);
-            }, 50);
+            }, 500);
 
         }
     }
@@ -262,7 +262,9 @@ class ENachBankDetail extends Component {
             this.setState(bankObj, () => {
                 Object.keys(this.state).map((val, key) => {
                     if (this.validate[val] !== undefined)
-                        this.validate[val] = this.state[val].length > 0;
+                        this.validate[val] = this.state[val].length;
+                    if (val === 'acc_name')
+                        this.validate[val] = this.state[val].length;
                     // console.log(this.validate);
                 });
             });

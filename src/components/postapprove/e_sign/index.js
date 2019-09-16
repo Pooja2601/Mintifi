@@ -161,7 +161,7 @@ class ESign extends Component {
         const resp = await fetchAPI(options);
 
         if (resp.status === apiActions.ERROR_RESPONSE) {
-            if (resp.data.code)
+            if (resp.data.code !== 'ER-ES-101')
                 showAlert(resp.data.message, "warn");
             // ToDo : need to look after it
             // this.popUpWindow.close();

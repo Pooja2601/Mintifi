@@ -511,7 +511,7 @@ class PersonalDetail extends Component {
                                     onBlur={() => this._pincodeFetch()}
                                     // ref={ref => (this.obj.pan = ref)}
                                     onChange={(e) => this.onChangeHandler(PINCODE, e.target.value)}
-
+                                    
                                 />
                             </div>
 
