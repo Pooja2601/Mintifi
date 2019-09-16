@@ -233,8 +233,10 @@ class BankDetail extends Component {
                 Object.keys(this.state).map((val, key) => {
                     if (this.validate[val] !== undefined)
                         this.validate[val] = this.state[val].length > 0;
-                    if (val == 'acc_type')
+                    if (val === 'acc_type')
                         this.validate[val] = false;
+                    if (val === 'acc_name' && this.state[val])
+                        this.validate[val] = this.state[val];
                     // console.log(this.validate);
                 });
             });
@@ -248,7 +250,7 @@ class BankDetail extends Component {
 
         // console.log(this.props.gstProfile)
         changeLoader(false);
-        setTimeout(() => this.handleValidation(), 500);
+        setTimeout(() => this.handleValidation(), 2000);
         // console.log(this.props.adharObj);
 
     }
