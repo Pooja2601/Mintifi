@@ -235,7 +235,7 @@ class BankDetail extends Component {
                         this.validate[val] = this.state[val].length > 0;
                     if (val === 'acc_type')
                         this.validate[val] = false;
-                    if (val === 'acc_name' && this.state[val])
+                    if (val === 'acc_name')
                         this.validate[val] = this.state[val];
                     // console.log(this.validate);
                 });

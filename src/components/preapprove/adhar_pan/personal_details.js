@@ -421,6 +421,29 @@ class PersonalDetail extends Component {
                     </div>
 
                     <div className={"row"}>
+
+                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
+                            <div className="form-group mb-3">
+                                <label htmlFor="dobDate" className="bmd-label-floating">
+                                    Date of Birth
+                                </label>
+                                <div className={'d-block'}>
+                                    <DatePicker
+                                        className="form-control font_weight"
+                                        // placeholderText={"Date of Birth"}
+                                        selected={new Date(this.state.dob)}
+                                        id={"dobDate"}
+                                        pattern={"^[0-9]{2}/[0-9]{2}/[0-9]{4}$"}
+                                        scrollableYearDropdown
+                                        showMonthDropdown
+                                        required={true}
+                                        showYearDropdown
+                                        dateFormat={'dd/MM/yyyy'}
+                                        onChange={(date) => this.changeDob(date)}
+                                    />
+                                </div>
+                            </div>
+                        </div>
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3 ">
                                 <label htmlFor="textAddress1" className="bmd-label-floating">
@@ -449,60 +472,10 @@ class PersonalDetail extends Component {
                                 />
                             </div>
                         </div>
-                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
-                            <div className="form-group mb-3">
-                                <label htmlFor="dobDate" className="bmd-label-floating">
-                                    Date of Birth
-                                </label>
-                                <div className={'d-block'}>
-                                    <DatePicker
-                                        className="form-control font_weight"
-                                        // placeholderText={"Date of Birth"}
-                                        selected={new Date(this.state.dob)}
-                                        id={"dobDate"}
-                                        pattern={"^[0-9]{2}/[0-9]{2}/[0-9]{4}$"}
-                                        scrollableYearDropdown
-                                        showMonthDropdown
-                                        required={true}
-                                        showYearDropdown
-                                        dateFormat={'dd/MM/yyyy'}
-                                        onChange={(date) => this.changeDob(date)}
-                                    />
-                                </div>
-                            </div>
-                        </div>
                     </div>
 
                     <div className={"row"}>
-                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
-                            <div className="form-group mb-3 ">
-                                <label htmlFor="textAddress2" className="bmd-label-floating">
-                                    Address 2
-                                </label>
-                                <input
-                                    type="text"
-                                    className="form-control font_weight"
-                                    // placeholder="Pincode"
-                                    title="Please enter Address 2"
-                                    autoCapitalize="characters"
-                                    // pattern={"^.+{3,}"}
-                                    id="textAddress2"
-                                    required={true}
-                                    value={this.state.address2}
-                                    onBlur={() => {
-                                        // this.props.setAdharManual(this.state);
-                                        // this.handleValidation();
-                                    }}
-                                    // ref={ref => (this.obj.pan = ref)}
-                                    onChange={(e) => {
-                                        const {value} = e.target;
-                                        this.setState({address2: value}, () => this.props.setAdharManual(this.state));
-                                        // this.validate.address2 = (value);
-                                    }}
-                                />
-                            </div>
 
-                        </div>
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3">
                                 <label htmlFor="numberPincode" className="bmd-label-floating">
@@ -530,6 +503,35 @@ class PersonalDetail extends Component {
                                             this.setState({pincode: e.target.value}, () => this.props.setAdharManual(this.state));
                                         this.validate.pincode = (regex.test(e.target.value));
                                         this._pincodeFetch();
+                                    }}
+                                />
+                            </div>
+
+                        </div>
+                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
+                            <div className="form-group mb-3 ">
+                                <label htmlFor="textAddress2" className="bmd-label-floating">
+                                    Address 2
+                                </label>
+                                <input
+                                    type="text"
+                                    className="form-control font_weight"
+                                    // placeholder="Pincode"
+                                    title="Please enter Address 2"
+                                    autoCapitalize="characters"
+                                    // pattern={"^.+{3,}"}
+                                    id="textAddress2"
+                                    required={true}
+                                    value={this.state.address2}
+                                    onBlur={() => {
+                                        // this.props.setAdharManual(this.state);
+                                        // this.handleValidation();
+                                    }}
+                                    // ref={ref => (this.obj.pan = ref)}
+                                    onChange={(e) => {
+                                        const {value} = e.target;
+                                        this.setState({address2: value}, () => this.props.setAdharManual(this.state));
+                                        // this.validate.address2 = (value);
                                     }}
                                 />
                             </div>
