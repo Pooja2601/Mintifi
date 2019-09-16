@@ -70,8 +70,9 @@ class PersonalDetail extends Component {
             history.push(`${PUBLIC_URL}/preapprove/token`);
 
         let state = adharObj;
+        this.tempState = Object.assign({}, this.state);
 
-        // console.log(state);
+        // console.log(this.tempState);
 
         if (checkObject(authObj))
             if (authObj.verified && checkObject(state))
@@ -87,6 +88,8 @@ class PersonalDetail extends Component {
                 });
             });
         else setAdharManual(this.state);
+
+        this.tempState = Object.assign({}, this.state);
 
         setTimeout(() => {
             this._loadGstProfile();
@@ -142,7 +145,6 @@ class PersonalDetail extends Component {
         // this.setState({missed_fields}, () => console.log('All Fields Validated : ' + this.state.missed_fields));
     }
 
-
     _pincodeFetch = async () => {
         //http://postalpincode.in/api/pincode/
         //https://test.mintifi.com/api/v2/communications/pincode/400059
@@ -172,33 +174,45 @@ class PersonalDetail extends Component {
         }
     };
 
-    fieldsType = Object.assign({}, validation);
 
     // ToDo : should be independent of a field
     validationHandler = () => {
         const {showAlert} = this.props;
-        Object.entries(this.fieldsType).map((val, key) => {
-            if (val[1].required) {
-                let regexTest = (val[1].pattern).test(this.state[val[1].slug]);
-                // console.log(regexTest);
-                if (!regexTest) {
-                    showAlert(val[1].error);
-                    this.setState({misses_fields: regexTest});
-                    return regexTest;
-                } else {
-                    showAlert();
-                    // return regexTest;
-                }
+        let misses_fields = false;
+        /*
+                for (const val of this.fieldsType) {
+                    console.log(val[1].slug)
+                }*/
 
+        Object.entries(validation).some((val, key) => {
+            if (val[1].required) {
+                if (this.state[val[1].slug]) {
+                    let regexTest = (val[1].pattern).test(this.state[val[1].slug]);
+                    console.log(val[1]);
+                    if (!regexTest) {
+                        showAlert(val[1].error);
+                        misses_fields = !regexTest;
+
+                        return regexTest;
+                    } else {
+                        // showAlert();
+                        return regexTest;
+                    }
+                }
             }
         });
+        this.setState({misses_fields});
     }
 
     onChangeHandler = (field, value) => {
         let that = this, regex, doby;
 
-        const {F_NAME, M_NAME, L_NAME, MOBILE, DOB, ADDRESS2, ADDRESS1, EMAIL, GENDER, OWNERSHIP, PINCODE} = this.fieldsType;
+        // fields is Equivalent to F_NAME , L_NAME... thats an object
 
+        // ToDo : comment those that are not required
+        const {F_NAME, M_NAME, L_NAME, MOBILE, DOB, ADDRESS2, ADDRESS1, EMAIL, GENDER, OWNERSHIP, PINCODE} = validation;
+
+        this.tempState = Object.assign({}, this.state);
         switch (field) {
 
             case MOBILE:
@@ -215,6 +229,7 @@ class PersonalDetail extends Component {
                 break;
             default:
                 this.tempState[field.slug] = value;
+                break
         }
 
         this.setState({...this.state, ...this.tempState});
@@ -232,7 +247,7 @@ class PersonalDetail extends Component {
     }
 
     render() {
-        const {F_NAME, M_NAME, L_NAME, MOBILE, DOB, ADDRESS2, ADDRESS1, EMAIL, GENDER, OWNERSHIP, PINCODE} = this.fieldsType;
+        const {F_NAME, M_NAME, L_NAME, MOBILE, DOB, ADDRESS2, ADDRESS1, EMAIL, GENDER, OWNERSHIP, PINCODE} = validation;
 
         return (
             <>

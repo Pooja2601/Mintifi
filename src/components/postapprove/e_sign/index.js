@@ -243,7 +243,6 @@ class ESign extends Component {
     componentDidMount() {
         // window.setTimeout(() => this._triggerESign(), 1000);
         this.props.EsignsetAttempt(0);
-        // setInterval(() => console.log(">>close", this.popUpWindow.closed), 1000);
         window.setInterval(() => {
             if (this.popUpWindow.closed) {
                 this.setState({checkStatus: false});
@@ -253,7 +252,6 @@ class ESign extends Component {
                 this.setState({checkStatus: true});
             }
         }, 10000);
-        // setInterval(() => console.log(">>>>>>>>.", this.checkStatusPopup), 1000);
     }
 
     render() {

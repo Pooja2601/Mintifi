@@ -41,7 +41,7 @@ export const validation = {
     EMAIL: {
         slug: 'email',
         type: "text",
-        pattern: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+        pattern: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
         title: "Please enter Email",
         error: "Invalid Email",
         required: true,
@@ -51,14 +51,14 @@ export const validation = {
     GENDER: {
         slug: 'gender',
         type: "button",
-        required: true,
+        required: false,
         id: 'genderHuman',
         pattern: /^[a-z]$/,
     },
     OWNERSHIP: {
         slug: 'ownership',
         type: "button",
-        required: true,
+        required: false,
         id: 'residenceOwnership',
         pattern: /^[a-z]+$/
     },
