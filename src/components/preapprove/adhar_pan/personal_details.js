@@ -499,10 +499,12 @@ class PersonalDetail extends Component {
                                     // ref={ref => (this.obj.pan = ref)}
                                     onChange={(e) => {
                                         let regex = /^[0-9]{6,7}$/;
-                                        if (e.target.value.length <= 6)
+                                        if (e.target.value.length <= 6) {
                                             this.setState({pincode: e.target.value}, () => this.props.setAdharManual(this.state));
+                                            // this._pincodeFetch();
+                                        }
                                         this.validate.pincode = (regex.test(e.target.value));
-                                        this._pincodeFetch();
+                                        // this._pincodeFetch();
                                     }}
                                 />
                             </div>
