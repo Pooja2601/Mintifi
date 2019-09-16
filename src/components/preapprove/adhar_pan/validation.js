@@ -1,4 +1,4 @@
-export const validation = {
+export const validationPersonalDetails = {
     F_NAME: {
         slug: "f_name",
         type: "text",
@@ -85,7 +85,7 @@ export const validation = {
     DOB: {
         slug: 'dob',
         id: 'dobDate',
-        required: true,
+        required: false,
         dateFormat: "dd/MM/yyyy",
         pattern: /^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/,
     },

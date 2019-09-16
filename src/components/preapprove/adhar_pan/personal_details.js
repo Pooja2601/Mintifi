@@ -11,7 +11,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import {fetchAPI, apiActions, postAPI} from "../../../api";
 import {checkObject} from "../../../shared/common_logic";
 
-import {validation} from "./validation";
+import {validationPersonalDetails} from "./validation";
 
 
 const {PUBLIC_URL} = process.env;
@@ -95,7 +95,7 @@ class PersonalDetail extends Component {
 
         setTimeout(() => {
             this._loadGstProfile();
-            this.handleValidation();
+            this.validationHandler();
             // console.log(adharObj);
         }, 1000);
         changeLoader(false);
@@ -133,7 +133,7 @@ class PersonalDetail extends Component {
 
     }
 
-    handleValidation() {
+    /*handleValidation() {
         let ctrerror = 6, missed_fields;
         // let missed_fields = Object.keys(this.validate).some(x => this.validate[x]);
         Object.values(this.validate).map((val, key) => {
@@ -145,74 +145,67 @@ class PersonalDetail extends Component {
         missed_fields = (ctrerror !== 0);
         this.setState({missed_fields});
         // this.setState({missed_fields}, () => console.log('All Fields Validated : ' + this.state.missed_fields));
-    }
+    }*/
 
     _pincodeFetch = async () => {
         //http://postalpincode.in/api/pincode/
         //https://test.mintifi.com/api/v2/communications/pincode/400059
         let city, state;
         const {setAdharManual, changeLoader, showAlert} = this.props;
-        if (this.state.pincode) {
-            const options = {
-                token: null,
-                URL: `${otpUrl}/pincode/${this.state.pincode}`,
-                showAlert: showAlert,
-                changeLoader: changeLoader
+        if (this.state.pincode)
+            if (this.state.pincode.length >= 6) {
+
+                const options = {
+                    token: null,
+                    URL: `${otpUrl}/pincode/${this.state.pincode}`,
+                    showAlert: showAlert,
+                    changeLoader: changeLoader
+                }
+
+                const resp = await fetchAPI(options);
+
+                if (resp.status === apiActions.SUCCESS_RESPONSE) {
+                    // TODO: Check for success response
+
+                    city = resp.data.city;
+                    state = resp.data.state;
+                    this.setState({city, state}, () => setAdharManual(this.state));
+                } else if (resp.status === apiActions.ERROR_RESPONSE) {
+                    showAlert(resp.data.message, 'warn');
+                    this.setState({city: '', state: ''});
+                }
+
             }
-
-            const resp = await fetchAPI(options);
-
-            if (resp.status === apiActions.SUCCESS_RESPONSE) {
-                // TODO: Check for success response  
-
-                city = resp.data.city;
-                state = resp.data.state;
-                this.setState({city, state}, () => setAdharManual(this.state));
-            } else if (resp.status === apiActions.ERROR_RESPONSE) {
-                showAlert(resp.data.message, 'warn');
-                this.setState({city: '', state: ''});
-            }
-
-        }
     };
 
 
     // ToDo : should be independent of a field
     validationHandler = () => {
         const {showAlert} = this.props;
-        let misses_fields = false;
-        /*
-                for (const val of this.fieldsType) {
-                    console.log(val[1].slug)
-                }*/
 
-        Object.entries(validation).some((val, key) => {
+        const lomo = Object.entries(validationPersonalDetails).some((val, key) => {
+
             if (val[1].required) {
-                if (this.state[val[1].slug]) {
-                    let regexTest = (val[1].pattern).test(this.state[val[1].slug]);
-                    console.log(val[1]);
-                    if (!regexTest) {
-                        showAlert(val[1].error);
-                        misses_fields = !regexTest;
+                let regexTest = (val[1].pattern).test(this.state[val[1].slug]);
 
-                        return regexTest;
-                    } else {
-                        // showAlert();
-                        return regexTest;
-                    }
+                if (!regexTest) { // false : failed pattern
+                    showAlert(val[1].error);
+                    return val[1];
                 }
             }
         });
-        this.setState({misses_fields});
+        this.setState({missed_fields: lomo}); // true : for disabling
+        // console.log(lomo, this.state.missed_fields);
+
     }
 
     onChangeHandler = (field, value) => {
         let that = this, regex, doby;
-
+        const {setAdharManual} = this.props;
         // fields is Equivalent to F_NAME , L_NAME... thats an object
 
         // ToDo : comment those that are not required
-        const {F_NAME, M_NAME, L_NAME, MOBILE, DOB, ADDRESS2, ADDRESS1, EMAIL, GENDER, OWNERSHIP, PINCODE} = validation;
+        const {F_NAME, M_NAME, L_NAME, MOBILE, DOB, ADDRESS2, ADDRESS1, EMAIL, GENDER, OWNERSHIP, PINCODE} = validationPersonalDetails;
 
         this.tempState = Object.assign({}, this.state);
         switch (field) {
@@ -226,8 +219,7 @@ class PersonalDetail extends Component {
                 if (value.length <= 6)
                     this.tempState['pincode'] = value;
 
-                // if (value.length > 3)
-                // this._pincodeFetch();
+                this._pincodeFetch();
                 break;
             default:
                 this.tempState[field.slug] = value;
@@ -237,19 +229,20 @@ class PersonalDetail extends Component {
         this.setState({...this.state, ...this.tempState});
 
         window.setTimeout(() => {
-            that.props.setAdharManual(that.state);
+            setAdharManual(that.state);
             this.validationHandler();
         }, 10)
 
     }
 
+    // for trimming `/`  on either side of
     regexTrim = (regex) => {
         var str = `${regex}`;
         return (str.split('/')[1]);
     }
 
     render() {
-        const {F_NAME, M_NAME, L_NAME, MOBILE, DOB, ADDRESS2, ADDRESS1, EMAIL, GENDER, OWNERSHIP, PINCODE} = validation;
+        const {F_NAME, M_NAME, L_NAME, MOBILE, DOB, ADDRESS2, ADDRESS1, EMAIL, GENDER, OWNERSHIP, PINCODE} = validationPersonalDetails;
 
         return (
             <>
