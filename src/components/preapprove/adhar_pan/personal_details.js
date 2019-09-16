@@ -143,28 +143,29 @@ class PersonalDetail extends Component {
         //https://test.mintifi.com/api/v2/communications/pincode/400059
         let city, state;
         const {setAdharManual, changeLoader, showAlert} = this.props;
-        if (this.state.pincode) {
-            const options = {
-                token: null,
-                URL: `${otpUrl}/pincode/${this.state.pincode}`,
-                showAlert: showAlert,
-                changeLoader: changeLoader
+        if (this.state.pincode)
+            if (this.state.pincode.length >= 6) {
+                const options = {
+                    token: null,
+                    URL: `${otpUrl}/pincode/${this.state.pincode}`,
+                    showAlert: showAlert,
+                    changeLoader: changeLoader
+                }
+
+                const resp = await fetchAPI(options);
+
+                if (resp.status === apiActions.SUCCESS_RESPONSE) {
+                    // TODO: Check for success response
+
+                    city = resp.data.city;
+                    state = resp.data.state;
+                    this.setState({city, state}, () => setAdharManual(this.state));
+                } else if (resp.status === apiActions.ERROR_RESPONSE) {
+                    showAlert(resp.data.message, 'warn');
+                    this.setState({city: '', state: ''});
+                }
+
             }
-
-            const resp = await fetchAPI(options);
-
-            if (resp.status === apiActions.SUCCESS_RESPONSE) {
-                // TODO: Check for success response  
-
-                city = resp.data.city;
-                state = resp.data.state;
-                this.setState({city, state}, () => setAdharManual(this.state));
-            } else if (resp.status === apiActions.ERROR_RESPONSE) {
-                showAlert(resp.data.message, 'warn');
-                this.setState({city: '', state: ''});
-            }
-
-        }
     };
 
     changeDob = (dob) => {
@@ -528,6 +529,7 @@ class PersonalDetail extends Component {
                                         if (e.target.value.length <= 6)
                                             this.setState({pincode: e.target.value}, () => this.props.setAdharManual(this.state));
                                         this.validate.pincode = (regex.test(e.target.value));
+                                        this._pincodeFetch();
                                     }}
                                 />
                             </div>
