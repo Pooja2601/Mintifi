@@ -9,8 +9,9 @@ import {
 } from "../../actions";
 import {otpUrl, baseUrl, environment, app_id} from "../../shared/constants";
 import {PrivacyPolicy, TnCPolicy} from "../../shared/policy";
-import {postMessage} from "../../shared/common_logic";
+import {postMessage, checkObject} from "../../shared/common_logic";
 import {fetchAPI, apiActions, postAPI} from "../../api";
+
 
 const {PUBLIC_URL} = process.env;
 
@@ -152,9 +153,9 @@ class Offers extends Component {
     componentWillMount() {
         const {payload, authObj, changeLoader, history} = this.props;
 
-        if (authObj !== Object(authObj) && !authObj)
+        if (!checkObject(authObj))
             history.push(`${PUBLIC_URL}/drawdown/auth`);
-        if (payload !== Object(payload) && !payload) {
+        if (!checkObject(payload)) {
             history.push(`${PUBLIC_URL}/drawdown/token`);
         }
         changeLoader(false);
@@ -169,7 +170,7 @@ class Offers extends Component {
         // ToDo :  uncomment in prod & make it const.
         // let {loanOffers, loanStatus, creditLimit} = loanPayload;
 
-        if (payload === Object(payload) && payload && loanPayload) {
+        if (checkObject(payload) && loanPayload) {
             // let {f_name, l_name} = payload;
             // ToDo :  comment this 2 line in prod.
             if (environment === "local") {
@@ -242,7 +243,7 @@ class Offers extends Component {
                     </div>
                     <div className="row m-auto cardContainerOuter">
                         <div className="list-group flex-row ">
-                            {loanPayload === Object(loanPayload) && loanPayload ? (
+                            {checkObject(loanPayload) && loanPayload ? (
                                 loanPayload.loanOffers.loan.offers.map((val, key) => (
                                     <a
                                         href="#"

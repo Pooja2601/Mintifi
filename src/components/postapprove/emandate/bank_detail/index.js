@@ -83,7 +83,7 @@ class ENachBankDetail extends Component {
         let nachObject = {};
 
         const options = {
-            URL: `${baseUrl}/setup_mandate`,
+            URL: `${baseUrl}/repayment/emandate/init`,
             data: {
                 "app_id": app_id,
                 "loan_application_id": eNachPayload.loan_application_id,
@@ -197,7 +197,7 @@ class ENachBankDetail extends Component {
         const {changeLoader, token, eNachPayload, showAlert, EnachsetBankDetail} = this.props;
         const paramReq = `app_id=${app_id}&loan_application_id=${eNachPayload.loan_application_id}`;
         const options = {
-            URL: `${baseUrl}/bank_account_details?${paramReq}`, token: token,
+            URL: `${baseUrl}/banking/account?${paramReq}`, token: token,
             showAlert: showAlert,
             changeLoader: changeLoader
         };

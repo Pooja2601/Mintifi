@@ -12,7 +12,7 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {setBankDetail, changeLoader, setToken, showAlert} from "../../../actions";
 import {withRouter} from "react-router-dom";
-import {alertModule, retrieveParam, generateToken} from "../../../shared/common_logic";
+import {alertModule, retrieveParam, generateToken, base64Logic} from "../../../shared/common_logic";
 // import DatePicker from "react-datepicker";
 // import "react-datepicker/dist/react-datepicker.css";
 import Select from "react-select";
@@ -90,19 +90,19 @@ class BankDetail extends Component {
              this.handleValidation();
          }*/
 
-    _genAuthToken = async (base64_encode) => {
-        const {history, changeLoader, showAlert} = this.props;
+    _genAuthToken = async () => {
+        const {history, changeLoader, showAlert, payload, preFlightResp} = this.props;
+
         changeLoader(true);
-        /*        const options = {
-                    token: null,
-                    URL: `${baseUrl}/auth`,
-                    data: {
-                        app_id: app_id,
-                        user_id: user_id,
-                        secret_key: auth_secret,
-                        type: "react_web_user"
-                    }
-                }*/
+        let payloadData = {
+            anchor_id: payload.anchor_id,
+            loan_application_id: preFlightResp.loan_application_id,
+            company_id: preFlightResp.company_id,
+            success_url: payload.success_url,
+            error_url: payload.error_url,
+            cancel_url: payload.cancel_url,
+        }
+        let base64_encode = base64Logic(payloadData, 'encode');
         const resp = await generateToken();
         changeLoader(false);
 
@@ -123,7 +123,7 @@ class BankDetail extends Component {
                     500
                 );
         } else if (resp == 30) {
-            showAlert("Something went while creating Token", "warn");
+            showAlert("Something went wrong while creating Token", "warn");
         }
 
     };
@@ -163,12 +163,12 @@ class BankDetail extends Component {
 
             if (resp.status === apiActions.SUCCESS_RESPONSE) {
                 // ToDo : comment in Prod
-                let base64_encode = retrieveParam(
-                    resp.data.payload,
-                    "payload"
-                );
+                // let base64_encode = retrieveParam(
+                //     resp.data.payload,
+                //     "payload"
+                // );
                 // console.log(base64_encode);
-                this._genAuthToken(base64_encode);
+                this._genAuthToken();
                 /*setTimeout(() => history.push(`${PUBLIC_URL}/esign?payload=${base64_encode}&token=${token}`, {
                     token: token,
                     payload: base64_encode
@@ -246,11 +246,11 @@ class BankDetail extends Component {
 
         }
 
-
         // console.log(this.props.gstProfile)
         changeLoader(false);
         setTimeout(() => this.handleValidation(), 500);
         // console.log(this.props.adharObj);
+
     }
 
     render() {

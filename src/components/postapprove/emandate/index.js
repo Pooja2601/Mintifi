@@ -104,7 +104,7 @@ class EMandate extends Component {
             token = retrieveParam(href, "token") || undefined;
             if (payload) base64_decode = base64Logic(payload, "decode");
             // console.log(payload);
-            console.log(base64_decode);
+            // console.log(base64_decode);
         }
 
         if (!checkObject(base64_decode) && !token)

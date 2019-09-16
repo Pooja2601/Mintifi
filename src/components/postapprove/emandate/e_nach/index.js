@@ -9,7 +9,8 @@ import {
 } from "../../../../actions";
 import {
     // alertModule,
-    base64Logic, checkObject,
+    base64Logic,
+    checkObject,
     retrieveParam
 } from "../../../../shared/common_logic";
 import {
@@ -26,7 +27,7 @@ const {PUBLIC_URL} = process.env;
 
 class ENach extends Component {
     static propTypes = {
-        eNachPayload: PropTypes.object,
+        eNachPayload: PropTypes.object.isRequired,
         showAlert: PropTypes.func,
         token: PropTypes.string.isRequired,
         changeLoader: PropTypes.func.isRequired
@@ -36,7 +37,7 @@ class ENach extends Component {
 
     _updateBackend = async result => {
         let {token, changeLoader, eNachPayload, history, showAlert} = this.props;
-        let redirectURL = '';
+        let redirectURL = "";
         const options = {
             URL: `${baseUrl}/loans/enach_status`,
             data: {
@@ -50,7 +51,7 @@ class ENach extends Component {
             token: token,
             showAlert: showAlert,
             changeLoader: changeLoader
-        }
+        };
 
         const resp = await postAPI(options);
 
@@ -58,7 +59,6 @@ class ENach extends Component {
             showAlert(resp.data.message, "warn");
             // this.setState({ backendError: this.state.backendError + 1 });
             redirectURL = ENachResponseUrl.cancel_url;
-
         } else if (resp.status === apiActions.SUCCESS_RESPONSE) {
             redirectURL = ENachResponseUrl.success_url;
         }
@@ -67,7 +67,6 @@ class ENach extends Component {
             if (environment === "prod" || environment === "dev")
                 history.push(redirectURL);
         }, 1000);
-
     };
 
     _triggerDigio = () => {
@@ -93,14 +92,8 @@ class ENach extends Component {
         }
     };
 
-
     componentWillMount() {
-        let {
-            changeLoader,
-            token,
-            eNachPayload,
-            showAlert
-        } = this.props;
+        let {changeLoader, token, eNachPayload, showAlert} = this.props;
         changeLoader(false);
 
         if (!checkObject(eNachPayload) && !token)
@@ -153,9 +146,7 @@ class ENach extends Component {
                 detail.status = "success";
             }
 
-            if (detail.error_code !== "CANCELLED")
-                that._updateBackend(detail);
-
+            if (detail.error_code !== "CANCELLED") that._updateBackend(detail);
         });
 
         // ToDo : uncomment in prod
@@ -204,9 +195,7 @@ class ENach extends Component {
                     <button
                         type="button"
                         onClick={e => this._triggerDigio()}
-                        disabled={
-                            !checkObject(eNachPayload) || !eNachPayload.mandate_id
-                        }
+                        disabled={!checkObject(eNachPayload) || !eNachPayload.mandate_id}
                         className="form-submit btn btn-raised greenButton"
                     >
                         Initiate E-NACH
@@ -228,7 +217,7 @@ class ENach extends Component {
 }
 
 const mapStateToProps = state => ({
-    token: state.eSignReducer.token,
+    token: state.eNachReducer.token,
     eNachPayload: state.eNachReducer.eNachPayload,
     bankObj: state.eNachReducer.bankObj
 });
