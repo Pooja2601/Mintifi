@@ -7,10 +7,10 @@ import { checkObject } from "../../../shared/common_logic";
 class ThankYou extends Component {
   componentWillMount() {
     const { payload, authObj, adharObj, businessObj } = this.props;
-    if (checkObject(payload))
-      if (checkObject(authObj))
-        if (checkObject(adharObj))
-          if (checkObject(businessObj))
+    if (!checkObject(payload))
+      if (!checkObject(authObj))
+        if (!checkObject(adharObj))
+          if (!checkObject(businessObj))
             this.props.history.push("/preapprove/token");
   }
 

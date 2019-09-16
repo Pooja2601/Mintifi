@@ -29,7 +29,7 @@ class AppRejected extends Component {
     const { changeLoader } = this.props;
     changeLoader(false);
     // alertModule('Just a test');
-    // if (payload !== Object(payload))
+    // if (!checkObject(payload))
     //     history.push(`${PUBLIC_URL}/preapprove/token`);
   }
 
