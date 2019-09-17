@@ -30,6 +30,9 @@ import EMandate from "./components/postapprove/emandate";
 // E-Sign
 import ESign from "./components/postapprove/e_sign";
 import ESignPopUp from "./components/postapprove/e_sign/esign_popup";
+import ESignSuccess from "./components/postapprove/e_sign/success_url";
+import ESignError from "./components/postapprove/e_sign/error_url";
+import ESignCancel from "./components/postapprove/e_sign/cancel_url";
 // E-Sign-Bank-Detail
 import ESignBankDetail from "./components/postapprove/emandate/bank_detail";
 //E-NACH
@@ -128,6 +131,18 @@ const routes = [
     {
         path: 'esign',
         component: ESign
+    },
+    {
+        path: 'esign/success_url',
+        component: ESignSuccess
+    },
+    {
+        path: 'esign/error_url',
+        component: ESignError
+    },
+    {
+        path: 'esign/cancel_url',
+        component: ESignCancel
     },
     {
         path: 'esign/esign_popup',

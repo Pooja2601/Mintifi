@@ -105,7 +105,8 @@ class ESign extends Component {
             };
 
             if (this.eSignAttempt > 3) {
-                this.popUpWindow.close();
+                if (this.popUpWindow)
+                    this.popUpWindow.close();
                 window.setTimeout(
                     () => (window.location.href = `${eSignPayload.error_url}`),
                     5000
@@ -121,7 +122,7 @@ class ESign extends Component {
                 const eSignPopUpPayload = base64Logic(resp.data, "encode");
                 // console.log(eSignPopUpPayload);
                 // ToDo : ideal for checking esign_status before Ahdarbridge opens up
-                this._pingDBStatus();
+
                 this.setState({checkStatus: true});
                 window.setTimeout(() => {
                     this.popUpWindow = window.open(
@@ -129,6 +130,7 @@ class ESign extends Component {
                         "ESign PopUp",
                         "width=600,height=500,location=no,menubar=no,toolbar=no,titlebar=no"
                     );
+                    this._pingDBStatus();
                     this.intervalPing = window.setInterval(
                         () => this._pingDBStatus(),
                         20000
@@ -177,7 +179,8 @@ class ESign extends Component {
                     "Looks like we're done with eSign, redirecting you to Anchor portal",
                     "success"
                 );
-                this.popUpWindow.close();
+                if (this.popUpWindow)
+                    this.popUpWindow.close();
                 this.setState({checkStatus: false});
                 if (checkObject(this.props.payload)) { /// check if coming from React Flow
                     base64_encoded = base64Logic(eSignPayload, 'encode');
@@ -273,13 +276,28 @@ class ESign extends Component {
 
                 <div className=" text-left " role="alert" style={{margin: "auto"}}>
                     {checkObject(eSignPayload) && token ? (
-                        <p className="paragraph_styling alert alert-info">
-                            Kindly complete the eSIGN procedure by clicking the button below.{" "}
-                            <br/>
-                            <small>
-                                Make sure to enable pop-up in your browser, for ESign to proceed
-                            </small>
-                        </p>
+                        <>
+                            <p className="paragraph_styling alert alert-info">
+                                Kindly complete the eSIGN procedure by clicking the button below.{" "}
+
+                            </p>
+                            <p className="paragraph_styling alert alert-info">
+                                <small>
+                                    Make sure to enable pop-up in your browser, for ESign to proceed.
+                                    <br/>
+                                    <a
+                                        href={"#"}
+                                        onClick={e => {
+                                            this._triggerESign();
+                                            return false;
+                                        }}
+                                        disabled={!checkObject(eSignPayload) || !token}
+                                    >
+                                        Click here
+                                    </a> to trigger eSign again after enabling in your browser.
+                                </small>
+                            </p>
+                        </>
                     ) : (
                         <p className="paragraph_styling alert alert-danger">
                             You may not access this page directly without appropriate

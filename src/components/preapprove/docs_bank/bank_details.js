@@ -231,6 +231,7 @@ class BankDetail extends Component {
         if (checkObject(adharObj)) {
             const {f_name, l_name} = adharObj;
             this.setState({acc_name: `${f_name} ${l_name}`}, () => setBankDetail(this.state));
+            this.validate['acc_name'] = true;
         }
         if (checkObject(bankObj))
             this.setState(bankObj, () => {
@@ -239,13 +240,10 @@ class BankDetail extends Component {
                         this.validate[val] = this.state[val].length > 0;
                     if (val === 'acc_type')
                         this.validate[val] = false;
-                    if (val === 'acc_name')
-                        this.validate[val] = this.state[val];
-                    // console.log(this.validate);
                 });
             });
         else setBankDetail(this.state);
-        
+
         // console.log(this.props.gstProfile)
         changeLoader(false);
         setTimeout(() => this.handleValidation(), 2000);
