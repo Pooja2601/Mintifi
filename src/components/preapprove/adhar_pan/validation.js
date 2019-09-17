@@ -2,7 +2,7 @@ const validationPersonalDetails = {
   F_NAME: {
     slug: "f_name",
     type: "text",
-    pattern: /^[a-zA-Z]{3,}(\s)?([a-zA-Z]+)?$/,
+    pattern: /^[a-zA-Z]{2,}[^]+$/,
     title: "Please enter First Name",
     error: "Invalid First Name",
     required: true,
@@ -12,7 +12,7 @@ const validationPersonalDetails = {
   M_NAME: {
     slug: "m_name",
     type: "text",
-    pattern: /^[a-zA-Z]{3,}(\s)?([a-zA-Z]+)?$/,
+    pattern: /^[a-zA-Z]{2,}[^]+$/,
     title: "Please enter Middle Name",
     error: "Invalid Middle Name",
     required: false,
@@ -22,7 +22,8 @@ const validationPersonalDetails = {
   L_NAME: {
     slug: "l_name",
     type: "text",
-    pattern: /^[a-zA-Z]{3,}(\s)?([a-zA-Z]+)?$/,
+    pattern: /^[a-zA-Z]{2,}[^]+$/,
+    // pattern: /^[a-zA-Z]{3,}(\s)?([a-zA-Z]+)?$/,
     title: "Please enter Last Name",
     error: "Invalid Last Name",
     required: true,
