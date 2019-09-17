@@ -122,7 +122,7 @@ class ESign extends Component {
                 const eSignPopUpPayload = base64Logic(resp.data, "encode");
                 // console.log(eSignPopUpPayload);
                 // ToDo : ideal for checking esign_status before Ahdarbridge opens up
-                this._pingDBStatus();
+
                 this.setState({checkStatus: true});
                 window.setTimeout(() => {
                     this.popUpWindow = window.open(
@@ -130,6 +130,7 @@ class ESign extends Component {
                         "ESign PopUp",
                         "width=600,height=500,location=no,menubar=no,toolbar=no,titlebar=no"
                     );
+                    this._pingDBStatus();
                     this.intervalPing = window.setInterval(
                         () => this._pingDBStatus(),
                         20000
@@ -280,7 +281,7 @@ class ESign extends Component {
                         <>
                             <p className="paragraph_styling alert alert-info">
                                 Kindly complete the eSIGN procedure by clicking the button below.{" "}
-                                
+
                             </p>
                             <p className="paragraph_styling alert alert-info">
                                 <small>
