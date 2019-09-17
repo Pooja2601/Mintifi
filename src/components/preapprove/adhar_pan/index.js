@@ -13,6 +13,7 @@ import PropTypes from "prop-types";
 import { Link, withRouter } from "react-router-dom";
 import { checkObject } from "../../../shared/common_logic";
 import { apiActions, fetchAPI } from "../../../api";
+import { validationAdharPan } from "./validation";
 const { PUBLIC_URL } = process.env;
 
 class AdharPan extends Component {
@@ -278,6 +279,7 @@ class AdharPan extends Component {
   }
 
   render() {
+    const { PAN_NUMBER, ADHAR_NUMBER } = validationAdharPan;
     return (
       <>
         <Link to={`${PUBLIC_URL}/preapprove/token`} className={"btn btn-link"}>
@@ -297,18 +299,18 @@ class AdharPan extends Component {
                 </label>
 
                 <input
-                  type="text"
+                  type={PAN_NUMBER.type}
                   className="form-control font_weight"
                   // placeholder="10 digit PAN Number"
-                  autoComplete={"off"}
+                  autoComplete={PAN_NUMBER.autoComplete}
                   name="url"
-                  maxLength={10}
-                  minLength={10}
-                  pattern="^[a-zA-Z]{3}[pP][a-zA-Z]{1}([0-9]){4}[a-zA-Z]{1}?$"
-                  title="Please enter valid PAN number. E.g. AAAAA9999A"
-                  autoCapitalize="characters"
+                  maxLength={PAN_NUMBER.maxLength}
+                  minLength={PAN_NUMBER.minLength}
+                  pattern={PAN_NUMBER.pattern}
+                  title={PAN_NUMBER.title}
+                  autoCapitalize={PAN_NUMBER.autoCapitalize}
                   id="numberPAN"
-                  required={true}
+                  required={PAN_NUMBER.required}
                   value={this.props.pan}
                   // ref={ref => (this.obj.pan = ref)}
                   onChange={e => this._PANEnter(e)}
@@ -331,15 +333,15 @@ class AdharPan extends Component {
                 </label>
                 <div className={"input-group"}>
                   <input
-                    type="number"
+                    type={ADHAR_NUMBER.type}
                     className="form-control font_weight"
                     name="url"
-                    pattern="^[0-9]{12}$"
-                    title="This field is required"
-                    autoComplete={"off"}
+                    pattern={ADHAR_NUMBER.pattern}
+                    title={ADHAR_NUMBER.title}
+                    autoComplete={ADHAR_NUMBER.autoComplete}
                     id="numberAdhar"
-                    maxLength={12}
-                    minLength={12}
+                    maxLength={ADHAR_NUMBER.maxLength}
+                    minLength={ADHAR_NUMBER.minLength}
                     value={this.props.adhar}
                     onChange={e => this._AdharEnter(e)}
                     // ref={ref => (this.obj.adhar = ref)}

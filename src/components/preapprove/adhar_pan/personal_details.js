@@ -188,7 +188,7 @@ class PersonalDetail extends Component {
 
             if (val[1].required) {
                 let regexTest = (val[1].pattern).test(this.state[val[1].slug]);
-
+                
                 if (!regexTest) { // false : failed pattern
                     showAlert(val[1].error);
                     return val[1];
