@@ -11,7 +11,7 @@ import {
 } from "../../../actions";
 import PropTypes from "prop-types";
 import { Link, withRouter } from "react-router-dom";
-import { checkObject } from "../../../shared/common_logic";
+import { checkObject, regexTrim } from "../../../shared/common_logic";
 import { apiActions, fetchAPI } from "../../../api";
 import { validationAdharPan } from "./validation";
 const { PUBLIC_URL } = process.env;
@@ -306,10 +306,10 @@ class AdharPan extends Component {
                   name="url"
                   maxLength={PAN_NUMBER.maxLength}
                   minLength={PAN_NUMBER.minLength}
-                  pattern={PAN_NUMBER.pattern}
+                  pattern={regexTrim(PAN_NUMBER.pattern)}
                   title={PAN_NUMBER.title}
                   autoCapitalize={PAN_NUMBER.autoCapitalize}
-                  id="numberPAN"
+                  id={PAN_NUMBER.id}
                   required={PAN_NUMBER.required}
                   value={this.props.pan}
                   // ref={ref => (this.obj.pan = ref)}
@@ -336,10 +336,10 @@ class AdharPan extends Component {
                     type={ADHAR_NUMBER.type}
                     className="form-control font_weight"
                     name="url"
-                    pattern={ADHAR_NUMBER.pattern}
+                    pattern={regexTrim(ADHAR_NUMBER.pattern)}
                     title={ADHAR_NUMBER.title}
                     autoComplete={ADHAR_NUMBER.autoComplete}
-                    id="numberAdhar"
+                    id={ADHAR_NUMBER.id}
                     maxLength={ADHAR_NUMBER.maxLength}
                     minLength={ADHAR_NUMBER.minLength}
                     value={this.props.adhar}

@@ -9,7 +9,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 // import {alertModule} from "../../../shared/common_logic";
 import {fetchAPI, apiActions, postAPI} from "../../../api";
-import {checkObject} from "../../../shared/common_logic";
+import {checkObject, regexTrim} from "../../../shared/common_logic";
 
 import {validationPersonalDetails} from "./validation";
 
@@ -90,8 +90,6 @@ class PersonalDetail extends Component {
                 });
             });
         else setAdharManual(this.state);
-
-        this.tempState = Object.assign({}, this.state);
 
         setTimeout(() => {
             this._loadGstProfile();
@@ -185,16 +183,17 @@ class PersonalDetail extends Component {
         const {showAlert} = this.props;
 
         const lomo = Object.entries(validationPersonalDetails).some((val, key) => {
-
+        //   if(this.state[val[1].slug])
             if (val[1].required) {
                 let regexTest = (val[1].pattern).test(this.state[val[1].slug]);
-                
                 if (!regexTest) { // false : failed pattern
                     showAlert(val[1].error);
                     return val[1];
                 }
             }
         });
+        if(!lomo)
+        showAlert();
         this.setState({missed_fields: lomo}); // true : for disabling
         // console.log(lomo, this.state.missed_fields);
 
@@ -237,12 +236,6 @@ class PersonalDetail extends Component {
 
     }
 
-    // for trimming `/`  on either side of
-    regexTrim = (regex) => {
-        var str = `${regex}`;
-        return (str.split('/')[1]);
-    }
-
     render() {
         const {F_NAME, M_NAME, L_NAME, MOBILE, DOB, ADDRESS2, ADDRESS1, EMAIL, GENDER, OWNERSHIP, PINCODE} = validationPersonalDetails;
 
@@ -266,7 +259,7 @@ class PersonalDetail extends Component {
                                     type={F_NAME.type}
                                     className="form-control font_weight"
                                     // placeholder="Full Name"
-                                    pattern={this.regexTrim(F_NAME.pattern)}
+                                    pattern={regexTrim(F_NAME.pattern)}
                                     title={F_NAME.title}
                                     autoCapitalize={F_NAME.autoCapitalize}
                                     id={F_NAME.id}
@@ -284,7 +277,7 @@ class PersonalDetail extends Component {
                                     type={M_NAME.type}
                                     className="form-control font_weight"
                                     // placeholder="Full Name"
-                                    pattern={this.regexTrim(M_NAME.pattern)}
+                                    pattern={regexTrim(M_NAME.pattern)}
                                     title={M_NAME.title}
                                     autoCapitalize={M_NAME.autoCapitalize}
                                     id={M_NAME.id}
@@ -301,7 +294,7 @@ class PersonalDetail extends Component {
                                     type={L_NAME.type}
                                     className="form-control font_weight"
                                     // placeholder="Full Name"
-                                    pattern={this.regexTrim(L_NAME.pattern)}
+                                    pattern={regexTrim(L_NAME.pattern)}
                                     title={L_NAME.title}
                                     autoCapitalize={L_NAME.autoCapitalize}
                                     id={L_NAME.id}
@@ -329,7 +322,7 @@ class PersonalDetail extends Component {
                                         type={MOBILE.type}
                                         className="form-control font_weight prependInput"
                                         // placeholder="Mobile Number"
-                                        pattern={this.regexTrim(MOBILE.pattern)}
+                                        pattern={regexTrim(MOBILE.pattern)}
                                         title={MOBILE.title}
                                         id={MOBILE.id}
                                         required={MOBILE.required}
@@ -347,7 +340,7 @@ class PersonalDetail extends Component {
                                     type={EMAIL.type}
                                     className="form-control font_weight"
                                     // placeholder="Email"
-                                    pattern={this.regexTrim(EMAIL.pattern)}
+                                    pattern={regexTrim(EMAIL.pattern)}
                                     title={EMAIL.title}
                                     autoCapitalize={EMAIL.autoCapitalize}
                                     id={EMAIL.id}
@@ -457,7 +450,7 @@ class PersonalDetail extends Component {
                                         // placeholderText={"Date of Birth"}
                                         selected={new Date(this.state.dob)}
                                         id={DOB.id}
-                                        pattern={this.regexTrim(DOB.pattern)}
+                                        pattern={regexTrim(DOB.pattern)}
                                         scrollableYearDropdown
                                         showMonthDropdown
                                         required={DOB.required}
@@ -478,7 +471,7 @@ class PersonalDetail extends Component {
                                     className="form-control font_weight"
                                     // placeholder="Pincode"
                                     title={ADDRESS1.title}
-                                    pattern={this.regexTrim(ADDRESS1.pattern)}
+                                    pattern={regexTrim(ADDRESS1.pattern)}
                                     autoCapitalize={ADDRESS1.autoCapitalize}
                                     id={ADDRESS1.id}
                                     required={ADDRESS1.required}
@@ -502,7 +495,7 @@ class PersonalDetail extends Component {
                                     type={PINCODE.type}
                                     className="form-control font_weight"
                                     // placeholder="Pincode"
-                                    pattern={this.regexTrim(PINCODE.pattern)}
+                                    pattern={regexTrim(PINCODE.pattern)}
                                     title={PINCODE.title}
                                     autoCapitalize={PINCODE.autoCapitalize}
                                     id={PINCODE.id}
@@ -530,7 +523,7 @@ class PersonalDetail extends Component {
 
                                     title={ADDRESS2.title}
                                     autoCapitalize={ADDRESS2.autoCapitalize}
-                                    pattern={this.regexTrim(ADDRESS2.pattern)}
+                                    pattern={regexTrim(ADDRESS2.pattern)}
                                     id={ADDRESS2.id}
                                     required={ADDRESS2.required}
                                     value={this.state.address2}

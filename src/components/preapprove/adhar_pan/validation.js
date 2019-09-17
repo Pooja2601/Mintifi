@@ -104,27 +104,31 @@ const validationAdharPan = {
   PAN_NUMBER: {
     type: "text",
     title: "Please enter valid PAN number. E.g. AAAAA9999A",
-    pattern: "^[a-zA-Z]{3}[pP][a-zA-Z]{1}([0-9]){4}[a-zA-Z]{1}?$",
+    pattern: /^[a-zA-Z]{3}[pP][a-zA-Z]{1}([0-9]){4}[a-zA-Z]{1}?$/,
     required: true,
     autoCapitalize: "characters",
     autoComplete: "off",
     minLength: 10,
-    maxLength: 10
+    maxLength: 10,
+    error: "Please Enter Right PAN Number",
+    id: "numberPAN"
   },
   ADHAR_NUMBER: {
     type: "number",
-    pattern: "^[0-9]{12}$",
+    pattern: /^[0-9]{12}$/,
     title: "This field is required",
     autoComplete: "off",
     maxLength: 12,
-    minLength: 12
+    minLength: 12,
+    error: "Please Enter Right Adhar Number",
+    id: "numberAdhar"
   }
 };
 
 const validationMobileOtp = {
   MOBILE_NUMBER: {
     type: "number",
-    pattern: "^[0-9]{10}$",
+    pattern: /^[0-9]{10}$/,
     title: "This field is required",
     min: 1000000000,
     max: 9999999999,
@@ -132,14 +136,18 @@ const validationMobileOtp = {
     minLength: 10,
     required: true,
     readOnly: true,
-    disabled: true
+    disabled: true,
+    error: "Please Enter Right Mobile Number",
+    id: "numberMobile"
   },
   VERIFY_OTP: {
     type: "number",
-    pattern: "^[0-9]{6}$",
+    pattern: /^[0-9]{6}$/,
     title: "This field is required",
     min: 100000,
-    max: 999999
+    max: 999999,
+    error: "Please Enter Right Otp",
+    id: "otpVerify"
   }
 };
 

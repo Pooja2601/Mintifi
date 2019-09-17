@@ -13,7 +13,7 @@ import {
 import { Link, withRouter } from "react-router-dom";
 // import {alertModule} from "../../../shared/common_logic";
 import { fetchAPI, apiActions, postAPI } from "../../../api";
-import { checkObject } from "../../../shared/common_logic";
+import { checkObject, regexTrim } from "../../../shared/common_logic";
 import { validationMobileOtp } from "./validation";
 const Timer = OTP_Timer;
 const { PUBLIC_URL } = process.env;
@@ -183,7 +183,6 @@ class MobileOtp extends Component {
 
   render() {
     const { MOBILE_NUMBER, VERIFY_OTP } = validationMobileOtp;
-    console.log("}}}", MOBILE_NUMBER);
     return (
       <>
         <Link
@@ -219,9 +218,9 @@ class MobileOtp extends Component {
                     max={MOBILE_NUMBER.max}
                     maxLength={MOBILE_NUMBER.maxLength}
                     minLength={MOBILE_NUMBER.minLength}
-                    pattern={MOBILE_NUMBER.pattern}
+                    pattern={regexTrim(MOBILE_NUMBER.pattern)}
                     title={MOBILE_NUMBER.title}
-                    id="numberMobile"
+                    id={MOBILE_NUMBER.id}
                     required={MOBILE_NUMBER.required}
                     readOnly={MOBILE_NUMBER.readOnly}
                     value={this.state.mobile}
@@ -248,9 +247,9 @@ class MobileOtp extends Component {
                     className="form-control font_weight"
                     // placeholder="Enter the OTP"
                     name="url"
-                    pattern={VERIFY_OTP.pattern}
+                    pattern={regexTrim(VERIFY_OTP.pattern)}
                     title={VERIFY_OTP.title}
-                    id="otpVerify"
+                    id={VERIFY_OTP.id}
                     value={this.state.otp}
                     min={VERIFY_OTP.min}
                     max={VERIFY_OTP.max}
