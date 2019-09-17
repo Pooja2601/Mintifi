@@ -102,6 +102,7 @@ const validationPersonalDetails = {
 
 const validationAdharPan = {
   PAN_NUMBER: {
+    slug: "pan",
     type: "text",
     title: "Please enter valid PAN number. E.g. AAAAA9999A",
     pattern: /^[a-zA-Z]{3}[pP][a-zA-Z]{1}([0-9]){4}[a-zA-Z]{1}?$/,
@@ -114,6 +115,7 @@ const validationAdharPan = {
     id: "numberPAN"
   },
   ADHAR_NUMBER: {
+    slug: "adhar",
     type: "number",
     pattern: /^[0-9]{12}$/,
     title: "This field is required",
@@ -127,6 +129,7 @@ const validationAdharPan = {
 
 const validationMobileOtp = {
   MOBILE_NUMBER: {
+    slug: "mobile",
     type: "number",
     pattern: /^[0-9]{10}$/,
     title: "This field is required",
@@ -141,6 +144,7 @@ const validationMobileOtp = {
     id: "numberMobile"
   },
   VERIFY_OTP: {
+    slug: "otp",
     type: "number",
     pattern: /^[0-9]{6}$/,
     title: "This field is required",

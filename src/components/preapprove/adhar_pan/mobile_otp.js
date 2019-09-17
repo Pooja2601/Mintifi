@@ -40,6 +40,8 @@ class MobileOtp extends Component {
     mobile_correct: false
   };
 
+  tempState = this.state;
+
   // obj = {mobile_correct: false};
 
   _formSubmit = async e => {
@@ -147,6 +149,59 @@ class MobileOtp extends Component {
     }
   };
 
+  //   _Verifyotp = e => {
+  //     if (e.target.value.length <= 6) this.setState({ otp: e.target.value });
+  //   };
+
+  _disable = () => {
+    // if (this.state.submitted) {
+    //   return false;
+    // } else return true;
+    // debugger;
+    if (!this.state.submitted) {
+      debugger;
+      return false;
+    } else {
+      debugger;
+      return true;
+    }
+  };
+
+  onChangeHandler = (field, value) => {
+    let that = this,
+      regex,
+      doby;
+    const { setAdharManual } = this.props;
+    // fields is Equivalent to F_NAME , L_NAME... thats an object
+
+    // ToDo : comment those that are not required
+    const { MOBILE_NUMBER, VERIFY_OTP } = validationMobileOtp;
+
+    this.tempState = Object.assign({}, this.state);
+    switch (field) {
+      case MOBILE_NUMBER:
+        if (value.length <= 10) {
+          this.tempState["mobile"] = value;
+          this.tempState["mobile_correct"] = value.length !== 10;
+        }
+        break;
+      case VERIFY_OTP:
+        if (value.length <= 6) {
+          this.tempState["otp"] = value;
+        }
+      default:
+        this.tempState[field.slug] = value;
+        break;
+    }
+
+    this.setState({ ...this.state, ...this.tempState });
+
+    window.setTimeout(() => {
+      setAdharManual(that.state);
+      //   this.validationHandler();
+    }, 10);
+  };
+
   componentWillMount() {
     const { adharObj, payload, history, authObj } = this.props;
 
@@ -213,7 +268,7 @@ class MobileOtp extends Component {
                     className="form-control font_weight prependInput"
                     // placeholder="10 digit Mobile Number"
                     name="url"
-                    disabled={MOBILE_NUMBER.disabled}
+                    disabled={this._disable()}
                     min={MOBILE_NUMBER.min}
                     max={MOBILE_NUMBER.max}
                     maxLength={MOBILE_NUMBER.maxLength}
@@ -222,10 +277,13 @@ class MobileOtp extends Component {
                     title={MOBILE_NUMBER.title}
                     id={MOBILE_NUMBER.id}
                     required={MOBILE_NUMBER.required}
-                    readOnly={MOBILE_NUMBER.readOnly}
+                    // readOnly={MOBILE_NUMBER.readOnly}
                     value={this.state.mobile}
                     // ref={ref => (this.obj.number = ref)}
-                    // onChange={(e) => this._setMobile(e)}
+                    // onChange={e => this._setMobile(e)}
+                    onChange={e =>
+                      this.onChangeHandler(MOBILE_NUMBER, e.target.value)
+                    }
                     aria-describedby="basic-addon3"
                   />
                 </div>
@@ -253,10 +311,10 @@ class MobileOtp extends Component {
                     value={this.state.otp}
                     min={VERIFY_OTP.min}
                     max={VERIFY_OTP.max}
-                    onChange={e => {
-                      if (e.target.value.length <= 6)
-                        this.setState({ otp: e.target.value });
-                    }}
+                    // onChange={this._Verifyotp}
+                    onChange={e =>
+                      this.onChangeHandler(VERIFY_OTP, e.target.value)
+                    }
                     aria-describedby="otp-area"
                   />
                   <div className="input-group-append">
