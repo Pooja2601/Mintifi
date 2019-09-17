@@ -183,7 +183,7 @@ class PersonalDetail extends Component {
         const {showAlert} = this.props;
 
         const lomo = Object.entries(validationPersonalDetails).some((val, key) => {
-        //   if(this.state[val[1].slug])
+
             if (val[1].required) {
                 let regexTest = (val[1].pattern).test(this.state[val[1].slug]);
                 if (!regexTest) { // false : failed pattern
@@ -192,8 +192,8 @@ class PersonalDetail extends Component {
                 }
             }
         });
-        if(!lomo)
-        showAlert();
+        if (!lomo)
+            showAlert();
         this.setState({missed_fields: lomo}); // true : for disabling
         // console.log(lomo, this.state.missed_fields);
 
@@ -504,7 +504,7 @@ class PersonalDetail extends Component {
                                     onBlur={() => this._pincodeFetch()}
                                     // ref={ref => (this.obj.pan = ref)}
                                     onChange={(e) => this.onChangeHandler(PINCODE, e.target.value)}
-                                    
+
                                 />
                             </div>
 
