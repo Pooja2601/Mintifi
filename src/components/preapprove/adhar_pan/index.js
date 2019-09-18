@@ -26,12 +26,13 @@ class AdharPan extends Component {
   state = {
     pan: "",
     adhar: "",
-    pan_correct: false,
+    // pan_correct: false,
     adhar_skip: false,
     adhar_correct: false,
     gst_details: {},
     checked: {},
-    selectedGST: ""
+    selectedGST: "",
+    missed_fields: true
   };
   gstDetails = {
     companytype: "",
@@ -159,25 +160,26 @@ class AdharPan extends Component {
     this._panFetch();
   }
 
-  _PANEnter = e => {
-    // ToDo : allow only Personal PAN
-    // let regex = /^[a-zA-Z]{5}([0-9]){4}[a-zA-Z]{1}?$/;
-    let regex = /^[a-zA-Z]{3}[pP][a-zA-Z]{1}([0-9]){4}[a-zA-Z]{1}?$/;
-    if (e.target.value.length <= 10) {
-      let pan_correct = regex.test(e.target.value);
-      this.setState({ pan: e.target.value.toUpperCase(), pan_correct });
-      this.props.pan_adhar(e.target.value.toUpperCase(), "");
-    }
-  };
+  // _PANEnter = e => {
+  //   // ToDo : allow only Personal PAN
+  //   // let regex = /^[a-zA-Z]{5}([0-9]){4}[a-zA-Z]{1}?$/;
+  //   let regex = /^[a-zA-Z]{3}[pP][a-zA-Z]{1}([0-9]){4}[a-zA-Z]{1}?$/;
+  //   if (e.target.value.length <= 10) {
+  //     let pan_correct = regex.test(e.target.value);
 
-  _AdharEnter = e => {
-    let regex = /^([0-9]){12}$/;
-    if (e.target.value.length <= 12) {
-      let adhar_correct = regex.test(e.target.value);
-      this.setState({ adhar: e.target.value, adhar_correct });
-      this.props.pan_adhar(this.props.pan, e.target.value);
-    }
-  };
+  //     this.setState({ pan: e.target.value.toUpperCase(), pan_correct });
+  //     this.props.pan_adhar(e.target.value.toUpperCase(), "");
+  //   }
+  // };
+
+  // _AdharEnter = e => {
+  //   let regex = /^([0-9]){12}$/;
+  //   if (e.target.value.length <= 12) {
+  //     let adhar_correct = regex.test(e.target.value);
+  //     this.setState({ adhar: e.target.value, adhar_correct });
+  //     this.props.pan_adhar(this.props.pan, e.target.value);
+  //   }
+  // };
 
   _setGST = () => {
     /* Object.keys(this.state.checked).map(val => { //0, 1, 2, 3
@@ -264,6 +266,60 @@ class AdharPan extends Component {
     }
   };
 
+  validationHandler = () => {
+    const { showAlert } = this.props;
+
+    const lomo = Object.entries(validationAdharPan).some((val, key) => {
+      if (val[1].required) {
+        let regexTest = val[1].pattern.test(this.state[val[1].slug]);
+        if (!regexTest) {
+          // false : failed pattern
+          showAlert(val[1].error);
+          return val[1];
+        }
+      }
+    });
+    if (!lomo) showAlert();
+    this.setState({ missed_fields: lomo }); // true : for disabling
+    // console.log(lomo, this.state.missed_fields);
+  };
+
+  onChangeHandler = (field, value) => {
+    let that = this,
+      regex,
+      doby;
+    const { pan_adhar } = this.props;
+    // fields is Equivalent to F_NAME , L_NAME... thats an object
+
+    // ToDo : comment those that are not required
+    const { PAN_NUMBER, ADHAR_NUMBER } = validationAdharPan;
+
+    this.tempState = Object.assign({}, this.state);
+
+    switch (field) {
+      case PAN_NUMBER:
+        if (value.length <= 10) {
+          this.tempState["pan"] = value.toUpperCase();
+        }
+        break;
+      case ADHAR_NUMBER:
+        if (value.length <= 12) {
+          this.tempState["adhar"] = value;
+        }
+        break;
+      default:
+        this.tempState[field.slug] = value;
+        break;
+    }
+
+    this.setState({ ...this.state, ...this.tempState });
+
+    window.setTimeout(() => {
+      pan_adhar(this.tempState["pan"], this.tempState["adhar"]);
+      this.validationHandler();
+    }, 10);
+  };
+
   componentWillMount() {
     const { payload } = this.props;
     if (!checkObject(payload))
@@ -273,7 +329,7 @@ class AdharPan extends Component {
 
   componentDidMount() {
     const { pan, changeLoader } = this.props;
-    if (pan) if (pan.length === 10) this.setState({ pan_correct: true });
+    // if (pan) if (pan.length === 10) this.setState({ missed_fields: true });
     // console.log(this.props.token)
     changeLoader(false);
   }
@@ -313,7 +369,10 @@ class AdharPan extends Component {
                   required={PAN_NUMBER.required}
                   value={this.props.pan}
                   // ref={ref => (this.obj.pan = ref)}
-                  onChange={e => this._PANEnter(e)}
+                  // onChange={e => this._PANEnter(e)}
+                  onChange={e =>
+                    this.onChangeHandler(PAN_NUMBER, e.target.value)
+                  }
                 />
                 <br />
               </div>
@@ -325,7 +384,7 @@ class AdharPan extends Component {
               <div
                 className="form-group"
                 style={{
-                  visibility: this.state.pan_correct ? "visible" : "hidden"
+                  visibility: !this.state.missed_fields ? "visible" : "hidden"
                 }}
               >
                 <label htmlFor="numberAdhar" className={"bmd-label-floating"}>
@@ -343,7 +402,10 @@ class AdharPan extends Component {
                     maxLength={ADHAR_NUMBER.maxLength}
                     minLength={ADHAR_NUMBER.minLength}
                     value={this.props.adhar}
-                    onChange={e => this._AdharEnter(e)}
+                    // onChange={e => this._AdharEnter(e)}
+                    onChange={e =>
+                      this.onChangeHandler(ADHAR_NUMBER, e.target.value)
+                    }
                     // ref={ref => (this.obj.adhar = ref)}
                     aria-describedby="adhar-area"
                   />
@@ -369,7 +431,7 @@ class AdharPan extends Component {
           </div>
 
           <div className="mt-5 mb-5 text-center ">
-            {this.state.pan_correct && (
+            {!this.state.missed_fields && (
               <input
                 type="submit"
                 name="submit"

@@ -112,18 +112,24 @@ const validationAdharPan = {
     autoComplete: "off",
     minLength: 10,
     maxLength: 10,
-    error: "Please Enter Right PAN Number",
+    error: "Invalid PAN Number",
     id: "numberPAN"
   },
+  // PAN_CORRECT: {
+  //   slug: 'pan_correct',
+  //   pattern:/^[a-zA-Z]{3}[pP][a-zA-Z]{1}([0-9]){4}[a-zA-Z]{1}?$/,
+  //   error: "Enter Valid Pan Card"
+  // },
   ADHAR_NUMBER: {
     slug: "adhar",
     type: "number",
     pattern: /^[0-9]{12}$/,
     title: "This field is required",
     autoComplete: "off",
+    required: false,
     maxLength: 12,
     minLength: 12,
-    error: "Please Enter Right Adhar Number",
+    error: "Invalid Adhar Number",
     id: "numberAdhar"
   }
 };

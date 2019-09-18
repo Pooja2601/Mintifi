@@ -10,8 +10,8 @@ import {PrivacyPolicy, TnCPolicy} from "../../../shared/policy";
 import Select from "react-select";
 // import DatePicker from "react-datepicker";
 // import "react-datepicker/dist/react-datepicker.css";
-import {checkObject} from "../../../shared/common_logic";
-
+import {checkObject, regexTrim} from "../../../shared/common_logic";
+import {validationBusinessDetails} from "./gst_validation";
 const {PUBLIC_URL} = process.env;
 
 class BusinessDetail extends Component {
@@ -182,6 +182,7 @@ class BusinessDetail extends Component {
     render() {
 
         const gstProfile = this.props.gstProfile;
+        const { COMPANY_NAME, COMPANY_TYPE, GST_NUMBER, PAN_NUMBER, AVERAGE_TRANSACTION, DEALER_CODE } = validationBusinessDetails
         return (
             <>
                 {/*<Link to={`${PUBLIC_URL}/preapprove/personaldetails`} className={"btn btn-link"}>Go Back </Link>*/}
@@ -202,15 +203,15 @@ class BusinessDetail extends Component {
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             {/*<h5 className={"text-center"}>{(gstProfile === Object(gstProfile)) ? gstProfile.lgnm : ''}</h5>*/}
                             <input
-                                type="text"
+                                type={COMPANY_NAME.type}
                                 className="form-control font_weight p-2"
-                                title="Company Legal Name"
-                                autoCapitalize="characters"
-                                id="companyName"
-                                required={true}
+                                title={COMPANY_NAME.title}
+                                autoCapitalize={COMPANY_NAME.autoCapitalize}
+                                id={COMPANY_NAME.id}
+                                required={COMPANY_NAME.required}
                                 value={(checkObject(gstProfile)) ? gstProfile.lgnm : ''}
-                                readOnly={true}
-                                disabled={true}
+                                readOnly={COMPANY_NAME.readOnly}
+                                disabled={COMPANY_NAME.disabled}
                             />
                         </div>
                     </div>
@@ -219,9 +220,9 @@ class BusinessDetail extends Component {
                             <div className="form-group mb-3">
                                 <label htmlFor="companyType" className={"bmd-label-floating"}>Company Type *</label>
                                 <Select options={BusinessType}
-                                        required={true}
-                                        id="companyType"
-                                        inputId={"companyType"}
+                                        required={COMPANY_TYPE.required}
+                                        id={COMPANY_TYPE.id}
+                                        inputId={COMPANY_TYPE.inputId}
                                     // value={BusinessType[1]}
                                         onBlur={() => this.validationErrorMsg()}
                                         onChange={(e) => {
@@ -255,14 +256,14 @@ class BusinessDetail extends Component {
                             <div className="form-group mb-3">
                                 <label htmlFor="numberGST" className={"bmd-label-floating"}>GST Number *</label>
                                 <input
-                                    type="text"
+                                    type={GST_NUMBER.type}
                                     className="form-control font_weight"
                                     // placeholder="Mobile Number"
-                                    pattern="^\d{2}[A-Z]{5}\d{4}[A-Z]{1}[A-Z\d]{1}[Z]{1}[A-Z\d]{1}$"
-                                    title="Please enter GST Number"
-                                    autoCapitalize="characters"
-                                    id="numberGST"
-                                    required={true}
+                                    pattern={regexTrim(GST_NUMBER.pattern)}
+                                    title={GST_NUMBER.title}
+                                    autoCapitalize={GST_NUMBER.autoCapitalize}
+                                    id={GST_NUMBER.id}
+                                    required={GST_NUMBER.required}
                                     value={this.state.gst}
                                     onBlur={() => this.validationErrorMsg()}
                                     // ref={ref => (this.obj.pan = ref)}
@@ -276,18 +277,18 @@ class BusinessDetail extends Component {
                         <div className="form-group mb-3 ">
                             <label htmlFor="numberPAN" className={"bmd-label-floating"}>Business PAN *</label>
                             <input
-                                type="text"
+                                type={PAN_NUMBER.type}
                                 className="form-control font_weight p-2"
                                 // placeholder="Email"
-                                pattern="^[a-zA-Z]{5}([0-9]){4}[a-zA-Z]{1}?$"
-                                title="Please enter Business PAN"
-                                autoCapitalize="characters"
-                                id="numberPAN"
-                                required={true}
+                                pattern={regexTrim(PAN_NUMBER.pattern)}
+                                title={PAN_NUMBER.title}
+                                autoCapitalize={PAN_NUMBER.autoCapitalize}
+                                id={PAN_NUMBER.id}
+                                required={PAN_NUMBER.required}
                                 value={this.state.bpan}
                                 onBlur={() => this.validationErrorMsg()}
-                                readOnly={true}
-                                disabled={true}
+                                readOnly={PAN_NUMBER.readOnly}
+                                disabled={PAN_NUMBER.disabled}
                                 // ref={ref => (this.obj.pan = ref)}
                                 onChange={(e) => this.setState({bpan: e.target.value}, () => this.props.setBusinessDetail(this.state))}
                             />
@@ -308,13 +309,13 @@ class BusinessDetail extends Component {
                   </span>
                                     </div>
                                     <input
-                                        type="text"
+                                        type={AVERAGE_TRANSACTION.type}
                                         className="form-control font_weight prependInput"
-                                        pattern="^[0-9]{5,10}$"
-                                        title="Enter Average monthly Transactions"
-                                        autoCapitalize="characters"
-                                        id="avgTrans"
-                                        required={true}
+                                        pattern={regexTrim(AVERAGE_TRANSACTION.pattern)}
+                                        title={AVERAGE_TRANSACTION.title}
+                                        autoCapitalize={AVERAGE_TRANSACTION.autoCapitalize}
+                                        id={AVERAGE_TRANSACTION.id}
+                                        required={AVERAGE_TRANSACTION.required}
                                         value={this.state.avgtrans}
                                         style={{marginLeft: '-0.5rem'}}
                                         // ref={ref => (this.obj.pan = ref)}
@@ -335,13 +336,13 @@ class BusinessDetail extends Component {
                                     Dealer Code
                                 </label>
                                 <input
-                                    type="text"
+                                    type={DEALER_CODE.type}
                                     className="form-control font_weight"
-                                    pattern="^[0-9A-Za-z]{4,}$"
-                                    title="Enter Dealer Code"
-                                    autoCapitalize="characters"
-                                    id="dealerCode"
-                                    required={true}
+                                    pattern={regexTrim(DEALER_CODE.pattern)}
+                                    title={DEALER_CODE.title}
+                                    autoCapitalize={DEALER_CODE.autoCapitalize}
+                                    id={DEALER_CODE.id}
+                                    required={DEALER_CODE.required}
                                     value={this.state.dealercode}
                                     // ref={ref => (this.obj.pan = ref)}
                                     onBlur={() => this.validationErrorMsg()}
