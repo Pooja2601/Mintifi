@@ -152,6 +152,11 @@ class ESign extends Component {
         let base64_encoded = ''
         this.counterPing -= 1;
 
+        const {
+            adharObj,
+            businessObj, bankObj, payload
+        } = this.props;
+
         const reqParam = `loan_application_id=${eSignPayload.loan_application_id}&document_type=agreement_document`;
         const options = {
             URL: `${baseUrl}/esign/status?${reqParam}`,
@@ -170,7 +175,6 @@ class ESign extends Component {
             // window.setTimeout(() => window.location.href = `${eSignPayload.error_url}`, 5000);
         }
 
-
         // ToDo : Navigating to anchor urls
         if (resp.status === apiActions.SUCCESS_RESPONSE) {
             let redLocation = `${eSignPayload.success_url}`;
@@ -182,7 +186,8 @@ class ESign extends Component {
                 if (this.popUpWindow)
                     this.popUpWindow.close();
                 this.setState({checkStatus: false});
-                if (checkObject(this.props.payload)) { /// check if coming from React Flow
+                if (checkObject(payload) && checkObject(adharObj) && checkObject(businessObj) && checkObject(bankObj)) {
+                    /// check if coming from React Flow
                     base64_encoded = base64Logic(eSignPayload, 'encode');
                     redLocation = `${PUBLIC_URL}/emandate?payload=${base64_encoded}&token=${token}`;
                 }
@@ -333,6 +338,10 @@ const mapStateToProps = state => ({
     eSignPayload: state.eSignReducer.eSignPayload,
     eSignAttempt: state.eSignReducer.eSignAttempt,
     payload: state.authPayload.payload,
+    adharObj: state.adharDetail.adharObj,
+    businessObj: state.businessDetail.businessObj,
+    bankObj: state.businessDetail.bankObj,
+
 });
 
 export default withRouter(
