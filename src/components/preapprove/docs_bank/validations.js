@@ -24,8 +24,8 @@ const bankValidations = {
     IFSC: {
         type: 'text',
         id: 'ifscCode',
-        title: 'Enter Average monthly Transactions',
-        error: "Invalid Monthly Transactions",
+        title: 'Enter IFSC Code',
+        error: "Invalid IFSC Code",
         required: true,
         slug: 'ifsc_code',
         autoCapitalize: "characters",
@@ -35,9 +35,9 @@ const bankValidations = {
         type: 'dropdown',
         id: 'accountType',
         slug: 'acc_type',
-        title: 'Select Account',
-        error: "Select Bank Account Type",
-        pattern: /^[^]+$/,
+        title: 'Select Account Type',
+        error: "Select Account Type",
+        pattern: /^[a-z]{2,}$/,
         options: accountType,
         required: true
     },
