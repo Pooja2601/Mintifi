@@ -42,6 +42,8 @@ import ErrorUrl from "./components/postapprove/emandate/e_nach/error_url";
 import CancelUrl from "./components/postapprove/emandate/e_nach/cancel_url";
 import PNach from "./components/postapprove/emandate/e_nach/pnach";
 
+// Dev Tool
+import ClearCache from "./components/clear_cache";
 
 const routes = [
     {
@@ -171,6 +173,10 @@ const routes = [
     {
         path: 'enach/pnach',
         component: PNach
+    },
+    {
+        path: 'clear_cache',
+        component: ClearCache
     },
 ];
 

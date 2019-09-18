@@ -114,35 +114,32 @@ class PersonalDetail extends Component {
     }
 
 
-    _pincodeFetch = async () => {
+    _pincodeFetch = async (pincode) => {
         //http://postalpincode.in/api/pincode/
         //https://test.mintifi.com/api/v2/communications/pincode/400059
         let city, state;
         const {setAdharManual, changeLoader, showAlert} = this.props;
-        if (this.state.pincode)
-            if (this.state.pincode.length >= 6) {
-
-                const options = {
-                    token: null,
-                    URL: `${otpUrl}/pincode/${this.state.pincode}`,
-                    showAlert: showAlert,
-                    changeLoader: changeLoader
-                }
-
-                const resp = await fetchAPI(options);
-
-                if (resp.status === apiActions.SUCCESS_RESPONSE) {
-                    // TODO: Check for success response
-
-                    city = resp.data.city;
-                    state = resp.data.state;
-                    this.setState({city, state}, () => setAdharManual(this.state));
-                } else if (resp.status === apiActions.ERROR_RESPONSE) {
-                    showAlert(resp.data.message, 'warn');
-                    this.setState({city: '', state: ''});
-                }
-
+        if (pincode) {
+            const options = {
+                token: null,
+                URL: `${otpUrl}/pincode/${pincode}`,
+                showAlert: showAlert,
+                changeLoader: changeLoader
             }
+
+            const resp = await fetchAPI(options);
+
+            if (resp.status === apiActions.SUCCESS_RESPONSE) {
+                // TODO: Check for success response
+
+                city = resp.data.city;
+                state = resp.data.state;
+                this.setState({city, state}, () => setAdharManual(this.state));
+            } else if (resp.status === apiActions.ERROR_RESPONSE) {
+                showAlert(resp.data.message, 'warn');
+                this.setState({city: '', state: ''});
+            }
+        }
     };
 
 
@@ -179,7 +176,7 @@ class PersonalDetail extends Component {
             case PINCODE:
                 if (value.length <= 6) {
                     this.tempState['pincode'] = value;
-                    this._pincodeFetch();
+                    value.length === 6 && this._pincodeFetch(value);
                 }
                 break;
             default:
@@ -462,7 +459,6 @@ class PersonalDetail extends Component {
                                     id={PINCODE.id}
                                     required={PINCODE.required}
                                     value={this.state.pincode}
-                                    onBlur={() => this._pincodeFetch()}
                                     // ref={ref => (this.obj.pan = ref)}
                                     onChange={(e) => this.onChangeHandler(PINCODE, e.target.value)}
 
