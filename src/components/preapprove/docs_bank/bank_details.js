@@ -35,8 +35,7 @@ class BankDetail extends Component {
     };
 
     state = {
-        dropdownSelected: {value: '', label: bankValidations.ACCOUNT_TYPE.title},
-        acc_type: null,
+        acc_type: "",
         bank_name: "",
         acc_number: "",
         acc_name: "",
@@ -55,36 +54,34 @@ class BankDetail extends Component {
     };
 
     tempState = this.state;
-    /*
 
-        validationErrorMsg = () => {
-            let ctrerror = 4,
-                fieldTxt;
-            Object.values(this.validate).map((val, key) => {
-                if (!val) ++ctrerror;
-                else --ctrerror;
-            });
-            if (ctrerror !== 0) {
-                fieldTxt = ctrerror > 1 ? "field is " : "fields are ";
-                // alertModule(`Kindly check the form again, ${ctrerror / 2} ${fieldTxt} still having some issue !`, 'warn');
-            }
-        };
-    */
+    validationErrorMsg = () => {
+        let ctrerror = 4,
+            fieldTxt;
+        Object.values(this.validate).map((val, key) => {
+            if (!val) ++ctrerror;
+            else --ctrerror;
+        });
+        if (ctrerror !== 0) {
+            fieldTxt = ctrerror > 1 ? "field is " : "fields are ";
+            // alertModule(`Kindly check the form again, ${ctrerror / 2} ${fieldTxt} still having some issue !`, 'warn');
+        }
+    };
 
-    /*   handleValidation = () => {
-           let ctrerror = 4,
-               missed_fields;
-           // let missed_fields = Object.keys(this.validate).some(x => this.validate[x]);
-           Object.values(this.validate).map((val, key) => {
-               if (!val) ++ctrerror;
-               else --ctrerror;
-               // console.log(val);
-           });
-           // console.log(ctrerror);
-           missed_fields = ctrerror !== 0;
-           this.setState({missed_fields});
-           // this.setState({missed_fields}, () => console.log('All Fields Validated : ' + this.state.missed_fields));
-       };*/
+    handleValidation = () => {
+        let ctrerror = 4,
+            missed_fields;
+        // let missed_fields = Object.keys(this.validate).some(x => this.validate[x]);
+        Object.values(this.validate).map((val, key) => {
+            if (!val) ++ctrerror;
+            else --ctrerror;
+            // console.log(val);
+        });
+        // console.log(ctrerror);
+        missed_fields = ctrerror !== 0;
+        this.setState({missed_fields});
+        // this.setState({missed_fields}, () => console.log('All Fields Validated : ' + this.state.missed_fields));
+    };
 
 
     // ToDo : should be independent of a field
@@ -128,12 +125,8 @@ class BankDetail extends Component {
             case IFSC:
                 if (value.length <= 11) {
                     this.tempState['ifsc_code'] = value;
-                    (value.length === 11) && this._fetchIFSC(value);
+                    this._pincodeFetch();
                 }
-                break;
-            case ACCOUNT_TYPE:
-                this.tempState['dropdownSelected'] = value;
-                this.tempState['acc_type'] = value.value;
                 break;
             case MICR_CODE:
                 if (value.length <= 9 && !isNaN(value)) {
@@ -144,8 +137,6 @@ class BankDetail extends Component {
                 this.tempState[field.slug] = value;
                 break
         }
-        console.log(value)
-
 
         this.setState({...this.state, ...this.tempState});
 
@@ -259,7 +250,6 @@ class BankDetail extends Component {
     _fetchIFSC(ifsc) {
         const {changeLoader, showAlert, setBankDetail} = this.props;
         let bank_name, micr_code, branch_name;
-
         changeLoader(true);
         fetch(`https://ifsc.razorpay.com/${ifsc}`)
             .then(resp => resp.json())
@@ -308,7 +298,7 @@ class BankDetail extends Component {
         if (checkObject(adharObj)) {
             const {f_name, l_name} = adharObj;
             this.setState({acc_name: `${f_name} ${l_name}`}, () => setBankDetail(this.state));
-            // this.validate['acc_name'] = true;
+            this.validate['acc_name'] = true;
         }
         if (checkObject(bankObj))
             this.setState(bankObj, () => {
@@ -324,7 +314,7 @@ class BankDetail extends Component {
         // console.log(this.props.gstProfile)
         changeLoader(false);
         // setTimeout(() => this.handleValidation(), 2000);
-        setTimeout(() => this.validationHandler(), 500);
+        setTimeout(() => this.validationHandler(), 2000);
         // console.log(this.props.adharObj);
 
     }
@@ -427,7 +417,6 @@ class BankDetail extends Component {
                                 <Select
                                     options={ACCOUNT_TYPE.options}
                                     required={true}
-                                    value={this.state.dropdownSelected}
                                     id={ACCOUNT_TYPE.id}
                                     inputId={ACCOUNT_TYPE.id}
                                     // onBlur={() => this.validationErrorMsg()}
@@ -471,7 +460,6 @@ class BankDetail extends Component {
                                     title={BANK_NAME.title}
                                     autoCapitalize={BANK_NAME.autoCapitalize}
                                     id={BANK_NAME.id}
-                                    pattern={regexTrim(BANK_NAME.pattern)}
                                     required={BANK_NAME.required}
                                     disabled={BANK_NAME.disabled}
                                     value={this.state.bank_name}
