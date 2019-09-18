@@ -35,7 +35,7 @@ const Error_URL = props => {
 };
 
 Error_URL.propTypes = {
-    eSignPayload: PropTypes.object.isRequired
+    eSignPayload: PropTypes.object
 };
 
 const mapStateToProps = state => ({

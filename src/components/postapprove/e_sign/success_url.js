@@ -34,7 +34,7 @@ const Success_URL = props => {
 };
 
 Success_URL.propTypes = {
-    eSignPayload: PropTypes.object.isRequired
+    eSignPayload: PropTypes.object
 };
 
 const mapStateToProps = state => ({
