@@ -45,47 +45,7 @@ class BankDetail extends Component {
         branch_name: ""
     };
 
-    validate = {
-        acc_type: false,
-        // bank_name: false,
-        acc_number: false,
-        acc_name: false,
-        ifsc_code: false
-        // micr_code: false,
-    };
-
     tempState = this.state;
-    /*
-
-        validationErrorMsg = () => {
-            let ctrerror = 4,
-                fieldTxt;
-            Object.values(this.validate).map((val, key) => {
-                if (!val) ++ctrerror;
-                else --ctrerror;
-            });
-            if (ctrerror !== 0) {
-                fieldTxt = ctrerror > 1 ? "field is " : "fields are ";
-                // alertModule(`Kindly check the form again, ${ctrerror / 2} ${fieldTxt} still having some issue !`, 'warn');
-            }
-        };
-    */
-
-    /*   handleValidation = () => {
-           let ctrerror = 4,
-               missed_fields;
-           // let missed_fields = Object.keys(this.validate).some(x => this.validate[x]);
-           Object.values(this.validate).map((val, key) => {
-               if (!val) ++ctrerror;
-               else --ctrerror;
-               // console.log(val);
-           });
-           // console.log(ctrerror);
-           missed_fields = ctrerror !== 0;
-           this.setState({missed_fields});
-           // this.setState({missed_fields}, () => console.log('All Fields Validated : ' + this.state.missed_fields));
-       };*/
-
 
     // ToDo : should be independent of a field
     validationHandler = () => {
@@ -98,7 +58,6 @@ class BankDetail extends Component {
         });
 
         this.setState({missed_fields: lomo}); // true : for disabling
-
     }
 
     // Common for all input fields of this component
@@ -301,22 +260,13 @@ class BankDetail extends Component {
         if (checkObject(adharObj)) {
             const {f_name, l_name} = adharObj;
             this.setState({acc_name: `${f_name} ${l_name}`}, () => setBankDetail(this.state));
-            // this.validate['acc_name'] = true;
         }
         if (checkObject(bankObj))
-            this.setState(bankObj, () => {
-                Object.keys(this.state).map((val, key) => {
-                    if (this.validate[val] !== undefined)
-                        this.validate[val] = this.state[val].length > 0;
-                    if (val === 'acc_type')
-                        this.validate[val] = false;
-                });
-            });
+            this.setState(bankObj);
         else setBankDetail(this.state);
 
         // console.log(this.props.gstProfile)
         changeLoader(false);
-        // setTimeout(() => this.handleValidation(), 2000);
         setTimeout(() => this.validationHandler(), 500);
         // console.log(this.props.adharObj);
 

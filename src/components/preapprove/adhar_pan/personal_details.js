@@ -9,9 +9,10 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 // import {alertModule} from "../../../shared/common_logic";
 import {fetchAPI, apiActions, postAPI} from "../../../api";
-import {checkObject, regexTrim} from "../../../shared/common_logic";
+import {checkObject, fieldValidationHandler, regexTrim} from "../../../shared/common_logic";
 
 import {validationPersonalDetails} from "./validation";
+import {bankValidations} from "../docs_bank/validations";
 
 
 const {PUBLIC_URL} = process.env;
@@ -45,19 +46,6 @@ class PersonalDetail extends Component {
 
     tempState = this.state;
 
-    validate = {
-        f_name: false,
-        // m_name: false,
-        l_name: false,
-        mobile: false,
-        email: false,
-        // dob: true,
-        // gender: true,
-        pincode: false,
-        address1: false,
-        // address2: false,
-    };
-
     componentDidMount() {
 
         const {payload, authObj, adharObj, changeLoader, setAdharManual, history, pan} = this.props;
@@ -82,13 +70,7 @@ class PersonalDetail extends Component {
                     state.mobile = authObj.mobile;
 
         if (checkObject(state))
-            this.setState(state, () => {
-                Object.keys(this.state).map((val, key) => {
-                    if (this.validate[val] !== undefined)
-                        this.validate[val] = (this.state[val].length);
-                    // console.log(this.validate);
-                });
-            });
+            this.setState(state);
         else setAdharManual(this.state);
 
         setTimeout(() => {
@@ -131,19 +113,6 @@ class PersonalDetail extends Component {
 
     }
 
-    /*handleValidation() {
-        let ctrerror = 6, missed_fields;
-        // let missed_fields = Object.keys(this.validate).some(x => this.validate[x]);
-        Object.values(this.validate).map((val, key) => {
-            if (!val)
-                ++ctrerror;
-            else --ctrerror;
-            // console.log(val);
-        });
-        missed_fields = (ctrerror !== 0);
-        this.setState({missed_fields});
-        // this.setState({missed_fields}, () => console.log('All Fields Validated : ' + this.state.missed_fields));
-    }*/
 
     _pincodeFetch = async () => {
         //http://postalpincode.in/api/pincode/
@@ -173,7 +142,6 @@ class PersonalDetail extends Component {
                     this.setState({city: '', state: ''});
                 }
 
-
             }
     };
 
@@ -182,20 +150,13 @@ class PersonalDetail extends Component {
     validationHandler = () => {
         const {showAlert} = this.props;
 
-        const lomo = Object.entries(validationPersonalDetails).some((val, key) => {
-
-            if (val[1].required) {
-                let regexTest = (val[1].pattern).test(this.state[val[1].slug]);
-                if (!regexTest) { // false : failed pattern
-                    showAlert(val[1].error);
-                    return val[1];
-                }
-            }
+        const lomo = fieldValidationHandler({
+            showAlert: showAlert,
+            validations: validationPersonalDetails,
+            localState: this.state
         });
-        if (!lomo)
-            showAlert();
+
         this.setState({missed_fields: lomo}); // true : for disabling
-        // console.log(lomo, this.state.missed_fields);
 
     }
 
