@@ -17,7 +17,7 @@ import {alertModule, retrieveParam, generateToken, base64Logic, regexTrim} from 
 // import "react-datepicker/dist/react-datepicker.css";
 import Select from "react-select";
 import {fetchAPI, apiActions, postAPI} from "../../../api";
-import {checkObject} from "../../../shared/common_logic";
+import {checkObject, fieldValidationHandler} from "../../../shared/common_logic";
 import {validationPersonalDetails} from "../adhar_pan/validation";
 import {bankValidations} from './validations';
 
@@ -91,23 +91,17 @@ class BankDetail extends Component {
     validationHandler = () => {
         const {showAlert} = this.props;
 
-        const lomo = Object.entries(bankValidations).some((val, key) => {
-
-            if (val[1].required) {
-                let regexTest = (val[1].pattern).test(this.state[val[1].slug]);
-                if (!regexTest) { // false : failed pattern
-                    showAlert(val[1].error);
-                    return val[1];
-                }
-            }
+        const lomo = fieldValidationHandler({
+            showAlert: showAlert,
+            validations: bankValidations,
+            localState: this.state
         });
-        if (!lomo)
-            showAlert();
+
         this.setState({missed_fields: lomo}); // true : for disabling
-        // console.log(lomo, this.state.missed_fields);
 
     }
 
+    // Common for all input fields of this component
     onChangeHandler = (field, value) => {
         let that = this;
         const {setBankDetail} = this.props;
@@ -144,8 +138,7 @@ class BankDetail extends Component {
                 this.tempState[field.slug] = value;
                 break
         }
-        console.log(value)
-
+        // console.log(value)
 
         this.setState({...this.state, ...this.tempState});
 
