@@ -1,3 +1,7 @@
+import React from "react";
+import {accountType} from '../shared/constants';
+import {BusinessType} from "../shared/constants";
+
 const validationPersonalDetails = {
     F_NAME: {
         slug: "f_name",
@@ -157,4 +161,145 @@ const validationMobileOtp = {
     }
 };
 
-export {validationPersonalDetails, validationAdharPan, validationMobileOtp};
+const bankValidations = {
+    ACCOUNT_NAME: {
+        type: 'text',
+        id: 'nameAccount',
+        slug: 'acc_name',
+        title: 'Enter Account Name',
+        error: 'Invalid Account Name',
+        required: true,
+        pattern: /^[a-zA-Z]{2,}[^]+$/,
+        autoCapitalize: "characters",
+    },
+    ACCOUNT_NUMBER: {
+        type: 'text',
+        id: 'numberAccount',
+        slug: 'acc_number',
+        title: 'Enter Account Number',
+        error: "Invalid Account Number",
+        pattern: /^[0-9]{9,18}$/,
+        required: true,
+    },
+    IFSC: {
+        type: 'text',
+        id: 'ifscCode',
+        title: 'Enter IFSC Code',
+        error: "Invalid IFSC Code",
+        required: true,
+        slug: 'ifsc_code',
+        autoCapitalize: "characters",
+        pattern: /[A-Za-z]{4}\d{7}$/,
+    },
+    ACCOUNT_TYPE: {
+        type: 'dropdown',
+        id: 'accountType',
+        slug: 'acc_type',
+        title: 'Select Account Type',
+        error: "Select Account Type",
+        pattern: /^[a-z]{2,}$/,
+        options: accountType,
+        required: true
+    },
+    BANK_NAME: {
+        id: 'nameBank',
+        type: 'text',
+        title: "Enter Bank Name",
+        error: "Invalid Bank Name",
+        pattern: /^[^]+$/,
+        slug: 'bank_name',
+        autoCapitalize: "characters",
+        disabled: true,
+        required: true,
+    },
+    MICR_CODE: {
+        type: "text",
+        pattern: /^[0-9]{9}$/,
+        title: "Enter MICR Code",
+        error: "Invalid MICR Code",
+        autoCapitalize: "characters",
+        id: "micrCode",
+        slug: 'micr_code',
+        required: false,
+        disabled: true,
+    },
+    BRANCH_NAME: {
+        type: "text",
+        title: "Enter Branch Name",
+        error: "Invalid Branch Name",
+        id: "nameBranch",
+        slug: 'branch_name',
+        pattern: /^[^]+$/,
+        required: true,
+        disabled: true,
+    }
+};
+
+const validationBusinessDetails = {
+    COMPANY_NAME: {
+        slug: "gstProfile",
+        type: "text",
+        title: "Company Legal Name",
+        autoCapitalize: "characters",
+        id: "companyName",
+        pattern: /^[^]+$/,
+        required: true,
+        readOnly: true,
+        disabled: true,
+        error: "Invalid Company Name"
+    },
+    COMPANY_TYPE: {
+        slug: "companytype",
+        required: true,
+        id: "companyType",
+        pattern: /^[^]+$/,
+        inputId: "companyType",
+        options: BusinessType,
+        error: "Invalid Company Type"
+    },
+    GST_NUMBER: {
+        slug: "gst",
+        type: "text",
+        pattern: /^\d{2}[a-zA-Z]{5}\d{4}[a-zA-Z][a-zA-Z1-9][zZ][a-zA-Z0-9]$/,
+        title: "Enter GST Number",
+        autoCapitalize: "characters",
+        id: "numberGST",
+        required: true,
+        error: "Invalid GST Number"
+    },
+    PAN_NUMBER: {
+        slug: "bpan",
+        type: "text",
+        pattern: /^[a-zA-Z]{5}([0-9]){4}[a-zA-Z]?$/,
+        title: "Enter Business PAN",
+        autoCapitalize: "characters",
+        id: "numberPAN",
+        required: true,
+        readOnly: true,
+        disabled: true,
+        error: "Invalid Pan Number"
+    },
+    AVERAGE_TRANSACTION: {
+        slug: "avgtrans",
+        type: "text",
+        pattern: /^[0-9]{5,10}$/,
+        title: "Enter Average monthly Transactions",
+        autoCapitalize: "characters",
+        id: "avgTrans",
+        required: true,
+        error: "Invalid Transaction Amount"
+    },
+    DEALER_CODE: {
+        slug: "dealercode",
+        type: "text",
+        pattern: /^[0-9A-Za-z]{4,10}$/,
+        title: "Enter Dealer Code",
+        autoCapitalize: "characters",
+        id: "dealerCode",
+        required: true,
+        error: "Invalid Dealer Code"
+    }
+};
+
+
+export {validationPersonalDetails, validationAdharPan, validationMobileOtp, validationBusinessDetails, bankValidations};

@@ -13,7 +13,7 @@ import PropTypes from "prop-types";
 import {Link, withRouter} from "react-router-dom";
 import {checkObject, fieldValidationHandler, regexTrim} from "../../../shared/common_logic";
 import {apiActions, fetchAPI} from "../../../api";
-import {validationAdharPan, validationPersonalDetails} from "./validation";
+import {validationAdharPan} from "./../../../shared/validations";
 
 const {PUBLIC_URL} = process.env;
 

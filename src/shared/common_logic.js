@@ -1,10 +1,7 @@
 // import React from "react";
-// import {withRouter} from "react-router-dom";
-// import {changeLoader,  DrawsetToken} from "../../actions";
 import {toast} from "react-toastify";
 import {app_id, auth_secret, baseUrl, user_id} from "./constants";
 import {apiActions, postAPI} from "../api";
-import {bankValidations} from "../components/preapprove/docs_bank/validations";
 
 const chars =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
@@ -178,8 +175,7 @@ export const fieldValidationHandler = (props) => {
     });
     if (!lomo)
         showAlert();
-    return lomo;
-    // this.setState({missed_fields: lomo}); // true : for disabling
+    return lomo; // true : for disabling
     // console.log(lomo, this.state.missed_fields);
 }
 
