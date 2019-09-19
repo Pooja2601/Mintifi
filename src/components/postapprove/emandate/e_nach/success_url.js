@@ -5,18 +5,21 @@ import {changeLoader, EnachsetAttempt, EnachsetPayload} from "../../../../action
 import {postMessage} from "../../../../shared/common_logic";
 import PropTypes from "prop-types";
 
+const {PUBLIC_URL} = process.env;
 const Success_URL = props => {
+    const hosty = props.eNachPayload.success_url.localeCompare(PUBLIC_URL);
     if (window.location !== window.parent.location)
         postMessage({
             enach_status: "success",
             loan_id: props.eNachPayload.loan_application_id,
             action: "close"
         });
-    else
-        window.setTimeout(() => {
-            window.location.href = `${props.eNachPayload.success_url}`;
-        }, 5000);
-
+    else {
+        if (hosty === -1)
+            window.setTimeout(() => {
+                window.location.href = `${props.eNachPayload.success_url}`;
+            }, 5000);
+    }
     return (
         <>
             <i className={"fa fa-check-circle checkCircle"}/>
