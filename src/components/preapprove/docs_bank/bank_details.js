@@ -24,7 +24,7 @@ import {
 // import "react-datepicker/dist/react-datepicker.css";
 import Select from "react-select";
 import {fetchAPI, apiActions, postAPI} from "../../../api";
-import {bankValidations} from "./../../../shared/validations";
+import {validationBank} from "./../../../shared/validations";
 
 const {PUBLIC_URL} = process.env;
 
@@ -40,7 +40,7 @@ class BankDetail extends Component {
     };
 
     state = {
-        dropdownSelected: {value: '', label: bankValidations.ACCOUNT_TYPE.title},
+        dropdownSelected: {value: '', label: validationBank.ACCOUNT_TYPE.title},
         acc_type: null,
         bank_name: "",
         acc_number: "",
@@ -58,7 +58,7 @@ class BankDetail extends Component {
 
         const lomo = fieldValidationHandler({
             showAlert: showAlert,
-            validations: bankValidations,
+            validations: validationBank,
             localState: this.state
         });
 
@@ -72,7 +72,7 @@ class BankDetail extends Component {
         // fields is Equivalent to F_NAME , L_NAME... thats an object
 
         // ToDo : comment those that are not required
-        const {ACCOUNT_NUMBER, ACCOUNT_TYPE, IFSC, MICR_CODE} = bankValidations;
+        const {ACCOUNT_NUMBER, ACCOUNT_TYPE, IFSC, MICR_CODE} = validationBank;
 
         this.tempState = Object.assign({}, this.state);
         switch (field) {
@@ -279,7 +279,7 @@ class BankDetail extends Component {
 
 
     render() {
-        const {ACCOUNT_NAME, ACCOUNT_NUMBER, ACCOUNT_TYPE, BANK_NAME, BRANCH_NAME, IFSC, MICR_CODE} = bankValidations;
+        const {ACCOUNT_NAME, ACCOUNT_NUMBER, ACCOUNT_TYPE, BANK_NAME, BRANCH_NAME, IFSC, MICR_CODE} = validationBank;
 
         // const gstProfile = this.props.gstProfile;
         return (

@@ -12,11 +12,18 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {changeLoader, setToken, showAlert, EnachsetBankDetail, EnachsetPayload} from "../../../../actions";
 import {withRouter} from "react-router-dom";
-import {alertModule, checkObject, retrieveParam, base64Logic} from "../../../../shared/common_logic";
+import {
+    alertModule,
+    checkObject,
+    retrieveParam,
+    base64Logic,
+    fieldValidationHandler
+} from "../../../../shared/common_logic";
 // import DatePicker from "react-datepicker";
 // import "react-datepicker/dist/react-datepicker.css";
 import Select from "react-select";
 import {fetchAPI, apiActions, postAPI} from "../../../../api";
+import {validationBank} from "../../../../shared/validations";
 
 const {PUBLIC_URL} = process.env;
 
@@ -76,6 +83,67 @@ class ENachBankDetail extends Component {
         // this.setState({missed_fields}, () => console.log('All Fields Validated : ' + this.state.missed_fields));
     };
 
+    // ToDo : should be independent of a field
+    validationHandler = () => {
+        const {showAlert} = this.props;
+
+        const lomo = fieldValidationHandler({
+            showAlert: showAlert,
+            validations: validationBank,
+            localState: this.state
+        });
+
+        this.setState({missed_fields: lomo}); // true : for disabling
+    }
+
+
+    // Common for all input fields of this component
+    onChangeHandler = (field, value) => {
+        let that = this;
+        const {setBankDetail} = this.props;
+        // fields is Equivalent to F_NAME , L_NAME... thats an object
+
+        // ToDo : comment those that are not required
+        const {ACCOUNT_NUMBER, ACCOUNT_TYPE, IFSC, MICR_CODE} = validationBank;
+
+        this.tempState = Object.assign({}, this.state);
+        switch (field) {
+
+            case ACCOUNT_NUMBER:
+                if (!isNaN(value))
+                    if (value.length <= 18)
+                        this.tempState['acc_number'] = value;
+                break;
+
+            case IFSC:
+                if (value.length <= 11) {
+                    this.tempState['ifsc_code'] = value;
+                    (value.length === 11) && this._fetchIFSC(value);
+                }
+                break;
+            case ACCOUNT_TYPE:
+                this.tempState['dropdownSelected'] = value;
+                this.tempState['acc_type'] = value.value;
+                break;
+            case MICR_CODE:
+                if (value.length <= 9 && !isNaN(value)) {
+                    this.tempState['micr_code'] = value;
+                }
+                break;
+            default:
+                this.tempState[field.slug] = value;
+                break
+        }
+        // console.log(value)
+
+        this.setState({...this.state, ...this.tempState});
+
+        window.setTimeout(() => {
+            setBankDetail(that.state);
+            this.validationHandler();
+        }, 10)
+
+    }
 
     _createMandate = async (base64_encode) => {
         const {changeLoader, token, showAlert, history, eNachPayload, EnachsetPayload} = this.props;
