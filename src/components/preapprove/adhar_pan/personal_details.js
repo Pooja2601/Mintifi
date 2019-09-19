@@ -7,12 +7,10 @@ import {setAdharManual, changeLoader, showAlert} from "../../../actions/index";
 import {Link, withRouter} from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-// import {alertModule} from "../../../shared/common_logic";
 import {fetchAPI, apiActions, postAPI} from "../../../api";
 import {checkObject, fieldValidationHandler, regexTrim} from "../../../shared/common_logic";
 
-import {validationPersonalDetails} from "./validation";
-import {bankValidations} from "../docs_bank/validations";
+import {validationPersonalDetails} from "./../../../shared/validations";
 
 
 const {PUBLIC_URL} = process.env;
@@ -163,7 +161,7 @@ class PersonalDetail extends Component {
         // fields is Equivalent to F_NAME , L_NAME... thats an object
 
         // ToDo : comment those that are not required
-        const {F_NAME, M_NAME, L_NAME, MOBILE, DOB, ADDRESS2, ADDRESS1, EMAIL, GENDER, OWNERSHIP, PINCODE} = validationPersonalDetails;
+        const {MOBILE, PINCODE} = validationPersonalDetails;
 
         this.tempState = Object.assign({}, this.state);
         switch (field) {

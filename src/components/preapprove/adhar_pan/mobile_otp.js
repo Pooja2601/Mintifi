@@ -11,10 +11,9 @@ import {
     showAlert
 } from "../../../actions/index";
 import {Link, withRouter} from "react-router-dom";
-// import {alertModule} from "../../../shared/common_logic";
 import {fetchAPI, apiActions, postAPI} from "../../../api";
 import {checkObject, fieldValidationHandler, regexTrim} from "../../../shared/common_logic";
-import {validationMobileOtp, validationPersonalDetails} from "./validation";
+import {validationMobileOtp} from "./../../../shared/validations";
 
 const Timer = OTP_Timer;
 const {PUBLIC_URL} = process.env;

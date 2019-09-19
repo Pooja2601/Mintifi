@@ -12,14 +12,19 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {setBankDetail, changeLoader, setToken, showAlert} from "../../../actions";
 import {withRouter} from "react-router-dom";
-import {alertModule, retrieveParam, generateToken, base64Logic, regexTrim} from "../../../shared/common_logic";
+import {
+    retrieveParam,
+    checkObject,
+    fieldValidationHandler,
+    generateToken,
+    base64Logic,
+    regexTrim
+} from "../../../shared/common_logic";
 // import DatePicker from "react-datepicker";
 // import "react-datepicker/dist/react-datepicker.css";
 import Select from "react-select";
 import {fetchAPI, apiActions, postAPI} from "../../../api";
-import {checkObject, fieldValidationHandler} from "../../../shared/common_logic";
-import {validationPersonalDetails} from "../adhar_pan/validation";
-import {bankValidations} from './validations';
+import {bankValidations} from "./../../../shared/validations";
 
 const {PUBLIC_URL} = process.env;
 
@@ -67,7 +72,7 @@ class BankDetail extends Component {
         // fields is Equivalent to F_NAME , L_NAME... thats an object
 
         // ToDo : comment those that are not required
-        const {ACCOUNT_NAME, ACCOUNT_NUMBER, ACCOUNT_TYPE, BANK_NAME, BRANCH_NAME, IFSC, MICR_CODE} = bankValidations;
+        const {ACCOUNT_NUMBER, ACCOUNT_TYPE, IFSC, MICR_CODE} = bankValidations;
 
         this.tempState = Object.assign({}, this.state);
         switch (field) {
