@@ -2,7 +2,7 @@ import React, {Component} from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
 import {BusinessType} from "../../../shared/constants";
 import {connect} from "react-redux";
-import {setBusinessDetail, changeLoader} from "../../../actions/index";
+import {setBusinessDetail, changeLoader, showAlert} from "../../../actions/index";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
 // import {alertModule} from "../../../shared/common_logic";
@@ -10,7 +10,7 @@ import {PrivacyPolicy, TnCPolicy} from "../../../shared/policy";
 import Select from "react-select";
 // import DatePicker from "react-datepicker";
 // import "react-datepicker/dist/react-datepicker.css";
-import {checkObject, regexTrim} from "../../../shared/common_logic";
+import {checkObject, regexTrim, fieldValidationHandler} from "../../../shared/common_logic";
 import {validationBusinessDetails} from "./gst_validation";
 const {PUBLIC_URL} = process.env;
 
@@ -34,6 +34,7 @@ class BusinessDetail extends Component {
         tnc_consent: false,
         tncModal: false,
         ctrerror: 4,
+        optionSelected: {value: '', label: ''},
     };
 
     validate = {companytype: false, gst: false, avgtrans: false, dealercode: false};
@@ -83,7 +84,7 @@ class BusinessDetail extends Component {
             this.props.history.push(`${PUBLIC_URL}/preapprove/finalize`);
         });
     }
-
+/*
     validationErrorMsg = () => {
         let ctrerror = 4, fieldTxt;
         Object.values(this.validate).map((val, key) => {
@@ -117,13 +118,83 @@ class BusinessDetail extends Component {
 
     businessGst(e) {
         const value = e;
-// ToDo : allow only Business PAN
+        // ToDo : allow only Business PAN
         if (value.length <= 15) {
             let bpan = value.substr(2, 10);
             this.setState({gst: value, bpan}, () => this.props.setBusinessDetail(this.state))
         }
         this.validate.gst = (value.length === 15) ? true : false;
         this.handleValidation();
+    }
+*/
+
+    // ToDo : should be independent of a field
+    validationHandler = () => {
+        const {showAlert} = this.props;
+
+        const lomo = fieldValidationHandler({
+            showAlert: showAlert,
+            validations: validationBusinessDetails,
+            localState: this.state
+        });
+
+        this.setState({missed_fields: lomo}); // true : for disabling
+    }
+
+
+    onChangeHandler = (field, value) => {
+        // debugger;
+        let that = this, regex, doby;
+        const {setBusinessDetail} = this.props;
+        // fields is Equivalent to F_NAME , L_NAME... thats an object
+
+        // ToDo : comment those that are not required
+        const {COMPANY_NAME, COMPANY_TYPE, GST_NUMBER, PAN_NUMBER, AVERAGE_TRANSACTION, DEALER_CODE} = validationBusinessDetails;
+
+        this.tempState = Object.assign({}, this.state);
+        switch (field) {
+            case COMPANY_NAME:
+                // if (value.length <= 6) {
+                //     this.tempState['pincode'] = value;
+                //     this._pincodeFetch();
+                // }
+                break;
+            case COMPANY_TYPE:
+                this.tempState['optionSelected'] = value;
+                this.tempState['companytype'] = value.value;
+                break;
+            case GST_NUMBER: 
+                    if (value.length <= 15) {
+                        let bpan = value.substr(2, 10);
+                        this.tempState['gst'] = value;
+                        this.tempState['bpan'] = bpan;
+                    }
+                    break;   
+            case PAN_NUMBER: 
+            if(value.length <=10)
+                  this.tempState['bpan'] = value;
+                  break;
+            case AVERAGE_TRANSACTION: 
+            if (value.value.length <= 10 && !isNaN(value.value)) 
+            this.tempState['avgtrans'] = value.value
+            break;
+            case DEALER_CODE: 
+            debugger
+            if (value.value.length <= 10) 
+            this.tempState['dealercode'] = value.value 
+            break;
+            default:
+                this.tempState[field.slug] = value;
+                break;
+        }
+
+        this.setState({...this.state, ...this.tempState});
+
+        window.setTimeout(() => {
+            setBusinessDetail(that.state);
+            this.validationHandler();
+        }, 10)
+
     }
 
     componentWillMount() {
@@ -144,18 +215,13 @@ class BusinessDetail extends Component {
         const {businessObj, payload, setBusinessDetail} = this.props;
         // console.log(adharObj);
 
+        const {GST_NUMBER} = validationBusinessDetails;
+
         if (checkObject(businessObj)) {
-            this.businessGst(businessObj.gst);
+           
 
-            this.setState(businessObj, () => {
-                Object.keys(this.state).map((val, key) => {
-                    if (this.validate[val] !== undefined)
-                        this.validate[val] = (this.state[val].length);
-                    if (val == 'companytype')
-                        this.validate.companytype = false; // Clearing the dropdown validation
-
-                });
-            });
+            this.setState(businessObj,()=>  this.onChangeHandler(GST_NUMBER,businessObj.gst));
+          
 
         } else setBusinessDetail(this.state);
 
@@ -175,9 +241,11 @@ class BusinessDetail extends Component {
             console.log(e);
         }
 
-        setTimeout(() => this.handleValidation(), 2000);
+        setTimeout(() => this.validationHandler(), 1000);
 
     }
+
+  
 
     render() {
 
@@ -219,18 +287,20 @@ class BusinessDetail extends Component {
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3">
                                 <label htmlFor="companyType" className={"bmd-label-floating"}>Company Type *</label>
-                                <Select options={BusinessType}
+                                <Select options={COMPANY_TYPE.options}
                                         required={COMPANY_TYPE.required}
                                         id={COMPANY_TYPE.id}
                                         inputId={COMPANY_TYPE.inputId}
-                                    // value={BusinessType[1]}
-                                        onBlur={() => this.validationErrorMsg()}
-                                        onChange={(e) => {
-                                            let {value} = e;
-                                            this.setState({companytype: value}, () => this.props.setBusinessDetail(this.state));
-                                            this.validate.companytype = (value.length > 0);
-                                            this.handleValidation();
-                                        }}/>
+                                        value={this.state.optionSelected}
+                                        // onBlur={() => this.validationErrorMsg()}
+                                        onChange={(e) => this.onChangeHandler(COMPANY_TYPE, e)}
+                                    //     onChange={(e) => {
+                                    //         let {value} = e;
+                                    //         this.setState({companytype: value}, () => this.props.setBusinessDetail(this.state));
+                                    //         this.validate.companytype = (value.length > 0);
+                                    //    this.handleValidation(); 
+                                    //     }} 
+                                        />
                                 {/*<select style={{fontWeight: 600}}
                                         title="Please select Company Type"
                                         value={this.state.companytype} required={true}
@@ -265,9 +335,10 @@ class BusinessDetail extends Component {
                                     id={GST_NUMBER.id}
                                     required={GST_NUMBER.required}
                                     value={this.state.gst}
-                                    onBlur={() => this.validationErrorMsg()}
+                                    // onBlur={() => this.validationErrorMsg()}
                                     // ref={ref => (this.obj.pan = ref)}
-                                    onChange={(e) => this.businessGst(e.target.value)}
+                                    // onChange={(e) => this.businessGst(e.target.value)}
+                                    onChange={(e) => this.onChangeHandler(GST_NUMBER, e.target.value)}
                                 />
                             </div>
                         </div>
@@ -286,11 +357,12 @@ class BusinessDetail extends Component {
                                 id={PAN_NUMBER.id}
                                 required={PAN_NUMBER.required}
                                 value={this.state.bpan}
-                                onBlur={() => this.validationErrorMsg()}
+                                // onBlur={() => this.validationErrorMsg()}
                                 readOnly={PAN_NUMBER.readOnly}
                                 disabled={PAN_NUMBER.disabled}
                                 // ref={ref => (this.obj.pan = ref)}
-                                onChange={(e) => this.setState({bpan: e.target.value}, () => this.props.setBusinessDetail(this.state))}
+                                onChange={(e) => this.onChangeHandler(PAN_NUMBER,  e.target.value)}
+                                // onChange={(e) => this.setState({bpan: e.target.value}, () => this.props.setBusinessDetail(this.state))}
                             />
                         </div>
                     ) : <></>}
@@ -319,13 +391,18 @@ class BusinessDetail extends Component {
                                         value={this.state.avgtrans}
                                         style={{marginLeft: '-0.5rem'}}
                                         // ref={ref => (this.obj.pan = ref)}
-                                        onBlur={() => this.validationErrorMsg()}
-                                        onChange={(e) => {
-                                            let {value} = e.target;
-                                            if (value.length <= 10 && !isNaN(value)) this.setState({avgtrans: value}, () => this.props.setBusinessDetail(this.state));
-                                            this.validate.avgtrans = (value.length <= 10 && value.length >= 5);
-                                            this.handleValidation();
-                                        }}
+                                        // onBlur={() => this.validationErrorMsg()}
+                                        onChange={(e) => this.onChangeHandler(AVERAGE_TRANSACTION,  e.target)}
+
+                                        // onChange={(e) => {
+                                        //     let {value} = e.target;
+                                        //     debugger
+                                        //     if (value.length <= 10 && !isNaN(value)) 
+                                        //      debugger
+                                        //     this.setState({avgtrans: value}, () => this.props.setBusinessDetail(this.state));
+                                        //     this.validate.avgtrans = (value.length <= 10 && value.length >= 5);
+                                        //     this.handleValidation();
+                                        // }}
                                     />
                                 </div>
                             </div>
@@ -345,13 +422,14 @@ class BusinessDetail extends Component {
                                     required={DEALER_CODE.required}
                                     value={this.state.dealercode}
                                     // ref={ref => (this.obj.pan = ref)}
-                                    onBlur={() => this.validationErrorMsg()}
-                                    onChange={(e) => {
-                                        let {value} = e.target;
-                                        if (value.length <= 10) this.setState({dealercode: value}, () => this.props.setBusinessDetail(this.state));
-                                        this.validate.dealercode = (value.length <= 10 && value.length >= 4);
-                                        this.handleValidation();
-                                    }}
+                                    // onBlur={() => this.validationErrorMsg()}
+                                    onChange={(e) => this.onChangeHandler(DEALER_CODE,  e.target)}
+                                    // onChange={(e) => {
+                                    //     let {value} = e.target;
+                                    //     if (value.length <= 10) this.setState({dealercode: value}, () => this.props.setBusinessDetail(this.state));
+                                    //     this.validate.dealercode = (value.length <= 10 && value.length >= 4);
+                                    //     this.handleValidation();
+                                    // }}
                                 />
                             </div>
                         </div>
@@ -403,5 +481,5 @@ const mapStateToProps = state => ({
 });
 
 export default withRouter(connect
-(mapStateToProps, {setBusinessDetail, changeLoader})
+(mapStateToProps, {setBusinessDetail, changeLoader, showAlert})
 (BusinessDetail));
