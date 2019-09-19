@@ -6,7 +6,7 @@ import {postMessage} from "../../../../shared/common_logic";
 import PropTypes from "prop-types";
 
 const PUBLIC_URL = process.env;
-const Cancel_URL = props => {l
+const Cancel_URL = props => {
     const hosty = props.eNachPayload.cancel_url.localeCompare(PUBLIC_URL);
     if (window.location !== window.parent.location) {
         postMessage({
