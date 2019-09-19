@@ -1,6 +1,5 @@
 import React, {Component} from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
-import {BusinessType} from "../../../shared/constants";
 import {connect} from "react-redux";
 import {setBusinessDetail, changeLoader, showAlert} from "../../../actions/index";
 import PropTypes from "prop-types";
@@ -100,7 +99,7 @@ class BusinessDetail extends Component {
 
 
     onChangeHandler = (field, value) => {
-        // debugger;
+
         let that = this, regex, doby;
         const {setBusinessDetail} = this.props;
         // fields is Equivalent to F_NAME , L_NAME... thats an object
@@ -169,9 +168,7 @@ class BusinessDetail extends Component {
         const {GST_NUMBER} = validationBusinessDetails;
 
         if (checkObject(businessObj)) {
-
             this.setState(businessObj, () => this.onChangeHandler(GST_NUMBER, businessObj.gst));
-
         } else setBusinessDetail(this.state);
 
         try {
@@ -191,7 +188,6 @@ class BusinessDetail extends Component {
         }
 
         setTimeout(() => this.validationHandler(), 1000);
-
     }
 
 

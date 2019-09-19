@@ -161,7 +161,7 @@ const validationMobileOtp = {
     }
 };
 
-const bankValidations = {
+const validationBank = {
     ACCOUNT_NAME: {
         type: 'text',
         id: 'nameAccount',
@@ -302,4 +302,4 @@ const validationBusinessDetails = {
 };
 
 
-export {validationPersonalDetails, validationAdharPan, validationMobileOtp, validationBusinessDetails, bankValidations};
+export {validationPersonalDetails, validationAdharPan, validationMobileOtp, validationBusinessDetails, validationBank};

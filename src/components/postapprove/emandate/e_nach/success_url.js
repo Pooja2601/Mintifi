@@ -17,7 +17,7 @@ const Success_URL = props => {
             action: "close"
         });
     else {
-        if (hosty === -1) // URLs and HOST are same
+        if (hosty === -1) // URLs and HOST aren't same
             window.setTimeout(() => {
                 window.location.href = `${props.eNachPayload.success_url}`;
             }, 5000);
