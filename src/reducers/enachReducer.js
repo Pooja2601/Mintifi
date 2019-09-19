@@ -7,9 +7,12 @@ export default (state = {}, action) => {
     switch (action.type) {
 
         case types.ENACH_PAYLOAD:
-            return {...state, eNachPayload: action.eNachPayload};
+            return {
+                ...state,
+                token: action.token, eNachPayload: action.eNachPayload
+            };
 
-        case types.ESIGN_BANK_DETAIL:
+        case types.ENACH_BANK_DETAIL:
             return {...state, bankObj: action.bankObj};
 
         case types.ENACH_ATTEMPT:

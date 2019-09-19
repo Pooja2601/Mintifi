@@ -32,10 +32,10 @@ export const types = {
     //...................................    Enach Section
     ENACH_PAYLOAD: "ENACH_PAYLOAD",
     ENACH_ATTEMPT: "ENACH_ATTEMPT",
+    ENACH_BANK_DETAIL: "ENACH_BANK_DETAIL",
     //...................................    Esign Section
     ESIGN_PAYLOAD: "ESIGN_PAYLOAD",
-    ESIGN_ATTEMPT: "ENACH_ATTEMPT",
-    ESIGN_BANK_DETAIL: "ESIGN_BANK_DETAIL",
+    ESIGN_ATTEMPT: "ESIGN_ATTEMPT",
     ESIGN_DOC_PAYLOAD: "ESIGN_DOC_PAYLOAD",
     ESIGN_ANCHOR_PAYLOAD: "ESIGN_ANCHOR_PAYLOAD",
 };
@@ -145,9 +145,17 @@ export const DrawAnchorPayload = anchorPayload => ({
 });
 
 //..................................... E-NACH
-export const EnachsetPayload = ( eNachPayload) => ({
+
+
+export const EnachsetPayload = (token, eNachPayload) => ({
     type: types.ENACH_PAYLOAD,
+    token,
     eNachPayload
+});
+
+export const EnachsetBankDetail = bankObj => ({
+    type: types.ENACH_BANK_DETAIL,
+    bankObj
 });
 
 export const EnachsetAttempt = eNachAttempt => ({
@@ -166,11 +174,6 @@ export const EsignsetPayload = (token, eSignPayload) => ({
 export const EsignsetAttempt = eSignAttempt => ({
     type: types.ESIGN_ATTEMPT,
     eSignAttempt
-});
-
-export const EsignsetBankDetail = bankObj => ({
-    type: types.ESIGN_BANK_DETAIL,
-    bankObj
 });
 
 export const EsignsetDocPayload = eSigndocObj => ({

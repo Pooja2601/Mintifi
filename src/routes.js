@@ -25,19 +25,22 @@ import DrawOffers from "./components/drawdown/offers";
 import DrawFetchOffers from "./components/drawdown/fetch_offers";
 import DrawThankYou from "./components/drawdown/thankyou";
 
+// E-Mandate
+import EMandate from "./components/postapprove/emandate";
 // E-Sign
 import ESign from "./components/postapprove/e_sign";
 import ESignPopUp from "./components/postapprove/e_sign/esign_popup";
-
+import ESignSuccess from "./components/postapprove/e_sign/success_url";
+import ESignError from "./components/postapprove/e_sign/error_url";
+import ESignCancel from "./components/postapprove/e_sign/cancel_url";
 // E-Sign-Bank-Detail
-import ESignBankDetail from "./components/postapprove/bank_detail";
-
+import ESignBankDetail from "./components/postapprove/emandate/bank_detail";
 //E-NACH
-import ENach from "./components/postapprove/e_nach/";
-import SuccessUrl from "./components/postapprove/e_nach/success_url";
-import ErrorUrl from "./components/postapprove/e_nach/error_url";
-import CancelUrl from "./components/postapprove/e_nach/cancel_url";
-import PNach from "./components/postapprove/e_nach/pnach";
+import ENach from "./components/postapprove/emandate/e_nach/";
+import SuccessUrl from "./components/postapprove/emandate/e_nach/success_url";
+import ErrorUrl from "./components/postapprove/emandate/e_nach/error_url";
+import CancelUrl from "./components/postapprove/emandate/e_nach/cancel_url";
+import PNach from "./components/postapprove/emandate/e_nach/pnach";
 
 
 const routes = [
@@ -122,20 +125,36 @@ const routes = [
         component: DrawThankYou
     },
     {
+        path: 'emandate',
+        component: EMandate
+    },
+    {
         path: 'esign',
         component: ESign
+    },
+    {
+        path: 'esign/success_url',
+        component: ESignSuccess
+    },
+    {
+        path: 'esign/error_url',
+        component: ESignError
+    },
+    {
+        path: 'esign/cancel_url',
+        component: ESignCancel
     },
     {
         path: 'esign/esign_popup',
         component: ESignPopUp
     },
     {
-        path: 'esign/bank_detail',
-        component: ESignBankDetail
-    },
-    {
         path: 'enach',
         component: ENach
+    },
+    {
+        path: 'enach/bank_detail',
+        component: ESignBankDetail
     },
     {
         path: 'enach/success_url',

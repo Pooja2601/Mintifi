@@ -1,8 +1,8 @@
 import React from "react";
 import {connect} from "react-redux";
 import {withRouter} from "react-router-dom";
-import {changeLoader, EnachsetAttempt, EnachsetPayload} from "../../../actions";
-import {postMessage} from "../../../shared/commonLogic";
+import {changeLoader, EnachsetAttempt, EnachsetPayload} from "../../../../actions";
+import {postMessage} from "../../../../shared/common_logic";
 import PropTypes from "prop-types";
 
 const Error_URL = props => {
@@ -15,7 +15,7 @@ const Error_URL = props => {
     else
         window.setTimeout(() => {
             window.location.href = `${props.eNachPayload.error_url}`;
-        }, 3000);
+        }, 4000);
 
     return (
         <>

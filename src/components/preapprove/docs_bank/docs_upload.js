@@ -4,7 +4,7 @@ import {withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
 import {baseUrl, app_id, environment} from "../../../shared/constants";
 import {pan_adhar, setAdharManual, setBusinessDetail, changeLoader, showAlert} from "../../../actions/index";
-// import {alertModule} from "../../../shared/commonLogic";
+import { checkObject } from "../../../shared/common_logic";
 
 const file_msg = "Select a file";
 const {PUBLIC_URL} = process.env;
@@ -39,7 +39,7 @@ class DocsUpload extends Component {
         businessObj: PropTypes.object.isRequired,
         gstProfile: PropTypes.object,
         preFlightResp: PropTypes.object
-      };
+    };
 
     state = {
         id_proof_msg: file_msg,
@@ -265,9 +265,9 @@ class DocsUpload extends Component {
                 resp => {
                     changeLoader(false);
                     // console.log(resp); // Handle the success response object
-                    if (resp.error === Object(resp.error))
+                    if (checkObject(resp.error))
                         showAlert("We couldn't upload the files, Kindly try again !", 'warn');
-                    else if (resp.response === Object(resp.response))
+                    else if (checkObject(resp.response))
                         history.push(`${PUBLIC_URL}/preapprove/bankdetail`);
                 }
             ).catch(
@@ -286,14 +286,13 @@ class DocsUpload extends Component {
         if (!token)
             history.push(`${PUBLIC_URL}/preapprove/token`);
 
-        if (payload === Object(payload) && payload) {
-            if (adharObj !== Object(adharObj))
+        if (checkObject(payload) && payload) {
+            if (!checkObject(adharObj))
                 history.push(`${PUBLIC_URL}/preapprove/personaldetail`);
 
-            if (businessObj !== Object(businessObj))
+            if (!checkObject(businessObj))
                 history.push(`${PUBLIC_URL}/preapprove/businessdetail`);
-        }
-        else history.push(`${PUBLIC_URL}/preapprove/token`);
+        } else history.push(`${PUBLIC_URL}/preapprove/token`);
 
         // console.log(adharObj);
         // console.log(payload);
@@ -307,7 +306,7 @@ class DocsUpload extends Component {
     }
 
     render() {
-        if (this.props.adharObj === Object(this.props.adharObj)) {
+        if (checkObject(this.props.adharObj)) {
             const {f_name, l_name} = this.props.adharObj;
             return (
                 <>
@@ -445,8 +444,7 @@ class DocsUpload extends Component {
                     </div>
                 </>
             )
-        }
-        else return null;
+        } else return null;
     }
 }
 

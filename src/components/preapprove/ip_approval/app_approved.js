@@ -2,14 +2,14 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {withRouter} from "react-router-dom";
 import {setAdharManual} from "../../../actions/index";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 import {
     defaultLender,
     environment,
     mintifiMobile,
     mintifiMail
 } from "../../../shared/constants";
-import {postMessage} from "../../../shared/commonLogic";
+import {postMessage, checkObject} from "../../../shared/common_logic";
 
 const {PUBLIC_URL} = process.env;
 
@@ -22,7 +22,7 @@ class AppApproved extends Component {
         anchorObj: PropTypes.object,
         payload: PropTypes.object.isRequired,
         businessObj: PropTypes.object.isRequired
-    }
+    };
 
     render() {
         let {
@@ -59,8 +59,7 @@ class AppApproved extends Component {
         if (window.location !== window.parent.location)
             postMessage({
                 loan_status: credit_eligibility.loan_status,
-                loan_id:
-                    preFlightResp === Object(preFlightResp) ? loan_application_id : "",
+                loan_id: checkObject(preFlightResp) ? loan_application_id : "",
                 credit_limit: credit_eligibility.loan_amount_approved,
                 action: "continue"
             });
@@ -68,11 +67,8 @@ class AppApproved extends Component {
         let iconCss = "fa checkCircle ";
 
         // console.log(credit_eligibility);
-        if (payload === Object(payload))
-            if (
-                credit_eligibility === Object(credit_eligibility) &&
-                !isNaN(loan_application_id)
-            )
+        if (checkObject(payload))
+            if (checkObject(credit_eligibility) && !isNaN(loan_application_id))
                 return (
                     <>
                         {/* <button onClick={() => history.push(`${PUBLIC_URL}/BusinessDetail`)} className={"btn btn-link"}>
@@ -161,16 +157,14 @@ class AppApproved extends Component {
                                     <tr>
                                         <td className={"tableDataRight"}>Loan ID</td>
                                         <td>
-                                            {preFlightResp === Object(preFlightResp)
-                                                ? loan_application_id
-                                                : ""}
+                                            {checkObject(preFlightResp) ? loan_application_id : ""}
                                         </td>
                                     </tr>
                                     <tr>
                                         <td className={"tableDataRight"}>Application Status</td>
                                         <td>
                                             {credit_eligibility.loan_status === "aip"
-                                                ? "approval_in_principle"
+                                                ? "Approved in Principle"
                                                 : credit_eligibility.loan_status}
                                         </td>
                                     </tr>
@@ -264,10 +258,8 @@ class AppApproved extends Component {
                                     <a href={`tel:+91${mintifiMobile}`}>+91 {mintifiMobile}</a>.{" "}
                                     <br/>
                                     Please mention your ( loan application id :{" "}
-                                    {preFlightResp === Object(preFlightResp)
-                                        ? loan_application_id
-                                        : ""}{" "}
-                                    ) in the request.
+                                    {checkObject(preFlightResp) ? loan_application_id : ""} ) in
+                                    the request.
                                 </div>
                                 <div className="mt-5 mb-5 text-center ">
                                     {/*
@@ -281,9 +273,7 @@ class AppApproved extends Component {
                                         className="form-submit btn btn-raised greenButton"
                                     >
                                         Back to{" "}
-                                        {anchorObj === Object(anchorObj)
-                                            ? anchorObj.anchor_name
-                                            : "Anchor"}
+                                        {checkObject(anchorObj) ? anchorObj.anchor_name : "Anchor"}
                                     </button>
                                 </div>
                             </>

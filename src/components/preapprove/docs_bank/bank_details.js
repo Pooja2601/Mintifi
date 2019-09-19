@@ -12,11 +12,13 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {setBankDetail, changeLoader, setToken, showAlert} from "../../../actions";
 import {withRouter} from "react-router-dom";
-import {alertModule, retrieveParam} from "../../../shared/commonLogic";
+import {alertModule, retrieveParam, generateToken, base64Logic} from "../../../shared/common_logic";
 // import DatePicker from "react-datepicker";
 // import "react-datepicker/dist/react-datepicker.css";
 import Select from "react-select";
 import {fetchAPI, apiActions, postAPI} from "../../../api";
+import {checkObject} from "../../../shared/common_logic";
+
 
 const {PUBLIC_URL} = process.env;
 
@@ -88,38 +90,40 @@ class BankDetail extends Component {
              this.handleValidation();
          }*/
 
-    _genAuthToken = async (base64_encode) => {
-        const {history, changeLoader, showAlert} = this.props;
+    _genAuthToken = async () => {
+        const {history, changeLoader, showAlert, payload, preFlightResp} = this.props;
+
         changeLoader(true);
-        const options = {
-            token: null,
-            URL: `${baseUrl}/auth`,
-            data: {
-                app_id: app_id,
-                user_id: user_id,
-                secret_key: auth_secret,
-                type: "react_web_user"
-            }
+        let payloadData = {
+            anchor_id: payload.anchor_id,
+            loan_application_id: preFlightResp.loan_application_id,
+            company_id: preFlightResp.company_id,
+            success_url: payload.success_url,
+            error_url: payload.error_url,
+            cancel_url: payload.cancel_url,
         }
-        const resp = await postAPI(options);
+        let base64_encode = base64Logic(payloadData, 'encode');
+        const resp = await generateToken();
         changeLoader(false);
 
-        if (resp.status === apiActions.ERROR_NET)
+        // console.log(JSON.stringify(resp));
+        if (resp == 31)
             showAlert('net');
 
-        if (resp.status === apiActions.SUCCESS_RESPONSE) {
-            if (resp.data.status === "success")
+        if (checkObject(resp)) {
+            // console.log(JSON.stringify(resp.data))
+            if (resp.status === "success")
                 setTimeout(
                     () =>
                         history.push(
                             `${PUBLIC_URL}/esign?payload=${base64_encode}&token=${
-                                resp.data.auth.token
+                                resp.auth.token
                                 }`
                         ),
                     500
                 );
-        } else if (resp.status === apiActions.ERROR_RESPONSE) {
-            showAlert(resp.data.message, "warn");
+        } else if (resp == 30) {
+            showAlert("Something went wrong while creating Token", "warn");
         }
 
     };
@@ -129,8 +133,8 @@ class BankDetail extends Component {
         const {changeLoader, token, payload, preFlightResp, history, showAlert} = this.props;
         // console.log(preFlightResp);
         const {bank_name, acc_name, acc_number, acc_type, ifsc_code, micr_code} = this.state;
-        if (preFlightResp === Object(preFlightResp)) {
-            changeLoader(true);
+        if (checkObject(preFlightResp)) {
+
             const options = {
                 token: token,
                 URL: `${baseUrl}/bank_account`,
@@ -150,21 +154,21 @@ class BankDetail extends Component {
                     error_url: payload.error_url,
                     cancel_url: payload.cancel_url,
                     timestamp: new Date()
-                }
+                },
+                showAlert: showAlert,
+                changeLoader: changeLoader
             }
 
             const resp = await postAPI(options);
-            changeLoader(false);
-            if (resp.status === apiActions.ERROR_NET)
-                showAlert("net");
 
             if (resp.status === apiActions.SUCCESS_RESPONSE) {
                 // ToDo : comment in Prod
-                let base64_encode = retrieveParam(
-                    resp.data.payload,
-                    "payload"
-                );
-                this._genAuthToken(base64_encode);
+                // let base64_encode = retrieveParam(
+                //     resp.data.payload,
+                //     "payload"
+                // );
+                // console.log(base64_encode);
+                this._genAuthToken();
                 /*setTimeout(() => history.push(`${PUBLIC_URL}/esign?payload=${base64_encode}&token=${token}`, {
                     token: token,
                     payload: base64_encode
@@ -177,7 +181,7 @@ class BankDetail extends Component {
     };
 
     _fetchIFSC(ifsc) {
-        const {changeLoader, showAlert} = this.props;
+        const {changeLoader, showAlert, setBankDetail} = this.props;
         let bank_name, micr_code, branch_name;
         changeLoader(true);
         fetch(`https://ifsc.razorpay.com/${ifsc}`)
@@ -185,7 +189,7 @@ class BankDetail extends Component {
             .then(
                 resp => {
                     changeLoader(false);
-                    if (resp === Object(resp)) {
+                    if (checkObject(resp)) {
                         bank_name = resp.BANK;
                         // ifsc_code = resp.IFSC;
                         micr_code = resp.MICR;
@@ -198,8 +202,9 @@ class BankDetail extends Component {
                         bank_name,
                         micr_code,
                         branch_name
-                    });
+                    }, () => setBankDetail(this.state));
                     // console.log(resp);
+
                 },
                 resp => {
                     showAlert('net');
@@ -211,32 +216,39 @@ class BankDetail extends Component {
     componentWillMount() {
         const {payload, adharObj, history, businessObj} = this.props;
 
-        if (payload === Object(payload) && payload) {
-            if (adharObj !== Object(adharObj))
+        if (checkObject(payload) && payload) {
+            if (!checkObject(adharObj))
                 history.push(`${PUBLIC_URL}/preapprove/personaldetail`);
 
-            if (businessObj !== Object(businessObj))
+            if (!checkObject(businessObj))
                 history.push(`${PUBLIC_URL}/preapprove/businessdetail`);
         } else history.push(`${PUBLIC_URL}/preapprove/token`);
     }
 
     componentDidMount() {
-        const {bankObj, setBankDetail, changeLoader} = this.props;
+        const {bankObj, setBankDetail, changeLoader, adharObj} = this.props;
 
-        if (bankObj === Object(bankObj))
+        if (checkObject(adharObj)) {
+            const {f_name, l_name} = adharObj;
+            this.setState({acc_name: `${f_name} ${l_name}`}, () => setBankDetail(this.state));
+            this.validate['acc_name'] = true;
+        }
+        if (checkObject(bankObj))
             this.setState(bankObj, () => {
                 Object.keys(this.state).map((val, key) => {
                     if (this.validate[val] !== undefined)
                         this.validate[val] = this.state[val].length > 0;
-                    // console.log(this.validate);
+                    if (val === 'acc_type')
+                        this.validate[val] = false;
                 });
             });
         else setBankDetail(this.state);
 
         // console.log(this.props.gstProfile)
         changeLoader(false);
-        setTimeout(() => this.handleValidation(), 500);
+        setTimeout(() => this.handleValidation(), 2000);
         // console.log(this.props.adharObj);
+
     }
 
     render() {

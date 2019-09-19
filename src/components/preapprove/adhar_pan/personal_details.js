@@ -7,8 +7,9 @@ import {setAdharManual, changeLoader, showAlert} from "../../../actions/index";
 import {Link, withRouter} from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-// import {alertModule} from "../../../shared/commonLogic";
+// import {alertModule} from "../../../shared/common_logic";
 import {fetchAPI, apiActions, postAPI} from "../../../api";
+import {checkObject} from "../../../shared/common_logic";
 
 const {PUBLIC_URL} = process.env;
 
@@ -27,7 +28,7 @@ class PersonalDetail extends Component {
         l_name: '',
         mobile: '',
         email: '',
-        dob: new Date(1980, 0, 1),
+        dob: new Date(315577770),
         gender: 'm',
         ownership: 'rented',
         pincode: '',
@@ -59,7 +60,7 @@ class PersonalDetail extends Component {
         setTimeout(() => {
         }, 1000);
         // console.log(pan)
-        if (payload === Object(payload) && payload) {
+        if (checkObject(payload)) {
             if (!pan)
                 history.push(`${PUBLIC_URL}/preapprove/adharpan`);
         } else
@@ -69,16 +70,16 @@ class PersonalDetail extends Component {
 
         // console.log(state);
 
-        if (authObj === Object(authObj) && authObj)
-            if (authObj.verified && state === Object(state))
+        if (checkObject(authObj))
+            if (authObj.verified && checkObject(state))
                 if (state.mobile)
                     state.mobile = authObj.mobile;
 
-        if (state === Object(state) && state)
+        if (checkObject(state))
             this.setState(state, () => {
                 Object.keys(this.state).map((val, key) => {
                     if (this.validate[val] !== undefined)
-                        this.validate[val] = (this.state[val].length > 0);
+                        this.validate[val] = (this.state[val].length);
                     // console.log(this.validate);
                 });
             });
@@ -96,14 +97,14 @@ class PersonalDetail extends Component {
     _loadGstProfile() {
         const {gstProfile, setAdharManual} = this.props;
         let tempName;
-        if (gstProfile === Object(gstProfile)) {
+        if (checkObject(gstProfile)) {
             if (Array.isArray(gstProfile.mbr) && gstProfile.mbr.length > 0) {
                 tempName = gstProfile.mbr[0].split(' ');
                 // console.log(tempName[0]);
                 this.setState({
                     f_name: tempName[0],
                     m_name: (tempName[2]) ? tempName[1] : '',
-                    l_name: (tempName[2]) ? tempName[2] : ''
+                    l_name: (tempName[2]) ? tempName[2] : (tempName[1] || '')
                 }, () => setAdharManual(this.state));
             }
             if (Array.isArray(gstProfile.pradr) && gstProfile.pradr.length > 0) {
@@ -120,6 +121,7 @@ class PersonalDetail extends Component {
         setTimeout(() => {
             this.props.history.push(`${PUBLIC_URL}/preapprove/mobileotp`);
         }, 500);
+
     }
 
     handleValidation() {
@@ -141,31 +143,29 @@ class PersonalDetail extends Component {
         //https://test.mintifi.com/api/v2/communications/pincode/400059
         let city, state;
         const {setAdharManual, changeLoader, showAlert} = this.props;
-        if (this.state.pincode) {
-            changeLoader(true);
-            const options = {
-                token: null,
-                URL: `${otpUrl}/pincode/${this.state.pincode}`
+        if (this.state.pincode)
+            if (this.state.pincode.length >= 6) {
+                const options = {
+                    token: null,
+                    URL: `${otpUrl}/pincode/${this.state.pincode}`,
+                    showAlert: showAlert,
+                    changeLoader: changeLoader
+                }
+
+                const resp = await fetchAPI(options);
+
+                if (resp.status === apiActions.SUCCESS_RESPONSE) {
+                    // TODO: Check for success response
+
+                    city = resp.data.city;
+                    state = resp.data.state;
+                    this.setState({city, state}, () => setAdharManual(this.state));
+                } else if (resp.status === apiActions.ERROR_RESPONSE) {
+                    showAlert(resp.data.message, 'warn');
+                    this.setState({city: '', state: ''});
+                }
+
             }
-
-            const resp = await fetchAPI(options);
-            changeLoader(false);
-
-            if (resp.status === apiActions.ERROR_NET)
-                showAlert("net");
-
-            if (resp.status === apiActions.SUCCESS_RESPONSE) {
-                // TODO: Check for success response  
-
-                city = resp.data.city;
-                state = resp.data.state;
-                this.setState({city, state}, () => setAdharManual(this.state));
-            } else if (resp.status === apiActions.ERROR_RESPONSE) {
-                showAlert(resp.data.message, 'warn');
-                this.setState({city: '', state: ''});
-            }
-
-        }
     };
 
     changeDob = (dob) => {
@@ -174,7 +174,9 @@ class PersonalDetail extends Component {
                 let year = d.getFullYear();
                 let dob = `${year}-${month}-${date}`;
          */
-        this.setState({dob}, () => this.props.setAdharManual(this.state))
+        let doby = new Date(dob)
+        // console.log(doby)
+        this.setState({dob: doby}, () => this.props.setAdharManual(this.state))
     };
 
     render() {
@@ -419,6 +421,29 @@ class PersonalDetail extends Component {
                     </div>
 
                     <div className={"row"}>
+
+                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
+                            <div className="form-group mb-3">
+                                <label htmlFor="dobDate" className="bmd-label-floating">
+                                    Date of Birth
+                                </label>
+                                <div className={'d-block'}>
+                                    <DatePicker
+                                        className="form-control font_weight"
+                                        // placeholderText={"Date of Birth"}
+                                        selected={new Date(this.state.dob)}
+                                        id={"dobDate"}
+                                        pattern={"^[0-9]{2}/[0-9]{2}/[0-9]{4}$"}
+                                        scrollableYearDropdown
+                                        showMonthDropdown
+                                        required={true}
+                                        showYearDropdown
+                                        dateFormat={'dd/MM/yyyy'}
+                                        onChange={(date) => this.changeDob(date)}
+                                    />
+                                </div>
+                            </div>
+                        </div>
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3 ">
                                 <label htmlFor="textAddress1" className="bmd-label-floating">
@@ -447,31 +472,44 @@ class PersonalDetail extends Component {
                                 />
                             </div>
                         </div>
-                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
-                            <div className="form-group mb-3">
-                                <label htmlFor="dobDate" className="bmd-label-floating">
-                                    Date of Birth
-                                </label>
-                                <div className={'d-block'}>
-                                    <DatePicker
-                                        className="form-control font_weight"
-                                        // placeholderText={"Date of Birth"}
-                                        selected={this.state.dob}
-                                        id={"dobDate"}
-                                        pattern={"^[0-9]{2}/[0-9]{2}/[0-9]{4}$"}
-                                        scrollableYearDropdown
-                                        showMonthDropdown
-                                        required={true}
-                                        showYearDropdown
-                                        dateFormat={'dd/MM/yyyy'}
-                                        onChange={(date) => this.changeDob(date)}
-                                    />
-                                </div>
-                            </div>
-                        </div>
                     </div>
 
                     <div className={"row"}>
+
+                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
+                            <div className="form-group mb-3">
+                                <label htmlFor="numberPincode" className="bmd-label-floating">
+                                    Pincode *
+                                </label>
+                                <input
+                                    type="number"
+                                    className="form-control font_weight"
+                                    // placeholder="Pincode"
+                                    pattern="^[0-9]{6}$"
+                                    title="Please enter Pincode"
+                                    autoCapitalize="characters"
+                                    id="numberPincode"
+                                    required={true}
+                                    value={this.state.pincode}
+                                    onBlur={() => {
+                                        // this.props.setAdharManual(this.state);
+                                        this._pincodeFetch();
+                                        this.handleValidation();
+                                    }}
+                                    // ref={ref => (this.obj.pan = ref)}
+                                    onChange={(e) => {
+                                        let regex = /^[0-9]{6,7}$/;
+                                        if (e.target.value.length <= 6) {
+                                            this.setState({pincode: e.target.value}, () => this.props.setAdharManual(this.state));
+                                            // this._pincodeFetch();
+                                        }
+                                        this.validate.pincode = (regex.test(e.target.value));
+                                        // this._pincodeFetch();
+                                    }}
+                                />
+                            </div>
+
+                        </div>
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3 ">
                                 <label htmlFor="textAddress2" className="bmd-label-floating">
@@ -496,37 +534,6 @@ class PersonalDetail extends Component {
                                         const {value} = e.target;
                                         this.setState({address2: value}, () => this.props.setAdharManual(this.state));
                                         // this.validate.address2 = (value);
-                                    }}
-                                />
-                            </div>
-
-                        </div>
-                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
-                            <div className="form-group mb-3">
-                                <label htmlFor="numberPincode" className="bmd-label-floating">
-                                    Pincode *
-                                </label>
-                                <input
-                                    type="number"
-                                    className="form-control font_weight"
-                                    // placeholder="Pincode"
-                                    pattern="^[0-9]{6}$"
-                                    title="Please enter Pincode"
-                                    autoCapitalize="characters"
-                                    id="numberPincode"
-                                    required={true}
-                                    value={this.state.pincode}
-                                    onBlur={() => {
-                                        // this.props.setAdharManual(this.state);
-                                        this._pincodeFetch();
-                                        this.handleValidation();
-                                    }}
-                                    // ref={ref => (this.obj.pan = ref)}
-                                    onChange={(e) => {
-                                        let regex = /^[0-9]{6,7}$/;
-                                        if (e.target.value.length <= 6)
-                                            this.setState({pincode: e.target.value}, () => this.props.setAdharManual(this.state));
-                                        this.validate.pincode = (regex.test(e.target.value));
                                     }}
                                 />
                             </div>

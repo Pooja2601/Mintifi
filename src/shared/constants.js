@@ -11,14 +11,6 @@ const payMintifiUrl =
     env_mode === "dev" || env_mode === "local"
         ? "http://test.pay.mintifi.com"
         : "https://pay.mintifi.com";
-// For Deployment of Base Root
-// For redirection after Failure and Success (of enach or drawdwon) (Its a dummy and Optional)
-const baseRootPath =
-    env_mode === "local"
-        ? "http://localhost"
-        : env_mode === "dev"
-        ? "http://test.pay.mintifi.com"
-        : "https://pay.mintifi.com";
 
 const anchorUrls = {
     success_url: `https://www.travelboutiqueonline.com/`,
@@ -26,8 +18,8 @@ const anchorUrls = {
     error_url: `https://www.travelboutiqueonline.com/`
 };
 
-const anchor_id = "05cc584e39f34d0e97fc4bb6cd1fa8aa"; //TBO : 05cc584e39f34d0e97fc4bb6cd1fa8aa , Indiamart : 8186bc , wirecard : uyh65t
-
+const anchor_id = "05cc584e39f34d0e97fc4bb6cd1fa8aa";
+//TBO : 05cc584e39f34d0e97fc4bb6cd1fa8aa , Indiamart : 8186bc , wirecard : uyh65t
 
 const {PUBLIC_URL} = process.env;
 
@@ -88,14 +80,13 @@ module.exports = {
         cancel_url: anchorUrls.cancel_url
     },
     eSignPayloadStatic: {
-        "loan_application_id": 3211,
-        "company_id": 12259,
-        "anchor_id": anchor_id,
-        "success_url": anchorUrls.success_url,
-        "cancel_url": anchorUrls.error_url,
-        "error_url": anchorUrls.cancel_url
+        loan_application_id: 3211,
+        company_id: 12259,
+        anchor_id: anchor_id,
+        success_url: anchorUrls.success_url,
+        cancel_url: anchorUrls.error_url,
+        error_url: anchorUrls.cancel_url
     },
-
     eSignDocsPayloadStatic: {
         url: "https://preprod.aadhaarbridge.com/api/_init",
         saCode: "b4237b",

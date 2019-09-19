@@ -1,11 +1,12 @@
-import React, { Component } from "react";
-import { withRouter } from "react-router-dom";
-import { connect } from "react-redux";
-import { changeLoader, DrawsetLoanPayload, showAlert } from "../../actions";
-import { otpUrl, baseUrl, environment, app_id } from "../../shared/constants";
-import { fetchAPI, apiActions, postAPI } from "../../api";
+import React, {Component} from "react";
+import {withRouter} from "react-router-dom";
+import {connect} from "react-redux";
+import {changeLoader, DrawsetLoanPayload, showAlert} from "../../actions";
+import {otpUrl, baseUrl, environment, app_id} from "../../shared/constants";
+import {fetchAPI, apiActions, postAPI} from "../../api";
+import {checkObject} from "../../shared/common_logic";
 
-const { PUBLIC_URL } = process.env;
+const {PUBLIC_URL} = process.env;
 
 /*
 let creditLimit = {
@@ -58,173 +59,178 @@ let loanOffers = {
 */
 
 class FetchOffers extends Component {
-  state = {
-    tnc_consent: false,
-    selected: {}
-  };
-
-  // Getting Credit Limit
-  _fetchCreditLimit = async () => {
-    const { token, payload, showAlert, changeLoader } = this.props;
-
-    let reqParam = `?app_id=${app_id}&anchor_id=${payload.anchor_id}&loan_application_id=${payload.loan_application_id}`;
-
-    const options = {
-      URL: `${baseUrl}/companies/${payload.company_id}/limit/${reqParam}`,
-      token: token
+    state = {
+        tnc_consent: false,
+        selected: {}
     };
 
-    const resp = await fetchAPI(options);
+    // Getting Credit Limit
+    _fetchCreditLimit = async () => {
+        const {token, payload, showAlert, changeLoader} = this.props;
 
-    // ToDo : fixed : forgot to add both lines under brackets
-    if (resp.status === apiActions.ERROR_NET) {
-      showAlert("net");
-      return undefined;
-    }
-    if (resp.status === apiActions.SUCCESS_RESPONSE) {
-      return resp.data;
-    } else if (resp.status === apiActions.ERROR_RESPONSE) {
-      // ToDo : fixed : forgot to add both lines under brackets
-      showAlert("An error occurred while fetching credit limit", "warn");
-      return null;
-    }
-  };
+        let reqParam = `?app_id=${app_id}&anchor_id=${payload.anchor_id}&loan_application_id=${payload.loan_application_id}`;
 
-  // Getting Loan Status
-  _fetchLoanStatus = async () => {
-    const { token, payload, showAlert, changeLoader } = this.props;
-    changeLoader(true);
-    let reqParam = `?app_id=${app_id}&anchor_id=${payload.anchor_id}`;
-    // TODO: check fetchAPI function
-    const options = {
-      URL: `${baseUrl}/loans/${payload.loan_application_id}/status/${reqParam}`,
-      token: token
+        const options = {
+            URL: `${baseUrl}/companies/${payload.company_id}/limit/${reqParam}`,
+            token: token,
+            showAlert: showAlert,
+            changeLoader: changeLoader
+        };
+
+        const resp = await fetchAPI(options);
+
+        // ToDo : fixed : forgot to add both lines under brackets
+        if (resp.status === apiActions.ERROR_NET) {
+            return undefined;
+        }
+        if (resp.status === apiActions.SUCCESS_RESPONSE) {
+            return resp.data;
+        } else if (resp.status === apiActions.ERROR_RESPONSE) {
+            // ToDo : fixed : forgot to add both lines under brackets
+            showAlert("An error occurred while fetching credit limit", "warn");
+            return null;
+        }
     };
 
-    const resp = await fetchAPI(options);
+    // Getting Loan Status
+    _fetchLoanStatus = async () => {
+        const {token, payload, showAlert, changeLoader} = this.props;
 
-    if (resp.status === apiActions.ERROR_NET) {
-      showAlert("net");
-      return undefined;
-    }
+        let reqParam = `?app_id=${app_id}&anchor_id=${payload.anchor_id}`;
+        // TODO: check fetchAPI function
+        const options = {
+            URL: `${baseUrl}/loans/${payload.loan_application_id}/status/${reqParam}`,
+            token: token,
+            showAlert: showAlert,
+            changeLoader: changeLoader
+        };
 
-    // DrawsetLoanPayload({loanOffers: null, loanStatus: resp, creditLimit: loanPayload.creditLimit});
-    if (resp.status === apiActions.ERROR_RESPONSE) {
-      showAlert("An error occurred while fetching Loan Status", "warn");
-      return null;
-    } else if (resp.status === apiActions.SUCCESS_RESPONSE) {
-      return resp.data;
-    }
-  };
+        const resp = await fetchAPI(options);
 
-  // Getting Loan Offers
-  _fetchLoanOffers = async () => {
-    const { token, payload, showAlert, changeLoader } = this.props;
-    changeLoader(true);
-    let reqParam = `?app_id=${app_id}&anchor_id=${payload.anchor_id}&amount=${payload.drawdown_amount}`;
+        if (resp.status === apiActions.ERROR_NET) {
+            return undefined;
+        }
 
-    // TODO: check fetchAPI function
-    const options = {
-      URL: `${baseUrl}/loans/${payload.loan_application_id}/offers/${reqParam}`,
-      token: token
+        // DrawsetLoanPayload({loanOffers: null, loanStatus: resp, creditLimit: loanPayload.creditLimit});
+        if (resp.status === apiActions.ERROR_RESPONSE) {
+            showAlert("An error occurred while fetching Loan Status", "warn");
+            return null;
+        } else if (resp.status === apiActions.SUCCESS_RESPONSE) {
+            return resp.data;
+        }
     };
 
-    const resp = await fetchAPI(options);
+    // Getting Loan Offers
+    _fetchLoanOffers = async () => {
+        const {token, payload, showAlert, changeLoader} = this.props;
 
-    if (resp.status === apiActions.ERROR_NET) {
-      showAlert("net");
-      return undefined;
-    }
+        let reqParam = `?app_id=${app_id}&anchor_id=${payload.anchor_id}&amount=${payload.drawdown_amount}`;
 
-    if (resp.status === apiActions.ERROR_RESPONSE) {
-      showAlert("An error occurred while fetching Loan Offers", "warn");
-      return null;
-    } else if (resp.status === apiActions.SUCCESS_RESPONSE) {
-      return resp.data;
-    }
-  };
+        // TODO: check fetchAPI function
+        const options = {
+            URL: `${baseUrl}/loans/${payload.loan_application_id}/offers/${reqParam}`,
+            token: token,
+            showAlert: showAlert,
+            changeLoader: changeLoader
+        };
 
-  _fetchInformation = async () => {
-    const { DrawsetLoanPayload, loanPayload, history } = this.props;
+        const resp = await fetchAPI(options);
 
-    let creditLimit = await this._fetchCreditLimit();
-    let loanStatus = await this._fetchLoanStatus();
-    let loanOffers = await this._fetchLoanOffers();
+        if (resp.status === apiActions.ERROR_NET) {
+            return undefined;
+        }
 
-    DrawsetLoanPayload({
-      loanOffers: loanOffers,
-      loanStatus: loanStatus,
-      creditLimit: creditLimit
-    });
+        if (resp.status === apiActions.ERROR_RESPONSE) {
+            showAlert("An error occurred while fetching Loan Offers", "warn");
+            return null;
+        } else if (resp.status === apiActions.SUCCESS_RESPONSE) {
+            return resp.data;
+        }
+    };
 
-    if (creditLimit && loanStatus && loanOffers) {
-      if (loanStatus.loan_application_status === "to_settle")
-        setTimeout(() => {
-          console.log(JSON.stringify(loanPayload));
-          history.push(`${PUBLIC_URL}/drawdown/offers`);
+    _fetchInformation = async () => {
+        const {DrawsetLoanPayload, loanPayload, history} = this.props;
+
+        let creditLimit = await this._fetchCreditLimit();
+        let loanStatus = await this._fetchLoanStatus();
+        let loanOffers = await this._fetchLoanOffers();
+
+        DrawsetLoanPayload({
+            loanOffers: loanOffers,
+            loanStatus: loanStatus,
+            creditLimit: creditLimit
         });
-    } else history.push(`${PUBLIC_URL}/drawdown/auth`);
-  };
 
-  componentWillMount() {
-    const { payload, authObj, changeLoader, history } = this.props;
-    changeLoader(true);
-    if (authObj !== Object(authObj) && !authObj)
-      history.push(`${PUBLIC_URL}/drawdown/auth`);
-    if (payload !== Object(payload) && !payload) {
-      history.push(`${PUBLIC_URL}/drawdown/token`);
+        if (creditLimit && loanStatus && loanOffers) {
+            if (loanStatus.loan_application_status === "to_settle")
+                setTimeout(() => {
+                    console.log(JSON.stringify(loanPayload));
+                    history.push(`${PUBLIC_URL}/drawdown/offers`);
+                });
+        } else history.push(`${PUBLIC_URL}/drawdown/auth`);
+    };
+
+    componentWillMount() {
+        const {payload, authObj, changeLoader, history} = this.props;
+        changeLoader(true);
+        if (!checkObject(authObj))
+            history.push(`${PUBLIC_URL}/drawdown/auth`);
+        if (!checkObject(payload)) {
+            history.push(`${PUBLIC_URL}/drawdown/token`);
+        }
     }
-  }
 
-  componentDidMount() {
-    // const {DrawsetLoanPayload, changeLoader} = this.props;
+    componentDidMount() {
+        // const {DrawsetLoanPayload, changeLoader} = this.props;
 
-    // ToDo : comment this development
-    if (environment === "prod" || environment === "dev")
-      this._fetchInformation();
+        // ToDo : comment this development
+        if (environment === "prod" || environment === "dev")
+            this._fetchInformation();
 
-    // ToDo : uncomment this 2 lines for development
-    /*  if (environment === 'local') {
-              DrawsetLoanPayload({loanOffers: loanOffers, loanStatus: loanStatus, creditLimit: creditLimit});
-              DrawsetPreflight(preFlightResp);
-          }*/
-  }
+        // ToDo : uncomment this 2 lines for development
+        /*  if (environment === 'local') {
+                  DrawsetLoanPayload({loanOffers: loanOffers, loanStatus: loanStatus, creditLimit: creditLimit});
+                  DrawsetPreflight(preFlightResp);
+              }
+        */
+    }
 
-  render() {
-    return (
-      <>
-        <div className="justify-content-center text-center fetchLoadPage">
-          <i className={"fa fa-clipboard-list"} /> <br />
-          <div className="lds-ellipsis">
-            <div />
-            <div />
-            <div />
-            <div />
-          </div>{" "}
-          <p className="paragraph_section">
-            Processing your Application.. <br />
-            Fetching the best offers for you, Hold on!
-          </p>{" "}
-        </div>
-      </>
-    );
-  }
+    render() {
+        return (
+            <>
+                <div className="justify-content-center text-center fetchLoadPage">
+                    <i className={"fa fa-clipboard-list"}/> <br/>
+                    <div className="lds-ellipsis">
+                        <div/>
+                        <div/>
+                        <div/>
+                        <div/>
+                    </div>
+                    {" "}
+                    <p className="paragraph_section">
+                        Processing your Application.. <br/>
+                        Fetching the best offers for you, Hold on!
+                    </p>{" "}
+                </div>
+            </>
+        );
+    }
 }
 
 const mapStateToProps = state => ({
-  token: state.drawdownReducer.token,
-  payload: state.drawdownReducer.payload,
-  authObj: state.drawdownReducer.authObj,
-  loanPayload: state.drawdownReducer.loanPayload
+    token: state.drawdownReducer.token,
+    payload: state.drawdownReducer.payload,
+    authObj: state.drawdownReducer.authObj,
+    loanPayload: state.drawdownReducer.loanPayload
 });
 
 export default withRouter(
-  connect(
-    mapStateToProps,
-    {
-      changeLoader,
-      DrawsetLoanPayload,
-      showAlert
-    }
-  )(FetchOffers)
+    connect(
+        mapStateToProps,
+        {
+            changeLoader,
+            DrawsetLoanPayload,
+            showAlert
+        }
+    )(FetchOffers)
 );

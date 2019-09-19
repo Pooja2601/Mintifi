@@ -13,7 +13,7 @@ import {
 } from "../../../actions/index";
 import { withRouter } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
-// import {alertModule} from "../../../shared/commonLogic";
+import { checkObject } from "../../../shared/common_logic";
 
 const { PUBLIC_URL } = process.env;
 
@@ -38,19 +38,6 @@ class ReviewBusinessDetail extends Component {
       avgtrans: "",
       dealercode: ""
     },
-    /* adharDetail: {
-          f_name: "",
-          m_name: "",
-          l_name: "",
-          mobile: "",
-          verified: "",
-          email: "",
-          dob: new Date(),
-          gender: "m",
-          pincode: "",
-          address1: "",
-          address2: ""
-        }, */
     tnc_consent: false,
     tncModal: false
   };
@@ -58,26 +45,14 @@ class ReviewBusinessDetail extends Component {
   componentWillMount() {
     const { payload, authObj, adharObj, businessObj, history } = this.props;
 
-    if (payload === Object(payload) && payload) {
-      if (adharObj !== Object(adharObj))
+    if (checkObject(payload)) {
+      if (!checkObject(adharObj))
         history.push(`${PUBLIC_URL}/preapprove/personaldetail`);
 
-      if (businessObj !== Object(businessObj))
+      if (!checkObject(businessObj))
         history.push(`${PUBLIC_URL}/preapprove/businessdetail`);
     } else history.push(`${PUBLIC_URL}/preapprove/token`);
   }
-
-  // needs to be at the backend
-  /*   _updateAnchor(creditStatus) {
-             const {anchorDomain, payload, changeLoader} = this.props;
-             changeLoader(true);
-             fetch(`${anchorDomain}/credit/${payload.anchor_transaction_id}/status/${creditStatus}`).then((resp) => {
-                 changeLoader(false);
-             }, (resp) => {
-                 alertModule();
-                 changeLoader(false);
-             })
-         }*/
 
   _formSubmit(e) {
     // e.preventDefault();
@@ -96,7 +71,7 @@ class ReviewBusinessDetail extends Component {
       showAlert
     } = this.props;
     changeLoader(true);
-    if (adharObj === Object(adharObj))
+    if (checkObject(adharObj))
       if (adharObj.dob) {
         let dobObj = new Date(adharObj.dob);
         dob =
@@ -151,7 +126,7 @@ class ReviewBusinessDetail extends Component {
       .then(
         resp => {
           changeLoader(false);
-          if (resp.response === Object(resp.response)) {
+          if (checkObject(resp.response)) {
             let { loan_status } = resp.response.credit_eligibility;
             // this._updateAnchor(loan_status);
             storeResponse(resp.response);
@@ -177,7 +152,7 @@ class ReviewBusinessDetail extends Component {
                 500
               );
             }
-          } else if (resp.error === Object(resp.error)) {
+          } else if (checkObject(resp.error)) {
             showAlert(resp.message, "warn");
             history.push(`${PUBLIC_URL}/preapprove/apprejected`, {
               status: "expired"

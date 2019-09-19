@@ -6,27 +6,28 @@ import {
     EnachsetPayload,
     EnachsetAttempt,
     showAlert
-} from "../../../actions";
+} from "../../../../actions";
 import {
     // alertModule,
     base64Logic,
+    checkObject,
     retrieveParam
-} from "../../../shared/commonLogic";
+} from "../../../../shared/common_logic";
 import {
     eNachPayloadStatic,
     baseUrl,
     app_id,
     environment,
     ENachResponseUrl
-} from "../../../shared/constants";
+} from "../../../../shared/constants";
 import PropTypes from "prop-types";
-import {apiActions, postAPI} from "../../../api";
+import {apiActions, postAPI} from "../../../../api";
 
 const {PUBLIC_URL} = process.env;
 
 class ENach extends Component {
     static propTypes = {
-        eNachPayload: PropTypes.object,
+        eNachPayload: PropTypes.object.isRequired,
         showAlert: PropTypes.func,
         token: PropTypes.string.isRequired,
         changeLoader: PropTypes.func.isRequired
@@ -36,7 +37,7 @@ class ENach extends Component {
 
     _updateBackend = async result => {
         let {token, changeLoader, eNachPayload, history, showAlert} = this.props;
-        let redirectURL = '';
+        let redirectURL = "";
         const options = {
             URL: `${baseUrl}/loans/enach_status`,
             data: {
@@ -47,19 +48,17 @@ class ENach extends Component {
                 loan_application_id: eNachPayload.loan_application_id,
                 company_id: eNachPayload.company_id
             },
-            token: token
-        }
-        changeLoader(true);
+            token: token,
+            showAlert: showAlert,
+            changeLoader: changeLoader
+        };
 
         const resp = await postAPI(options);
 
-        if (resp.status === apiActions.ERROR_NET)
-            showAlert("net");
         if (resp.status === apiActions.ERROR_RESPONSE) {
             showAlert(resp.data.message, "warn");
             // this.setState({ backendError: this.state.backendError + 1 });
             redirectURL = ENachResponseUrl.cancel_url;
-
         } else if (resp.status === apiActions.SUCCESS_RESPONSE) {
             redirectURL = ENachResponseUrl.success_url;
         }
@@ -68,9 +67,6 @@ class ENach extends Component {
             if (environment === "prod" || environment === "dev")
                 history.push(redirectURL);
         }, 1000);
-
-        changeLoader(false);
-
     };
 
     _triggerDigio = () => {
@@ -92,51 +88,19 @@ class ENach extends Component {
                 // ToDo : Uncomment this line in Prod
                 if (environment === "prod" || environment === "dev")
                     history.push(ENachResponseUrl.error_url);
-            }, 1000);
+            }, 3000);
         }
     };
 
-
     componentWillMount() {
-        let {
-            changeLoader,
-            EnachsetPayload,
-            token,
-            eNachPayload,
-            showAlert
-        } = this.props;
+        let {changeLoader, token, eNachPayload, showAlert} = this.props;
         changeLoader(false);
 
-        let {href} = window.location,
-            base64_decode = {},
-            payload;
-
-        /*    if (environment === "local") base64_decode = eNachPayloadStatic;
-
-            // ToDo : hide the 2 lines in prod
-            if (eNachPayload === Object(eNachPayload) && eNachPayload) {
-                // coming from constant
-                Object.assign(base64_decode, eNachPayload);
-            }*/
-
-        // this.setState({errorMsg: false});
-        /* if (environment === "prod" || environment === "dev") {
-             payload = retrieveParam(href, "payload") || undefined;
-             token = retrieveParam(href, "token") || undefined;
-             if (payload) base64_decode = base64Logic(payload, "decode");
-             // else this.setState({errorMsg: true});
-             // console.log(base64_decode);
-         }*/
-
-        if (eNachPayload !== Object(eNachPayload) && !eNachPayload && !token)
+        if (!checkObject(eNachPayload) && !token)
             showAlert(
                 "You cannot access this page directly without Authorised Session !!",
                 "error"
             );
-        /* else {
-             // ToDo : need to look later
-             EnachsetPayload(token, base64_decode);
-         }*/
     }
 
     componentDidMount() {
@@ -147,13 +111,13 @@ class ENach extends Component {
             showAlert,
             EnachsetAttempt
         } = this.props;
-        if (eNachAttempt) this.setState({ctr: eNachAttempt});
+        // if (eNachAttempt) this.setState({ctr: eNachAttempt});
         let that = this;
 
         document.addEventListener("responseDigio", function (obj) {
             let {detail} = obj;
 
-            console.log(JSON.stringify(detail));
+            // console.log(JSON.stringify(detail));
             if (detail.error_code !== undefined) {
                 showAlert(
                     `Failed to register with error :  ${detail.message}`,
@@ -168,25 +132,26 @@ class ENach extends Component {
 
                 detail.mandate_id = detail.digio_doc_id;
                 detail.status = detail.error_code === "CANCELLED" ? "cancel" : "error";
-                setTimeout(() => {
-                    // ToDo : uncomment in prod
-                    if (environment === "prod" || environment === "dev")
-                        if (eNachPayload === Object(eNachPayload))
-                            if (detail.error_code !== "CANCELLED")
+                // console.log(JSON.stringify(detail));
+                if (detail.error_code !== "CANCELLED")
+                    setTimeout(() => {
+                        // ToDo : uncomment in prod
+                        if (environment === "prod" || environment === "dev")
+                            if (checkObject(eNachPayload))
                                 history.push(ENachResponseUrl.error_url);
-                }, 1000);
+                    }, 1000);
             } else {
                 showAlert("Register successful for e-NACH", "success");
                 detail.mandate_id = detail.digio_doc_id;
                 detail.status = "success";
             }
-            // console.log(eNachPayload);
-            that._updateBackend(detail);
+
+            if (detail.error_code !== "CANCELLED") that._updateBackend(detail);
         });
 
         // ToDo : uncomment in prod
         if (environment === "prod" || environment === "dev")
-            if (eNachPayload === Object(eNachPayload) && eNachPayload.mandate_id)
+            if (checkObject(eNachPayload) && eNachPayload.mandate_id)
                 setTimeout(() => this._triggerDigio(), 1000);
     }
 
@@ -200,7 +165,7 @@ class ENach extends Component {
                 <br/>
 
                 <div className=" text-left " role="alert" style={{margin: "auto"}}>
-                    {eNachPayload === Object(eNachPayload) && eNachPayload.mandate_id ? (
+                    {checkObject(eNachPayload) && eNachPayload.mandate_id ? (
                         <p className="paragraph_styling alert alert-info">
                             Kindly complete the eNACH procedure by clicking the button below.
                             Remember, you may only try twice.
@@ -230,9 +195,7 @@ class ENach extends Component {
                     <button
                         type="button"
                         onClick={e => this._triggerDigio()}
-                        disabled={
-                            eNachPayload !== Object(eNachPayload) || !eNachPayload.mandate_id
-                        }
+                        disabled={!checkObject(eNachPayload) || !eNachPayload.mandate_id}
                         className="form-submit btn btn-raised greenButton"
                     >
                         Initiate E-NACH
@@ -254,7 +217,7 @@ class ENach extends Component {
 }
 
 const mapStateToProps = state => ({
-    token: state.eSignReducer.token,
+    token: state.eNachReducer.token,
     eNachPayload: state.eNachReducer.eNachPayload,
     bankObj: state.eNachReducer.bankObj
 });
