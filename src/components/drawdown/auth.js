@@ -33,7 +33,6 @@ class MobileOtp extends Component {
 
   state = {
     submitted: false,
-    loading: false,
     showMsg: {},
     timer: Timer,
     mobile: "",
@@ -49,7 +48,7 @@ class MobileOtp extends Component {
     clearInterval(this.interval);
     const { changeLoader, token, DrawsetAuth, showAlert } = this.props;
 
-    this.setState({ loading: true, submitted: true, timer: Timer });
+    this.setState({ submitted: true, timer: Timer });
     const options = {
       URL: `${otpUrl}/send_otp`,
       token: token,
@@ -66,7 +65,7 @@ class MobileOtp extends Component {
 
     if (resp.status === apiActions.ERROR_RESPONSE) {
       showAlert(resp.data.message, "warn");
-      this.setState({ loading: false, submitted: false });
+      this.setState({ submitted: false });
     } else if (resp.status === apiActions.SUCCESS_RESPONSE) {
       // alertModule(resp.success.message, "warn");
       this.setState({ otp_reference_id: resp.data.otp_reference_code }, () =>
@@ -76,7 +75,6 @@ class MobileOtp extends Component {
         this.setState({ timer: this.state.timer - 1 }, () => {
           if (this.state.timer === 0) {
             this.setState({
-              loading: false,
               submitted: false,
               timer: Timer
             });
@@ -110,7 +108,7 @@ class MobileOtp extends Component {
 
     if (resp.status === apiActions.ERROR_RESPONSE) {
       showAlert(resp.data.message, "warn");
-      this.setState({ loading: false, submitted: false });
+      this.setState({ submitted: false });
     } else if (resp.status === apiActions.SUCCESS_RESPONSE) {
       let that = this;
       this.setState({ verified: resp.data.is_otp_verified }, () => {
@@ -192,7 +190,7 @@ class MobileOtp extends Component {
     let that = this,
       regex,
       doby;
-    const { DrawsetAuth } = this.props;
+    const { DrawsetAuth, authObj } = this.props;
     // fields is Equivalent to F_NAME , L_NAME... thats an object
 
     // ToDo : comment those that are not required
@@ -245,14 +243,15 @@ class MobileOtp extends Component {
       if (checkObject(authObj)) {
         if (authObj.mobile)
           this.setState({
-            mobile: authObj.mobile,
-            missed_fields: authObj.mobile.length !== 10
+            mobile: authObj.mobile
           });
         else DrawsetAuth(this.state);
       }
       // else history.push(`${PUBLIC_URL}/drawdown/token`);
     } else history.push(`${PUBLIC_URL}/drawdown/token`);
     // console.log(payload)
+    window.setTimeout(() => this.validationHandler(), 500);
+
     changeLoader(false);
   }
 
@@ -365,7 +364,7 @@ class MobileOtp extends Component {
               name="submit"
               style={{
                 visibility:
-                  !this.state.missed_fields && !this.state.loading
+                  !this.state.missed_fields && !this.state.submitted
                     ? "visible"
                     : "hidden"
               }}
@@ -379,10 +378,7 @@ class MobileOtp extends Component {
 
             <button
               style={{
-                visibility:
-                  this.state.loading && this.state.otp.length === 6
-                    ? "visible"
-                    : "hidden"
+                visibility: this.state.otp.length === 6 ? "visible" : "hidden"
               }}
               onClick={e => this._verifyOTP(e)}
               className="btn btn-raised greenButton text-center"
