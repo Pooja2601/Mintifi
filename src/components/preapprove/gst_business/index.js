@@ -34,7 +34,7 @@ class BusinessDetail extends Component {
         tnc_consent: false,
         tncModal: false,
         ctrerror: 4,
-        optionSelected: {value: '', label: ''},
+        optionSelected: {value: '', label: "Select Company Type"},
     };
 
     validate = {companytype: false, gst: false, avgtrans: false, dealercode: false};
@@ -179,7 +179,7 @@ class BusinessDetail extends Component {
             this.tempState['avgtrans'] = value.value
             break;
             case DEALER_CODE: 
-            debugger
+            // debugger
             if (value.value.length <= 10) 
             this.tempState['dealercode'] = value.value 
             break;
