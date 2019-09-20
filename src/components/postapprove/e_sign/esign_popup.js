@@ -25,10 +25,11 @@ const TriggerPopUp = () => {
             {(checkObject(payloadPopUp)) ? (
                 <form ref={ref => adharForm = ref} method="post"
                       action={payloadPopUp.url}>
+                    {/*// Iterating over response payloads to create Input Fields for AdharBridge*/}
                     {tempPayloadKeys.map((val, key) =>
                         <input key={key} type="hidden" name={val} value={payloadPopUp[val]}/>
                     )}
-                   
+
                     <p>Uploading data to server...</p>
                     <button type="submit" style={{visibility: 'hidden'}}>Proceed</button>
                 </form>

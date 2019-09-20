@@ -15,7 +15,7 @@ const Cancel_URL = props => {
             loan_id: props.eNachPayload.loan_application_id
         });
     } else {
-        if (hosty === -1)
+        if (hosty === -1) // URLs and HOST aren't same
             window.setTimeout(() => {
                 window.location.href = `${props.eNachPayload.cancel_url}`;
             }, 4000);
@@ -32,10 +32,10 @@ const Cancel_URL = props => {
 
             <div className="alert alert-warning" role="alert">
                 {/*<h4 className="alert-heading">Dear {f_name} {l_name}</h4>*/}
-                <p className="paragraph_styling  ">
-                    We cannot process the eNACH Application as of now, you'll be
-                    redirected to Anchor dashboard within a moment, you may try again from
-                    Anchor's portal..
+                <p className="paragraph_styling">
+                    We cannot process the eNACH Application as of now, {!hosty && `you'll be
+                    redirected to Anchor dashboard within a moment,`} you may try again from
+                    Merchant's portal..
                 </p>
             </div>
         </>

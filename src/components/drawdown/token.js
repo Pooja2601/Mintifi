@@ -98,4 +98,3 @@ export default withRouter(connect(
     mapStateToProps,
     {DrawsetToken, changeLoader, showAlert}
 )(DrawLanding));
-

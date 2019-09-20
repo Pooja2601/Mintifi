@@ -3270,3 +3270,10 @@ like a tickmark */
     flex-wrap: inherit;
     font-size: 13px;
 }
+
+.footerComplaint {
+    display: block;
+    text-align: center;
+    font-size: 0.6rem;
+    color: #6c757d;
+}

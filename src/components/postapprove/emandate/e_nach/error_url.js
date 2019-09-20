@@ -16,7 +16,7 @@ const Error_URL = props => {
             loan_id: props.eNachPayload.loan_application_id
         });
     else {
-        if (hosty === -1) // HOST and payload urls not same
+        if (hosty === -1) // URLs and HOST aren't same
             window.setTimeout(() => {
                 window.location.href = `${props.eNachPayload.error_url}`;
             }, 4000);
@@ -29,10 +29,10 @@ const Error_URL = props => {
 
             <div className="alert alert-danger" role="alert">
                 {/*<h4 className="alert-heading">Dear {f_name} {l_name}</h4>*/}
-                <p className="paragraph_styling  ">
+                <p className="paragraph_styling">
                     Thank you for completing the process, For some reason we couldn't
-                    complete the e-NACH, you'll be redirected to Anchor dashboard within a
-                    moment..
+                    complete the e-NACH {!hosty && `, you'll be redirected to Anchor dashboard within a
+                    moment..`}
                 </p>
             </div>
         </>

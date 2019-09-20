@@ -2,6 +2,7 @@ import React from "react";
 import {baseUrl, app_id} from "../shared/constants";
 import {checkObject} from "../shared/common_logic";
 
+
 export const apiActions = {
     ERROR_RESPONSE: "ERROR_RESPONSE",
     SUCCESS_RESPONSE: "SUCCESS_RESPONSE",
@@ -26,7 +27,9 @@ export const fetchAPI = propsParam => {
         .then(
             resp => {
                 isLoader && changeLoader(false);
+
                 if (!checkObject(resp.response)) {
+
                     return {status: apiActions.ERROR_RESPONSE, data: resp.error};
                 } else {
                     return {status: apiActions.SUCCESS_RESPONSE, data: resp.response};
@@ -69,7 +72,9 @@ export const postAPI = propsParam => {
         .then(
             resp => {
                 isLoader && changeLoader(false);
+
                 if (!checkObject(resp.response)) {
+
                     return {status: apiActions.ERROR_RESPONSE, data: resp.error};
                 } else {
                     return {status: apiActions.SUCCESS_RESPONSE, data: resp.response};
