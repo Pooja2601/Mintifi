@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import {withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
 import {baseUrl, app_id, environment} from "../../../shared/constants";
-import {pan_adhar, setAdharManual, setBusinessDetail, changeLoader, showAlert} from "../../../actions/index";
+import {pan_adhar, setAdharManual, setBusinessDetail, changeLoader, showAlert} from "../../../actions";
 import {checkObject} from "../../../shared/common_logic";
 
 const file_msg = "Select a file";

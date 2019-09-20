@@ -3,14 +3,14 @@ import React, {Component} from "react";
 import {baseUrl, otpUrl} from "../../../shared/constants";
 import {connect} from "react-redux";
 import PropTypes from 'prop-types';
-import {setAdharManual, changeLoader, showAlert} from "../../../actions/index";
+import {setAdharManual, changeLoader, showAlert} from "../../../actions";
 import {Link, withRouter} from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {fetchAPI, apiActions, postAPI} from "../../../api";
 import {checkObject, fieldValidationHandler, regexTrim} from "../../../shared/common_logic";
 
-import {validationPersonalDetails} from "./../../../shared/validations";
+import {validationPersonalDetails} from "../../../shared/validations";
 
 
 const {PUBLIC_URL} = process.env;

@@ -9,7 +9,7 @@ import {
   changeLoader,
   setAdharManual,
   showAlert
-} from "../../../actions/index";
+} from "../../../actions";
 import { Link, withRouter } from "react-router-dom";
 import { fetchAPI, apiActions, postAPI } from "../../../api";
 import {
@@ -17,7 +17,7 @@ import {
   fieldValidationHandler,
   regexTrim
 } from "../../../shared/common_logic";
-import { validationMobileOtp } from "./../../../shared/validations";
+import { validationMobileOtp } from "../../../shared/validations";
 
 const Timer = OTP_Timer;
 const { PUBLIC_URL } = process.env;
