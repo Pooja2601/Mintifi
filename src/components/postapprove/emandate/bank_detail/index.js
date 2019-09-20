@@ -17,7 +17,7 @@ import {
     checkObject,
     retrieveParam,
     base64Logic,
-    fieldValidationHandler
+    fieldValidationHandler, regexTrim
 } from "../../../../shared/common_logic";
 // import DatePicker from "react-datepicker";
 // import "react-datepicker/dist/react-datepicker.css";
@@ -37,6 +37,7 @@ class ENachBankDetail extends Component {
     };
 
     state = {
+        dropdownSelected: {value: '', label: 'Select Account Type'},
         acc_type: "",
         bank_name: "",
         acc_number: "",
@@ -46,42 +47,6 @@ class ENachBankDetail extends Component {
         branch_name: ""
     };
 
-    validate = {
-        acc_type: false,
-        // bank_name: false,
-        acc_number: false,
-        acc_name: false,
-        ifsc_code: false
-        // micr_code: false,
-    };
-
-    validationErrorMsg = () => {
-        let ctrerror = 4,
-            fieldTxt;
-        Object.values(this.validate).map((val, key) => {
-            if (!val) ++ctrerror;
-            else --ctrerror;
-        });
-        if (ctrerror !== 0) {
-            fieldTxt = ctrerror > 1 ? "field is " : "fields are ";
-            // alertModule(`Kindly check the form again, ${ctrerror / 2} ${fieldTxt} still having some issue !`, 'warn');
-        }
-    };
-
-    handleValidation = () => {
-        let ctrerror = 4,
-            missed_fields;
-        // let missed_fields = Object.keys(this.validate).some(x => this.validate[x]);
-        Object.values(this.validate).map((val, key) => {
-            if (!val) ++ctrerror;
-            else --ctrerror;
-            // console.log(val);
-        });
-        // console.log(ctrerror);
-        missed_fields = ctrerror !== 0;
-        this.setState({missed_fields});
-        // this.setState({missed_fields}, () => console.log('All Fields Validated : ' + this.state.missed_fields));
-    };
 
     // ToDo : should be independent of a field
     validationHandler = () => {
@@ -96,11 +61,10 @@ class ENachBankDetail extends Component {
         this.setState({missed_fields: lomo}); // true : for disabling
     }
 
-
     // Common for all input fields of this component
     onChangeHandler = (field, value) => {
         let that = this;
-        const {setBankDetail} = this.props;
+        const {EnachsetBankDetail} = this.props;
         // fields is Equivalent to F_NAME , L_NAME... thats an object
 
         // ToDo : comment those that are not required
@@ -126,9 +90,9 @@ class ENachBankDetail extends Component {
                 this.tempState['acc_type'] = value.value;
                 break;
             case MICR_CODE:
-                if (value.length <= 9 && !isNaN(value)) {
+                if (value.length <= 9 && !isNaN(value))
                     this.tempState['micr_code'] = value;
-                }
+
                 break;
             default:
                 this.tempState[field.slug] = value;
@@ -139,7 +103,7 @@ class ENachBankDetail extends Component {
         this.setState({...this.state, ...this.tempState});
 
         window.setTimeout(() => {
-            setBankDetail(that.state);
+            EnachsetBankDetail(that.state);
             this.validationHandler();
         }, 10)
 
@@ -162,18 +126,22 @@ class ENachBankDetail extends Component {
         };
         const resp = await postAPI(options);
 
-        if (resp.status === apiActions.ERROR_RESPONSE)
+        if (resp.status === apiActions.ERROR_RESPONSE) {
             showAlert('We couldn`t setup the mandate, you may try the physical NACH process', 'warn');
-        else if (resp.status === apiActions.SUCCESS_RESPONSE) {
+            setTimeout(() =>
+                history.push(
+                    `${PUBLIC_URL}/enach/error_url`), 3000);
+        } else if (resp.status === apiActions.SUCCESS_RESPONSE) {
             showAlert('e-Mandate created successfully', 'success');
             nachObject = Object.assign(eNachPayload, resp.data);
             EnachsetPayload(token, nachObject);
+            nachObject = base64Logic(nachObject, 'encode');
+            // ToDo : payload & token append , needs to be reomved
+            setTimeout(() =>
+                history.push(
+                    `${PUBLIC_URL}/enach?payload=${nachObject}&token=${token}`), 1000);
         }
-        nachObject = base64Logic(nachObject, 'encode');
-        // ToDo : payload & token append , needs to be reomved
-        setTimeout(() =>
-            history.push(
-                `${PUBLIC_URL}/enach?payload=${nachObject}&token=${token}`), 1000);
+
     }
 
     _formSubmit = async e => {
@@ -273,7 +241,7 @@ class ENachBankDetail extends Component {
 
         const resp = await fetchAPI(options);
 
-        // Doesn't require to check if error
+        // ToDO : Doesn't require to check if error
         // if(resp.status === apiActions.ERROR_RESPONSE)
 
         if (resp.status === apiActions.SUCCESS_RESPONSE) {
@@ -300,15 +268,9 @@ class ENachBankDetail extends Component {
 
                 if (bank_ifsc_code)
                     that._fetchIFSC(that.state.ifsc_code);
-
-                that.validate.ifsc_code = that.state.ifsc_code.length === 11;
-                that.validate.acc_name = that.state.acc_name.length > 2;
-                that.validate.acc_number =
-                    that.state.acc_number.length >= 9 && that.state.acc_number.length <= 18;
-                that.validate.acc_type = false;
-
-                window.setTimeout(() => that.handleValidation(), 50);
                 EnachsetBankDetail(that.state);
+                window.setTimeout(() => that.validationHandler(), 100);
+
             }, 500);
 
         }
@@ -327,23 +289,16 @@ class ENachBankDetail extends Component {
         const {bankObj, EnachsetBankDetail, changeLoader} = this.props;
 
         if (checkObject(bankObj))
-            this.setState(bankObj, () => {
-                Object.keys(this.state).map((val, key) => {
-                    if (this.validate[val] !== undefined)
-                        this.validate[val] = this.state[val].length;
-                    if (val === 'acc_name')
-                        this.validate[val] = this.state[val].length;
-                    // console.log(this.validate);
-                });
-            });
+            this.setState(bankObj);
         else EnachsetBankDetail(this.state);
 
         changeLoader(false);
-        setTimeout(() => this.handleValidation(), 500);
+        setTimeout(() => this.validationHandler(), 500);
     }
 
     render() {
 
+        const {ACCOUNT_NAME, ACCOUNT_NUMBER, ACCOUNT_TYPE, BANK_NAME, BRANCH_NAME, IFSC, MICR_CODE} = validationBank;
         return (
             <>
                 {/*<Link to={`${PUBLIC_URL}/preapprove/personaldetails`} className={"btn btn-link"}>Go Back </Link>*/}
@@ -363,61 +318,41 @@ class ENachBankDetail extends Component {
                     <div className={"row"}>
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3 ">
-                                <label htmlFor="nameAccount" className={"bmd-label-floating"}>
+                                <label htmlFor={ACCOUNT_NAME.id} className={"bmd-label-floating"}>
                                     Account Name *
                                 </label>
                                 <input
-                                    type="text"
+                                    type={ACCOUNT_NAME.type}
                                     className="form-control font_weight"
                                     // placeholder="Email"
-                                    title="Please enter Account Name"
-                                    autoCapitalize="characters"
-                                    id="nameAccount"
-                                    required={true}
+                                    pattern={regexTrim(ACCOUNT_NAME.pattern)}
+                                    title={ACCOUNT_NAME.title}
+                                    autoCapitalize={ACCOUNT_NAME.autoCapitalize}
+                                    id={ACCOUNT_NAME.id}
+                                    required={ACCOUNT_NAME.title}
                                     value={this.state.acc_name}
-                                    onBlur={() => this.validationErrorMsg()}
                                     // ref={ref => (this.obj.pan = ref)}
-                                    onChange={e => {
-                                        let {value} = e.target;
-                                        this.validate.acc_name = value.length > 2;
-                                        this.setState({acc_name: value}, () =>
-                                            this.props.EnachsetBankDetail(this.state)
-                                        );
-                                        this.handleValidation();
-                                    }}
+                                    onChange={e => this.onChangeHandler(ACCOUNT_NAME, e.target.value)}
                                 />
                             </div>
                         </div>
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3">
-                                <label htmlFor="numberAccount" className={"bmd-label-floating"}>
+                                <label htmlFor={ACCOUNT_NUMBER.id} className={"bmd-label-floating"}>
                                     Account Number *
                                 </label>
                                 <input
-                                    type="text"
+                                    type={ACCOUNT_NUMBER.type}
                                     className="form-control font_weight"
                                     // placeholder="Mobile Number"
-                                    pattern="^[0-9]{9,18}$"
-                                    title="Please enter Account Number"
-                                    autoCapitalize="characters"
-                                    id="numberAccount"
-                                    required={true}
+                                    pattern={regexTrim(ACCOUNT_NUMBER.pattern)}
+                                    title={ACCOUNT_NUMBER.title}
+                                    autoCapitalize={ACCOUNT_NUMBER.autoCapitalize}
+                                    id={ACCOUNT_NUMBER.id}
+                                    required={ACCOUNT_NUMBER.required}
                                     value={this.state.acc_number}
-                                    onBlur={() => this.validationErrorMsg()}
                                     // ref={ref => (this.obj.pan = ref)}
-                                    onChange={e => {
-                                        let {value} = e.target;
-                                        if (!isNaN(value)) {
-                                            this.validate.acc_number =
-                                                value.length >= 9 && value.length <= 18;
-                                            if (value.length <= 18) {
-                                                this.setState({acc_number: value}, () =>
-                                                    this.props.EnachsetBankDetail(this.state)
-                                                );
-                                                this.handleValidation();
-                                            }
-                                        }
-                                    }}
+                                    onChange={e => this.onChangeHandler(ACCOUNT_NUMBER, e.target.value)}
                                 />
                             </div>
                         </div>
@@ -426,56 +361,37 @@ class ENachBankDetail extends Component {
                     <div className={"row"}>
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3">
-                                <label htmlFor="ifscCode" className="bmd-label-floating">
+                                <label htmlFor={IFSC.id} className="bmd-label-floating">
                                     IFSC *
                                 </label>
 
                                 <input
-                                    type="text"
+                                    type={IFSC.id}
                                     className="form-control font_weight text-capitalize"
-                                    pattern="^[A-Za-z]{4}\d{7}$"
-                                    title="Enter Average monthly Transactions"
-                                    autoCapitalize="characters"
-                                    id="ifscCode"
-                                    required={true}
+                                    pattern={regexTrim(IFSC.pattern)}
+                                    title={IFSC.title}
+                                    autoCapitalize={IFSC.autoCapitalize}
+                                    id={IFSC.id}
+                                    required={IFSC.required}
                                     value={this.state.ifsc_code}
                                     // ref={ref => (this.obj.pan = ref)}
-                                    onBlur={() => {
-                                        this.validationErrorMsg();
-                                        this._fetchIFSC(this.state.ifsc_code);
-                                    }}
-                                    onChange={e => {
-                                        let {value} = e.target;
-                                        this.validate.ifsc_code = value.length === 11;
-                                        if (value.length <= 11) {
-                                            this.setState({ifsc_code: value}, () =>
-                                                this.props.EnachsetBankDetail(this.state)
-                                            );
-                                            this.handleValidation();
-                                        }
-                                    }}
+                                    onChange={e => this.onChangeHandler(IFSC, e.target.value)}
                                 />
                             </div>
                         </div>
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3">
-                                <label htmlFor="accountType" className={"bmd-label-floating"}>
+                                <label htmlFor={ACCOUNT_TYPE.id} className={"bmd-label-floating"}>
                                     Account Type *
                                 </label>
                                 <Select
-                                    options={accountType}
-                                    required={true}
-                                    id="accountType"
-                                    inputId={"accountType"}
-                                    onBlur={() => this.validationErrorMsg()}
-                                    onChange={e => {
-                                        let {value} = e;
-                                        this.setState({acc_type: value}, () =>
-                                            this.props.EnachsetBankDetail(this.state)
-                                        );
-                                        this.validate.acc_type = value.length > 0;
-                                        this.handleValidation();
-                                    }}
+                                    options={ACCOUNT_TYPE.options}
+                                    required={ACCOUNT_TYPE.required}
+                                    id={ACCOUNT_TYPE.id}
+                                    pattern={regexTrim(ACCOUNT_TYPE.pattern)}
+                                    value={this.state.dropdownSelected}
+                                    inputId={ACCOUNT_TYPE.id}
+                                    onChange={e => this.onChangeHandler(ACCOUNT_TYPE, e)}
                                 />
                                 {/*<select style={{fontWeight: 600}}
                                         title="Please select Company Type"
@@ -505,27 +421,22 @@ class ENachBankDetail extends Component {
                                 className="form-group mb-3"
                                 style={{display: this.state.bank_name ? "block" : "none"}}
                             >
-                                <label htmlFor="nameBank" className={"bmd-label-floating"}>
+                                <label htmlFor={BANK_NAME.id} className={"bmd-label-floating"}>
                                     Bank Name *
                                 </label>
                                 <input
-                                    type="text"
+                                    type={BANK_NAME.type}
                                     className="form-control font_weight"
                                     // placeholder="Email"
-                                    title="Please enter Bank Name"
-                                    autoCapitalize="characters"
-                                    id="nameBank"
-                                    required={true}
-                                    disabled={true}
+                                    title={BANK_NAME.title}
+                                    pattern={regexTrim(BANK_NAME.pattern)}
+                                    autoCapitalize={BANK_NAME.autoCapitalize}
+                                    id={BANK_NAME.id}
+                                    required={BANK_NAME.required}
+                                    disabled={BANK_NAME.disabled}
                                     value={this.state.bank_name}
-                                    // onBlur={() => this.validationErrorMsg()}
                                     // ref={ref => (this.obj.pan = ref)}
-                                    /*onChange={(e) => {
-                                                          let {value} = e.target;
-                                                          this.setState({bank_name: value}, () => this.props.EnachsetBankDetail(this.state));
-                                                          this.validate.bank_name = (value.length > 0);
-                                                          this.handleValidation();
-                                                      }}*/
+                                    // onChange={(e) => this.onChangeHandler(BANK_NAME,e.target.value)}
                                 />
                             </div>
                         </div>
@@ -534,30 +445,20 @@ class ENachBankDetail extends Component {
                                 className="form-group mb-3"
                                 style={{display: this.state.micr_code ? "block" : "none"}}
                             >
-                                <label htmlFor="micrCode" className="bmd-label-floating">
+                                <label htmlFor={MICR_CODE.id} className="bmd-label-floating">
                                     MICR Code
                                 </label>
                                 <input
-                                    type="text"
+                                    type={MICR_CODE.type}
                                     className="form-control font_weight"
-                                    pattern="^[0-9]{9}$"
-                                    title="Enter MICR Code"
-                                    autoCapitalize="characters"
-                                    id="micrCode"
-                                    disabled={true}
+                                    pattern={regexTrim(MICR_CODE.pattern)}
+                                    title={MICR_CODE.title}
+                                    autoCapitalize={MICR_CODE.autoCapitalize}
+                                    id={MICR_CODE.id}
+                                    disabled={MICR_CODE.disabled}
                                     value={this.state.micr_code}
                                     // ref={ref => (this.obj.pan = ref)}
-                                    // onBlur={() => this.validationErrorMsg()}
-                                    onChange={e => {
-                                        let {value} = e.target;
-                                        this.validate.micr_code = value.length === 9;
-                                        if (value.length <= 9 && !isNaN(value)) {
-                                            this.setState({micr_code: value}, () =>
-                                                this.props.EnachsetBankDetail(this.state)
-                                            );
-                                            // this.handleValidation();
-                                        }
-                                    }}
+                                    onChange={e => this.onChangeHandler(MICR_CODE, e.target.value)}
                                 />
                             </div>
                         </div>
@@ -568,17 +469,18 @@ class ENachBankDetail extends Component {
                     >
                         <div className={"col-sm-12"}>
                             <div className="form-group mb-3 ">
-                                <label htmlFor="nameBranch" className={"bmd-label-floating"}>
+                                <label htmlFor={BRANCH_NAME.id} className={"bmd-label-floating"}>
                                     Branch Name *
                                 </label>
                                 <input
-                                    type="text"
+                                    type={BRANCH_NAME.type}
                                     className="form-control font_weight"
                                     // placeholder="Email"
-                                    title="Please enter Branch Name"
-                                    id="nameBranch"
-                                    required={true}
-                                    disabled={true}
+                                    title={BRANCH_NAME.title}
+                                    id={BRANCH_NAME.id}
+                                    pattern={regexTrim(BRANCH_NAME.pattern)}
+                                    required={BRANCH_NAME.required}
+                                    disabled={BRANCH_NAME.disabled}
                                     value={this.state.branch_name}
                                 />
                             </div>
