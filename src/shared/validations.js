@@ -160,7 +160,7 @@ const validationMobileOtp = {
     max: 999999,
     maxLength: 6,
     minLength: 6,
-    required: true
+    required: false
   }
 };
 

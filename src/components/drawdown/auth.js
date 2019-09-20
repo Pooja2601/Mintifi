@@ -18,7 +18,7 @@ import {
   regexTrim,
   fieldValidationHandler
 } from "../../shared/common_logic";
-import { drawdownValidation } from "./drawdown_validation";
+import { validationMobileOtp } from "../../shared/validations";
 
 const Timer = OTP_Timer;
 const { PUBLIC_URL } = process.env;
@@ -178,7 +178,7 @@ class MobileOtp extends Component {
 
     const lomo = fieldValidationHandler({
       showAlert: showAlert,
-      validations: drawdownValidation,
+      validations: validationMobileOtp,
       localState: this.state
     });
 
@@ -194,7 +194,7 @@ class MobileOtp extends Component {
     // fields is Equivalent to F_NAME , L_NAME... thats an object
 
     // ToDo : comment those that are not required
-    const { MOBILE_NUMBER, VERIFY_OTP } = drawdownValidation;
+    const { MOBILE_NUMBER, VERIFY_OTP } = validationMobileOtp;
 
     this.tempState = Object.assign({}, this.state);
     switch (field) {
@@ -257,7 +257,7 @@ class MobileOtp extends Component {
 
   render() {
     // const {payload, match} = this.props;
-    const { MOBILE_NUMBER, VERIFY_OTP } = drawdownValidation;
+    const { MOBILE_NUMBER, VERIFY_OTP } = validationMobileOtp;
     return (
       <>
         {/*<Link to={`${PUBLIC_URL}/PersonalDetails`} className={"btn btn-link"}>Go Back </Link>*/}
