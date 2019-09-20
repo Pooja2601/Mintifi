@@ -6,8 +6,7 @@ import {changeLoader, EnachsetAttempt, EnachsetPayload} from "../../../../action
 import {postMessage} from "../../../../shared/common_logic";
 import PropTypes from "prop-types";
 
-const PUBLIC_URL = process.env;
-
+const {PUBLIC_URL} = process.env;
 const Success_URL = props => {
     const hosty = props.eNachPayload.success_url.localeCompare(PUBLIC_URL);
     if (window.location !== window.parent.location)
