@@ -304,6 +304,7 @@ const validationBusinessDetails = {
   }
 };
 
+<<<<<<< HEAD
 export {
   validationPersonalDetails,
   validationAdharPan,
@@ -311,3 +312,7 @@ export {
   validationBusinessDetails,
   validationBank
 };
+=======
+export {validationPersonalDetails, validationAdharPan, validationMobileOtp, validationBusinessDetails, validationBank};
+
+>>>>>>> e5db93ff314eed14e327f2f9c1674124cf7e23be
