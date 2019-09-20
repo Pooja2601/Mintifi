@@ -127,6 +127,7 @@ class Offers extends Component {
                     // history.push(`${PUBLIC_URL}/drawdown/token`)
                 }, 2000);
             }
+            setTimeout(() => history.push(`${PUBLIC_URL}/drawdown/error`), 500);
 
         } else if (resp.status === apiActions.SUCCESS_RESPONSE) {
             // ToDo : uncomment this 2 lines for production

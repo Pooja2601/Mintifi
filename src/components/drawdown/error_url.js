@@ -25,8 +25,8 @@ const ErrorUrl = (props) => {
             loan_product = preFlightResp.offer.product_type.split("_");
             loan_product = loan_product[0] + " " + loan_product[1];
         }
-        
-        if (window.location !== window.parent.location)
+
+        if (window.location !== window.parent.location) {
             if (checkObject(payload))
                 postMessage({
                     drawdown_status: "error",
@@ -35,10 +35,10 @@ const ErrorUrl = (props) => {
                     drawdown_id: checkObject(preFlightResp) ? preFlightResp.drawdown_id : null,
                     action: "close"
                 });
-            else {
-                if (checkObject(payload))
-                    window.setTimeout(() => window.location.href = `${payload.error_url}`, 5000);
-            }
+        } else {
+            if (checkObject(payload))
+                window.setTimeout(() => window.location.href = `${payload.error_url}`, 5000);
+        }
 
         return (
             <>
