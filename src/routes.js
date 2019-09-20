@@ -24,6 +24,7 @@ import DrawAuth from "./components/drawdown/auth";
 import DrawOffers from "./components/drawdown/offers";
 import DrawFetchOffers from "./components/drawdown/fetch_offers";
 import DrawThankYou from "./components/drawdown/thankyou";
+import DrawError from "./components/drawdown/error_url";
 
 // E-Mandate
 import EMandate from "./components/postapprove/emandate";
@@ -125,6 +126,10 @@ const routes = [
     {
         path: 'drawdown/thankyou',
         component: DrawThankYou
+    },
+    {
+        path: 'drawdown/error',
+        component: DrawError
     },
     {
         path: 'emandate',
