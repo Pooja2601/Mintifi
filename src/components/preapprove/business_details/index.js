@@ -208,8 +208,8 @@ class BusinessDetail extends Component {
         console.log(">>>>>", this.state.gst);
 
         const gstProfile = this.props.gstProfile;
-        const {COMPANY_NAME, COMPANY_TYPE, GST_NUMBER, PAN_NUMBER, AVERAGE_TRANSACTION, DEALER_CODE, BUSINESS_EMAIL, BUSINESS_PHONE, NO_OF_FOUNDERS, NO_OF_EMPLOYEES,} = validationBusinessDetails;
-        const {OWNERSHIP, ADDRESS1, ADDRESS2, PINCODE, DOB} = validationPersonalDetails;
+        const {COMPANY_NAME, COMPANY_TYPE, GST_NUMBER, PAN_NUMBER, AVERAGE_TRANSACTION, DEALER_CODE, BUSINESS_EMAIL, BUSINESS_PHONE, NO_OF_FOUNDERS, NO_OF_EMPLOYEES, OWNERSHIP, ADDRESS1, ADDRESS2, PINCODE, DOB} = validationBusinessDetails;
+        // const {OWNERSHIP, ADDRESS1, ADDRESS2, PINCODE, DOB} = validationPersonalDetails;
         // console.log(".....", GST_NUMBER.pattern); 
         return (
             <>
@@ -433,14 +433,11 @@ class BusinessDetail extends Component {
                                     <input
                                         type={NO_OF_FOUNDERS.type}
                                         className="form-control font_weight"
-
                                         pattern={regexTrim(NO_OF_FOUNDERS.pattern)}
                                         title={NO_OF_FOUNDERS.title}
-
                                         id={NO_OF_FOUNDERS.id}
                                         required={NO_OF_FOUNDERS.required}
                                         value={this.state.no_of_founders}
-
                                         onChange={(e) => this.onChangeHandler(NO_OF_FOUNDERS, e.target.value)}
                                     />
                                 </div>
@@ -585,7 +582,7 @@ class BusinessDetail extends Component {
                     <div className="mt-5 mb-5 text-center">
                         <button
                             type="submit"
-                            disabled={this.state.missed_fields || !this.state.tnc_consent}
+                            // disabled={this.state.missed_fields || !this.state.tnc_consent}
                             onClick={e => this._formSubmit(e)}
                             className="form-submit btn btn-raised greenButton"
                         >Check your eligibility
