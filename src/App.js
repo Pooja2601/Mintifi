@@ -20,10 +20,10 @@ import {routes} from './routes'
 // import Header from "./shared/header";
 // import Footer from "./shared/footer";
 import Loader from "./shared/loader";
-import Error from "./shared/error";
+import Error_404 from "./layouts/404_page";
 
-import Headers from "./shared/header";
-import CustomAlert from "./shared/custom_alerts";
+import Headers from "./layouts/header";
+import CustomAlert from "./layouts/custom_alerts";
 
 const {store, persistor} = configureStore();
 
@@ -56,7 +56,6 @@ class App extends Component {
                                     >
                                         <div
                                             className="col-11 col-md-6 ml-5 mr-5 mb-3 partner_section mainCardBody"
-
                                         >
                                             <CustomAlert/>
                                             <Loader/>
@@ -76,7 +75,7 @@ class App extends Component {
                                                         />
                                                     ))}
 
-                                                    <Route component={Error}/>
+                                                    <Route component={Error_404}/>
                                                 </Switch>
                                                 {/*</CSSTransition>*/}
                                                 {/*</TransitionGroup>*/}

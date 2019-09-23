@@ -203,6 +203,7 @@ class ESign extends Component {
     };
 
     componentWillUnmount() {
+
         if (this.intervalPing) window.clearInterval(this.intervalPing);
         if (this.checkStatusPopup) window.clearInterval(this.checkStatusPopup);
     }
@@ -216,6 +217,7 @@ class ESign extends Component {
             showAlert
         } = this.props;
         changeLoader(false);
+        showAlert();
 
         let {href} = window.location,
             base64_decode = {},

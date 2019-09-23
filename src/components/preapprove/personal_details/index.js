@@ -46,8 +46,10 @@ class PersonalDetail extends Component {
 
     componentDidMount() {
 
-        const {payload, authObj, adharObj, changeLoader, setAdharManual, history, pan} = this.props;
+        const {payload, authObj, adharObj, changeLoader, showAlert, setAdharManual, history, pan} = this.props;
         // console.log(typeof payload);
+        changeLoader(false);
+        showAlert();
         setTimeout(() => {
         }, 1000);
         // console.log(pan)
@@ -76,7 +78,6 @@ class PersonalDetail extends Component {
             this.validationHandler();
             // console.log(adharObj);
         }, 1000);
-        changeLoader(false);
 
     }
 

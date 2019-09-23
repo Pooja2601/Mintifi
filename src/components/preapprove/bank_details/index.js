@@ -248,8 +248,9 @@ class BankDetail extends Component {
     }
 
     componentWillMount() {
-        const {payload, adharObj, history, businessObj} = this.props;
-
+        const {payload, adharObj, history, businessObj, changeLoader, showAlert} = this.props;
+        changeLoader(false);
+        showAlert();
         if (checkObject(payload) && payload) {
             if (!checkObject(adharObj))
                 history.push(`${PUBLIC_URL}/preapprove/personaldetail`);
@@ -260,7 +261,7 @@ class BankDetail extends Component {
     }
 
     componentDidMount() {
-        const {bankObj, setBankDetail, changeLoader, adharObj} = this.props;
+        const {bankObj, setBankDetail, adharObj} = this.props;
 
         if (checkObject(adharObj)) {
             const {f_name, l_name} = adharObj;
@@ -271,7 +272,6 @@ class BankDetail extends Component {
         else setBankDetail(this.state);
 
         // console.log(this.props.gstProfile)
-        changeLoader(false);
         setTimeout(() => this.validationHandler(), 500);
         // console.log(this.props.adharObj);
 

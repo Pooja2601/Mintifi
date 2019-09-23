@@ -208,8 +208,11 @@ class MobileOtp extends Component {
     };
 
     componentWillMount() {
+        const {changeLoader, match, showAlert} = this.props;
+        changeLoader(false);
+        showAlert();
         /*const {changeLoader, match, DrawsetToken} = this.props;
-                        changeLoader(false);
+
                         const {token, payload} = match.params;
                         if (!token &&  !checkObject(payload))
                             alertModule("You cannot access this page directly without Authorised session!! ", 'error');

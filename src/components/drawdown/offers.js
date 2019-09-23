@@ -144,7 +144,7 @@ class Offers extends Component {
     };
 
     componentWillMount() {
-        const {payload, authObj, changeLoader, history} = this.props;
+        const {payload, authObj, changeLoader, history, showAlert} = this.props;
 
         if (!checkObject(authObj))
             history.push(`${PUBLIC_URL}/drawdown/auth`);
@@ -152,6 +152,7 @@ class Offers extends Component {
             history.push(`${PUBLIC_URL}/drawdown/token`);
         }
         changeLoader(false);
+        showAlert();
     }
 
     render() {

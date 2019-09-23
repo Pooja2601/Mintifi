@@ -277,8 +277,10 @@ class ENachBankDetail extends Component {
     }
 
     componentWillMount() {
-        const {eNachPayload, history} = this.props;
+        const {eNachPayload, history, changeLoader, showAlert} = this.props;
 
+        changeLoader(false);
+        showAlert();
         if (checkObject(eNachPayload)) {
             // history.push(`${PUBLIC_URL}/emandate`);
             this._fetchBankDetails();
@@ -286,13 +288,12 @@ class ENachBankDetail extends Component {
     }
 
     componentDidMount() {
-        const {bankObj, EnachsetBankDetail, changeLoader} = this.props;
+        const {bankObj, EnachsetBankDetail} = this.props;
 
         if (checkObject(bankObj))
             this.setState(bankObj);
         else EnachsetBankDetail(this.state);
 
-        changeLoader(false);
         setTimeout(() => this.validationHandler(), 500);
     }
 

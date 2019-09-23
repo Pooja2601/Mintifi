@@ -97,7 +97,7 @@ class ENach extends Component {
     componentWillMount() {
         let {changeLoader, token, eNachPayload, showAlert} = this.props;
         changeLoader(false);
-
+        showAlert();
         if (!checkObject(eNachPayload) && !token)
             showAlert(
                 "You cannot access this page directly without Authorised Session !!",
