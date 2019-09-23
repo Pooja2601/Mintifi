@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import {baseUrl, app_id, environment} from "../../../shared/constants";
 import {pan_adhar, setAdharManual, setBusinessDetail, changeLoader, showAlert} from "../../../actions";
 import {checkObject} from "../../../shared/common_logic";
+import {apiActions, postFileAPI} from "../../../api";
 
 const file_msg = "Select a file";
 const {PUBLIC_URL} = process.env;
@@ -224,7 +225,7 @@ class DocsUpload extends Component {
         }
     }
 
-    formSubmit() {
+    formSubmit = async () => {
 
         let {payload, token, preFlightResp, changeLoader, history, showAlert} = this.props;
         changeLoader(true);
@@ -251,32 +252,19 @@ class DocsUpload extends Component {
             ctr++;
         }
 
-        fetch(`${baseUrl}/documents`, {
-            method: 'POST',
-            headers: {
-                // "Content-Type": "",
-                "token": token,
-                "cache": "no-cache",
-            },
-            body: formData // This is your file object
-        })
-            .then(resp => resp.json())
-            .then(
-                resp => {
-                    changeLoader(false);
-                    // console.log(resp); // Handle the success response object
-                    if (checkObject(resp.error))
-                        showAlert("We couldn't upload the files, Kindly try again !", 'warn');
-                    else if (checkObject(resp.response))
-                        history.push(`${PUBLIC_URL}/preapprove/bankdetail`);
-                }
-            ).catch(
-            error => {
-                changeLoader(false);
-                // console.log(error); // Handle the error response object
-                showAlert();
-            }
-        );
+        const options = {
+            URL: `${baseUrl}/documents`,
+            data: formData,
+            token: token,
+            showAlert: showAlert,
+            changeLoader: changeLoader
+        };
+        const resp = await postFileAPI(options);
+
+        if (resp.status === apiActions.SUCCESS_RESPONSE) {
+            history.push(`${PUBLIC_URL}/preapprove/bankdetail`);
+        }
+
     }
 
     componentWillMount() {
