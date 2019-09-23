@@ -170,7 +170,7 @@ export const fieldValidationHandler = props => {
     const {showAlert, validations, localState} = props;
 
     const lomo = Object.entries(validations).some((val, key) => {
-
+        console.log(val[1].slug);
         if (val[1].required) {
             let regexTest = val[1].pattern.test(localState[val[1].slug]);
             if (!regexTest) {
@@ -178,10 +178,12 @@ export const fieldValidationHandler = props => {
                 if (localState[val[1].slug])
                     showAlert(val[1].error);
                 return val[1];
+
             }
         }
 
     });
+
     if (!lomo) showAlert();
     return lomo; // true : for disabling
 };
