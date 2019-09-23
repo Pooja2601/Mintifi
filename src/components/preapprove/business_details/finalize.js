@@ -122,7 +122,12 @@ class ReviewBusinessDetail extends Component {
           no_of_founders: businessObj.no_of_founders,
           no_of_employees: businessObj.no_of_employees,
           monthly_anchor_txn_value: businessObj.monthly_anchor_txn_value,
-          business_address: businessObj.business_address
+          business_address: {
+            ownership_type: businessObj.ownership,
+            address_1: businessObj.address1,
+            address_2: businessObj.address2,
+            pincode: businessObj.pincode
+          }
         },
 
         loan_details: {
