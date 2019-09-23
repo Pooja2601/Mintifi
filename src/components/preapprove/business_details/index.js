@@ -43,8 +43,8 @@ class BusinessDetail extends Component {
         ownership: 'rented',
         pincode: '',
         address1: '',
-        address2: '', 
-        gst_correct: true, 
+        address2: '',
+        gst_correct: true,
     };
 
     validate = {companytype: false, gst: false, avgtrans: false, dealercode: false};
@@ -146,7 +146,7 @@ class BusinessDetail extends Component {
                 if (value.length <= 10)
                     this.tempState['dealercode'] = value;
                 break;
-           
+
             default:
                 this.tempState[field.slug] = value;
                 break;
@@ -208,7 +208,7 @@ class BusinessDetail extends Component {
         console.log(">>>>>", this.state.gst);
 
         const gstProfile = this.props.gstProfile;
-        const {COMPANY_NAME, COMPANY_TYPE, GST_NUMBER, PAN_NUMBER, AVERAGE_TRANSACTION, DEALER_CODE, BUSINESS_EMAIL, BUSINESS_PHONE, NO_OF_FOUNDERS, NO_OF_EMPLOYEES, } = validationBusinessDetails;
+        const {COMPANY_NAME, COMPANY_TYPE, GST_NUMBER, PAN_NUMBER, AVERAGE_TRANSACTION, DEALER_CODE, BUSINESS_EMAIL, BUSINESS_PHONE, NO_OF_FOUNDERS, NO_OF_EMPLOYEES,} = validationBusinessDetails;
         const {OWNERSHIP, ADDRESS1, ADDRESS2, PINCODE, DOB} = validationPersonalDetails;
         // console.log(".....", GST_NUMBER.pattern); 
         return (
@@ -295,6 +295,9 @@ class BusinessDetail extends Component {
                             </div>
                         </div>
 
+                    </div>
+                    <div className={"row"}>
+
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3">
                                 <label htmlFor="business_email" className="bmd-label-floating">
@@ -315,7 +318,6 @@ class BusinessDetail extends Component {
                                 />
                             </div>
                         </div>
-
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3">
                                 <label htmlFor={BUSINESS_PHONE.id}
@@ -344,52 +346,21 @@ class BusinessDetail extends Component {
                                         value={this.state.business_phone}
                                         // ref={ref => (this.obj.number = ref)}
                                         onChange={e =>
-                                        this.onChangeHandler(BUSINESS_PHONE, e.target.value)
+                                            this.onChangeHandler(BUSINESS_PHONE, e.target.value)
                                         }
                                         aria-describedby="basic-addon3"
                                     />
                                 </div>
                             </div>
                         </div>
-                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
-                            <div className="form-group mb-3">
-                                <label htmlFor="no_of_founders" className={"bmd-label-floating"}>Number of Founders</label>
-                                <input
-                                    type={NO_OF_FOUNDERS.type}
-                                    className="form-control font_weight"
-                                   
-                                    pattern={regexTrim(NO_OF_FOUNDERS.pattern)}
-                                    title={NO_OF_FOUNDERS.title}
-                                  
-                                    id={NO_OF_FOUNDERS.id}
-                                    required={NO_OF_FOUNDERS.required}
-                                    value={this.state.no_of_founders}
-                                  
-                                    onChange={(e) => this.onChangeHandler(NO_OF_FOUNDERS, e.target.value)}
-                                />
-                            </div>
-                        </div>
+                    </div>
+
+                    <div className={"row"}>
 
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3">
-                                <label htmlFor="no_of_employees" className={"bmd-label-floating"}>Number of Employees</label>
-                                <input
-                                    type={NO_OF_EMPLOYEES.type}
-                                    className="form-control font_weight"                                   
-                                    pattern={regexTrim(NO_OF_EMPLOYEES.pattern)}
-                                    title={NO_OF_EMPLOYEES.title}                               
-                                    id={NO_OF_EMPLOYEES.id}
-                                    required={NO_OF_EMPLOYEES.required}
-                                    value={this.state.no_of_employees}                               
-                                    onChange={(e) => this.onChangeHandler(NO_OF_EMPLOYEES, e.target.value)}
-                                />
-                            </div>
-                        </div>
-
-                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
-                        <div className="form-group mb-3">
                                 <label htmlFor={DOB.id} className="bmd-label-floating">
-                                   Date of incorporation
+                                    Date of incorporation
                                 </label>
                                 <div className={'d-block'}>
                                     <DatePicker
@@ -408,79 +379,6 @@ class BusinessDetail extends Component {
                                 </div>
                             </div>
                         </div>
-
-                        {(this.state.gst_correct=== false || this.state.gst=== "")? 
-                         <div className={"row"}>
-                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
-                            <div className="form-group mb-3 ">
-                                <label htmlFor={ADDRESS1.id} className="bmd-label-floating">
-                                    Address 1 *
-                                </label>
-                                <input
-                                    type={ADDRESS1.type}
-                                    className="form-control font_weight"
-                                    // placeholder="Pincode"
-                                    title={ADDRESS1.title}
-                                    pattern={regexTrim(ADDRESS1.pattern)}
-                                    autoCapitalize={ADDRESS1.autoCapitalize}
-                                    id={ADDRESS1.id}
-                                    required={ADDRESS1.required}
-                                    value={this.state.address1}
-                                    // ref={ref => (this.obj.pan = ref)}
-                                    onChange={(e) => this.onChangeHandler(ADDRESS1, e.target.value)}
-                                />
-                            </div>
-                        </div>
-
-                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
-                            <div className="form-group mb-3">
-                                <label htmlFor={PINCODE.id} className="bmd-label-floating">
-                                    Pincode *
-                                </label>
-                                <input
-                                    type={PINCODE.type}
-                                    className="form-control font_weight"
-                                    // placeholder="Pincode"
-                                    pattern={regexTrim(PINCODE.pattern)}
-                                    title={PINCODE.title}
-                                    autoCapitalize={PINCODE.autoCapitalize}
-                                    id={PINCODE.id}
-                                    required={PINCODE.required}
-                                    value={this.state.pincode}
-                                    // ref={ref => (this.obj.pan = ref)}
-                                    onChange={(e) => this.onChangeHandler(PINCODE, e.target.value)}
-
-                                />
-                            </div>
-
-                        </div>
-
-                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
-                            <div className="form-group mb-3 ">
-
-                                <label htmlFor={ADDRESS2.id} className="bmd-label-floating">
-                                    Address 2
-
-                                </label>
-                                <input
-                                    type={ADDRESS2.type}
-                                    className="form-control font_weight"
-                                    // placeholder="Pincode"
-
-                                    title={ADDRESS2.title}
-                                    autoCapitalize={ADDRESS2.autoCapitalize}
-                                    pattern={regexTrim(ADDRESS2.pattern)}
-                                    id={ADDRESS2.id}
-                                    required={ADDRESS2.required}
-                                    value={this.state.address2}
-                                    // ref={ref => (this.obj.pan = ref)}
-                                    onChange={(e) => this.onChangeHandler(ADDRESS2, e.target.value)}
-
-                                />
-                            </div>
-                        </div>
-                        <div className={"row"}>
-
                         <div className={"col-sm-6 col-xs-12 col-md-6 text-left"}>
                             <label htmlFor={OWNERSHIP.id} className="d-block bmd-label">
                                 Ownership *
@@ -521,23 +419,129 @@ class BusinessDetail extends Component {
                                     <small>Owned</small>
                                 </button>
                             </div>
-                            </div>
                         </div>
-                        </div>
-                        : <></>
-                        }
-
-                        
-                                    
                     </div>
 
 
-                        
-                        
+                    {(this.state.gst_correct === false || this.state.gst === "") ? <>
+                        <div className={"row"}>
 
-        
+                            <div className={"col-md-6 col-sm-6 col-xs-12"}>
+                                <div className="form-group mb-3">
+                                    <label htmlFor="no_of_founders" className={"bmd-label-floating"}>Number of
+                                        Founders</label>
+                                    <input
+                                        type={NO_OF_FOUNDERS.type}
+                                        className="form-control font_weight"
 
-                    {(this.state.companytype !== "proprietorship" && this.state.companytype !== "") ? (
+                                        pattern={regexTrim(NO_OF_FOUNDERS.pattern)}
+                                        title={NO_OF_FOUNDERS.title}
+
+                                        id={NO_OF_FOUNDERS.id}
+                                        required={NO_OF_FOUNDERS.required}
+                                        value={this.state.no_of_founders}
+
+                                        onChange={(e) => this.onChangeHandler(NO_OF_FOUNDERS, e.target.value)}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className={"col-md-6 col-sm-6 col-xs-12"}>
+                                <div className="form-group mb-3">
+                                    <label htmlFor="no_of_employees" className={"bmd-label-floating"}>Number of
+                                        Employees</label>
+                                    <input
+                                        type={NO_OF_EMPLOYEES.type}
+                                        className="form-control font_weight"
+                                        pattern={regexTrim(NO_OF_EMPLOYEES.pattern)}
+                                        title={NO_OF_EMPLOYEES.title}
+                                        id={NO_OF_EMPLOYEES.id}
+                                        required={NO_OF_EMPLOYEES.required}
+                                        value={this.state.no_of_employees}
+                                        onChange={(e) => this.onChangeHandler(NO_OF_EMPLOYEES, e.target.value)}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div className={"row"}>
+                            <div className={"col-md-6 col-sm-6 col-xs-12"}>
+                                <div className="form-group mb-3 ">
+                                    <label htmlFor={ADDRESS1.id} className="bmd-label-floating">
+                                        Address 1 *
+                                    </label>
+                                    <input
+                                        type={ADDRESS1.type}
+                                        className="form-control font_weight"
+                                        // placeholder="Pincode"
+                                        title={ADDRESS1.title}
+                                        pattern={regexTrim(ADDRESS1.pattern)}
+                                        autoCapitalize={ADDRESS1.autoCapitalize}
+                                        id={ADDRESS1.id}
+                                        required={ADDRESS1.required}
+                                        value={this.state.address1}
+                                        // ref={ref => (this.obj.pan = ref)}
+                                        onChange={(e) => this.onChangeHandler(ADDRESS1, e.target.value)}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className={"col-md-6 col-sm-6 col-xs-12"}>
+                                <div className="form-group mb-3">
+                                    <label htmlFor={PINCODE.id} className="bmd-label-floating">
+                                        Pincode *
+                                    </label>
+                                    <input
+                                        type={PINCODE.type}
+                                        className="form-control font_weight"
+                                        // placeholder="Pincode"
+                                        pattern={regexTrim(PINCODE.pattern)}
+                                        title={PINCODE.title}
+                                        autoCapitalize={PINCODE.autoCapitalize}
+                                        id={PINCODE.id}
+                                        required={PINCODE.required}
+                                        value={this.state.pincode}
+                                        // ref={ref => (this.obj.pan = ref)}
+                                        onChange={(e) => this.onChangeHandler(PINCODE, e.target.value)}
+
+                                    />
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div className={"row"}>
+
+                            <div className={"col-md-6 col-sm-6 col-xs-12"}>
+                                <div className="form-group mb-3 ">
+
+                                    <label htmlFor={ADDRESS2.id} className="bmd-label-floating">
+                                        Address 2
+
+                                    </label>
+                                    <input
+                                        type={ADDRESS2.type}
+                                        className="form-control font_weight"
+                                        // placeholder="Pincode"
+
+                                        title={ADDRESS2.title}
+                                        autoCapitalize={ADDRESS2.autoCapitalize}
+                                        pattern={regexTrim(ADDRESS2.pattern)}
+                                        id={ADDRESS2.id}
+                                        required={ADDRESS2.required}
+                                        value={this.state.address2}
+                                        // ref={ref => (this.obj.pan = ref)}
+                                        onChange={(e) => this.onChangeHandler(ADDRESS2, e.target.value)}
+
+                                    />
+                                </div>
+                            </div>
+
+                        </div>
+                    </> : <></>
+                    }
+
+
+                    {/*    {(this.state.companytype !== "proprietorship" && this.state.companytype !== "") ? (
                         <div className="form-group mb-3 ">
                             <label htmlFor="numberPAN" className={"bmd-label-floating"}>Business PAN *</label>
                             <input
@@ -556,7 +560,7 @@ class BusinessDetail extends Component {
                                 onChange={(e) => this.onChangeHandler(PAN_NUMBER, e.target.value)}
                             />
                         </div>
-                    ) : <></>}
+                    ) : <></>}*/}
 
 
                     <div className=" mt-5">
