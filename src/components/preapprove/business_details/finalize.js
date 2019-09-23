@@ -91,14 +91,14 @@ class ReviewBusinessDetail extends Component {
         distributor_dealer_code:
           businessObj.dealercode && payload.distributor_dealer_code,
         sales_agent_mobile_number: payload.sales_agent_mobile_number,
-        business_type: businessObj.companytype,
+        // business_type: businessObj.companytype,
         anchor_transaction_id: payload.anchor_transaction_id,
         borrowers: {
           first_name: adharObj.f_name || "_",
           middle_name: adharObj.m_name,
           last_name: adharObj.l_name,
           pan: pan,
-          gstin: businessObj.gst,
+          // gstin: businessObj.gst,
           dob: dob,
           mobile_number: adharObj.mobile,
           email: adharObj.email,
@@ -110,12 +110,28 @@ class ReviewBusinessDetail extends Component {
             pincode: adharObj.pincode
           }
         },
+
+        business_details: {
+          business_name: businessObj.lgnm,
+          business_type: businessObj.companytype,
+          gstin: businessObj.gst,
+          business_pan: businessObj.bpan,
+          inc_date: businessObj.inc_date,
+          business_email: businessObj.business_email,
+          business_phone: businessObj.business_phone,
+          no_of_founders: businessObj.no_of_founders,
+          no_of_employees: businessObj.no_of_employees,
+          monthly_anchor_txn_value: businessObj.monthly_anchor_txn_value,
+          business_address: businessObj.business_address
+        },
+
         loan_details: {
           loan_amount: payload.loan_amount,
           product_type: payload.product_type,
           average_monthly_transaction: businessObj.avgtrans,
-          retailer_onboarding_date: payload.retailer_onboarding_date
+          retailer_onboarding_date: payload.retailer_onboarding_date,
           // "vintage": 60
+          vintage: 60
         },
         tnc_accepted: true,
         is_credit_decision: true,
