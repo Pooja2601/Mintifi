@@ -2741,7 +2741,7 @@ input[type=number]::-webkit-outer-spin-button {
 #ifscCode:invalid,
 #numberAccount:invalid,
 #micrCode:invalid {
-    color: crimson !important;
+    color: black !important;
     /* indianred */
     border-color: crimson !important;
 }
@@ -3276,4 +3276,8 @@ like a tickmark */
     text-align: center;
     font-size: 0.6rem;
     color: #6c757d;
+}
+
+.phoneDisplay{
+   z-index: 999 !important;
 }

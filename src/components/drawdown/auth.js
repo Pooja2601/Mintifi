@@ -271,7 +271,7 @@ class MobileOtp extends Component {
             <div className={"col-sm-11 col-md-8 m-auto"}>
               <div className="form-group mb-3">
                 <label htmlFor="numberMobile" className={"bmd-label-floating"}>
-                  Mobile Number *
+                  Enter Mobile Number *
                 </label>
                 <div className={"input-group"}>
                   <div className="input-group-prepend">
@@ -362,12 +362,13 @@ class MobileOtp extends Component {
           <div className="mt-3 mb-2 text-center ">
             <button
               name="submit"
-              style={{
-                visibility:
-                  !this.state.missed_fields && !this.state.submitted
-                    ? "visible"
-                    : "hidden"
-              }}
+              // style={{
+              //   visibility:
+              //     !this.state.missed_fields && !this.state.submitted
+              //       ? "visible"
+              //       : "hidden"
+              // }}
+              disabled={!(!this.state.missed_fields && !this.state.submitted)}
               // value={"Send OTP"}
               onClick={e => this._formSubmit(e)}
               className="form-submit btn btn-raised greenButton"
