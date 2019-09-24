@@ -142,6 +142,9 @@ class BusinessDetail extends Component {
                 if (value.length <= 10)
                     this.tempState['bpan'] = value;
                 break;
+            case INC_DATE:
+                this.tempState['inc_date'] = new Date(value);
+                break;
             case PINCODE:
                 if (value.length <= 6)
                     this.tempState['pincode'] = value;
@@ -154,7 +157,6 @@ class BusinessDetail extends Component {
                 if (value.length <= 10)
                     this.tempState['dealer_code'] = value;
                 break;
-
             default:
                 this.tempState[field.slug] = value;
                 break;
@@ -346,6 +348,7 @@ class BusinessDetail extends Component {
                                         id={INC_DATE.id}
                                         pattern={regexTrim(INC_DATE.pattern)}
                                         scrollableYearDropdown
+                                        dropdownMode={"scroll"}
                                         showMonthDropdown
                                         required={INC_DATE.required}
                                         showYearDropdown

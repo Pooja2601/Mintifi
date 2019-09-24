@@ -143,6 +143,19 @@ export const postMessage = obj => {
     }, 4000);
 };
 
+export const retrieveDate = dateString => {
+    let dt, date, month, year;
+    try {
+        let dt = new Date(dateString);
+        date = dt.getDate();
+        month = dt.getMonth();
+        year = dt.getFullYear();
+        return `${year}/${month}/${date}`;
+    } catch (e) {
+        return dateString
+    }
+}
+
 // Self Explanatory
 export const checkObject = obj => {
     try {
@@ -172,7 +185,7 @@ export const fieldValidationHandler = props => {
     const lomo = Object.entries(validations).some((val, key) => {
 
         if (val[1].required) {
-            console.log(val[1].slug);
+            // console.log(val[1].slug);
             let regexTest = val[1].pattern.test(localState[val[1].slug]);
             if (!regexTest) {
                 // false : failed pattern

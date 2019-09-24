@@ -13,7 +13,7 @@ import {
 } from "../../../actions/index";
 import {withRouter} from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
-import {checkObject} from "../../../shared/common_logic";
+import {checkObject, retrieveDate} from "../../../shared/common_logic";
 
 const {PUBLIC_URL} = process.env;
 
@@ -99,7 +99,7 @@ class ReviewBusinessDetail extends Component {
                     last_name: adharObj.l_name,
                     pan: pan,
                     // gstin: businessObj.gst,
-                    dob: dob,
+                    dob: retrieveDate(dob),
                     mobile_number: adharObj.mobile,
                     email: adharObj.email,
                     gender: adharObj.gender,
@@ -115,7 +115,7 @@ class ReviewBusinessDetail extends Component {
                     business_type: businessObj.company_type,
                     gstin: businessObj.gst,
                     business_pan: businessObj.bpan,
-                    inc_date: businessObj.inc_date,
+                    inc_date: retrieveDate(businessObj.inc_date),
                     business_email: businessObj.business_email,
                     business_phone: businessObj.business_phone,
                     no_of_founders: businessObj.no_of_founders,
