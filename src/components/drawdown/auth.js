@@ -274,7 +274,7 @@ class MobileOtp extends Component {
                   Enter Mobile Number *
                 </label>
                 <div className={"input-group"}>
-                  <div className="input-group-prepend">
+                  <div className="input-group-prepend phoneDisplay">
                     <span className="input-group-text" id="basic-addon3">
                       +91
                     </span>
@@ -312,7 +312,7 @@ class MobileOtp extends Component {
                 }}
               >
                 <label htmlFor="otpVerify" className={"bmd-label-floating"}>
-                  OTP *
+                  Enter OTP *
                 </label>
                 <div className={"input-group"}>
                   <input
@@ -362,12 +362,9 @@ class MobileOtp extends Component {
           <div className="mt-3 mb-2 text-center ">
             <button
               name="submit"
-              // style={{
-              //   visibility:
-              //     !this.state.missed_fields && !this.state.submitted
-              //       ? "visible"
-              //       : "hidden"
-              // }}
+              style={{
+                visibility: !this.state.submitted ? "visible" : "hidden"
+              }}
               disabled={!(!this.state.missed_fields && !this.state.submitted)}
               // value={"Send OTP"}
               onClick={e => this._formSubmit(e)}
