@@ -261,7 +261,7 @@ const validationBusinessDetails = {
         error: "Invalid Company Name"
     },
     COMPANY_TYPE: {
-        slug: "companytype",
+        slug: "company_type",
         required: true,
         id: "companyType",
         pattern: /^[^]+$/,
@@ -302,7 +302,7 @@ const validationBusinessDetails = {
         error: "Invalid Transaction Amount"
     },
     DEALER_CODE: {
-        slug: "dealercode",
+        slug: "dealer_code",
         type: "text",
         pattern: /^[0-9A-Za-z]{4,10}$/,
         title: "Enter Dealer Code",

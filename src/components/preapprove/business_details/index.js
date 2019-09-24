@@ -27,11 +27,11 @@ class BusinessDetail extends Component {
 
     state = {
         company_name: '',
-        companytype: '',
+        company_type: '',
         gst: '',
         bpan: '',
         avgtrans: '',
-        dealercode: '',
+        dealer_code: '',
         missed_fields: true,
         // lgnm: '', // company_name
         tnc_consent: false,
@@ -48,7 +48,7 @@ class BusinessDetail extends Component {
         gst_correct: true,
     };
 
-    // validate = {companytype: false, gst: false, avgtrans: false, dealercode: false};
+    // validate = {company_type: false, gst: false, avgtrans: false, dealer_code: false};
 
     RenderModalTnC = () => {
         return (
@@ -124,7 +124,7 @@ class BusinessDetail extends Component {
 
             case COMPANY_TYPE:
                 this.tempState['optionSelected'] = value;
-                this.tempState['companytype'] = value.value;
+                this.tempState['company_type'] = value.value;
                 break;
             case GST_NUMBER:
                 if (value.length <= 15) {
@@ -149,11 +149,10 @@ class BusinessDetail extends Component {
             case AVERAGE_TRANSACTION:
                 if (value.length <= 10 && !isNaN(value))
                     this.tempState['avgtrans'] = value;
-
                 break;
             case DEALER_CODE:
                 if (value.length <= 10)
-                    this.tempState['dealercode'] = value;
+                    this.tempState['dealer_code'] = value;
                 break;
 
             default:
@@ -205,7 +204,7 @@ class BusinessDetail extends Component {
                 company_name = gstProfile.lgnm;
             if (checkObject(payload)) {
                 this.setState({
-                    dealercode: payload.distributor_dealer_code,
+                    dealer_code: payload.distributor_dealer_code,
                     company_name
                 }, () => setBusinessDetail(this.state));
             }
@@ -281,7 +280,7 @@ class BusinessDetail extends Component {
                     <div className={"row"}>
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3">
-                                <label htmlFor="companyType" className={"bmd-label-floating"}>Company Type *</label>
+                                <label htmlFor={COMPANY_TYPE.id} className={"bmd-label-floating"}>Company Type *</label>
                                 <Select options={COMPANY_TYPE.options}
                                         required={COMPANY_TYPE.required}
                                         id={COMPANY_TYPE.id}
@@ -292,11 +291,11 @@ class BusinessDetail extends Component {
                                 />
                                 {/*<select style={{fontWeight: 600}}
                                         title="Please select Company Type"
-                                        value={this.state.companytype} required={true}
+                                        value={this.state.company_type} required={true}
                                         onChange={(e) => {
                                             let {value} = e.target;
-                                            this.setState({companytype: value}, () => this.props.setBusinessDetail(this.state));
-                                            this.validate.companytype = (value.length > 0);
+                                            this.setState({company_type: value}, () => this.props.setBusinessDetail(this.state));
+                                            this.validate.company_type = (value.length > 0);
                                             this.handleValidation();
                                         }}
                                         onBlur={() => this.validationErrorMsg()}
@@ -395,6 +394,51 @@ class BusinessDetail extends Component {
                                     />
                                     <small>Owned</small>
                                 </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className={"row"}>
+                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
+                            <div className="form-group mb-3 ">
+                                <label htmlFor={AVERAGE_TRANSACTION.id} className="bmd-label-floating">
+                                    Average Monthly Trans.
+                                </label>
+                                <input
+                                    type={AVERAGE_TRANSACTION.type}
+                                    className="form-control font_weight"
+                                    // placeholder="Pincode"
+                                    title={AVERAGE_TRANSACTION.title}
+                                    pattern={regexTrim(AVERAGE_TRANSACTION.pattern)}
+                                    autoCapitalize={AVERAGE_TRANSACTION.autoCapitalize}
+                                    id={AVERAGE_TRANSACTION.id}
+                                    required={AVERAGE_TRANSACTION.required}
+                                    value={this.state.avgtrans}
+                                    // ref={ref => (this.obj.pan = ref)}
+                                    onChange={(e) => this.onChangeHandler(AVERAGE_TRANSACTION, e.target.value)}
+                                />
+                            </div>
+                        </div>
+
+                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
+                            <div className="form-group mb-3">
+                                <label htmlFor={DEALER_CODE.id} className="bmd-label-floating">
+                                    Dealer Code
+                                </label>
+                                <input
+                                    type={DEALER_CODE.type}
+                                    className="form-control font_weight"
+                                    // placeholder="Pincode"
+                                    pattern={regexTrim(DEALER_CODE.pattern)}
+                                    title={DEALER_CODE.title}
+                                    autoCapitalize={DEALER_CODE.autoCapitalize}
+                                    id={DEALER_CODE.id}
+                                    required={DEALER_CODE.required}
+                                    value={this.state.dealer_code}
+                                    // ref={ref => (this.obj.pan = ref)}
+                                    onChange={(e) => this.onChangeHandler(DEALER_CODE, e.target.value)}
+
+                                />
                             </div>
                         </div>
                     </div>
@@ -572,7 +616,7 @@ class BusinessDetail extends Component {
                     }
 
 
-                    {/*    {(this.state.companytype !== "proprietorship" && this.state.companytype !== "") ? (
+                    {/*    {(this.state.company_type !== "proprietorship" && this.state.company_type !== "") ? (
                         <div className="form-group mb-3 ">
                             <label htmlFor="numberPAN" className={"bmd-label-floating"}>Business PAN *</label>
                             <input

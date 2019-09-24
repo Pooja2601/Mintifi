@@ -32,11 +32,11 @@ class ReviewBusinessDetail extends Component {
         // authObj: {mobile: '', verified: ''},
         pan_adhar: {pan: "", adhar: ""},
         businessDetail: {
-            companytype: "",
+            company_type: "",
             gst: "",
             bpan: "",
             avgtrans: "",
-            dealercode: ""
+            dealer_code: ""
         },
         tnc_consent: false,
         tncModal: false
@@ -89,9 +89,9 @@ class ReviewBusinessDetail extends Component {
                 app_id: app_id,
                 anchor_id: payload.anchor_id,
                 distributor_dealer_code:
-                    businessObj.dealercode && payload.distributor_dealer_code,
+                    businessObj.dealer_code && payload.distributor_dealer_code,
                 sales_agent_mobile_number: payload.sales_agent_mobile_number,
-                // business_type: businessObj.companytype,
+                // business_type: businessObj.company_type,
                 anchor_transaction_id: payload.anchor_transaction_id,
                 borrowers: {
                     first_name: adharObj.f_name || "_",
@@ -110,10 +110,9 @@ class ReviewBusinessDetail extends Component {
                         pincode: adharObj.pincode
                     }
                 },
-
                 business_details: {
                     business_name: businessObj.company_name,
-                    business_type: businessObj.companytype,
+                    business_type: businessObj.company_type,
                     gstin: businessObj.gst,
                     business_pan: businessObj.bpan,
                     inc_date: businessObj.inc_date,
