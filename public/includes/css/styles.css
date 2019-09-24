@@ -2842,6 +2842,8 @@ input[type=number]::-webkit-outer-spin-button {
 .greenButton:hover,
 .uploadButton {
     box-shadow: 0 4px 10px #cccccc;
+    background-color: #23d6be;
+    color: #fff
 }
 
 .uploadButton,
@@ -3293,4 +3295,9 @@ like a tickmark */
     border-radius: 15px;
     background-color: grey;
     right: -20px;
+}
+
+.modalHeight{
+    height: 100%;
+    overflow: scroll;
 }

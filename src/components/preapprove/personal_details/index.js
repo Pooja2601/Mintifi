@@ -269,7 +269,7 @@ class PersonalDetail extends Component {
                                        className={"bmd-label-floating"}>Mobile
                                     Number *</label>
                                 <div className={"input-group"}>
-                                    <div className="input-group-prepend">
+                                    <div className="input-group-prepend phoneDisplay">
                   <span className="input-group-text" id="basic-addon3">
                     +91
                   </span>

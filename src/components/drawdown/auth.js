@@ -376,8 +376,9 @@ class MobileOtp extends Component {
 
             <button
               style={{
-                visibility: this.state.otp.length === 6 ? "visible" : "hidden"
+                visibility: this.state.submitted ? "visible" : "hidden"
               }}
+              disabled={this.state.otp.length !== 6}
               onClick={e => this._verifyOTP(e)}
               className="btn btn-raised greenButton text-center"
             >

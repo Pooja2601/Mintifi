@@ -38,7 +38,7 @@ class Offers extends Component {
           aria-hidden="true"
         >
           <div
-            className="modal-dialog modal-lg"
+            className="modal-dialog modal-lg modalHeight"
             role="document"
             style={{ margin: "5.75rem auto" }}
           >
@@ -118,26 +118,31 @@ class Offers extends Component {
     const resp = await postAPI(options);
 
     if (resp.status === apiActions.ERROR_RESPONSE) {
-      showAlert(resp.data.message);
-
+      //   showAlert(resp.data.message);
       if (resp.data.code === "ER-AUTH-102") {
         setTimeout(() => {
           window.location.href = `${PUBLIC_URL}/drawdown/token`;
           // history.push(`${PUBLIC_URL}/drawdown/token`)
         }, 2000);
+      } else if (resp.data.code === "ER-AUTH-114") {
+        setTimeout(() => {
+          window.location.href = `${PUBLIC_URL}/drawdown/token`;
+          // history.push(`${PUBLIC_URL}/drawdown/token`)
+        }, 2000);
       }
+
       setTimeout(() => history.push(`${PUBLIC_URL}/drawdown/error`), 500);
     } else if (resp.status === apiActions.SUCCESS_RESPONSE) {
       // ToDo : uncomment this 2 lines for production
       if (environment === "prod" || environment === "dev") {
         DrawsetPreflight(resp.data);
-        setTimeout(() => history.push(`${PUBLIC_URL}/drawdown/thankyou`), 500);
+        setTimeout(() => history.push(`${PUBLIC_URL}/drawdown/thankyou`), 5000);
       }
     }
 
     // ToDo : comment this for production
     if (environment === "local") {
-      setTimeout(() => history.push(`${PUBLIC_URL}/drawdown/thankyou`), 500);
+      setTimeout(() => history.push(`${PUBLIC_URL}/drawdown/thankyou`), 5000);
     }
   };
 
@@ -154,7 +159,7 @@ class Offers extends Component {
   render() {
     // console.log(">>>>", this.state.selected.product_type);
 
-    console.log("????", this.props.loanPayload);
+    // console.log("????", this.props.loanPayload);
     let cardBox =
       "card card-body mt-1 ml-1 list-group-item list-group-item-action flex-column align-items-start cardBox";
     // ToDo :  make the line const in prod.
@@ -203,14 +208,14 @@ class Offers extends Component {
                 <div className="col-sm-5"># {payload.loan_application_id}</div>
               </div>
               <div className="row mb-1 p-2 drawdownTable">
-                <div className="col-sm-7">Credit Approved</div>
+                <div className="col-sm-7">Total Credit Limit</div>
                 <div className="col-sm-5">
                   Rs {loanPayload.creditLimit.approved_credit_limit}
                 </div>
               </div>
 
               <div className="row mb-1 p-2 drawdownTable">
-                <div className="col-sm-7">Balance Credit</div>
+                <div className="col-sm-7">Credit Available</div>
                 <div className="col-sm-5">
                   Rs {loanPayload.creditLimit.balance_credit_limit}
                 </div>
@@ -256,7 +261,7 @@ class Offers extends Component {
 
                       <h5 className="mb-1 mr-1 text-capitalize">
                         {" "}
-                        {val.product_type}
+                        {val.product_type.replace("_", " ")}
                       </h5>
                       {/*<small>3 days ago</small>*/}
                     </div>
@@ -284,12 +289,12 @@ class Offers extends Component {
 
           <div
             className="mt-4 ml-5 mr-3"
-            style={{
-              visibility:
-                this.state.selected.product_type !== undefined
-                  ? "visible"
-                  : "hidden"
-            }}
+            // style={{
+            //   visibility:
+            //     this.state.selected.product_type !== undefined
+            //       ? "visible"
+            //       : "hidden"
+            // }}
           >
             <label className="main">
               I accept the{" "}
@@ -316,7 +321,7 @@ class Offers extends Component {
               >
                 Privacy Policy
               </a>{" "}
-              of the Mintifi and agree upon the selected the EMI Tenure .
+              of Mintifi and agree upon the selected the EMI Tenure .
               <input
                 type="checkbox"
                 checked={this.state.tnc_consent}
@@ -325,6 +330,7 @@ class Offers extends Component {
                     tnc_consent: !prevState.tnc_consent
                   }))
                 }
+                disabled={this.state.selected.product_type === undefined}
               />
               <span className="geekmark"></span>
             </label>
@@ -342,7 +348,13 @@ class Offers extends Component {
             <button
               className={"greenButton btn btn-raised"}
               onClick={e => this._submitForm(e)}
-              disabled={!this.state.tnc_consent}
+              disabled={
+                !this.state.tnc_consent ||
+                this.state.selected.product_type === undefined
+              }
+              style={{
+                visibility: "visible"
+              }}
             >
               Proceed
             </button>
