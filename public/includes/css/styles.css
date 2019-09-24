@@ -3281,3 +3281,16 @@ like a tickmark */
 .phoneDisplay{
    z-index: 999 !important;
 }
+
+.hideFields{
+    display: none;
+}
+
+.selectedMark{
+    position: absolute;
+    height: 25px;
+    width: 25px;
+    border-radius: 15px;
+    background-color: grey;
+    right: -20px;
+}
