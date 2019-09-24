@@ -26,20 +26,21 @@ class BusinessDetail extends Component {
     };
 
     state = {
+        company_name: '',
         companytype: '',
         gst: '',
         bpan: '',
         avgtrans: '',
         dealercode: '',
         missed_fields: true,
-        lgnm: '',
+        // lgnm: '', // company_name
         tnc_consent: false,
         tncModal: false,
         ctrerror: 4,
         optionSelected: {value: '', label: "Select Company Type"},
         business_email: '',
         business_phone: '',
-        dob: new Date(315577770),
+        inc_date: new Date(1117608499),
         ownership: 'rented',
         pincode: '',
         address1: '',
@@ -47,7 +48,7 @@ class BusinessDetail extends Component {
         gst_correct: true,
     };
 
-    validate = {companytype: false, gst: false, avgtrans: false, dealercode: false};
+    // validate = {companytype: false, gst: false, avgtrans: false, dealercode: false};
 
     RenderModalTnC = () => {
         return (
@@ -104,7 +105,7 @@ class BusinessDetail extends Component {
             validations: validationBusinessDetails,
             localState: this.state
         });
-
+        // console.log(lomo)
         this.setState({missed_fields: lomo}); // true : for disabling
     }
 
@@ -116,7 +117,7 @@ class BusinessDetail extends Component {
         // fields is Equivalent to F_NAME , L_NAME... thats an object
 
         // ToDo : comment those that are not required
-        const {COMPANY_NAME, COMPANY_TYPE, GST_NUMBER, PAN_NUMBER, AVERAGE_TRANSACTION, DEALER_CODE} = validationBusinessDetails;
+        const {COMPANY_NAME, BUSINESS_PHONE, COMPANY_TYPE, GST_NUMBER, PAN_NUMBER, AVERAGE_TRANSACTION, DEALER_CODE, PINCODE} = validationBusinessDetails;
 
         this.tempState = Object.assign({}, this.state);
         switch (field) {
@@ -133,9 +134,17 @@ class BusinessDetail extends Component {
                     this.tempState['gst_correct'] = (GST_NUMBER.pattern).test(value)
                 }
                 break;
+            case BUSINESS_PHONE:
+                if (value.length <= 10)
+                    this.tempState['business_phone'] = value;
+                break;
             case PAN_NUMBER:
                 if (value.length <= 10)
                     this.tempState['bpan'] = value;
+                break;
+            case PINCODE:
+                if (value.length <= 6)
+                    this.tempState['pincode'] = value;
                 break;
             case AVERAGE_TRANSACTION:
                 if (value.length <= 10 && !isNaN(value))
@@ -174,10 +183,11 @@ class BusinessDetail extends Component {
     }
 
     componentDidMount() {
-        const {businessObj, payload, setBusinessDetail} = this.props;
+        const {businessObj, payload, setBusinessDetail, gstProfile} = this.props;
         // console.log(adharObj);
 
         const {GST_NUMBER} = validationBusinessDetails;
+        let company_name = businessObj.company_name ? businessObj.company_name : '';
 
         if (checkObject(businessObj)) {
             this.setState(businessObj, () => this.onChangeHandler(GST_NUMBER, businessObj.gst));
@@ -191,8 +201,13 @@ class BusinessDetail extends Component {
                       });
                       this.setState({gst: gstProfile.gstin, lgnm: gstProfile.lgnm});
                   }*/
+            if (checkObject(gstProfile))
+                company_name = gstProfile.lgnm;
             if (checkObject(payload)) {
-                this.setState({dealercode: payload.distributor_dealer_code}, () => setBusinessDetail(this.state));
+                this.setState({
+                    dealercode: payload.distributor_dealer_code,
+                    company_name
+                }, () => setBusinessDetail(this.state));
             }
 
         } catch (e) {
@@ -202,14 +217,28 @@ class BusinessDetail extends Component {
         setTimeout(() => this.validationHandler(), 1000);
     }
 
+    // ToDo : Need to make it feasible in future
+    _customButtonValidation = () => {
+        // Negate for disabling feature
+        let result;
+        const {tnc_consent, gst_correct, missed_fields, address1, pincode, gst} = this.state;
+        if (!missed_fields && tnc_consent) {
+            if (gst_correct)
+                result = true;
+            else {
+                if (pincode && address1)
+                    result = (pincode.length === 6 && address1.length > 2);
+                else result = false;
+            }
+        } else result = false;
+        // Negate for disabling feature on submit button
+        return !result;
+    };
 
     render() {
-        console.log(">>>>>", this.state.gst_correct);
-        console.log(">>>>>", this.state.gst);
 
         const gstProfile = this.props.gstProfile;
-        const {COMPANY_NAME, COMPANY_TYPE, GST_NUMBER, PAN_NUMBER, AVERAGE_TRANSACTION, DEALER_CODE, BUSINESS_EMAIL, BUSINESS_PHONE, NO_OF_FOUNDERS, NO_OF_EMPLOYEES, OWNERSHIP, ADDRESS1, ADDRESS2, PINCODE, DOB} = validationBusinessDetails;
-        // const {OWNERSHIP, ADDRESS1, ADDRESS2, PINCODE, DOB} = validationPersonalDetails;
+        const {COMPANY_NAME, COMPANY_TYPE, GST_NUMBER, PAN_NUMBER, AVERAGE_TRANSACTION, DEALER_CODE, BUSINESS_EMAIL, BUSINESS_PHONE, NO_OF_FOUNDERS, NO_OF_EMPLOYEES, OWNERSHIP, ADDRESS1, ADDRESS2, PINCODE, INC_DATE} = validationBusinessDetails;
         // console.log(".....", GST_NUMBER.pattern); 
         return (
             <>
@@ -227,20 +256,26 @@ class BusinessDetail extends Component {
                     onSubmit={e => this._formSubmit(e)}
                 >
                     <div className={"row"}
-                         style={{visibility: (checkObject(gstProfile) && gstProfile.lgnm) ? 'visible' : 'hidden'}}>
+                        // style={{visibility: (checkObject(gstProfile) && gstProfile.lgnm) ? 'visible' : 'hidden'}}
+                    >
                         <div className={"col-md-12 col-sm-12 col-xs-12"}>
-                            {/*<h5 className={"text-center"}>{(gstProfile === Object(gstProfile)) ? gstProfile.lgnm : ''}</h5>*/}
-                            <input
-                                type={COMPANY_NAME.type}
-                                className="form-control font_weight p-2"
-                                title={COMPANY_NAME.title}
-                                autoCapitalize={COMPANY_NAME.autoCapitalize}
-                                id={COMPANY_NAME.id}
-                                required={COMPANY_NAME.required}
-                                value={(checkObject(gstProfile)) ? gstProfile.lgnm : ''}
-                                readOnly={COMPANY_NAME.readOnly}
-                                disabled={COMPANY_NAME.disabled}
-                            />
+                            <div className="form-group mb-3">
+                                <label htmlFor={COMPANY_NAME.id} className={"bmd-label-floating"}>Company Legal Name
+                                    *</label>
+                                {/*<h5 className={"text-center"}>{(gstProfile === Object(gstProfile)) ? gstProfile.lgnm : ''}</h5>*/}
+                                <input
+                                    type={COMPANY_NAME.type}
+                                    className="form-control font_weight p-2"
+                                    title={COMPANY_NAME.title}
+                                    autoCapitalize={COMPANY_NAME.autoCapitalize}
+                                    // placeholder={COMPANY_NAME.title}
+                                    id={COMPANY_NAME.id}
+                                    required={COMPANY_NAME.required}
+                                    value={this.state.company_name}
+                                    disabled={COMPANY_NAME.disabled}
+                                    onChange={e => this.onChangeHandler(COMPANY_NAME, e.target.value)}
+                                />
+                            </div>
                         </div>
                     </div>
                     <div className={"row"}>
@@ -278,7 +313,7 @@ class BusinessDetail extends Component {
                         </div>
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3">
-                                <label htmlFor="numberGST" className={"bmd-label-floating"}>GST Number *</label>
+                                <label htmlFor="numberGST" className={"bmd-label-floating"}>GST Number </label>
                                 <input
                                     type={GST_NUMBER.type}
                                     className="form-control font_weight"
@@ -296,85 +331,27 @@ class BusinessDetail extends Component {
                         </div>
 
                     </div>
-                    <div className={"row"}>
-
-                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
-                            <div className="form-group mb-3">
-                                <label htmlFor="business_email" className="bmd-label-floating">
-                                    Business Email
-                                </label>
-                                <input
-                                    type={BUSINESS_EMAIL.type}
-                                    className="form-control font_weight"
-                                    pattern={regexTrim(BUSINESS_EMAIL.pattern)}
-                                    title={BUSINESS_EMAIL.title}
-                                    autoCapitalize={BUSINESS_EMAIL.autoCapitalize}
-                                    id={BUSINESS_EMAIL.id}
-                                    required={BUSINESS_EMAIL.required}
-                                    value={this.state.business_email}
-                                    // ref={ref => (this.obj.pan = ref)}
-                                    onChange={(e) => this.onChangeHandler(BUSINESS_EMAIL, e.target.value)}
-
-                                />
-                            </div>
-                        </div>
-                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
-                            <div className="form-group mb-3">
-                                <label htmlFor={BUSINESS_PHONE.id}
-                                       className={"bmd-label-floating"}>Mobile Number *</label>
-                                <div className={"input-group"}>
-                                    <div className="input-group-prepend">
-                                        <span className="input-group-text" id="basic-addon3">
-                                            +91
-                                        </span>
-                                    </div>
-                                    <input
-                                        type={BUSINESS_PHONE.type}
-                                        className="form-control font_weight prependInput"
-                                        // placeholder="10 digit Mobile Number"
-                                        name="url"
-                                        disabled={this.state.submitted}
-                                        min={BUSINESS_PHONE.min}
-                                        max={BUSINESS_PHONE.max}
-                                        maxLength={BUSINESS_PHONE.maxLength}
-                                        minLength={BUSINESS_PHONE.minLength}
-                                        pattern={regexTrim(BUSINESS_PHONE.pattern)}
-                                        title={BUSINESS_PHONE.title}
-                                        id={BUSINESS_PHONE.id}
-                                        required={BUSINESS_PHONE.required}
-                                        // readOnly={BUSINESS_PHONE.readOnly}
-                                        value={this.state.business_phone}
-                                        // ref={ref => (this.obj.number = ref)}
-                                        onChange={e =>
-                                            this.onChangeHandler(BUSINESS_PHONE, e.target.value)
-                                        }
-                                        aria-describedby="basic-addon3"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
                     <div className={"row"}>
 
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3">
-                                <label htmlFor={DOB.id} className="bmd-label-floating">
+                                <label htmlFor={INC_DATE.id} className="bmd-label-floating">
                                     Date of incorporation
                                 </label>
                                 <div className={'d-block'}>
                                     <DatePicker
                                         className="form-control font_weight"
                                         // placeholderText={"Date of Birth"}
-                                        selected={new Date(this.state.dob)}
-                                        id={DOB.id}
-                                        pattern={regexTrim(DOB.pattern)}
+                                        selected={new Date(this.state.inc_date)}
+                                        id={INC_DATE.id}
+                                        pattern={regexTrim(INC_DATE.pattern)}
                                         scrollableYearDropdown
                                         showMonthDropdown
-                                        required={DOB.required}
+                                        required={INC_DATE.required}
                                         showYearDropdown
-                                        dateFormat={DOB.dateFormat}
-                                        onChange={(date) => this.onChangeHandler(DOB, date)}
+                                        dateFormat={INC_DATE.dateFormat}
+                                        onChange={(date) => this.onChangeHandler(INC_DATE, date)}
                                     />
                                 </div>
                             </div>
@@ -424,6 +401,65 @@ class BusinessDetail extends Component {
 
 
                     {(this.state.gst_correct === false || this.state.gst === "") ? <>
+                        <div className={"row"}>
+
+                            <div className={"col-md-6 col-sm-6 col-xs-12"}>
+                                <div className="form-group mb-3">
+                                    <label htmlFor="business_email" className="bmd-label-floating">
+                                        Business Email
+                                    </label>
+                                    <input
+                                        type={BUSINESS_EMAIL.type}
+                                        className="form-control font_weight"
+                                        pattern={regexTrim(BUSINESS_EMAIL.pattern)}
+                                        title={BUSINESS_EMAIL.title}
+                                        autoCapitalize={BUSINESS_EMAIL.autoCapitalize}
+                                        id={BUSINESS_EMAIL.id}
+                                        required={BUSINESS_EMAIL.required}
+                                        value={this.state.business_email}
+                                        // ref={ref => (this.obj.pan = ref)}
+                                        onChange={(e) => this.onChangeHandler(BUSINESS_EMAIL, e.target.value)}
+
+                                    />
+                                </div>
+                            </div>
+                            <div className={"col-md-6 col-sm-6 col-xs-12"}>
+                                <div className="form-group mb-3">
+                                    <label htmlFor={BUSINESS_PHONE.id}
+                                           className={"bmd-label-floating"}>Business Phone </label>
+                                    <div className={"input-group"}>
+                                        <div className="input-group-prepend phoneDisplay">
+                                        <span className="input-group-text" id="basic-addon3">
+                                            +91
+                                        </span>
+                                        </div>
+                                        <input
+                                            type={BUSINESS_PHONE.type}
+                                            className="form-control font_weight prependInput"
+                                            // placeholder="10 digit Mobile Number"
+                                            name="url"
+                                            disabled={this.state.submitted}
+                                            min={BUSINESS_PHONE.min}
+                                            max={BUSINESS_PHONE.max}
+                                            maxLength={BUSINESS_PHONE.maxLength}
+                                            minLength={BUSINESS_PHONE.minLength}
+                                            pattern={regexTrim(BUSINESS_PHONE.pattern)}
+                                            title={BUSINESS_PHONE.title}
+                                            id={BUSINESS_PHONE.id}
+                                            required={BUSINESS_PHONE.required}
+                                            // readOnly={BUSINESS_PHONE.readOnly}
+                                            value={this.state.business_phone}
+                                            // ref={ref => (this.obj.number = ref)}
+                                            onChange={e =>
+                                                this.onChangeHandler(BUSINESS_PHONE, e.target.value)
+                                            }
+                                            aria-describedby="basic-addon3"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div className={"row"}>
 
                             <div className={"col-md-6 col-sm-6 col-xs-12"}>
@@ -507,13 +543,11 @@ class BusinessDetail extends Component {
 
                         </div>
                         <div className={"row"}>
-
                             <div className={"col-md-6 col-sm-6 col-xs-12"}>
                                 <div className="form-group mb-3 ">
 
                                     <label htmlFor={ADDRESS2.id} className="bmd-label-floating">
                                         Address 2
-
                                     </label>
                                     <input
                                         type={ADDRESS2.type}
@@ -582,7 +616,7 @@ class BusinessDetail extends Component {
                     <div className="mt-5 mb-5 text-center">
                         <button
                             type="submit"
-                            // disabled={this.state.missed_fields || !this.state.tnc_consent}
+                            disabled={this._customButtonValidation()}
                             onClick={e => this._formSubmit(e)}
                             className="form-submit btn btn-raised greenButton"
                         >Check your eligibility

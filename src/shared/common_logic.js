@@ -170,8 +170,9 @@ export const fieldValidationHandler = props => {
     const {showAlert, validations, localState} = props;
 
     const lomo = Object.entries(validations).some((val, key) => {
-        console.log(val[1].slug);
+
         if (val[1].required) {
+            console.log(val[1].slug);
             let regexTest = val[1].pattern.test(localState[val[1].slug]);
             if (!regexTest) {
                 // false : failed pattern
@@ -181,7 +182,6 @@ export const fieldValidationHandler = props => {
 
             }
         }
-
     });
 
     if (!lomo) showAlert();
