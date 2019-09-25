@@ -4,11 +4,12 @@ import {withRouter} from "react-router-dom";
 import {changeLoader, EnachsetAttempt, EnachsetPayload} from "../../../../actions";
 import {postMessage} from "../../../../shared/common_logic";
 import PropTypes from "prop-types";
+import {payMintifiUrl} from '../../../../shared/constants';
 
-const {PUBLIC_URL} = process.env;
+// const {PUBLIC_URL} = process.env;
 const Cancel_URL = props => {
-    const hosty = props.eNachPayload.cancel_url.localeCompare(PUBLIC_URL);
-    if (window.location !== window.parent.location) {
+    const hosty = props.eNachPayload.cancel_url.localeCompare(payMintifiUrl);
+    if (window.location.host !== window.parent.location.host) {
         postMessage({
             enach_status: "cancel",
             action: "close",
