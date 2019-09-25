@@ -40,7 +40,8 @@ class ESign extends Component {
     popUpWindow = "";
     intervalPing = "";
     checkStatusPopup = "";
-    counterPing = 5;
+    COUNTER_PING = 8; // 2 minutes
+    INTERVAL_TIMER = 15000;
     eSignAttempt = 0;
 
     state = {
@@ -133,7 +134,7 @@ class ESign extends Component {
                     this._pingDBStatus();
                     this.intervalPing = window.setInterval(
                         () => this._pingDBStatus(),
-                        20000
+                        this.INTERVAL_TIMER
                     );
                 }, 1000);
             }
@@ -150,7 +151,7 @@ class ESign extends Component {
         } = this.props;
 
         let base64_encoded = ''
-        this.counterPing -= 1;
+        this.COUNTER_PING -= 1;
 
         const {
             adharObj,
@@ -177,10 +178,10 @@ class ESign extends Component {
 
         // ToDo : Navigating to anchor urls
         if (resp.status === apiActions.SUCCESS_RESPONSE) {
-            let redLocation = `${eSignPayload.success_url}`;
+            let redLocation = `${eSignPayload.success_url}`; // Anchor URL
             if (resp.data.success) {
                 showAlert(
-                    "Looks like we're done with eSign, redirecting you to Anchor portal",
+                    "Great, we're done with eSign, redirecting you to Anchor portal",
                     "success"
                 );
                 if (this.popUpWindow)
@@ -198,7 +199,7 @@ class ESign extends Component {
             }
         }
 
-        if (this.counterPing === 0)
+        if (this.COUNTER_PING === 0)
             if (this.intervalPing) window.clearInterval(this.intervalPing);
     };
 
@@ -253,7 +254,6 @@ class ESign extends Component {
     componentDidMount() {
         // window.setTimeout(() => this._triggerESign(), 1000);
         this.props.EsignsetAttempt(0);
-        // setInterval(() => console.log(">>close", this.popUpWindow.closed), 1000);
         window.setInterval(() => {
             try {
                 if (this.popUpWindow)
@@ -269,7 +269,6 @@ class ESign extends Component {
             }
 
         }, 10000);
-        // setInterval(() => console.log(">>>>>>>>.", this.checkStatusPopup), 1000);
     }
 
     render() {

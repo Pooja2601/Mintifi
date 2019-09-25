@@ -127,15 +127,8 @@ class Offers extends Component {
                     // history.push(`${PUBLIC_URL}/drawdown/token`)
                 }, 2000);
             }
-            if (window.location !== window.parent.location) {
-                postMessage({
-                    drawdown_status: "error",
-                    drawdown_offer: null,
-                    loan_id: payload.loan_application_id,
-                    drawdown_id: payload.anchor_drawdown_id,
-                    action: "close"
-                });
-            }
+            setTimeout(() => history.push(`${PUBLIC_URL}/drawdown/error`), 500);
+
         } else if (resp.status === apiActions.SUCCESS_RESPONSE) {
             // ToDo : uncomment this 2 lines for production
             if (environment === "prod" || environment === "dev") {

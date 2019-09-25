@@ -61,6 +61,8 @@ class ENach extends Component {
             redirectURL = ENachResponseUrl.cancel_url;
         } else if (resp.status === apiActions.SUCCESS_RESPONSE) {
             redirectURL = ENachResponseUrl.success_url;
+        } else {
+            redirectURL = ENachResponseUrl.cancel_url;
         }
         window.setTimeout(() => {
             // ToDo : Uncomment the below line in Prod

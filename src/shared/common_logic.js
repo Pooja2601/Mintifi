@@ -1,6 +1,4 @@
 // import React from "react";
-// import {withRouter} from "react-router-dom";
-// import {changeLoader,  DrawsetToken} from "../../actions";
 import {toast} from "react-toastify";
 import {app_id, auth_secret, baseUrl, user_id} from "./constants";
 import {apiActions, postAPI} from "../api";
@@ -10,7 +8,6 @@ const chars =
 export const Base64 = {
     btoa: (input = "") => {
         try {
-
             let str = input;
             let output = "";
 
@@ -32,13 +29,12 @@ export const Base64 = {
 
             return output;
         } catch (e) {
-            return null
+            return null;
         }
     },
 
     atob: (input = "") => {
         try {
-
             let str = input.replace(/=+$/, "");
             let output = "";
 
@@ -64,6 +60,7 @@ export const Base64 = {
     }
 };
 
+// Not used anymore, a Plugin for triggering Alerts
 export const alertModule = (msg, type) => {
     if (!msg) {
         console.log("Looks like a connectivity issue..!");
@@ -77,8 +74,10 @@ export const alertModule = (msg, type) => {
     }
 };
 
+// Encodes or Decodes to and from Base64 string (input or output will be an object)
 export const base64Logic = (payload, action) => {
-    let base64 = {}, newPayload = payload;
+    let base64 = {},
+        newPayload = payload;
     if (action === "decode") {
         try {
             base64 = eval(`(${Base64.atob(newPayload)})`);
@@ -87,20 +86,17 @@ export const base64Logic = (payload, action) => {
         }
 
         /* try {
-          base64 = newPayload
-            ? JSON.parse(new Buffer(newPayload, "base64").toString("ascii"))
-            : {};
-        } catch (e) {
-          base64 = Base64.atob(newPayload);
-        } */
+                  base64 = newPayload
+                    ? JSON.parse(new Buffer(newPayload, "base64").toString("ascii"))
+                    : {};
+                } catch (e) {
+                  base64 = Base64.atob(newPayload);
+                } */
     }
     if (action === "encode") {
         newPayload = JSON.stringify(newPayload);
         try {
-            base64 =
-                newPayload
-                    ? new Buffer(newPayload).toString("base64")
-                    : {};
+            base64 = newPayload ? new Buffer(newPayload).toString("base64") : {};
         } catch (e) {
             base64 = Base64.btoa(newPayload);
         }
@@ -108,6 +104,7 @@ export const base64Logic = (payload, action) => {
     return base64;
 };
 
+// Retrieves param(key) from URL (key, value basis)
 export const retrieveParam = (urlToParse, key) => {
     // if (urlToParse.length > 0)
     try {
@@ -121,7 +118,6 @@ export const retrieveParam = (urlToParse, key) => {
 };
 
 export const generateToken = async () => {
-
     const options = {
         URL: `${baseUrl}/auth`,
         data: {
@@ -130,41 +126,64 @@ export const generateToken = async () => {
             app_id: app_id,
             type: "react_web_user"
         }
-    }
+    };
 
     const resp = await postAPI(options);
 
-    if (resp.status === apiActions.ERROR_RESPONSE)
-        return 30;
-    else if (resp.status === apiActions.SUCCESS_RESPONSE)
-        return resp.data; // ToDo : issue need to look
+    if (resp.status === apiActions.ERROR_RESPONSE) return 30;
+    else if (resp.status === apiActions.SUCCESS_RESPONSE) return resp.data; // ToDo : issue need to look
 
     return 31;
-
 };
 
+// Useful to dispatch an JS event, ideal when PWM is opened vai a POPup
 export const postMessage = obj => {
     window.setTimeout(() => {
         window.parent.postMessage(obj, `*`);
     }, 4000);
 };
 
-
+// Self Explanatory
 export const checkObject = obj => {
     try {
-        if (obj === null)
-            return false;
-        if (obj === undefined)
-            return false;
-        if (obj !== Object(obj))
-            return false;
+        if (obj === null) return false;
+        if (obj === undefined) return false;
+        if (obj !== Object(obj)) return false;
 
         for (var key in obj) {
-            if (obj.hasOwnProperty(key))
-                return true;
+            if (obj.hasOwnProperty(key)) return true;
         }
     } catch (e) {
         return false;
     }
     // return true;
-}
+};
+
+// Removes trimming slashes
+export const regexTrim = regex => {
+    var str = `${regex}`;
+    return str.split("/")[1];
+};
+
+// Validates all the fields
+export const fieldValidationHandler = props => {
+    const {showAlert, validations, localState} = props;
+
+    const lomo = Object.entries(validations).some((val, key) => {
+        // console.log(val[1].slug);
+        if (val[1].required) {
+            let regexTest = val[1].pattern.test(localState[val[1].slug]);
+            if (!regexTest) {
+                // false : failed pattern
+                if (localState[val[1].slug])
+                    showAlert(val[1].error);
+                return val[1];
+
+            }
+        }
+
+    });
+
+    if (!lomo) showAlert();
+    return lomo; // true : for disabling
+};

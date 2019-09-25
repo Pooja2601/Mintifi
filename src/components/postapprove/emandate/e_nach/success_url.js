@@ -1,21 +1,23 @@
 import React from "react";
 import {connect} from "react-redux";
 import {withRouter} from "react-router-dom";
+import {ENachResponseUrl} from './../../../../shared/constants';
 import {changeLoader, EnachsetAttempt, EnachsetPayload} from "../../../../actions";
 import {postMessage} from "../../../../shared/common_logic";
 import PropTypes from "prop-types";
+import {payMintifiUrl} from '../../../../shared/constants';
 
 const {PUBLIC_URL} = process.env;
 const Success_URL = props => {
-    const hosty = props.eNachPayload.success_url.localeCompare(PUBLIC_URL);
-    if (window.location !== window.parent.location)
+    const hosty = props.eNachPayload.success_url.includes(payMintifiUrl);
+    if (window.location.host !== window.parent.location.host)
         postMessage({
             enach_status: "success",
             loan_id: props.eNachPayload.loan_application_id,
             action: "close"
         });
     else {
-        if (hosty === -1)
+        if (!hosty) // URLs and HOST aren't same
             window.setTimeout(() => {
                 window.location.href = `${props.eNachPayload.success_url}`;
             }, 5000);
@@ -29,8 +31,8 @@ const Success_URL = props => {
             <div className="alert alert-success" role="alert">
                 {/*<h4 className="alert-heading">Dear {f_name} {l_name}</h4>*/}
                 <p className="paragraph_styling  ">
-                    Thank you for completing the E-NACH process, you'll be redirected to
-                    Anchor dashboard within a moment..
+                    Thank you for completing the E-NACH process {!hosty && `, you'll be redirected to
+                    Anchor dashboard within a moment..`}
                 </p>
             </div>
         </>

@@ -12,13 +12,19 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {setBankDetail, changeLoader, setToken, showAlert} from "../../../actions";
 import {withRouter} from "react-router-dom";
-import {alertModule, retrieveParam, generateToken, base64Logic} from "../../../shared/common_logic";
+import {
+    retrieveParam,
+    checkObject,
+    fieldValidationHandler,
+    generateToken,
+    base64Logic,
+    regexTrim
+} from "../../../shared/common_logic";
 // import DatePicker from "react-datepicker";
 // import "react-datepicker/dist/react-datepicker.css";
 import Select from "react-select";
 import {fetchAPI, apiActions, postAPI} from "../../../api";
-import {checkObject} from "../../../shared/common_logic";
-
+import {validationBank} from "./../../../shared/validations";
 
 const {PUBLIC_URL} = process.env;
 
@@ -34,7 +40,8 @@ class BankDetail extends Component {
     };
 
     state = {
-        acc_type: "",
+        dropdownSelected: {value: '', label: validationBank.ACCOUNT_TYPE.title},
+        acc_type: null,
         bank_name: "",
         acc_number: "",
         acc_name: "",
@@ -43,42 +50,68 @@ class BankDetail extends Component {
         branch_name: ""
     };
 
-    validate = {
-        acc_type: false,
-        // bank_name: false,
-        acc_number: false,
-        acc_name: false,
-        ifsc_code: false
-        // micr_code: false,
-    };
+    tempState = this.state;
 
-    validationErrorMsg = () => {
-        let ctrerror = 4,
-            fieldTxt;
-        Object.values(this.validate).map((val, key) => {
-            if (!val) ++ctrerror;
-            else --ctrerror;
+    // ToDo : should be independent of a field
+    validationHandler = () => {
+        const {showAlert} = this.props;
+
+        const lomo = fieldValidationHandler({
+            showAlert: showAlert,
+            validations: validationBank,
+            localState: this.state
         });
-        if (ctrerror !== 0) {
-            fieldTxt = ctrerror > 1 ? "field is " : "fields are ";
-            // alertModule(`Kindly check the form again, ${ctrerror / 2} ${fieldTxt} still having some issue !`, 'warn');
+
+        this.setState({missed_fields: lomo}); // true : for disabling
+    }
+
+    // Common for all input fields of this component
+    onChangeHandler = (field, value) => {
+        let that = this;
+        const {setBankDetail} = this.props;
+        // fields is Equivalent to F_NAME , L_NAME... thats an object
+
+        // ToDo : comment those that are not required
+        const {ACCOUNT_NUMBER, ACCOUNT_TYPE, IFSC, MICR_CODE} = validationBank;
+
+        this.tempState = Object.assign({}, this.state);
+        switch (field) {
+
+            case ACCOUNT_NUMBER:
+                if (!isNaN(value))
+                    if (value.length <= 18)
+                        this.tempState['acc_number'] = value;
+                break;
+
+            case IFSC:
+                if (value.length <= 11) {
+                    this.tempState['ifsc_code'] = value;
+                    (value.length === 11) && this._fetchIFSC(value);
+                }
+                break;
+            case ACCOUNT_TYPE:
+                this.tempState['dropdownSelected'] = value;
+                this.tempState['acc_type'] = value.value;
+                break;
+            case MICR_CODE:
+                if (value.length <= 9 && !isNaN(value)) {
+                    this.tempState['micr_code'] = value;
+                }
+                break;
+            default:
+                this.tempState[field.slug] = value;
+                break
         }
-    };
+        // console.log(value)
 
-    handleValidation = () => {
-        let ctrerror = 4,
-            missed_fields;
-        // let missed_fields = Object.keys(this.validate).some(x => this.validate[x]);
-        Object.values(this.validate).map((val, key) => {
-            if (!val) ++ctrerror;
-            else --ctrerror;
-            // console.log(val);
-        });
-        // console.log(ctrerror);
-        missed_fields = ctrerror !== 0;
-        this.setState({missed_fields});
-        // this.setState({missed_fields}, () => console.log('All Fields Validated : ' + this.state.missed_fields));
-    };
+        this.setState({...this.state, ...this.tempState});
+
+        window.setTimeout(() => {
+            setBankDetail(that.state);
+            this.validationHandler();
+        }, 10)
+
+    }
 
     /*   businessGst(e) {
              const {value} = e.target;
@@ -183,6 +216,7 @@ class BankDetail extends Component {
     _fetchIFSC(ifsc) {
         const {changeLoader, showAlert, setBankDetail} = this.props;
         let bank_name, micr_code, branch_name;
+
         changeLoader(true);
         fetch(`https://ifsc.razorpay.com/${ifsc}`)
             .then(resp => resp.json())
@@ -231,27 +265,22 @@ class BankDetail extends Component {
         if (checkObject(adharObj)) {
             const {f_name, l_name} = adharObj;
             this.setState({acc_name: `${f_name} ${l_name}`}, () => setBankDetail(this.state));
-            this.validate['acc_name'] = true;
         }
         if (checkObject(bankObj))
-            this.setState(bankObj, () => {
-                Object.keys(this.state).map((val, key) => {
-                    if (this.validate[val] !== undefined)
-                        this.validate[val] = this.state[val].length > 0;
-                    if (val === 'acc_type')
-                        this.validate[val] = false;
-                });
-            });
+            this.setState(bankObj);
         else setBankDetail(this.state);
 
         // console.log(this.props.gstProfile)
         changeLoader(false);
-        setTimeout(() => this.handleValidation(), 2000);
+        setTimeout(() => this.validationHandler(), 500);
         // console.log(this.props.adharObj);
 
     }
 
+
     render() {
+        const {ACCOUNT_NAME, ACCOUNT_NUMBER, ACCOUNT_TYPE, BANK_NAME, BRANCH_NAME, IFSC, MICR_CODE} = validationBank;
+
         // const gstProfile = this.props.gstProfile;
         return (
             <>
@@ -272,61 +301,42 @@ class BankDetail extends Component {
                     <div className={"row"}>
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3 ">
-                                <label htmlFor="nameAccount" className={"bmd-label-floating"}>
+                                <label htmlFor={ACCOUNT_NAME.id} className={"bmd-label-floating"}>
                                     Account Name *
                                 </label>
                                 <input
-                                    type="text"
+                                    type={ACCOUNT_NAME.type}
                                     className="form-control font_weight"
                                     // placeholder="Email"
-                                    title="Please enter Account Name"
-                                    autoCapitalize="characters"
-                                    id="nameAccount"
-                                    required={true}
+                                    title={ACCOUNT_NAME.title}
+                                    autoCapitalize={ACCOUNT_NAME.autoCapitalize}
+                                    id={ACCOUNT_NAME.id}
+                                    pattern={regexTrim(ACCOUNT_NAME.pattern)}
+                                    required={ACCOUNT_NAME.required}
                                     value={this.state.acc_name}
-                                    onBlur={() => this.validationErrorMsg()}
+                                    // onBlur={() => this.validationErrorMsg()}
                                     // ref={ref => (this.obj.pan = ref)}
-                                    onChange={e => {
-                                        let {value} = e.target;
-                                        this.validate.acc_name = value.length > 2;
-                                        this.setState({acc_name: value}, () =>
-                                            this.props.setBankDetail(this.state)
-                                        );
-                                        this.handleValidation();
-                                    }}
+                                    onChange={e => this.onChangeHandler(ACCOUNT_NAME, e.target.value)}
                                 />
                             </div>
                         </div>
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3">
-                                <label htmlFor="numberAccount" className={"bmd-label-floating"}>
+                                <label htmlFor={ACCOUNT_NUMBER.id} className={"bmd-label-floating"}>
                                     Account Number *
                                 </label>
                                 <input
-                                    type="text"
+                                    type={ACCOUNT_NUMBER.type}
                                     className="form-control font_weight"
                                     // placeholder="Mobile Number"
-                                    pattern="^[0-9]{9,18}$"
-                                    title="Please enter Account Number"
-                                    autoCapitalize="characters"
-                                    id="numberAccount"
-                                    required={true}
+                                    pattern={regexTrim(ACCOUNT_NUMBER.pattern)}
+                                    title={ACCOUNT_NUMBER.title}
+                                    id={ACCOUNT_NUMBER.id}
+                                    required={ACCOUNT_NUMBER.required}
                                     value={this.state.acc_number}
-                                    onBlur={() => this.validationErrorMsg()}
+                                    // onBlur={() => this.validationErrorMsg()}
                                     // ref={ref => (this.obj.pan = ref)}
-                                    onChange={e => {
-                                        let {value} = e.target;
-                                        if (!isNaN(value)) {
-                                            this.validate.acc_number =
-                                                value.length >= 9 && value.length <= 18;
-                                            if (value.length <= 18) {
-                                                this.setState({acc_number: value}, () =>
-                                                    this.props.setBankDetail(this.state)
-                                                );
-                                                this.handleValidation();
-                                            }
-                                        }
-                                    }}
+                                    onChange={e => this.onChangeHandler(ACCOUNT_NUMBER, e.target.value)}
                                 />
                             </div>
                         </div>
@@ -335,56 +345,41 @@ class BankDetail extends Component {
                     <div className={"row"}>
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3">
-                                <label htmlFor="ifscCode" className="bmd-label-floating">
+                                <label htmlFor={IFSC.id} className="bmd-label-floating">
                                     IFSC *
                                 </label>
 
                                 <input
-                                    type="text"
+                                    type={IFSC.type}
                                     className="form-control font_weight text-capitalize"
-                                    pattern="^[A-Za-z]{4}\d{7}$"
-                                    title="Enter Average monthly Transactions"
-                                    autoCapitalize="characters"
-                                    id="ifscCode"
-                                    required={true}
+                                    pattern={regexTrim(IFSC.pattern)}
+                                    title={IFSC.title}
+                                    autoCapitalize={IFSC.autoCapitalize}
+                                    id={IFSC.id}
+                                    required={IFSC.required}
                                     value={this.state.ifsc_code}
                                     // ref={ref => (this.obj.pan = ref)}
                                     onBlur={() => {
-                                        this.validationErrorMsg();
+                                        // this.validationErrorMsg();
                                         this._fetchIFSC(this.state.ifsc_code);
                                     }}
-                                    onChange={e => {
-                                        let {value} = e.target;
-                                        this.validate.ifsc_code = value.length === 11;
-                                        if (value.length <= 11) {
-                                            this.setState({ifsc_code: value}, () =>
-                                                this.props.setBankDetail(this.state)
-                                            );
-                                            this.handleValidation();
-                                        }
-                                    }}
+                                    onChange={e => this.onChangeHandler(IFSC, e.target.value)}
                                 />
                             </div>
                         </div>
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3">
-                                <label htmlFor="accountType" className={"bmd-label-floating"}>
+                                <label htmlFor={ACCOUNT_TYPE.id} className={"bmd-label-floating"}>
                                     Account Type *
                                 </label>
                                 <Select
-                                    options={accountType}
+                                    options={ACCOUNT_TYPE.options}
                                     required={true}
-                                    id="accountType"
-                                    inputId={"accountType"}
-                                    onBlur={() => this.validationErrorMsg()}
-                                    onChange={e => {
-                                        let {value} = e;
-                                        this.setState({acc_type: value}, () =>
-                                            this.props.setBankDetail(this.state)
-                                        );
-                                        this.validate.acc_type = value.length > 0;
-                                        this.handleValidation();
-                                    }}
+                                    value={this.state.dropdownSelected}
+                                    id={ACCOUNT_TYPE.id}
+                                    inputId={ACCOUNT_TYPE.id}
+                                    // onBlur={() => this.validationErrorMsg()}
+                                    onChange={e => this.onChangeHandler(ACCOUNT_TYPE, e)}
                                 />
                                 {/*<select style={{fontWeight: 600}}
                                         title="Please select Company Type"
@@ -414,18 +409,19 @@ class BankDetail extends Component {
                                 className="form-group mb-3"
                                 style={{display: this.state.bank_name ? "block" : "none"}}
                             >
-                                <label htmlFor="nameBank" className={"bmd-label-floating"}>
+                                <label htmlFor={BANK_NAME.id} className={"bmd-label-floating"}>
                                     Bank Name *
                                 </label>
                                 <input
-                                    type="text"
+                                    type={BANK_NAME.type}
                                     className="form-control font_weight"
                                     // placeholder="Email"
-                                    title="Please enter Bank Name"
-                                    autoCapitalize="characters"
-                                    id="nameBank"
-                                    required={true}
-                                    disabled={true}
+                                    title={BANK_NAME.title}
+                                    autoCapitalize={BANK_NAME.autoCapitalize}
+                                    id={BANK_NAME.id}
+                                    pattern={regexTrim(BANK_NAME.pattern)}
+                                    required={BANK_NAME.required}
+                                    disabled={BANK_NAME.disabled}
                                     value={this.state.bank_name}
                                     // onBlur={() => this.validationErrorMsg()}
                                     // ref={ref => (this.obj.pan = ref)}
@@ -443,30 +439,21 @@ class BankDetail extends Component {
                                 className="form-group mb-3"
                                 style={{display: this.state.micr_code ? "block" : "none"}}
                             >
-                                <label htmlFor="micrCode" className="bmd-label-floating">
+                                <label htmlFor={MICR_CODE.id} className="bmd-label-floating">
                                     MICR Code
                                 </label>
                                 <input
-                                    type="text"
+                                    type={MICR_CODE.type}
                                     className="form-control font_weight"
-                                    pattern="^[0-9]{9}$"
-                                    title="Enter MICR Code"
-                                    autoCapitalize="characters"
-                                    id="micrCode"
-                                    disabled={true}
+                                    pattern={regexTrim(MICR_CODE.pattern)}
+                                    title={MICR_CODE.title}
+                                    autoCapitalize={MICR_CODE.autoCapitalize}
+                                    id={MICR_CODE.id}
+                                    disabled={MICR_CODE.disabled}
                                     value={this.state.micr_code}
                                     // ref={ref => (this.obj.pan = ref)}
                                     // onBlur={() => this.validationErrorMsg()}
-                                    onChange={e => {
-                                        let {value} = e.target;
-                                        this.validate.micr_code = value.length === 9;
-                                        if (value.length <= 9 && !isNaN(value)) {
-                                            this.setState({micr_code: value}, () =>
-                                                this.props.setBankDetail(this.state)
-                                            );
-                                            // this.handleValidation();
-                                        }
-                                    }}
+                                    onChange={e => this.onChangeHandler(MICR_CODE, e.target.value)}
                                 />
                             </div>
                         </div>
@@ -477,17 +464,18 @@ class BankDetail extends Component {
                     >
                         <div className={"col-sm-12"}>
                             <div className="form-group mb-3 ">
-                                <label htmlFor="nameBranch" className={"bmd-label-floating"}>
+                                <label htmlFor={BRANCH_NAME.id} className={"bmd-label-floating"}>
                                     Branch Name *
                                 </label>
                                 <input
-                                    type="text"
+                                    type={BRANCH_NAME.type}
                                     className="form-control font_weight"
                                     // placeholder="Email"
-                                    title="Please enter Branch Name"
-                                    id="nameBranch"
-                                    required={true}
-                                    disabled={true}
+                                    title={BRANCH_NAME.title}
+                                    pattern={regexTrim(BRANCH_NAME.pattern)}
+                                    id={BRANCH_NAME.id}
+                                    required={BRANCH_NAME.required}
+                                    disabled={BRANCH_NAME.disabled}
                                     value={this.state.branch_name}
                                 />
                             </div>

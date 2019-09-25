@@ -8,7 +8,7 @@ import {
     withRouter
 } from "react-router-dom";
 import ScrollToTop from "./shared/scrollhack";
-
+import {payMintifiUrl} from './shared/constants'
 import configureStore from "./store";
 import {PersistGate} from "redux-persist/integration/react";
 import {ToastContainer, toast} from "react-toastify";

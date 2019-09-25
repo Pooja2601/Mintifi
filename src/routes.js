@@ -3,15 +3,15 @@ import React from 'react'
 import Index from "./components/";
 import Login from "./components/landing";
 import AdharPan from "./components/preapprove/adhar_pan";
-import PersonalDetail from "./components/preapprove/adhar_pan/personal_details";
-import MobileOTP from "./components/preapprove/adhar_pan/mobile_otp";
-import BusinessDetail from "./components/preapprove/gst_business";
-import Finalize from "./components/preapprove/gst_business/finalize";
+import PersonalDetail from "./components/preapprove/personal_details";
+import MobileOTP from "./components/preapprove/mobile_otp";
+import BusinessDetail from "./components/preapprove/business_details";
+import Finalize from "./components/preapprove/business_details/finalize";
 import AppRejected from "./components/preapprove/ip_approval/app_rejected";
 import AppApproved from "./components/preapprove/ip_approval/app_approved";
-import DocsUpload from "./components/preapprove/docs_bank/docs_upload";
-import BankDetail from "./components/preapprove/docs_bank/bank_details";
 import ThankYou from "./components/preapprove/ip_approval/thank_you";
+import DocsUpload from "./components/preapprove/docs_upload";
+import BankDetail from "./components/preapprove/bank_details";
 
 //Existing User
 import Auth from "./components/preapprove/exist_user";
@@ -24,6 +24,7 @@ import DrawAuth from "./components/drawdown/auth";
 import DrawOffers from "./components/drawdown/offers";
 import DrawFetchOffers from "./components/drawdown/fetch_offers";
 import DrawThankYou from "./components/drawdown/thankyou";
+import DrawError from "./components/drawdown/error_url";
 
 // E-Mandate
 import EMandate from "./components/postapprove/emandate";
@@ -42,6 +43,8 @@ import ErrorUrl from "./components/postapprove/emandate/e_nach/error_url";
 import CancelUrl from "./components/postapprove/emandate/e_nach/cancel_url";
 import PNach from "./components/postapprove/emandate/e_nach/pnach";
 
+// Dev Tool
+import ClearCache from "./components/clear_cache";
 
 const routes = [
     {
@@ -125,6 +128,10 @@ const routes = [
         component: DrawThankYou
     },
     {
+        path: 'drawdown/error',
+        component: DrawError
+    },
+    {
         path: 'emandate',
         component: EMandate
     },
@@ -171,6 +178,10 @@ const routes = [
     {
         path: 'enach/pnach',
         component: PNach
+    },
+    {
+        path: 'clear_cache',
+        component: ClearCache
     },
 ];
 

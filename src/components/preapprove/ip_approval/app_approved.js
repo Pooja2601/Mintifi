@@ -56,7 +56,7 @@ class AppApproved extends Component {
             location = {state: {status: load_status}};
         }
         // ToDo : Hide Ends here
-        if (window.location !== window.parent.location)
+        if (window.location.host !== window.parent.location.host)
             postMessage({
                 loan_status: credit_eligibility.loan_status,
                 loan_id: checkObject(preFlightResp) ? loan_application_id : "",
@@ -148,7 +148,7 @@ class AppApproved extends Component {
                                         : "alert alert-success"
                                 }
                             >
-                                <table width="100%" style={{margin: "auto 15%"}}>
+                                <table width="100%" style={{margin: "auto 5%"}}>
                                     <tbody>
                                     {/*<tr>
                                     <td>PRODUCT OFFERED</td>
