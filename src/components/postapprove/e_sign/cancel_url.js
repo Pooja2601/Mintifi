@@ -6,7 +6,7 @@ import {postMessage} from "../../../shared/common_logic";
 import PropTypes from "prop-types";
 
 const Cancel_URL = props => {
-    if (window.location !== window.parent.location) {
+    if (window.location.host !== window.parent.location.host) {
         postMessage({
             esign_status: "cancel",
             action: "close",

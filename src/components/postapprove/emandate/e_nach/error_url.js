@@ -10,7 +10,7 @@ const {PUBLIC_URL} = process.env;
 
 const Error_URL = props => {
     const hosty = props.eNachPayload.error_url.localeCompare(payMintifiUrl);
-    if (window.location !== window.parent.location)
+    if (window.location.host !== window.parent.location.host)
         postMessage({
             enach_status: "error",
             action: "close",

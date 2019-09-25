@@ -10,7 +10,7 @@ import {payMintifiUrl} from '../../../../shared/constants';
 const {PUBLIC_URL} = process.env;
 const Success_URL = props => {
     const hosty = props.eNachPayload.success_url.localeCompare(payMintifiUrl);
-    if (window.location !== window.parent.location)
+    if (window.location.host !== window.parent.location.host)
         postMessage({
             enach_status: "success",
             loan_id: props.eNachPayload.loan_application_id,

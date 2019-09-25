@@ -9,7 +9,7 @@ import {payMintifiUrl} from '../../../../shared/constants';
 // const {PUBLIC_URL} = process.env;
 const Cancel_URL = props => {
     const hosty = props.eNachPayload.cancel_url.localeCompare(payMintifiUrl);
-    if (window.location !== window.parent.location) {
+    if (window.location.host !== window.parent.location.host) {
         postMessage({
             enach_status: "cancel",
             action: "close",
