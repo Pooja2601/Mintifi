@@ -8,7 +8,7 @@ import {payMintifiUrl} from '../../../../shared/constants';
 
 // const {PUBLIC_URL} = process.env;
 const Cancel_URL = props => {
-    const hosty = props.eNachPayload.cancel_url.localeCompare(payMintifiUrl);
+    const hosty = props.eNachPayload.cancel_url.includes(payMintifiUrl);
     if (window.location.host !== window.parent.location.host) {
         postMessage({
             enach_status: "cancel",
@@ -16,7 +16,7 @@ const Cancel_URL = props => {
             loan_id: props.eNachPayload.loan_application_id
         });
     } else {
-        if (hosty === -1) // URLs and HOST aren't same
+        if (!hosty) // URLs and HOST aren't same
             window.setTimeout(() => {
                 window.location.href = `${props.eNachPayload.cancel_url}`;
             }, 4000);
