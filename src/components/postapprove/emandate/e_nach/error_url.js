@@ -4,11 +4,12 @@ import {withRouter} from "react-router-dom";
 import {changeLoader, EnachsetAttempt, EnachsetPayload} from "../../../../actions";
 import {postMessage} from "../../../../shared/common_logic";
 import PropTypes from "prop-types";
+import {payMintifiUrl} from '../../../../shared/constants';
 
 const {PUBLIC_URL} = process.env;
 
 const Error_URL = props => {
-    const hosty = props.eNachPayload.error_url.localeCompare(PUBLIC_URL);
+    const hosty = props.eNachPayload.error_url.localeCompare(payMintifiUrl);
     if (window.location !== window.parent.location)
         postMessage({
             enach_status: "error",
