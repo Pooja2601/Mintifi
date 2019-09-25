@@ -2717,7 +2717,31 @@ input[type=number]::-webkit-outer-spin-button {
 #dealerCode:valid,
 #ifscCode:valid,
 #numberAccount:valid,
-#micrCode:valid {
+#micrCode:valid
+#companyName:valid
+#companyType:valid
+#numberGST:valid
+#numberPAN:valid
+#avgTrans:valid
+#dealerCode:valid
+#business_email:valid
+#business_phone:valid
+#no_of_founders:valid
+#no_of_employees:valid
+#incDate:valid
+#numberPincode:valid
+#textAddress1:valid
+#businessOwnership:valid
+#retailerVintage:valid
+#nameBranch:valid
+#micrCode:valid
+#nameBank:valid
+#dropdown:valid
+#ifscCode:valid
+#numberAccount:valid
+#nameAccount:valid
+
+ {
     color: black !important;
     border-color: black !important;
 }
@@ -2740,7 +2764,29 @@ input[type=number]::-webkit-outer-spin-button {
 #dealerCode:invalid,
 #ifscCode:invalid,
 #numberAccount:invalid,
-#micrCode:invalid {
+#micrCode:invalid
+#companyName:invalid
+#companyType:invalid
+#numberGST:invalid
+#numberPAN:invalid
+#avgTrans:invalid
+#dealerCode:invalid
+#business_email:invalid
+#business_phone:invalid
+#no_of_founders:invalid
+#no_of_employees:invalid
+#incDate:invalid
+#numberPincode:invalid
+#textAddress1:invalid
+#businessOwnership:invalid
+#retailerVintage:invalid
+#nameBranch:invalid
+#micrCode:invalid
+#nameBank:invalid
+#dropdown:invalid
+#ifscCode:invalid
+#numberAccount:invalid
+#nameAccount:invalid {
     color: black !important;
     /* indianred */
     border-color: crimson !important;
