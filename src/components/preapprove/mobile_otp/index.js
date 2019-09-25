@@ -347,6 +347,7 @@ class MobileOtp extends Component {
                     ? "visible"
                     : "hidden"
               }}
+              // disabled={}
               // value={"Send OTP"}
               onClick={e => this._formSubmit(e)}
               className="form-submit btn btn-raised greenButton m-auto d-block"
@@ -357,12 +358,13 @@ class MobileOtp extends Component {
             <button
               style={{
                 visibility:
-                  this.state.loading && this.state.otp.length === 6
+                  this.state.loading && this.state.submitted
                     ? "visible"
                     : "hidden"
               }}
+              disabled={this.state.loading && this.state.otp.length !== 6}
               onClick={e => this._verifyOTP(e)}
-              className="btn btn-raised greenButton text-center m-auto d-block"
+              className="btn btn-raised greenButton text-center m-auto d-block marginTopBottom"
             >
               Verify OTP
             </button>
