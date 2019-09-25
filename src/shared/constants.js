@@ -9,8 +9,8 @@ const env_mode =
 const subUrl = env_mode === "dev" || env_mode === "local" ? "test" : "live"; //  `live` | `test`  , Sub url for Mintifi API webhook
 const payMintifiUrl =
     env_mode === "dev" || env_mode === "local"
-        ? "http://test.pay.mintifi.com"
-        : "https://pay.mintifi.com";
+        ? `http://${window.location.host}`
+        : `https://${window.location.host}`;
 
 const anchorUrls = {
     success_url: `https://www.travelboutiqueonline.com/`,
@@ -22,7 +22,7 @@ const anchor_id = "05cc584e39f34d0e97fc4bb6cd1fa8aa";
 //TBO : 05cc584e39f34d0e97fc4bb6cd1fa8aa , Indiamart : 8186bc , wirecard : uyh65t
 
 const {PUBLIC_URL} = process.env;
-
+// console.log(window.location.host);
 module.exports = {
     environment: env_mode,
     app_id: "1", // For React

@@ -42,7 +42,7 @@ class AppRejected extends Component {
     if (environment === "local") location = { state: { status: loan_status } };
 
     // console.log(state);
-    if (window.location !== window.parent.location)
+    if (window.location.host !== window.parent.location.host)
       postMessage({
         loan_status: state.status,
         loan_id: "",

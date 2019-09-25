@@ -26,7 +26,7 @@ const ErrorUrl = (props) => {
             loan_product = loan_product[0] + " " + loan_product[1];
         }
 
-        if (window.location !== window.parent.location) {
+        if (window.location.host !== window.parent.location.host) {
             if (checkObject(payload))
                 postMessage({
                     drawdown_status: "error",
