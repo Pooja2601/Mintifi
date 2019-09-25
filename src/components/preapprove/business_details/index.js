@@ -8,7 +8,7 @@ import {PrivacyPolicy, TnCPolicy} from "../../../shared/policy";
 import Select from "react-select";
 // import DatePicker from "react-datepicker";
 // import "react-datepicker/dist/react-datepicker.css";
-import {checkObject, regexTrim, fieldValidationHandler} from "../../../shared/common_logic";
+import {checkObject, regexTrim, fieldValidationHandler, retrieveDate} from "../../../shared/common_logic";
 import {validationBusinessDetails, validationPersonalDetails} from "./../../../shared/validations";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -117,7 +117,7 @@ class BusinessDetail extends Component {
         // fields is Equivalent to F_NAME , L_NAME... thats an object
 
         // ToDo : comment those that are not required
-        const {COMPANY_NAME, BUSINESS_PHONE, COMPANY_TYPE, GST_NUMBER, PAN_NUMBER, AVERAGE_TRANSACTION, DEALER_CODE, PINCODE} = validationBusinessDetails;
+        const {COMPANY_NAME, BUSINESS_PHONE, COMPANY_TYPE, GST_NUMBER, PAN_NUMBER, AVERAGE_TRANSACTION, DEALER_CODE, PINCODE, INC_DATE} = validationBusinessDetails;
 
         this.tempState = Object.assign({}, this.state);
         switch (field) {
@@ -144,6 +144,7 @@ class BusinessDetail extends Component {
                 break;
             case INC_DATE:
                 this.tempState['inc_date'] = new Date(value);
+                
                 break;
             case PINCODE:
                 if (value.length <= 6)
@@ -163,6 +164,7 @@ class BusinessDetail extends Component {
         }
 
         this.setState({...this.state, ...this.tempState});
+        
         window.setTimeout(() => {
             setBusinessDetail(that.state);
             this.validationHandler();
