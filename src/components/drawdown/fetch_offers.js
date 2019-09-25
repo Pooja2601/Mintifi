@@ -164,7 +164,7 @@ class FetchOffers extends Component {
         if (creditLimit && loanStatus && loanOffers) {
             if (loanStatus.loan_application_status === "to_settle")
                 setTimeout(() => {
-                    console.log(JSON.stringify(loanPayload));
+                    // console.log(JSON.stringify(loanPayload));
                     history.push(`${PUBLIC_URL}/drawdown/offers`);
                 });
         } else history.push(`${PUBLIC_URL}/drawdown/auth`);

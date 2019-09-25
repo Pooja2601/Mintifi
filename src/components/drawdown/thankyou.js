@@ -26,7 +26,7 @@ const ThankYou = (props) => {
             loan_product = loan_product[0] + " " + loan_product[1];
         }
 
-        if (window.location !== window.parent.location)
+        if (window.location.host !== window.parent.location.host)
             postMessage({
                 drawdown_status: "success",
                 drawdown_offer: preFlightResp.offer,
