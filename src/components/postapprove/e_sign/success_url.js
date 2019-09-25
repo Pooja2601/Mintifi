@@ -6,7 +6,7 @@ import {postMessage} from "../../../shared/common_logic";
 import PropTypes from "prop-types";
 
 const Success_URL = props => {
-    if (window.location !== window.parent.location)
+    if (window.location.host !== window.parent.location.host)
         postMessage({
             esign_status: "success",
             loan_id: props.eSignPayload.loan_application_id,

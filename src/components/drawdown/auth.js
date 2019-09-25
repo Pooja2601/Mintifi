@@ -271,10 +271,10 @@ class MobileOtp extends Component {
             <div className={"col-sm-11 col-md-8 m-auto"}>
               <div className="form-group mb-3">
                 <label htmlFor="numberMobile" className={"bmd-label-floating"}>
-                  Mobile Number *
+                  Enter Mobile Number *
                 </label>
                 <div className={"input-group"}>
-                  <div className="input-group-prepend">
+                  <div className="input-group-prepend phoneDisplay">
                     <span className="input-group-text" id="basic-addon3">
                       +91
                     </span>
@@ -312,7 +312,7 @@ class MobileOtp extends Component {
                 }}
               >
                 <label htmlFor="otpVerify" className={"bmd-label-floating"}>
-                  OTP *
+                  Enter OTP *
                 </label>
                 <div className={"input-group"}>
                   <input
@@ -363,11 +363,9 @@ class MobileOtp extends Component {
             <button
               name="submit"
               style={{
-                visibility:
-                  !this.state.missed_fields && !this.state.submitted
-                    ? "visible"
-                    : "hidden"
+                visibility: !this.state.submitted ? "visible" : "hidden"
               }}
+              disabled={!(!this.state.missed_fields && !this.state.submitted)}
               // value={"Send OTP"}
               onClick={e => this._formSubmit(e)}
               className="form-submit btn btn-raised greenButton"
@@ -378,8 +376,9 @@ class MobileOtp extends Component {
 
             <button
               style={{
-                visibility: this.state.otp.length === 6 ? "visible" : "hidden"
+                visibility: this.state.submitted ? "visible" : "hidden"
               }}
+              disabled={this.state.otp.length !== 6}
               onClick={e => this._verifyOTP(e)}
               className="btn btn-raised greenButton text-center"
             >
