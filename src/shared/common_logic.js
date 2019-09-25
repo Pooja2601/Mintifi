@@ -194,6 +194,8 @@ export const fieldValidationHandler = props => {
     }
   });
 
-  if (!lomo) showAlert();
+  if (!lomo) {
+    showAlert();
+  }
   return lomo; // true : for disabling
 };

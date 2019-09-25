@@ -117,7 +117,7 @@ class BusinessDetail extends Component {
         // fields is Equivalent to F_NAME , L_NAME... thats an object
 
         // ToDo : comment those that are not required
-        const {COMPANY_NAME, BUSINESS_PHONE, COMPANY_TYPE, GST_NUMBER, PAN_NUMBER, AVERAGE_TRANSACTION, DEALER_CODE, PINCODE, INC_DATE} = validationBusinessDetails;
+        const {COMPANY_NAME, BUSINESS_PHONE, COMPANY_TYPE, GST_NUMBER, PAN_NUMBER, AVERAGE_TRANSACTION, DEALER_CODE, PINCODE, INC_DATE, RETAILER_VINTAGE} = validationBusinessDetails;
 
         this.tempState = Object.assign({}, this.state);
         switch (field) {
@@ -157,6 +157,10 @@ class BusinessDetail extends Component {
             case DEALER_CODE:
                 if (value.length <= 10)
                     this.tempState['dealer_code'] = value;
+                break;
+            case RETAILER_VINTAGE: 
+            if (value.length <=4)
+            this.tempState['retailerVintage'] = value;
                 break;
             default:
                 this.tempState[field.slug] = value;
@@ -224,15 +228,28 @@ class BusinessDetail extends Component {
     _customButtonValidation = () => {
         // Negate for disabling feature
         let result;
-        const {tnc_consent, gst_correct, missed_fields, address1, pincode, gst} = this.state;
+        const { payload, showAlert} = this.props
+         const {tnc_consent, gst_correct, missed_fields, address1, pincode, gst, retailerVintage} = this.state;
         if (!missed_fields && tnc_consent) {
             if (gst_correct)
                 result = true;
             else {
                 if (pincode && address1)
                     result = (pincode.length === 6 && address1.length > 2);
-                else result = false;
+                else { 
+                    showAlert("Invalid Pincode or Address")
+                    result = false
+                };
             }
+            if(!payload.retailer_onboarding_date)
+                if(retailerVintage){
+                    result = (retailerVintage.length>0)
+                } else {
+                    result = false;
+                    showAlert("Invalid Vintage (in months)");
+                };
+                
+
         } else result = false;
         // Negate for disabling feature on submit button
         return !result;
@@ -240,9 +257,8 @@ class BusinessDetail extends Component {
 
     render() {
 
-        const gstProfile = this.props.gstProfile;
-        const {COMPANY_NAME, COMPANY_TYPE, GST_NUMBER, PAN_NUMBER, AVERAGE_TRANSACTION, DEALER_CODE, BUSINESS_EMAIL, BUSINESS_PHONE, NO_OF_FOUNDERS, NO_OF_EMPLOYEES, OWNERSHIP, ADDRESS1, ADDRESS2, PINCODE, INC_DATE} = validationBusinessDetails;
-        // console.log(".....", GST_NUMBER.pattern); 
+        const {businessObj, payload, setBusinessDetail, gstProfile} = this.props;
+        const {COMPANY_NAME, COMPANY_TYPE, GST_NUMBER, PAN_NUMBER, AVERAGE_TRANSACTION, DEALER_CODE, BUSINESS_EMAIL, BUSINESS_PHONE, NO_OF_FOUNDERS, NO_OF_EMPLOYEES, OWNERSHIP, ADDRESS1, ADDRESS2, PINCODE, INC_DATE, RETAILER_VINTAGE} = validationBusinessDetails;
         return (
             <>
                 {/*<Link to={`${PUBLIC_URL}/preapprove/personaldetails`} className={"btn btn-link"}>Go Back </Link>*/}
@@ -340,7 +356,7 @@ class BusinessDetail extends Component {
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3">
                                 <label htmlFor={INC_DATE.id} className="bmd-label-floating">
-                                    Date of incorporation
+                                    Date of incorporation *
                                 </label>
                                 <div className={'d-block'}>
                                     <DatePicker
@@ -448,7 +464,30 @@ class BusinessDetail extends Component {
                         </div>
                     </div>
 
+                    <div className={"row"}>
+                    {(!payload.retailer_onboarding_date)?     
+                    <div className={"col-md-6 col-sm-6 col-xs-12"}>
+                            <div className="form-group mb-3 ">
+                                <label htmlFor={RETAILER_VINTAGE.id} className="bmd-label-floating">
+                                   Retailer Vintage *
+                                </label>
+                                <input
+                                    type={RETAILER_VINTAGE.type}
+                                    className="form-control font_weight"
+                                    // placeholder="Pincode"
+                                    title={RETAILER_VINTAGE.title}
+                                    pattern={regexTrim(RETAILER_VINTAGE.pattern)}
+                                   
+                                    id={RETAILER_VINTAGE.id}
+                                    required={RETAILER_VINTAGE.required}
+                                    value={this.state.retailerVintage}
 
+                                    // ref={ref => (this.obj.pan = ref)}
+                                    onChange={(e) => this.onChangeHandler(RETAILER_VINTAGE, e.target.value)}
+                                />
+                            </div>
+                        </div>: <></>}
+                    </div>
                     {(this.state.gst_correct === false || this.state.gst === "") ? <>
                         <div className={"row"}>
 

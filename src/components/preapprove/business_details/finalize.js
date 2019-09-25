@@ -120,7 +120,7 @@ class ReviewBusinessDetail extends Component {
         retailer_onboarding_date: payload.retailer_onboarding_date,
         retailer_vintage: payload.retailer_vintage
           ? payload.retailer_vintage
-          : "",
+          : businessObj.retailer_vintage,
         business_address: {
           ownership_type: businessObj.ownership,
           address_1: businessObj.address1,
