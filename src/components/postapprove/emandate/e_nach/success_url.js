@@ -9,7 +9,7 @@ import {payMintifiUrl} from '../../../../shared/constants';
 
 const {PUBLIC_URL} = process.env;
 const Success_URL = props => {
-    const hosty = props.eNachPayload.success_url.localeCompare(payMintifiUrl);
+    const hosty = props.eNachPayload.success_url.includes(payMintifiUrl);
     if (window.location.host !== window.parent.location.host)
         postMessage({
             enach_status: "success",
@@ -17,7 +17,7 @@ const Success_URL = props => {
             action: "close"
         });
     else {
-        if (hosty === -1) // URLs and HOST aren't same
+        if (!hosty) // URLs and HOST aren't same
             window.setTimeout(() => {
                 window.location.href = `${props.eNachPayload.success_url}`;
             }, 5000);
