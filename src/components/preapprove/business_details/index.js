@@ -13,6 +13,7 @@ import {validationBusinessDetails, validationPersonalDetails} from "./../../../s
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
+const {COMPANY_NAME, COMPANY_TYPE, GST_NUMBER, PAN_NUMBER, AVERAGE_TRANSACTION, DEALER_CODE, BUSINESS_EMAIL, BUSINESS_PHONE, NO_OF_FOUNDERS, NO_OF_EMPLOYEES, OWNERSHIP, ADDRESS1, ADDRESS2, PINCODE, INC_DATE, RETAILER_VINTAGE} = validationBusinessDetails;
 
 const {PUBLIC_URL} = process.env;
 
@@ -115,9 +116,6 @@ class BusinessDetail extends Component {
         let that = this, regex, doby;
         const {setBusinessDetail} = this.props;
         // fields is Equivalent to F_NAME , L_NAME... thats an object
-
-        // ToDo : comment those that are not required
-        const {COMPANY_NAME, BUSINESS_PHONE, COMPANY_TYPE, GST_NUMBER, PAN_NUMBER, AVERAGE_TRANSACTION, DEALER_CODE, PINCODE, INC_DATE, RETAILER_VINTAGE} = validationBusinessDetails;
 
         this.tempState = Object.assign({}, this.state);
         switch (field) {
@@ -234,22 +232,24 @@ class BusinessDetail extends Component {
             if (gst_correct)
                 result = true;
             else {
-                if (pincode && address1)
-                    result = (pincode.length === 6 && address1.length > 2);
-                else {
-                    showAlert("Invalid Pincode or Address")
+                if (pincode && address1) {
+                    result = (PINCODE.pattern.test(pincode) && ADDRESS1.pattern.test(address1));
+                    !PINCODE.pattern.test(pincode) && showAlert("Invalid Pincode entered");
+                    !ADDRESS1.pattern.test(address1) && showAlert("Invalid Address-1 entered");
+                } else {
+                    showAlert("Pincode or Address is Missing");
                     result = false
                 }
-                ;
+
             }
             if (!payload.retailer_onboarding_date)
                 if (retailerVintage) {
-                    result = (retailerVintage.length > 0)
+                    result =  RETAILER_VINTAGE.pattern.test(retailerVintage);
+                    !RETAILER_VINTAGE.pattern.test(retailerVintage) && showAlert("Invalid Vintage (in months)");
                 } else {
                     result = false;
-                    showAlert("Invalid Vintage (in months)");
+                    showAlert("Missing Vintage (in months)");
                 }
-            ;
 
 
         } else result = false;
@@ -260,7 +260,6 @@ class BusinessDetail extends Component {
     render() {
 
         const {businessObj, payload, setBusinessDetail, gstProfile} = this.props;
-        const {COMPANY_NAME, COMPANY_TYPE, GST_NUMBER, PAN_NUMBER, AVERAGE_TRANSACTION, DEALER_CODE, BUSINESS_EMAIL, BUSINESS_PHONE, NO_OF_FOUNDERS, NO_OF_EMPLOYEES, OWNERSHIP, ADDRESS1, ADDRESS2, PINCODE, INC_DATE, RETAILER_VINTAGE} = validationBusinessDetails;
         return (
             <>
                 {/*<Link to={`${PUBLIC_URL}/preapprove/personaldetails`} className={"btn btn-link"}>Go Back </Link>*/}
