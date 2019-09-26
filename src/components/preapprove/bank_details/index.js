@@ -333,30 +333,6 @@ class BankDetail extends Component {
         <form id="serverless-contact-form" onSubmit={e => this._formSubmit(e)}>
           <div className={"row"}>
             <div className={"col-md-6 col-sm-6 col-xs-12"}>
-              {/* <div className="form-group mb-3 ">
-                <label
-                  htmlFor={ACCOUNT_NAME.id}
-                  className={"bmd-label-floating"}
-                >
-                  {ACCOUNT_NAME.label}
-                </label>
-                <input
-                  type={ACCOUNT_NAME.type}
-                  className="form-control font_weight"
-                  // placeholder="Email"
-                  title={ACCOUNT_NAME.title}
-                  autoCapitalize={ACCOUNT_NAME.autoCapitalize}
-                  id={ACCOUNT_NAME.id}
-                  pattern={regexTrim(ACCOUNT_NAME.pattern)}
-                  required={ACCOUNT_NAME.required}
-                  value={this.state.acc_name}
-                  // onBlur={() => this.validationErrorMsg()}
-                  // ref={ref => (this.obj.pan = ref)}
-                  onChange={e =>
-                    this.onChangeHandler(ACCOUNT_NAME, e.target.value)
-                  }
-                />
-              </div> */}
               <InputWrapper
                 validation={ACCOUNT_NAME}
                 localState={this.state}
@@ -364,56 +340,21 @@ class BankDetail extends Component {
               />
             </div>
             <div className={"col-md-6 col-sm-6 col-xs-12"}>
-              <div className="form-group mb-3">
-                <label
-                  htmlFor={ACCOUNT_NUMBER.id}
-                  className={"bmd-label-floating"}
-                >
-                  {ACCOUNT_NUMBER.label}
-                </label>
-                <input
-                  type={ACCOUNT_NUMBER.type}
-                  className="form-control font_weight"
-                  // placeholder="Mobile Number"
-                  pattern={regexTrim(ACCOUNT_NUMBER.pattern)}
-                  title={ACCOUNT_NUMBER.title}
-                  id={ACCOUNT_NUMBER.id}
-                  required={ACCOUNT_NUMBER.required}
-                  value={this.state.acc_number}
-                  // onBlur={() => this.validationErrorMsg()}
-                  // ref={ref => (this.obj.pan = ref)}
-                  onChange={e =>
-                    this.onChangeHandler(ACCOUNT_NUMBER, e.target.value)
-                  }
-                />
-              </div>
+              <InputWrapper
+                validation={ACCOUNT_NUMBER}
+                localState={this.state}
+                onChangeHandler={this.onChangeHandler}
+              />
             </div>
           </div>
 
           <div className={"row"}>
             <div className={"col-md-6 col-sm-6 col-xs-12"}>
-              <div className="form-group mb-3">
-                <label htmlFor={IFSC.id} className="bmd-label-floating">
-                  {IFSC.label}
-                </label>
-
-                <input
-                  type={IFSC.type}
-                  className="form-control font_weight text-capitalize"
-                  pattern={regexTrim(IFSC.pattern)}
-                  title={IFSC.title}
-                  autoCapitalize={IFSC.autoCapitalize}
-                  id={IFSC.id}
-                  required={IFSC.required}
-                  value={this.state.ifsc_code}
-                  // ref={ref => (this.obj.pan = ref)}
-                  onBlur={() => {
-                    // this.validationErrorMsg();
-                    this._fetchIFSC(this.state.ifsc_code);
-                  }}
-                  onChange={e => this.onChangeHandler(IFSC, e.target.value)}
-                />
-              </div>
+              <InputWrapper
+                validation={IFSC}
+                localState={this.state}
+                onChangeHandler={this.onChangeHandler}
+              />
             </div>
             <div className={"col-md-6 col-sm-6 col-xs-12"}>
               <div className="form-group mb-3">
@@ -455,60 +396,25 @@ class BankDetail extends Component {
           </div>
 
           <div className={"row"}>
-            <div className={"col-md-6 col-sm-6 col-xs-12"}>
-              <div
-                className="form-group mb-3"
-                style={{ display: this.state.bank_name ? "block" : "none" }}
-              >
-                <label htmlFor={BANK_NAME.id} className={"bmd-label-floating"}>
-                  {BANK_NAME.label}
-                </label>
-                <input
-                  type={BANK_NAME.type}
-                  className="form-control font_weight"
-                  // placeholder="Email"
-                  title={BANK_NAME.title}
-                  autoCapitalize={BANK_NAME.autoCapitalize}
-                  id={BANK_NAME.id}
-                  pattern={regexTrim(BANK_NAME.pattern)}
-                  required={BANK_NAME.required}
-                  disabled={BANK_NAME.disabled}
-                  value={this.state.bank_name}
-                  // onBlur={() => this.validationErrorMsg()}
-                  // ref={ref => (this.obj.pan = ref)}
-                  /*onChange={(e) => {
-                                                          let {value} = e.target;
-                                                          this.setState({bank_name: value}, () => this.props.setBankDetail(this.state));
-                                                          this.validate.bank_name = (value.length > 0);
-                                                          this.handleValidation();
-                                                      }}*/
-                />
-              </div>
+            <div
+              className={"col-md-6 col-sm-6 col-xs-12"}
+              style={{ display: this.state.bank_name ? "block" : "none" }}
+            >
+              <InputWrapper
+                validation={BANK_NAME}
+                localState={this.state}
+                onChangeHandler={this.onChangeHandler}
+              />
             </div>
-            <div className={"col-md-6 col-sm-6 col-xs-12"}>
-              <div
-                className="form-group mb-3"
-                style={{ display: this.state.micr_code ? "block" : "none" }}
-              >
-                <label htmlFor={MICR_CODE.id} className="bmd-label-floating">
-                  {MICR_CODE.label}
-                </label>
-                <input
-                  type={MICR_CODE.type}
-                  className="form-control font_weight"
-                  pattern={regexTrim(MICR_CODE.pattern)}
-                  title={MICR_CODE.title}
-                  autoCapitalize={MICR_CODE.autoCapitalize}
-                  id={MICR_CODE.id}
-                  disabled={MICR_CODE.disabled}
-                  value={this.state.micr_code}
-                  // ref={ref => (this.obj.pan = ref)}
-                  // onBlur={() => this.validationErrorMsg()}
-                  onChange={e =>
-                    this.onChangeHandler(MICR_CODE, e.target.value)
-                  }
-                />
-              </div>
+            <div
+              className={"col-md-6 col-sm-6 col-xs-12"}
+              style={{ display: this.state.micr_code ? "block" : "none" }}
+            >
+              <InputWrapper
+                validation={MICR_CODE}
+                localState={this.state}
+                onChangeHandler={this.onChangeHandler}
+              />
             </div>
           </div>
           <div
@@ -516,25 +422,11 @@ class BankDetail extends Component {
             style={{ display: this.state.branch_name ? "block" : "none" }}
           >
             <div className={"col-sm-12"}>
-              <div className="form-group mb-3 ">
-                <label
-                  htmlFor={BRANCH_NAME.id}
-                  className={"bmd-label-floating"}
-                >
-                  {BRANCH_NAME.label}
-                </label>
-                <input
-                  type={BRANCH_NAME.type}
-                  className="form-control font_weight"
-                  // placeholder="Email"
-                  title={BRANCH_NAME.title}
-                  pattern={regexTrim(BRANCH_NAME.pattern)}
-                  id={BRANCH_NAME.id}
-                  required={BRANCH_NAME.required}
-                  disabled={BRANCH_NAME.disabled}
-                  value={this.state.branch_name}
-                />
-              </div>
+              <InputWrapper
+                validation={BRANCH_NAME}
+                localState={this.state}
+                onChangeHandler={this.onChangeHandler}
+              />
             </div>
           </div>
           {/*<div className="checkbox mt-5">
