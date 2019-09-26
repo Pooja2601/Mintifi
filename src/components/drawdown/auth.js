@@ -40,7 +40,8 @@ class MobileOtp extends Component {
     otp_reference_id: "",
     verified: false,
     mobile_correct: false,
-    missed_fields: true
+    missed_fields: true,
+    count: 0
   };
 
   _formSubmit = async e => {
@@ -65,11 +66,15 @@ class MobileOtp extends Component {
 
     if (resp.status === apiActions.ERROR_RESPONSE) {
       showAlert(resp.data.message, "warn");
-      this.setState({ submitted: false });
+      this.setState({ submitted: true });
     } else if (resp.status === apiActions.SUCCESS_RESPONSE) {
       // alertModule(resp.success.message, "warn");
-      this.setState({ otp_reference_id: resp.data.otp_reference_code }, () =>
-        DrawsetAuth(this.state)
+      this.setState(
+        {
+          otp_reference_id: resp.data.otp_reference_code,
+          count: this.state.count + 1
+        },
+        () => DrawsetAuth(this.state)
       );
       this.interval = setInterval(e => {
         this.setState({ timer: this.state.timer - 1 }, () => {
@@ -108,7 +113,7 @@ class MobileOtp extends Component {
 
     if (resp.status === apiActions.ERROR_RESPONSE) {
       showAlert(resp.data.message, "warn");
-      this.setState({ submitted: false });
+      this.setState({ submitted: true });
     } else if (resp.status === apiActions.SUCCESS_RESPONSE) {
       let that = this;
       this.setState({ verified: resp.data.is_otp_verified }, () => {
@@ -359,21 +364,36 @@ class MobileOtp extends Component {
             </label>
           </div>
 
-          <div className="mt-3 mb-2 text-center ">
-            <button
-              name="submit"
-              style={{
-                visibility: !this.state.submitted ? "visible" : "hidden"
-              }}
-              disabled={!(!this.state.missed_fields && !this.state.submitted)}
-              // value={"Send OTP"}
-              onClick={e => this._formSubmit(e)}
-              className="form-submit btn btn-raised greenButton"
-            >
-              Send OTP
-            </button>
-            <br />
+          <div className="mt-3 mb-2 text-center">
+            {this.state.count === 0 ? (
+              <button
+                name="submit"
+                style={{
+                  visibility: !this.state.submitted ? "visible" : "hidden"
+                }}
+                disabled={!(!this.state.missed_fields && !this.state.submitted)}
+                // value={"Send OTP"}
+                onClick={e => this._formSubmit(e)}
+                className="form-submit btn btn-raised greenButton"
+              >
+                Send OTP
+              </button>
+            ) : (
+              <button
+                name="submit"
+                style={{
+                  visibility: !this.state.submitted ? "visible" : "hidden"
+                }}
+                disabled={!(!this.state.missed_fields && !this.state.submitted)}
+                // value={"Send OTP"}
+                onClick={e => this._formSubmit(e)}
+                className="form-submit btn btn-raised greenButton"
+              >
+                Resend OTP
+              </button>
+            )}
 
+            <br />
             <button
               style={{
                 visibility: this.state.submitted ? "visible" : "hidden"

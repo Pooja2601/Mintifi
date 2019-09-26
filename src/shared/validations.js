@@ -1,6 +1,6 @@
 import React from "react";
-import {accountType} from "../shared/constants";
-import {BusinessType} from "../shared/constants";
+import { accountType } from "../shared/constants";
+import { BusinessType } from "../shared/constants";
 
 const phoneNumber = {
     type: "number",
@@ -114,136 +114,136 @@ const validationPersonalDetails = {
 };
 
 const validationAdharPan = {
-    PAN_NUMBER: {
-        slug: "pan",
-        type: "text",
-        title: "Please enter valid PAN number. E.g. AAAAA9999A",
-        pattern: /^[a-zA-Z]{3}[pP][a-zA-Z]([0-9]){4}[a-zA-Z]$/,
-        required: true,
-        autoCapitalize: "characters",
-        autoComplete: "off",
-        minLength: 10,
-        maxLength: 10,
-        error: "Invalid PAN Number",
-        id: "numberPAN"
-    },
-    ADHAR_NUMBER: {
-        slug: "adhar",
-        type: "number",
-        pattern: /^[0-9]{12}$/,
-        title: "Aadhaar is required",
-        autoComplete: "off",
-        required: false,
-        maxLength: 12,
-        minLength: 12,
-        error: "Invalid Adhar Number",
-        id: "numberAdhar"
-    }
+  PAN_NUMBER: {
+    slug: "pan",
+    type: "text",
+    title: "Please enter valid PAN number. E.g. AAAAA9999A",
+    pattern: /^[a-zA-Z]{3}[pP][a-zA-Z]([0-9]){4}[a-zA-Z]$/,
+    required: true,
+    autoCapitalize: "characters",
+    autoComplete: "off",
+    minLength: 10,
+    maxLength: 10,
+    error: "Invalid PAN Number",
+    id: "numberPAN"
+  },
+  ADHAR_NUMBER: {
+    slug: "adhar",
+    type: "number",
+    pattern: /^[0-9]{12}$/,
+    title: "Aadhaar is required",
+    autoComplete: "off",
+    required: false,
+    maxLength: 12,
+    minLength: 12,
+    error: "Invalid Adhar Number",
+    id: "numberAdhar"
+  }
 };
 
 const validationMobileOtp = {
-    MOBILE_NUMBER: {
-        slug: "mobile",
-        type: "number",
-        pattern: /^[0-9]{10}$/,
-        title: "Enter Mobile Number",
-        min: 1000000000,
-        max: 9999999999,
-        maxLength: 10,
-        minLength: 10,
-        required: true,
-        readOnly: true,
-        disabled: true,
-        error: "Invalid Mobile Number entered",
-        id: "numberMobile"
-    },
-    VERIFY_OTP: {
-        slug: "otp",
-        type: "number",
-        pattern: /^[0-9]{6}$/,
-        error: "Invalid OTP Number",
-        title: "This field is required",
-        id: "otpVerify",
-        min: 100000,
-        max: 999999,
-        maxLength: 6,
-        minLength: 6,
-        required: false
-    }
+  MOBILE_NUMBER: {
+    slug: "mobile",
+    type: "number",
+    pattern: /^[0-9]{10}$/,
+    title: "Enter Mobile Number",
+    min: 1000000000,
+    max: 9999999999,
+    maxLength: 10,
+    minLength: 10,
+    required: true,
+    readOnly: true,
+    disabled: true,
+    error: "Invalid Mobile Number entered",
+    id: "numberMobile"
+  },
+  VERIFY_OTP: {
+    slug: "otp",
+    type: "number",
+    pattern: /^[0-9]{6}$/,
+    error: "Invalid OTP Number",
+    title: "This field is required",
+    id: "otpVerify",
+    min: 100000,
+    max: 999999,
+    maxLength: 6,
+    minLength: 6,
+    required: false
+  }
 };
 
 const validationBank = {
-    ACCOUNT_NAME: {
-        type: "text",
-        id: "nameAccount",
-        slug: "acc_name",
-        title: "Enter Account Name",
-        error: "Invalid Account Name",
-        required: true,
-        pattern: /^[a-zA-Z]{2,}[^]+$/,
-        autoCapitalize: "characters"
-    },
-    ACCOUNT_NUMBER: {
-        type: "text",
-        id: "numberAccount",
-        slug: "acc_number",
-        title: "Enter Account Number",
-        error: "Invalid Account Number",
-        pattern: /^[0-9]{9,18}$/,
-        required: true
-    },
-    IFSC: {
-        type: "text",
-        id: "ifscCode",
-        title: "Enter IFSC Code",
-        error: "Invalid IFSC Code",
-        required: true,
-        slug: "ifsc_code",
-        autoCapitalize: "characters",
-        pattern: /[A-Za-z]{4}\d{7}$/
-    },
-    ACCOUNT_TYPE: {
-        type: "dropdown",
-        id: "accountType",
-        slug: "acc_type",
-        title: "Select Account Type",
-        error: "Select Account Type",
-        pattern: /^[a-z]{2,}$/,
-        options: accountType,
-        required: true
-    },
-    BANK_NAME: {
-        id: "nameBank",
-        type: "text",
-        title: "Enter Bank Name",
-        error: "Invalid Bank Name",
-        pattern: /^[a-zA-Z0-9]{2,}[^]+$/,
-        slug: "bank_name",
-        autoCapitalize: "characters",
-        disabled: true,
-        required: true
-    },
-    MICR_CODE: {
-        type: "text",
-        pattern: /^[0-9]{9}$/,
-        title: "Enter MICR Code",
-        error: "Invalid MICR Code",
-        autoCapitalize: "characters",
-        id: "micrCode",
-        slug: "micr_code",
-        required: false,
-        disabled: true
-    },
-    BRANCH_NAME: {
-        type: "text",
-        title: "Enter Branch Name",
-        error: "Invalid Branch Name",
-        id: "nameBranch",
-        slug: "branch_name",
-        pattern: /^[a-zA-Z0-9]{2,}[^]+$/,
-        required: true,
-        disabled: true
-    }
+  ACCOUNT_NAME: {
+    type: "text",
+    id: "nameAccount",
+    slug: "acc_name",
+    title: "Enter Account Name",
+    error: "Invalid Account Name",
+    required: true,
+    pattern: /^[a-zA-Z]{2,}[^]+$/,
+    autoCapitalize: "characters"
+  },
+  ACCOUNT_NUMBER: {
+    type: "text",
+    id: "numberAccount",
+    slug: "acc_number",
+    title: "Enter Account Number",
+    error: "Invalid Account Number",
+    pattern: /^[0-9]{9,18}$/,
+    required: true
+  },
+  IFSC: {
+    type: "text",
+    id: "ifscCode",
+    title: "Enter IFSC Code",
+    error: "Invalid IFSC Code",
+    required: true,
+    slug: "ifsc_code",
+    autoCapitalize: "characters",
+    pattern: /[A-Za-z]{4}\d{7}$/
+  },
+  ACCOUNT_TYPE: {
+    type: "dropdown",
+    id: "accountType",
+    slug: "acc_type",
+    title: "Select Account Type",
+    error: "Select Account Type",
+    pattern: /^[a-z]{2,}$/,
+    options: accountType,
+    required: true
+  },
+  BANK_NAME: {
+    id: "nameBank",
+    type: "text",
+    title: "Enter Bank Name",
+    error: "Invalid Bank Name",
+    pattern: /^[a-zA-Z0-9]{2,}[^]+$/,
+    slug: "bank_name",
+    autoCapitalize: "characters",
+    disabled: true,
+    required: true
+  },
+  MICR_CODE: {
+    type: "text",
+    pattern: /^[0-9]{9}$/,
+    title: "Enter MICR Code",
+    error: "Invalid MICR Code",
+    autoCapitalize: "characters",
+    id: "micrCode",
+    slug: "micr_code",
+    required: false,
+    disabled: true
+  },
+  BRANCH_NAME: {
+    type: "text",
+    title: "Enter Branch Name",
+    error: "Invalid Branch Name",
+    id: "nameBranch",
+    slug: "branch_name",
+    pattern: /^[a-zA-Z0-9]{2,}[^]+$/,
+    required: true,
+    disabled: true
+  }
 };
 
 const validationBusinessDetails = {
@@ -403,9 +403,9 @@ const validationBusinessDetails = {
 };
 
 export {
-    validationPersonalDetails,
-    validationAdharPan,
-    validationMobileOtp,
-    validationBusinessDetails,
-    validationBank
+  validationPersonalDetails,
+  validationAdharPan,
+  validationMobileOtp,
+  validationBusinessDetails,
+  validationBank
 };

@@ -271,7 +271,7 @@ class Offers extends Component {
                         <div> {val.roi}%</div>
                       </li>
                       <li className="mt-1 mr-0 p-2 d-flex justify-content-between align-items-center">
-                        <div>Tenor </div>
+                        <div>Tenure </div>
                         <div>{val.tenor} Months</div>
                       </li>
                       <li className="mt-1 mr-0 p-2 d-flex justify-content-between align-items-center">
