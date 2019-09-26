@@ -86,12 +86,12 @@ export const base64Logic = (payload, action) => {
         }
 
         /* try {
-                  base64 = newPayload
-                    ? JSON.parse(new Buffer(newPayload, "base64").toString("ascii"))
-                    : {};
-                } catch (e) {
-                  base64 = Base64.atob(newPayload);
-                } */
+                      base64 = newPayload
+                        ? JSON.parse(new Buffer(newPayload, "base64").toString("ascii"))
+                        : {};
+                    } catch (e) {
+                      base64 = Base64.atob(newPayload);
+                    } */
     }
     if (action === "encode") {
         newPayload = JSON.stringify(newPayload);
@@ -143,6 +143,19 @@ export const postMessage = obj => {
     }, 4000);
 };
 
+export const retrieveDate = dateString => {
+    let dt, date, month, year;
+    try {
+        let dt = new Date(dateString);
+        date = dt.getDate();
+        month = dt.getMonth() + 1;
+        year = dt.getFullYear();
+        return `${year}-${month}-${date}`;
+    } catch (e) {
+        return dateString;
+    }
+};
+
 // Self Explanatory
 export const checkObject = obj => {
     try {
@@ -175,15 +188,14 @@ export const fieldValidationHandler = props => {
             let regexTest = val[1].pattern.test(localState[val[1].slug]);
             if (!regexTest) {
                 // false : failed pattern
-                if (localState[val[1].slug])
-                    showAlert(val[1].error);
+                if (localState[val[1].slug]) showAlert(val[1].error);
                 return val[1];
-
             }
         }
-
     });
 
-    if (!lomo) showAlert();
+    if (!lomo) {
+        showAlert();
+    }
     return lomo; // true : for disabling
 };

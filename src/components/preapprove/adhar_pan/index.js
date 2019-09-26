@@ -22,6 +22,7 @@ import {validationAdharPan} from "./../../../shared/validations";
 const {PUBLIC_URL} = process.env;
 
 class AdharPan extends Component {
+
     static propTypes = {
         pan: PropTypes.string,
         adhar: PropTypes.string,
@@ -40,11 +41,11 @@ class AdharPan extends Component {
         missed_fields: true
     };
     gstDetails = {
-        companytype: "",
+        company_type: "",
         gst: "",
         bpan: "",
         avgtrans: "",
-        dealercode: "",
+        dealer_code: "",
         lgnm: "",
         tnc_consent: false
     };
@@ -160,9 +161,10 @@ class AdharPan extends Component {
     };
 
     //ToDo : Check the PAN with the backend AP for Confirmation of new user
-    _formSubmit(e) {
+    _formSubmit = async (e) => {
         e.preventDefault();
         this._panFetch();
+
     }
 
     _setGST = () => {
