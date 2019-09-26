@@ -44,6 +44,7 @@ class BusinessDetail extends Component {
         inc_date: new Date(1117608499),
         ownership: 'rented',
         pincode: '',
+        retailer_vintage: '',
         address1: '',
         address2: '',
         gst_correct: true,
@@ -122,43 +123,43 @@ class BusinessDetail extends Component {
 
             case COMPANY_TYPE:
                 this.tempState['optionSelected'] = value;
-                this.tempState['company_type'] = value.value;
+                this.tempState[field.slug] = value.value;
                 break;
             case GST_NUMBER:
                 if (value.length <= 15) {
                     let bpan = value.substr(2, 10);
-                    this.tempState['gst'] = value;
-                    this.tempState['bpan'] = bpan;
+                    this.tempState[field.slug] = value;
+                    this.tempState[PAN_NUMBER.slug] = bpan;
                     this.tempState['gst_correct'] = (GST_NUMBER.pattern).test(value)
                 }
                 break;
             case BUSINESS_PHONE:
                 if (value.length <= 10)
-                    this.tempState['business_phone'] = value;
+                    this.tempState[field.slug] = value;
                 break;
             case PAN_NUMBER:
                 if (value.length <= 10)
-                    this.tempState['bpan'] = value;
+                    this.tempState[field.slug] = value;
                 break;
             case INC_DATE:
-                this.tempState['inc_date'] = new Date(value);
+                this.tempState[field.slug] = new Date(value);
 
                 break;
             case PINCODE:
                 if (value.length <= 6)
-                    this.tempState['pincode'] = value;
+                    this.tempState[field.slug] = value;
                 break;
             case AVERAGE_TRANSACTION:
                 if (value.length <= 10 && !isNaN(value))
-                    this.tempState['avgtrans'] = value;
+                    this.tempState[field.slug] = value;
                 break;
             case DEALER_CODE:
                 if (value.length <= 10)
-                    this.tempState['dealer_code'] = value;
+                    this.tempState[field.slug] = value;
                 break;
             case RETAILER_VINTAGE:
                 if (value.length <= 4)
-                    this.tempState['retailerVintage'] = value;
+                    this.tempState[field.slug] = value;
                 break;
             default:
                 this.tempState[field.slug] = value;
