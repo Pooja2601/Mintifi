@@ -309,7 +309,7 @@ const validationBusinessDetails = {
     readOnly: true,
     disabled: true,
     error: "Invalid Pan Number",
-    label: "PAN Number *"
+    label: "PAN Number"
   },
   AVERAGE_TRANSACTION: {
     slug: "avgtrans",
