@@ -8,7 +8,7 @@ import {Link, withRouter} from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {fetchAPI, apiActions, postAPI} from "../../../api";
-import {checkObject, fieldValidationHandler, regexTrim} from "../../../shared/common_logic";
+import {checkObject, fieldValidationHandler, regexTrim, retrieveDate} from "../../../shared/common_logic";
 
 import {validationPersonalDetails} from "../../../shared/validations";
 
@@ -161,7 +161,7 @@ class PersonalDetail extends Component {
         // fields is Equivalent to F_NAME , L_NAME... thats an object
 
         // ToDo : comment those that are not required
-        const {MOBILE, PINCODE} = validationPersonalDetails;
+        const {MOBILE, PINCODE, DOB} = validationPersonalDetails;
 
         this.tempState = Object.assign({}, this.state);
         switch (field) {
@@ -176,6 +176,10 @@ class PersonalDetail extends Component {
                     this.tempState['pincode'] = value;
                     value.length === 6 && this._pincodeFetch(value);
                 }
+                break;
+            case DOB:
+                // this.tempState['dob'] = retrieveDate(value);
+                this.tempState['dob'] = new Date(value);
                 break;
             default:
                 this.tempState[field.slug] = value;
@@ -409,6 +413,7 @@ class PersonalDetail extends Component {
                                         pattern={regexTrim(DOB.pattern)}
                                         scrollableYearDropdown
                                         showMonthDropdown
+                                        dropdownMode={"scroll"}
                                         required={DOB.required}
                                         showYearDropdown
                                         dateFormat={DOB.dateFormat}

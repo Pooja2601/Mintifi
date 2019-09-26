@@ -162,11 +162,11 @@ class Auth extends Component {
                 if (business_details === Object(business_details) && business_details[0].pan) {
                     let businessDetails = {
                         lgnm: business_details[0].business_name,
-                        companytype: business_details[0].business_type,
+                        company_type: business_details[0].business_type,
                         gst: business_details[0].business_gst,
                         bpan: business_details[0].business_pan,
                         avgtrans: '',
-                        dealercode: '',
+                        dealer_code: '',
                     };
                     setBusinessDetail(businessDetails);
                     // console.log(businessObj);
