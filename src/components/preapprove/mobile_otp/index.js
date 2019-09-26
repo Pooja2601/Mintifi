@@ -205,8 +205,9 @@ class MobileOtp extends Component {
         } else history.push(`${PUBLIC_URL}/preapprove/token`);
     }
 
+
     componentDidMount() {
-        const {adharObj} = this.props;
+        const {adharObj, changeLoader} = this.props;
 
         let state = this.state,
             that = this;
@@ -220,6 +221,7 @@ class MobileOtp extends Component {
         }, 500);
 
         // else setAdharManual(this.state);
+        changeLoader(false);
     }
 
     render() {
@@ -244,7 +246,8 @@ class MobileOtp extends Component {
                                     Mobile Number *
                                 </label>
                                 <div className={"input-group"}>
-                                    <div className="input-group-prepend">
+                                    <div className="input-group-prepend phoneDisplay">
+
                     <span className="input-group-text" id="basic-addon3">
                       +91
                     </span>
@@ -326,6 +329,7 @@ class MobileOtp extends Component {
                         </div>
                     </div>
 
+
                     <div className={"text-center"}>
                         <label
                             className="resendOTPLabel"
@@ -347,6 +351,7 @@ class MobileOtp extends Component {
                                         ? "visible"
                                         : "hidden"
                             }}
+                            // disabled={}
                             // value={"Send OTP"}
                             onClick={e => this._formSubmit(e)}
                             className="form-submit btn btn-raised greenButton m-auto d-block"
@@ -357,20 +362,23 @@ class MobileOtp extends Component {
                         <button
                             style={{
                                 visibility:
-                                    this.state.loading && this.state.otp.length === 6
+                                    this.state.loading && this.state.submitted
                                         ? "visible"
                                         : "hidden"
                             }}
+                            disabled={this.state.loading && this.state.otp.length !== 6}
                             onClick={e => this._verifyOTP(e)}
-                            className="btn btn-raised greenButton text-center m-auto d-block"
+                            className="btn btn-raised greenButton text-center m-auto d-block marginTopBottom"
                         >
                             Verify OTP
                         </button>
                     </div>
                 </div>
+                
             </>
         );
     }
+
 }
 
 const mapStateToProps = state => ({
