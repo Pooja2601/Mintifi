@@ -36,8 +36,8 @@ const validationPersonalDetails = {
   },
   MOBILE: {
     slug: "mobile",
-    type: "text",
-    pattern: /^(?:(?!e)[a-z])+$/i,
+    type: "number",
+    pattern: /^[0-9]{10}$/,
     title: "Please enter Mobile Number",
     error: "Invalid Mobile Number",
     required: true,
