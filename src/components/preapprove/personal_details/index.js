@@ -215,7 +215,7 @@ class PersonalDetail extends Component {
                     <div className={"row"}>
                         <div className={"col-md-4 col-sm-4 col-xs-12"}>
                             <div className="form-group mb-3 ">
-                                <label htmlFor={F_NAME.id} className={"bmd-label-floating"}>First Name *</label>
+                                <label htmlFor={F_NAME.id} className={"bmd-label-floating"}>{F_NAME.label}</label>
                                 <input
                                     type={F_NAME.type}
                                     className="form-control font_weight"
@@ -233,7 +233,7 @@ class PersonalDetail extends Component {
                         </div>
                         <div className={"col-md-4 col-sm-4 col-xs-12"}>
                             <div className="form-group mb-3 ">
-                                <label htmlFor={M_NAME.id} className={"bmd-label-floating"}>Middle Name </label>
+                                <label htmlFor={M_NAME.id} className={"bmd-label-floating"}>{M_NAME.label} </label>
                                 <input
                                     type={M_NAME.type}
                                     className="form-control font_weight"
@@ -250,7 +250,7 @@ class PersonalDetail extends Component {
                         </div>
                         <div className={"col-md-4 col-sm-4 col-xs-12"}>
                             <div className="form-group mb-3 ">
-                                <label htmlFor={L_NAME.id} className={"bmd-label-floating"}>Last Name *</label>
+                                <label htmlFor={L_NAME.id} className={"bmd-label-floating"}>{L_NAME.label}</label>
                                 <input
                                     type={L_NAME.type}
                                     className="form-control font_weight"
@@ -271,8 +271,7 @@ class PersonalDetail extends Component {
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3">
                                 <label htmlFor={MOBILE.id}
-                                       className={"bmd-label-floating"}>Mobile
-                                    Number *</label>
+                                       className={"bmd-label-floating"}>{MOBILE.label}</label>
                                 <div className={"input-group"}>
                                     <div className="input-group-prepend phoneDisplay">
                   <span className="input-group-text" id="basic-addon3">
@@ -296,7 +295,7 @@ class PersonalDetail extends Component {
                         </div>
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3 ">
-                                <label htmlFor={EMAIL.id} className={"bmd-label-floating"}>Email ID *</label>
+                                <label htmlFor={EMAIL.id} className={"bmd-label-floating"}>{EMAIL.label}</label>
                                 <input
                                     type={EMAIL.type}
                                     className="form-control font_weight"
@@ -317,7 +316,7 @@ class PersonalDetail extends Component {
                     <div className={"row"}>
                         <div className={"col-sm-6 col-xs-12 col-md-6 text-left"}>
                             <label htmlFor={GENDER.id} className="d-block bmd-label">
-                                Gender *
+                              {GENDER.label}
                             </label>
                             <div
                                 className="btn-group ToggleBtn"
@@ -357,7 +356,7 @@ class PersonalDetail extends Component {
                         </div>
                         <div className={"col-sm-6 col-xs-12 col-md-6 text-left"}>
                             <label htmlFor={OWNERSHIP.id} className="d-block bmd-label">
-                                Ownership *
+                                {OWNERSHIP.label}
                             </label>
                             <div
                                 className="btn-group ToggleBtn"
@@ -403,7 +402,7 @@ class PersonalDetail extends Component {
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3">
                                 <label htmlFor={DOB.id} className="bmd-label-floating">
-                                    Date of Birth
+                                    {DOB.label}
                                 </label>
                                 <div className={'d-block'}>
                                     <DatePicker
@@ -426,7 +425,7 @@ class PersonalDetail extends Component {
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3 ">
                                 <label htmlFor={ADDRESS1.id} className="bmd-label-floating">
-                                    Address 1 *
+                                    {ADDRESS1.label}
                                 </label>
                                 <input
                                     type={ADDRESS1.type}
@@ -451,7 +450,7 @@ class PersonalDetail extends Component {
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3">
                                 <label htmlFor={PINCODE.id} className="bmd-label-floating">
-                                    Pincode *
+                                   {PINCODE.label}
                                 </label>
                                 <input
                                     type={PINCODE.type}
@@ -474,7 +473,7 @@ class PersonalDetail extends Component {
                             <div className="form-group mb-3 ">
 
                                 <label htmlFor={ADDRESS2.id} className="bmd-label-floating">
-                                    Address 2
+                                  {ADDRESS2.label}
 
                                 </label>
                                 <input
