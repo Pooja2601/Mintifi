@@ -8,8 +8,12 @@ import {PrivacyPolicy, TnCPolicy} from "../../../shared/policy";
 import Select from "react-select";
 // import DatePicker from "react-datepicker";
 // import "react-datepicker/dist/react-datepicker.css";
-import {checkObject, regexTrim, fieldValidationHandler} from "../../../shared/common_logic";
-import {validationBusinessDetails} from "./../../../shared/validations";
+import {checkObject, regexTrim, fieldValidationHandler, retrieveDate} from "../../../shared/common_logic";
+import {validationBusinessDetails, validationPersonalDetails} from "./../../../shared/validations";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
+const {COMPANY_NAME, COMPANY_TYPE, GST_NUMBER, PAN_NUMBER, AVERAGE_TRANSACTION, DEALER_CODE, BUSINESS_EMAIL, BUSINESS_PHONE, NO_OF_FOUNDERS, NO_OF_EMPLOYEES, OWNERSHIP, ADDRESS1, ADDRESS2, PINCODE, INC_DATE, RETAILER_VINTAGE} = validationBusinessDetails;
 
 const {PUBLIC_URL} = process.env;
 
@@ -23,20 +27,29 @@ class BusinessDetail extends Component {
     };
 
     state = {
-        companytype: '',
+        company_name: '',
+        company_type: '',
         gst: '',
         bpan: '',
         avgtrans: '',
-        dealercode: '',
+        dealer_code: '',
         missed_fields: true,
-        lgnm: '',
+        // lgnm: '', // company_name
         tnc_consent: false,
         tncModal: false,
         ctrerror: 4,
         optionSelected: {value: '', label: "Select Company Type"},
+        business_email: '',
+        business_phone: '',
+        inc_date: new Date(1117608499),
+        ownership: 'rented',
+        pincode: '',
+        address1: '',
+        address2: '',
+        gst_correct: true,
     };
 
-    validate = {companytype: false, gst: false, avgtrans: false, dealercode: false};
+    // validate = {company_type: false, gst: false, avgtrans: false, dealer_code: false};
 
     RenderModalTnC = () => {
         return (
@@ -93,7 +106,7 @@ class BusinessDetail extends Component {
             validations: validationBusinessDetails,
             localState: this.state
         });
-
+        // console.log(lomo)
         this.setState({missed_fields: lomo}); // true : for disabling
     }
 
@@ -104,35 +117,48 @@ class BusinessDetail extends Component {
         const {setBusinessDetail} = this.props;
         // fields is Equivalent to F_NAME , L_NAME... thats an object
 
-        // ToDo : comment those that are not required
-        const {COMPANY_NAME, COMPANY_TYPE, GST_NUMBER, PAN_NUMBER, AVERAGE_TRANSACTION, DEALER_CODE} = validationBusinessDetails;
-
         this.tempState = Object.assign({}, this.state);
         switch (field) {
 
             case COMPANY_TYPE:
                 this.tempState['optionSelected'] = value;
-                this.tempState['companytype'] = value.value;
+                this.tempState['company_type'] = value.value;
                 break;
             case GST_NUMBER:
                 if (value.length <= 15) {
                     let bpan = value.substr(2, 10);
                     this.tempState['gst'] = value;
                     this.tempState['bpan'] = bpan;
+                    this.tempState['gst_correct'] = (GST_NUMBER.pattern).test(value)
                 }
+                break;
+            case BUSINESS_PHONE:
+                if (value.length <= 10)
+                    this.tempState['business_phone'] = value;
                 break;
             case PAN_NUMBER:
                 if (value.length <= 10)
                     this.tempState['bpan'] = value;
                 break;
+            case INC_DATE:
+                this.tempState['inc_date'] = new Date(value);
+
+                break;
+            case PINCODE:
+                if (value.length <= 6)
+                    this.tempState['pincode'] = value;
+                break;
             case AVERAGE_TRANSACTION:
                 if (value.length <= 10 && !isNaN(value))
                     this.tempState['avgtrans'] = value;
-
                 break;
             case DEALER_CODE:
                 if (value.length <= 10)
-                    this.tempState['dealercode'] = value;
+                    this.tempState['dealer_code'] = value;
+                break;
+            case RETAILER_VINTAGE:
+                if (value.length <= 4)
+                    this.tempState['retailerVintage'] = value;
                 break;
             default:
                 this.tempState[field.slug] = value;
@@ -162,12 +188,13 @@ class BusinessDetail extends Component {
     }
 
     componentDidMount() {
-        const {businessObj, payload, setBusinessDetail} = this.props;
+        const {businessObj, payload, setBusinessDetail, gstProfile} = this.props;
         // console.log(adharObj);
-
+        let company_name;
         const {GST_NUMBER} = validationBusinessDetails;
 
         if (checkObject(businessObj)) {
+            company_name = businessObj.company_name ? businessObj.company_name : '';
             this.setState(businessObj, () => this.onChangeHandler(GST_NUMBER, businessObj.gst));
         } else setBusinessDetail(this.state);
 
@@ -179,8 +206,13 @@ class BusinessDetail extends Component {
                       });
                       this.setState({gst: gstProfile.gstin, lgnm: gstProfile.lgnm});
                   }*/
+            if (checkObject(gstProfile))
+                company_name = gstProfile.lgnm;
             if (checkObject(payload)) {
-                this.setState({dealercode: payload.distributor_dealer_code}, () => setBusinessDetail(this.state));
+                this.setState({
+                    dealer_code: payload.distributor_dealer_code,
+                    company_name
+                }, () => setBusinessDetail(this.state));
             }
 
         } catch (e) {
@@ -190,11 +222,44 @@ class BusinessDetail extends Component {
         setTimeout(() => this.validationHandler(), 1000);
     }
 
+    // ToDo : Need to make it feasible in future
+    _customButtonValidation = () => {
+        // Negate for disabling feature
+        let result;
+        const {payload, showAlert} = this.props
+        const {tnc_consent, gst_correct, missed_fields, address1, pincode, gst, retailerVintage} = this.state;
+        if (!missed_fields && tnc_consent) {
+            if (gst_correct)
+                result = true;
+            else {
+                if (pincode && address1) {
+                    result = (PINCODE.pattern.test(pincode) && ADDRESS1.pattern.test(address1));
+                    !PINCODE.pattern.test(pincode) && showAlert("Invalid Pincode entered");
+                    !ADDRESS1.pattern.test(address1) && showAlert("Invalid Address-1 entered");
+                } else {
+                    showAlert("Pincode or Address is Missing");
+                    result = false
+                }
+
+            }
+            if (!payload.retailer_onboarding_date)
+                if (retailerVintage) {
+                    result =  RETAILER_VINTAGE.pattern.test(retailerVintage);
+                    !RETAILER_VINTAGE.pattern.test(retailerVintage) && showAlert("Invalid Vintage (in months)");
+                } else {
+                    result = false;
+                    showAlert("Missing Vintage (in months)");
+                }
+
+
+        } else result = false;
+        // Negate for disabling feature on submit button
+        return !result;
+    };
 
     render() {
 
-        const gstProfile = this.props.gstProfile;
-        const {COMPANY_NAME, COMPANY_TYPE, GST_NUMBER, PAN_NUMBER, AVERAGE_TRANSACTION, DEALER_CODE} = validationBusinessDetails
+        const {businessObj, payload, setBusinessDetail, gstProfile} = this.props;
         return (
             <>
                 {/*<Link to={`${PUBLIC_URL}/preapprove/personaldetails`} className={"btn btn-link"}>Go Back </Link>*/}
@@ -211,26 +276,32 @@ class BusinessDetail extends Component {
                     onSubmit={e => this._formSubmit(e)}
                 >
                     <div className={"row"}
-                         style={{visibility: (checkObject(gstProfile) && gstProfile.lgnm) ? 'visible' : 'hidden'}}>
+                        // style={{visibility: (checkObject(gstProfile) && gstProfile.lgnm) ? 'visible' : 'hidden'}}
+                    >
                         <div className={"col-md-12 col-sm-12 col-xs-12"}>
-                            {/*<h5 className={"text-center"}>{(gstProfile === Object(gstProfile)) ? gstProfile.lgnm : ''}</h5>*/}
-                            <input
-                                type={COMPANY_NAME.type}
-                                className="form-control font_weight p-2"
-                                title={COMPANY_NAME.title}
-                                autoCapitalize={COMPANY_NAME.autoCapitalize}
-                                id={COMPANY_NAME.id}
-                                required={COMPANY_NAME.required}
-                                value={(checkObject(gstProfile)) ? gstProfile.lgnm : ''}
-                                readOnly={COMPANY_NAME.readOnly}
-                                disabled={COMPANY_NAME.disabled}
-                            />
+                            <div className="form-group mb-3">
+                                <label htmlFor={COMPANY_NAME.id} className={"bmd-label-floating"}>Company Legal Name
+                                    *</label>
+                                {/*<h5 className={"text-center"}>{(gstProfile === Object(gstProfile)) ? gstProfile.lgnm : ''}</h5>*/}
+                                <input
+                                    type={COMPANY_NAME.type}
+                                    className="form-control font_weight p-2"
+                                    title={COMPANY_NAME.title}
+                                    autoCapitalize={COMPANY_NAME.autoCapitalize}
+                                    // placeholder={COMPANY_NAME.title}
+                                    id={COMPANY_NAME.id}
+                                    required={COMPANY_NAME.required}
+                                    value={this.state.company_name}
+                                    disabled={COMPANY_NAME.disabled}
+                                    onChange={e => this.onChangeHandler(COMPANY_NAME, e.target.value)}
+                                />
+                            </div>
                         </div>
                     </div>
                     <div className={"row"}>
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3">
-                                <label htmlFor="companyType" className={"bmd-label-floating"}>Company Type *</label>
+                                <label htmlFor={COMPANY_TYPE.id} className={"bmd-label-floating"}>Company Type *</label>
                                 <Select options={COMPANY_TYPE.options}
                                         required={COMPANY_TYPE.required}
                                         id={COMPANY_TYPE.id}
@@ -241,11 +312,11 @@ class BusinessDetail extends Component {
                                 />
                                 {/*<select style={{fontWeight: 600}}
                                         title="Please select Company Type"
-                                        value={this.state.companytype} required={true}
+                                        value={this.state.company_type} required={true}
                                         onChange={(e) => {
                                             let {value} = e.target;
-                                            this.setState({companytype: value}, () => this.props.setBusinessDetail(this.state));
-                                            this.validate.companytype = (value.length > 0);
+                                            this.setState({company_type: value}, () => this.props.setBusinessDetail(this.state));
+                                            this.validate.company_type = (value.length > 0);
                                             this.handleValidation();
                                         }}
                                         onBlur={() => this.validationErrorMsg()}
@@ -262,7 +333,7 @@ class BusinessDetail extends Component {
                         </div>
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3">
-                                <label htmlFor="numberGST" className={"bmd-label-floating"}>GST Number *</label>
+                                <label htmlFor="numberGST" className={"bmd-label-floating"}>GST Number </label>
                                 <input
                                     type={GST_NUMBER.type}
                                     className="form-control font_weight"
@@ -278,9 +349,319 @@ class BusinessDetail extends Component {
                                 />
                             </div>
                         </div>
+
                     </div>
 
-                    {(this.state.companytype !== "proprietorship" && this.state.companytype !== "") ? (
+                    <div className={"row"}>
+
+                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
+                            <div className="form-group mb-3">
+                                <label htmlFor={INC_DATE.id} className="bmd-label-floating">
+                                    Date of incorporation *
+                                </label>
+                                <div className={'d-block'}>
+                                    <DatePicker
+                                        className="form-control font_weight"
+                                        // placeholderText={"Date of Birth"}
+                                        selected={new Date(this.state.inc_date)}
+                                        id={INC_DATE.id}
+                                        pattern={regexTrim(INC_DATE.pattern)}
+                                        scrollableYearDropdown
+                                        dropdownMode={"scroll"}
+                                        showMonthDropdown
+                                        required={INC_DATE.required}
+                                        showYearDropdown
+                                        dateFormat={INC_DATE.dateFormat}
+                                        onChange={(date) => this.onChangeHandler(INC_DATE, date)}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div className={"col-sm-6 col-xs-12 col-md-6 text-left"}>
+                            <label htmlFor={OWNERSHIP.id} className="d-block bmd-label">
+                                Ownership *
+                            </label>
+                            <div
+                                className="btn-group ToggleBtn"
+                                id={OWNERSHIP.id}
+                                role="groupProperty"
+                                aria-label="..."
+                            >
+
+                                <button
+                                    type={OWNERSHIP.type}
+                                    className="btn btn-default btnLeft"
+                                    onClick={() => this.onChangeHandler(OWNERSHIP, 'rented')}
+                                    style={{
+                                        border:
+                                            this.state.ownership === "rented" && "2px solid #00bfa5",
+                                    }}
+                                >
+                                    <i
+                                        className="fa fa-building"
+                                    />
+                                    <small>Rented</small>
+                                </button>
+                                <button
+                                    type={OWNERSHIP.type}
+                                    className="btn btn-default btnRight"
+                                    onClick={() => this.onChangeHandler(OWNERSHIP, 'owned')}
+                                    style={{
+                                        border:
+                                            this.state.ownership === "owned" && "2px solid #00bfa5",
+                                    }}
+                                >
+                                    <i
+                                        className="fa fa-home"
+                                    />
+                                    <small>Owned</small>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className={"row"}>
+                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
+                            <div className="form-group mb-3 ">
+                                <label htmlFor={AVERAGE_TRANSACTION.id} className="bmd-label-floating">
+                                    Average Monthly Trans.
+                                </label>
+                                <input
+                                    type={AVERAGE_TRANSACTION.type}
+                                    className="form-control font_weight"
+                                    // placeholder="Pincode"
+                                    title={AVERAGE_TRANSACTION.title}
+                                    pattern={regexTrim(AVERAGE_TRANSACTION.pattern)}
+                                    autoCapitalize={AVERAGE_TRANSACTION.autoCapitalize}
+                                    id={AVERAGE_TRANSACTION.id}
+                                    required={AVERAGE_TRANSACTION.required}
+                                    value={this.state.avgtrans}
+                                    // ref={ref => (this.obj.pan = ref)}
+                                    onChange={(e) => this.onChangeHandler(AVERAGE_TRANSACTION, e.target.value)}
+                                />
+                            </div>
+                        </div>
+
+                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
+                            <div className="form-group mb-3">
+                                <label htmlFor={DEALER_CODE.id} className="bmd-label-floating">
+                                    Dealer Code
+                                </label>
+                                <input
+                                    type={DEALER_CODE.type}
+                                    className="form-control font_weight"
+                                    // placeholder="Pincode"
+                                    pattern={regexTrim(DEALER_CODE.pattern)}
+                                    title={DEALER_CODE.title}
+                                    autoCapitalize={DEALER_CODE.autoCapitalize}
+                                    id={DEALER_CODE.id}
+                                    required={DEALER_CODE.required}
+                                    value={this.state.dealer_code}
+                                    // ref={ref => (this.obj.pan = ref)}
+                                    onChange={(e) => this.onChangeHandler(DEALER_CODE, e.target.value)}
+
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className={"row"}>
+                        {(!payload.retailer_onboarding_date) ?
+                            <div className={"col-md-6 col-sm-6 col-xs-12"}>
+                                <div className="form-group mb-3 ">
+                                    <label htmlFor={RETAILER_VINTAGE.id} className="bmd-label-floating">
+                                        Retailer Vintage *
+                                    </label>
+                                    <input
+                                        type={RETAILER_VINTAGE.type}
+                                        className="form-control font_weight"
+                                        // placeholder="Pincode"
+                                        title={RETAILER_VINTAGE.title}
+                                        pattern={regexTrim(RETAILER_VINTAGE.pattern)}
+
+                                        id={RETAILER_VINTAGE.id}
+                                        required={RETAILER_VINTAGE.required}
+                                        value={this.state.retailerVintage}
+
+                                        // ref={ref => (this.obj.pan = ref)}
+                                        onChange={(e) => this.onChangeHandler(RETAILER_VINTAGE, e.target.value)}
+                                    />
+                                </div>
+                            </div> : <></>}
+                    </div>
+                    {(this.state.gst_correct === false || this.state.gst === "") ? <>
+                        <div className={"row"}>
+
+                            <div className={"col-md-6 col-sm-6 col-xs-12"}>
+                                <div className="form-group mb-3">
+                                    <label htmlFor="business_email" className="bmd-label-floating">
+                                        Business Email
+                                    </label>
+                                    <input
+                                        type={BUSINESS_EMAIL.type}
+                                        className="form-control font_weight"
+                                        pattern={regexTrim(BUSINESS_EMAIL.pattern)}
+                                        title={BUSINESS_EMAIL.title}
+                                        autoCapitalize={BUSINESS_EMAIL.autoCapitalize}
+                                        id={BUSINESS_EMAIL.id}
+                                        required={BUSINESS_EMAIL.required}
+                                        value={this.state.business_email}
+                                        // ref={ref => (this.obj.pan = ref)}
+                                        onChange={(e) => this.onChangeHandler(BUSINESS_EMAIL, e.target.value)}
+
+                                    />
+                                </div>
+                            </div>
+                            <div className={"col-md-6 col-sm-6 col-xs-12"}>
+                                <div className="form-group mb-3">
+                                    <label htmlFor={BUSINESS_PHONE.id}
+                                           className={"bmd-label-floating"}>Business Phone </label>
+                                    <div className={"input-group"}>
+                                        <div className="input-group-prepend phoneDisplay">
+                                        <span className="input-group-text" id="basic-addon3">
+                                            +91
+                                        </span>
+                                        </div>
+                                        <input
+                                            type={BUSINESS_PHONE.type}
+                                            className="form-control font_weight prependInput"
+                                            // placeholder="10 digit Mobile Number"
+                                            name="url"
+                                            disabled={this.state.submitted}
+                                            min={BUSINESS_PHONE.min}
+                                            max={BUSINESS_PHONE.max}
+                                            maxLength={BUSINESS_PHONE.maxLength}
+                                            minLength={BUSINESS_PHONE.minLength}
+                                            pattern={regexTrim(BUSINESS_PHONE.pattern)}
+                                            title={BUSINESS_PHONE.title}
+                                            id={BUSINESS_PHONE.id}
+                                            required={BUSINESS_PHONE.required}
+                                            // readOnly={BUSINESS_PHONE.readOnly}
+                                            value={this.state.business_phone}
+                                            // ref={ref => (this.obj.number = ref)}
+                                            onChange={e =>
+                                                this.onChangeHandler(BUSINESS_PHONE, e.target.value)
+                                            }
+                                            aria-describedby="basic-addon3"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className={"row"}>
+
+                            <div className={"col-md-6 col-sm-6 col-xs-12"}>
+                                <div className="form-group mb-3">
+                                    <label htmlFor="no_of_founders" className={"bmd-label-floating"}>Number of
+                                        Founders</label>
+                                    <input
+                                        type={NO_OF_FOUNDERS.type}
+                                        className="form-control font_weight"
+                                        pattern={regexTrim(NO_OF_FOUNDERS.pattern)}
+                                        title={NO_OF_FOUNDERS.title}
+                                        id={NO_OF_FOUNDERS.id}
+                                        required={NO_OF_FOUNDERS.required}
+                                        value={this.state.no_of_founders}
+                                        onChange={(e) => this.onChangeHandler(NO_OF_FOUNDERS, e.target.value)}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className={"col-md-6 col-sm-6 col-xs-12"}>
+                                <div className="form-group mb-3">
+                                    <label htmlFor="no_of_employees" className={"bmd-label-floating"}>Number of
+                                        Employees</label>
+                                    <input
+                                        type={NO_OF_EMPLOYEES.type}
+                                        className="form-control font_weight"
+                                        pattern={regexTrim(NO_OF_EMPLOYEES.pattern)}
+                                        title={NO_OF_EMPLOYEES.title}
+                                        id={NO_OF_EMPLOYEES.id}
+                                        required={NO_OF_EMPLOYEES.required}
+                                        value={this.state.no_of_employees}
+                                        onChange={(e) => this.onChangeHandler(NO_OF_EMPLOYEES, e.target.value)}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div className={"row"}>
+                            <div className={"col-md-6 col-sm-6 col-xs-12"}>
+                                <div className="form-group mb-3 ">
+                                    <label htmlFor={ADDRESS1.id} className="bmd-label-floating">
+                                        Address 1 *
+                                    </label>
+                                    <input
+                                        type={ADDRESS1.type}
+                                        className="form-control font_weight"
+                                        // placeholder="Pincode"
+                                        title={ADDRESS1.title}
+                                        pattern={regexTrim(ADDRESS1.pattern)}
+                                        autoCapitalize={ADDRESS1.autoCapitalize}
+                                        id={ADDRESS1.id}
+                                        required={ADDRESS1.required}
+                                        value={this.state.address1}
+                                        // ref={ref => (this.obj.pan = ref)}
+                                        onChange={(e) => this.onChangeHandler(ADDRESS1, e.target.value)}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className={"col-md-6 col-sm-6 col-xs-12"}>
+                                <div className="form-group mb-3">
+                                    <label htmlFor={PINCODE.id} className="bmd-label-floating">
+                                        Pincode *
+                                    </label>
+                                    <input
+                                        type={PINCODE.type}
+                                        className="form-control font_weight"
+                                        // placeholder="Pincode"
+                                        pattern={regexTrim(PINCODE.pattern)}
+                                        title={PINCODE.title}
+                                        autoCapitalize={PINCODE.autoCapitalize}
+                                        id={PINCODE.id}
+                                        required={PINCODE.required}
+                                        value={this.state.pincode}
+                                        // ref={ref => (this.obj.pan = ref)}
+                                        onChange={(e) => this.onChangeHandler(PINCODE, e.target.value)}
+
+                                    />
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div className={"row"}>
+                            <div className={"col-md-6 col-sm-6 col-xs-12"}>
+                                <div className="form-group mb-3 ">
+
+                                    <label htmlFor={ADDRESS2.id} className="bmd-label-floating">
+                                        Address 2
+                                    </label>
+                                    <input
+                                        type={ADDRESS2.type}
+                                        className="form-control font_weight"
+                                        // placeholder="Pincode"
+
+                                        title={ADDRESS2.title}
+                                        autoCapitalize={ADDRESS2.autoCapitalize}
+                                        pattern={regexTrim(ADDRESS2.pattern)}
+                                        id={ADDRESS2.id}
+                                        required={ADDRESS2.required}
+                                        value={this.state.address2}
+                                        // ref={ref => (this.obj.pan = ref)}
+                                        onChange={(e) => this.onChangeHandler(ADDRESS2, e.target.value)}
+
+                                    />
+                                </div>
+                            </div>
+
+                        </div>
+                    </> : <></>
+                    }
+
+
+                    {/*    {(this.state.company_type !== "proprietorship" && this.state.company_type !== "") ? (
                         <div className="form-group mb-3 ">
                             <label htmlFor="numberPAN" className={"bmd-label-floating"}>Business PAN *</label>
                             <input
@@ -299,59 +680,9 @@ class BusinessDetail extends Component {
                                 onChange={(e) => this.onChangeHandler(PAN_NUMBER, e.target.value)}
                             />
                         </div>
-                    ) : <></>}
+                    ) : <></>}*/}
 
 
-                    <div className={"row"}>
-                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
-                            <div className="form-group mb-3">
-                                <label htmlFor="avgTrans" className="bmd-label-floating">
-                                    Average Monthly Transactions *
-                                </label>
-                                <div className={"input-group"}>
-                                    <div className="input-group-prepend">
-                  <span className="input-group-text" id="basic-addon3">
-                    ₹
-                  </span>
-                                    </div>
-                                    <input
-                                        type={AVERAGE_TRANSACTION.type}
-                                        className="form-control font_weight prependInput"
-                                        pattern={regexTrim(AVERAGE_TRANSACTION.pattern)}
-                                        title={AVERAGE_TRANSACTION.title}
-                                        autoCapitalize={AVERAGE_TRANSACTION.autoCapitalize}
-                                        id={AVERAGE_TRANSACTION.id}
-                                        required={AVERAGE_TRANSACTION.required}
-                                        value={this.state.avgtrans}
-                                        style={{marginLeft: '-0.5rem'}}
-                                        // ref={ref => (this.obj.pan = ref)}
-                                        onChange={(e) => this.onChangeHandler(AVERAGE_TRANSACTION, e.target.value)}
-
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
-                            <div className="form-group mb-3">
-                                <label htmlFor="dealerCode" className="bmd-label-floating">
-                                    Dealer Code
-                                </label>
-                                <input
-                                    type={DEALER_CODE.type}
-                                    className="form-control font_weight"
-                                    pattern={regexTrim(DEALER_CODE.pattern)}
-                                    title={DEALER_CODE.title}
-                                    autoCapitalize={DEALER_CODE.autoCapitalize}
-                                    id={DEALER_CODE.id}
-                                    required={DEALER_CODE.required}
-                                    value={this.state.dealercode}
-                                    // ref={ref => (this.obj.pan = ref)}
-                                    onChange={(e) => this.onChangeHandler(DEALER_CODE, e.target.value)}
-
-                                />
-                            </div>
-                        </div>
-                    </div>
                     <div className=" mt-5">
 
                         <label className="main">I accept the <a href={'#'} onClick={(e) => {
@@ -374,7 +705,7 @@ class BusinessDetail extends Component {
                     <div className="mt-5 mb-5 text-center">
                         <button
                             type="submit"
-                            disabled={this.state.missed_fields || !this.state.tnc_consent}
+                            disabled={this._customButtonValidation()}
                             onClick={e => this._formSubmit(e)}
                             className="form-submit btn btn-raised greenButton"
                         >Check your eligibility

@@ -40,11 +40,11 @@ class AdharPan extends Component {
     missed_fields: true
   };
   gstDetails = {
-    companytype: "",
+    company_type: "",
     gst: "",
     bpan: "",
     avgtrans: "",
-    dealercode: "",
+    dealer_code: "",
     lgnm: "",
     tnc_consent: false
   };
@@ -211,7 +211,7 @@ class AdharPan extends Component {
       BusinessType.map((val, key) => {
         if (company_details.ctb !== undefined)
           if (val.label.localeCompare(company_details.ctb) === 0)
-            this.gstDetails.companytype = val.value;
+            this.gstDetails.company_type = val.value;
       });
 
       this.gstDetails.lgnm = company_details.lgnm;
