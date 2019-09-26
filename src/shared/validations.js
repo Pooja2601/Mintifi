@@ -5,8 +5,12 @@ import {BusinessType} from "../shared/constants";
 const phoneNumber = {
     type: "number",
     pattern: /^[0-9]{10}$/,
-    title: "Please enter Mobile Number",
-    error: "Invalid Mobile Number"
+    title: "Enter Mobile Number",
+    error: "Invalid Mobile Number entered",
+    min: 1000000000,
+    max: 9999999999,
+    maxLength: 10,
+    minLength: 10,
 };
 
 const emailText = {
@@ -146,17 +150,10 @@ const validationAdharPan = {
 const validationMobileOtp = {
     MOBILE_NUMBER: {
         slug: "mobile",
-        type: "number",
-        pattern: /^[0-9]{10}$/,
-        title: "Enter Mobile Number",
-        min: 1000000000,
-        max: 9999999999,
-        maxLength: 10,
-        minLength: 10,
+        ...phoneNumber,
         required: true,
         readOnly: true,
         disabled: true,
-        error: "Invalid Mobile Number entered",
         id: "numberMobile"
     },
     VERIFY_OTP: {
@@ -321,10 +318,6 @@ const validationBusinessDetails = {
     },
     BUSINESS_PHONE: {
         slug: "business_phone",
-        min: 1000000000,
-        max: 9999999999,
-        maxLength: 10,
-        minLength: 10,
         required: false,
         readOnly: false,
         disabled: false,
