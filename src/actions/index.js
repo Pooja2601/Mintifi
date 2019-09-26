@@ -1,6 +1,7 @@
 export const types = {
     SHOW_ALERT: "SHOW_ALERT",
     CHANGE_LOADER: "CHANGE_LOADER",
+    FIELD_ALERT: "FIELD_ALERT",
     //...................................Preapproval Flow
     // Exisiting User
     EXIST_SUMMARY: "EXIST_SUMMARY",
@@ -50,6 +51,8 @@ export const showAlert = (
     alertType,
     // alertShow
 });
+
+export const fieldAlert = (alertObj) => ({type: types.FIELD_ALERT, alertObj});
 
 export const changeLoader = loader => ({
     type: types.CHANGE_LOADER,

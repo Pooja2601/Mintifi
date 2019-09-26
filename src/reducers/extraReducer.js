@@ -10,7 +10,11 @@ export default (state = {}, action) => {
         case types.CHANGE_LOADER:
             return {...state, loader: action.loader};
 
+        case types.FIELD_ALERT:
+            return {...state, alertObj: action.alertObj};
+
         default:
             return state;
     }
 };
+

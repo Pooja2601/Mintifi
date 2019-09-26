@@ -13,17 +13,17 @@ import configureStore from "./store";
 import {PersistGate} from "redux-persist/integration/react";
 import {ToastContainer, toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {routes} from './routes'
+import {routes} from './shared/routes'
 
 // import {TransitionGroup, CSSTransition} from "react-transition-group";
 
 // import Header from "./shared/header";
 // import Footer from "./shared/footer";
-import Loader from "./shared/loader";
-import Error_404 from "./layouts/404_page";
+import Loader from "./layouts/loader_layout";
+import Error_404 from "./layouts/404_layout";
 
-import Headers from "./layouts/header";
-import CustomAlert from "./layouts/custom_alerts";
+import Headers from "./layouts/header_layout";
+import CustomAlert from "./layouts/alerts_wrapper";
 
 const {store, persistor} = configureStore();
 

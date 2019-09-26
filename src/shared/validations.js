@@ -125,18 +125,20 @@ const validationAdharPan = {
         minLength: 10,
         maxLength: 10,
         error: "Invalid PAN Number",
+        label: "PAN Number *",
         id: "numberPAN"
     },
     ADHAR_NUMBER: {
         slug: "adhar",
+        label: "Enter Aadhaar (optional)",
         type: "number",
         pattern: /^[0-9]{12}$/,
-        title: "Aadhaar is required",
+        title: "Enter Aadhaar Number",
         autoComplete: "off",
         required: false,
         maxLength: 12,
         minLength: 12,
-        error: "Invalid Adhar Number",
+        error: "Invalid Aadhaar Number",
         id: "numberAdhar"
     }
 };

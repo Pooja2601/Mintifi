@@ -180,7 +180,7 @@ export const regexTrim = regex => {
 
 // Validates all the fields
 export const fieldValidationHandler = props => {
-    const {showAlert, validations, localState} = props;
+    const {showAlert, validations, localState, fieldAlert} = props;
 
     const lomo = Object.entries(validations).some((val, key) => {
         // console.log(val[1].slug);
@@ -188,14 +188,17 @@ export const fieldValidationHandler = props => {
             let regexTest = val[1].pattern.test(localState[val[1].slug]);
             if (!regexTest) {
                 // false : failed pattern
-                if (localState[val[1].slug]) showAlert(val[1].error);
+                if (localState[val[1].slug])
+                    fieldAlert({showError: true, slug: val[1].slug});
+                // showAlert(val[1].error);
                 return val[1];
             }
         }
     });
 
     if (!lomo) {
-        showAlert();
+        fieldAlert();
+        // showAlert();
     }
     return lomo; // true : for disabling
 };

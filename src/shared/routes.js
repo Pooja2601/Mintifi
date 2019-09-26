@@ -1,50 +1,50 @@
 import React from 'react'
 
-import Index from "./components/";
-import Login from "./components/landing";
-import AdharPan from "./components/preapprove/adhar_pan";
-import PersonalDetail from "./components/preapprove/personal_details";
-import MobileOTP from "./components/preapprove/mobile_otp";
-import BusinessDetail from "./components/preapprove/business_details";
-import Finalize from "./components/preapprove/business_details/finalize";
-import AppRejected from "./components/preapprove/ip_approval/app_rejected";
-import AppApproved from "./components/preapprove/ip_approval/app_approved";
-import ThankYou from "./components/preapprove/ip_approval/thank_you";
-import DocsUpload from "./components/preapprove/docs_upload";
-import BankDetail from "./components/preapprove/bank_details";
+import Index from "../components";
+import Login from "../components/landing";
+import AdharPan from "../components/preapprove/adhar_pan";
+import PersonalDetail from "../components/preapprove/personal_details";
+import MobileOTP from "../components/preapprove/mobile_otp";
+import BusinessDetail from "../components/preapprove/business_details";
+import Finalize from "../components/preapprove/business_details/finalize";
+import AppRejected from "../components/preapprove/ip_approval/app_rejected";
+import AppApproved from "../components/preapprove/ip_approval/app_approved";
+import ThankYou from "../components/preapprove/ip_approval/thank_you";
+import DocsUpload from "../components/preapprove/docs_upload";
+import BankDetail from "../components/preapprove/bank_details";
 
 //Existing User
-import Auth from "./components/preapprove/exist_user";
-import Dashboard from "./components/preapprove/exist_user/dashboard";
+import Auth from "../components/preapprove/exist_user";
+import Dashboard from "../components/preapprove/exist_user/dashboard";
 
 //Drawdown
-import DrawIndex from "./components/drawdown/";
-import Drawdown from "./components/drawdown/token";
-import DrawAuth from "./components/drawdown/auth";
-import DrawOffers from "./components/drawdown/offers";
-import DrawFetchOffers from "./components/drawdown/fetch_offers";
-import DrawThankYou from "./components/drawdown/thankyou";
-import DrawError from "./components/drawdown/error_url";
+import DrawIndex from "../components/drawdown";
+import Drawdown from "../components/drawdown/token";
+import DrawAuth from "../components/drawdown/auth";
+import DrawOffers from "../components/drawdown/offers";
+import DrawFetchOffers from "../components/drawdown/fetch_offers";
+import DrawThankYou from "../components/drawdown/thankyou";
+import DrawError from "../components/drawdown/error_url";
 
 // E-Mandate
-import EMandate from "./components/postapprove/emandate";
+import EMandate from "../components/postapprove/emandate";
 // E-Sign
-import ESign from "./components/postapprove/e_sign";
-import ESignPopUp from "./components/postapprove/e_sign/esign_popup";
-import ESignSuccess from "./components/postapprove/e_sign/success_url";
-import ESignError from "./components/postapprove/e_sign/error_url";
-import ESignCancel from "./components/postapprove/e_sign/cancel_url";
+import ESign from "../components/postapprove/e_sign";
+import ESignPopUp from "../components/postapprove/e_sign/esign_popup";
+import ESignSuccess from "../components/postapprove/e_sign/success_url";
+import ESignError from "../components/postapprove/e_sign/error_url";
+import ESignCancel from "../components/postapprove/e_sign/cancel_url";
 // E-Sign-Bank-Detail
-import ESignBankDetail from "./components/postapprove/emandate/bank_detail";
+import ESignBankDetail from "../components/postapprove/emandate/bank_detail";
 //E-NACH
-import ENach from "./components/postapprove/emandate/e_nach/";
-import SuccessUrl from "./components/postapprove/emandate/e_nach/success_url";
-import ErrorUrl from "./components/postapprove/emandate/e_nach/error_url";
-import CancelUrl from "./components/postapprove/emandate/e_nach/cancel_url";
-import PNach from "./components/postapprove/emandate/e_nach/pnach";
+import ENach from "../components/postapprove/emandate/e_nach";
+import SuccessUrl from "../components/postapprove/emandate/e_nach/success_url";
+import ErrorUrl from "../components/postapprove/emandate/e_nach/error_url";
+import CancelUrl from "../components/postapprove/emandate/e_nach/cancel_url";
+import PNach from "../components/postapprove/emandate/e_nach/pnach";
 
 // Dev Tool
-import ClearCache from "./components/clear_cache";
+import ClearCache from "../components/clear_cache";
 
 const routes = [
     {
