@@ -191,7 +191,8 @@ const validationBank = {
     error: "Invalid Account Name",
     required: true,
     pattern: /^[a-zA-Z]{2,}[^]+$/,
-    autoCapitalize: "characters"
+    autoCapitalize: "characters",
+    label: "Account Name *"
   },
   ACCOUNT_NUMBER: {
     type: "text",
@@ -200,7 +201,8 @@ const validationBank = {
     title: "Enter Account Number",
     error: "Invalid Account Number",
     pattern: /^[0-9]{9,18}$/,
-    required: true
+    required: true,
+    label: "Account Number *"
   },
   IFSC: {
     type: "text",
@@ -210,7 +212,8 @@ const validationBank = {
     required: true,
     slug: "ifsc_code",
     autoCapitalize: "characters",
-    pattern: /[A-Za-z]{4}\d{7}$/
+    pattern: /[A-Za-z]{4}\d{7}$/,
+    label: "IFSC *"
   },
   ACCOUNT_TYPE: {
     type: "dropdown",
@@ -220,7 +223,8 @@ const validationBank = {
     error: "Select Account Type",
     pattern: /^[a-z]{2,}$/,
     options: accountType,
-    required: true
+    required: true,
+    label: "Account Type *"
   },
   BANK_NAME: {
     id: "nameBank",
@@ -231,7 +235,8 @@ const validationBank = {
     slug: "bank_name",
     autoCapitalize: "characters",
     disabled: true,
-    required: true
+    required: true,
+    label: "Bank Name *"
   },
   MICR_CODE: {
     type: "text",
@@ -242,7 +247,8 @@ const validationBank = {
     id: "micrCode",
     slug: "micr_code",
     required: false,
-    disabled: true
+    disabled: true,
+    label: "MICR Code"
   },
   BRANCH_NAME: {
     type: "text",
@@ -252,7 +258,8 @@ const validationBank = {
     slug: "branch_name",
     pattern: /^[a-zA-Z0-9]{2,}[^]+$/,
     required: true,
-    disabled: true
+    disabled: true,
+    label: "Branch Name *"
   }
 };
 
@@ -267,7 +274,8 @@ const validationBusinessDetails = {
     required: true,
     readOnly: false,
     disabled: false,
-    error: "Invalid Company Name"
+    error: "Invalid Company Name",
+    label: "Company Legal Name"
   },
   COMPANY_TYPE: {
     slug: "company_type",
@@ -276,7 +284,8 @@ const validationBusinessDetails = {
     pattern: /^[^]+$/,
     inputId: "companyType",
     options: BusinessType,
-    error: "Invalid Company Type"
+    error: "Invalid Company Type",
+    label: "Company Type *"
   },
   GST_NUMBER: {
     slug: "gst",
@@ -286,7 +295,8 @@ const validationBusinessDetails = {
     autoCapitalize: "characters",
     id: "numberGST",
     required: false,
-    error: "Invalid GST Number"
+    error: "Invalid GST Number",
+    label: "GST Number"
   },
   PAN_NUMBER: {
     slug: "bpan",
@@ -298,7 +308,8 @@ const validationBusinessDetails = {
     required: false,
     readOnly: true,
     disabled: true,
-    error: "Invalid Pan Number"
+    error: "Invalid Pan Number",
+    label: "Date of incorporation *"
   },
   AVERAGE_TRANSACTION: {
     slug: "avgtrans",
@@ -308,7 +319,8 @@ const validationBusinessDetails = {
     autoCapitalize: "characters",
     id: "avgTrans",
     required: false,
-    error: "Invalid Transaction Amount"
+    error: "Invalid Transaction Amount",
+    label: "Average Monthly Trans."
   },
   DEALER_CODE: {
     slug: "dealer_code",
@@ -318,14 +330,16 @@ const validationBusinessDetails = {
     autoCapitalize: "characters",
     id: "dealerCode",
     required: false,
-    error: "Invalid Dealer Code"
+    error: "Invalid Dealer Code",
+    label: "Dealer Code"
   },
   BUSINESS_EMAIL: {
     slug: "business_email",
     id: "business_email",
     ...emailText,
     required: false,
-    title: "Enter Business Email"
+    title: "Enter Business Email",
+    label: "Business Email"
   },
   BUSINESS_PHONE: {
     slug: "business_phone",
@@ -333,7 +347,8 @@ const validationBusinessDetails = {
     readOnly: false,
     disabled: false,
     ...phoneNumber,
-    id: "business_phone"
+    id: "business_phone",
+    label: "Business Phone"
   },
   NO_OF_FOUNDERS: {
     slug: "no_of_founders",
@@ -346,7 +361,8 @@ const validationBusinessDetails = {
     max: 1000,
     maxLength: 5,
     minLength: 5,
-    id: "no_of_founders"
+    id: "no_of_founders",
+    label: "Number of Founders"
   },
   NO_OF_EMPLOYEES: {
     slug: "no_of_employees",
@@ -359,7 +375,8 @@ const validationBusinessDetails = {
     max: 1000,
     maxLength: 5,
     minLength: 5,
-    id: "no_of_employees"
+    id: "no_of_employees",
+    label: "Number of Employees"
   },
   INC_DATE: {
     slug: "inc_date",
@@ -368,7 +385,8 @@ const validationBusinessDetails = {
     dateFormat: "dd/MM/yyyy",
     // pattern: /^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/,
     pattern: /^[^]{2,}$/,
-    error: "Invalid Date"
+    error: "Invalid Date",
+    label: "Date of Incorporation *"
   },
   PINCODE: {
     slug: "pincode",
@@ -377,7 +395,8 @@ const validationBusinessDetails = {
     required: false, // custom validation on business page
     id: "numberPincode",
     pattern: /^[0-9]{6}$/,
-    autoCapitalize: "characters"
+    autoCapitalize: "characters",
+    label: "Pincode *"
   },
   ADDRESS1: {
     slug: "address1",
@@ -387,7 +406,8 @@ const validationBusinessDetails = {
     id: "textAddress1",
     title: "Please enter Address 1",
     error: "Invalid Address 1",
-    autoCapitalize: "characters"
+    autoCapitalize: "characters",
+    label: " Address 1 *"
   },
   ADDRESS2: validationPersonalDetails.ADDRESS2,
   OWNERSHIP: {
@@ -395,7 +415,8 @@ const validationBusinessDetails = {
     type: "button",
     required: true,
     id: "businessOwnership",
-    pattern: /^[a-z]+$/
+    pattern: /^[a-z]+$/,
+    label: "Ownership *"
   },
   RETAILER_VINTAGE: {
     slug: "retailer_vintage",
@@ -404,7 +425,8 @@ const validationBusinessDetails = {
     id: "retailerVintage",
     pattern: /^[0-9]{3,8}$/,
     error: "Invalid Retailer Vintage",
-    title: "Retailer Vintage"
+    title: "Retailer Vintage",
+    label: "Retailer Vintage *"
   }
 };
 

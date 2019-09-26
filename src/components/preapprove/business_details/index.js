@@ -280,7 +280,7 @@ class BusinessDetail extends Component {
                     >
                         <div className={"col-md-12 col-sm-12 col-xs-12"}>
                             <div className="form-group mb-3">
-                                <label htmlFor={COMPANY_NAME.id} className={"bmd-label-floating"}>Company Legal Name
+                                <label htmlFor={COMPANY_NAME.id} className={"bmd-label-floating"}>{COMPANY_NAME.label}
                                     *</label>
                                 {/*<h5 className={"text-center"}>{(gstProfile === Object(gstProfile)) ? gstProfile.lgnm : ''}</h5>*/}
                                 <input
@@ -301,7 +301,7 @@ class BusinessDetail extends Component {
                     <div className={"row"}>
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3">
-                                <label htmlFor={COMPANY_TYPE.id} className={"bmd-label-floating"}>Company Type *</label>
+                                <label htmlFor={COMPANY_TYPE.id} className={"bmd-label-floating"}>{COMPANY_TYPE.label}</label>
                                 <Select options={COMPANY_TYPE.options}
                                         required={COMPANY_TYPE.required}
                                         id={COMPANY_TYPE.id}
@@ -333,7 +333,7 @@ class BusinessDetail extends Component {
                         </div>
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3">
-                                <label htmlFor="numberGST" className={"bmd-label-floating"}>GST Number </label>
+                                <label htmlFor="numberGST" className={"bmd-label-floating"}>{GST_NUMBER.label} </label>
                                 <input
                                     type={GST_NUMBER.type}
                                     className="form-control font_weight"
@@ -357,7 +357,7 @@ class BusinessDetail extends Component {
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3">
                                 <label htmlFor={INC_DATE.id} className="bmd-label-floating">
-                                    Date of incorporation *
+                                    {INC_DATE.label}
                                 </label>
                                 <div className={'d-block'}>
                                     <DatePicker
@@ -379,7 +379,7 @@ class BusinessDetail extends Component {
                         </div>
                         <div className={"col-sm-6 col-xs-12 col-md-6 text-left"}>
                             <label htmlFor={OWNERSHIP.id} className="d-block bmd-label">
-                                Ownership *
+                                {OWNERSHIP.label}
                             </label>
                             <div
                                 className="btn-group ToggleBtn"
@@ -424,7 +424,7 @@ class BusinessDetail extends Component {
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3 ">
                                 <label htmlFor={AVERAGE_TRANSACTION.id} className="bmd-label-floating">
-                                    Average Monthly Trans.
+                                   {AVERAGE_TRANSACTION.label}
                                 </label>
                                 <input
                                     type={AVERAGE_TRANSACTION.type}
@@ -445,7 +445,7 @@ class BusinessDetail extends Component {
                         <div className={"col-md-6 col-sm-6 col-xs-12"}>
                             <div className="form-group mb-3">
                                 <label htmlFor={DEALER_CODE.id} className="bmd-label-floating">
-                                    Dealer Code
+                                    {DEALER_CODE.label}
                                 </label>
                                 <input
                                     type={DEALER_CODE.type}
@@ -470,7 +470,7 @@ class BusinessDetail extends Component {
                             <div className={"col-md-6 col-sm-6 col-xs-12"}>
                                 <div className="form-group mb-3 ">
                                     <label htmlFor={RETAILER_VINTAGE.id} className="bmd-label-floating">
-                                        Retailer Vintage *
+                                       {RETAILER_VINTAGE.label}
                                     </label>
                                     <input
                                         type={RETAILER_VINTAGE.type}
@@ -495,7 +495,7 @@ class BusinessDetail extends Component {
                             <div className={"col-md-6 col-sm-6 col-xs-12"}>
                                 <div className="form-group mb-3">
                                     <label htmlFor="business_email" className="bmd-label-floating">
-                                        Business Email
+                                       {BUSINESS_EMAIL.label}
                                     </label>
                                     <input
                                         type={BUSINESS_EMAIL.type}
@@ -515,7 +515,7 @@ class BusinessDetail extends Component {
                             <div className={"col-md-6 col-sm-6 col-xs-12"}>
                                 <div className="form-group mb-3">
                                     <label htmlFor={BUSINESS_PHONE.id}
-                                           className={"bmd-label-floating"}>Business Phone </label>
+                                           className={"bmd-label-floating"}>{BUSINESS_PHONE.label} </label>
                                     <div className={"input-group"}>
                                         <div className="input-group-prepend phoneDisplay">
                                         <span className="input-group-text" id="basic-addon3">
@@ -553,8 +553,7 @@ class BusinessDetail extends Component {
 
                             <div className={"col-md-6 col-sm-6 col-xs-12"}>
                                 <div className="form-group mb-3">
-                                    <label htmlFor="no_of_founders" className={"bmd-label-floating"}>Number of
-                                        Founders</label>
+                                    <label htmlFor="no_of_founders" className={"bmd-label-floating"}>{NO_OF_FOUNDERS.label}</label>
                                     <input
                                         type={NO_OF_FOUNDERS.type}
                                         className="form-control font_weight"
@@ -570,8 +569,7 @@ class BusinessDetail extends Component {
 
                             <div className={"col-md-6 col-sm-6 col-xs-12"}>
                                 <div className="form-group mb-3">
-                                    <label htmlFor="no_of_employees" className={"bmd-label-floating"}>Number of
-                                        Employees</label>
+                                    <label htmlFor="no_of_employees" className={"bmd-label-floating"}>{NO_OF_EMPLOYEES.label}</label>
                                     <input
                                         type={NO_OF_EMPLOYEES.type}
                                         className="form-control font_weight"
@@ -589,7 +587,7 @@ class BusinessDetail extends Component {
                             <div className={"col-md-6 col-sm-6 col-xs-12"}>
                                 <div className="form-group mb-3 ">
                                     <label htmlFor={ADDRESS1.id} className="bmd-label-floating">
-                                        Address 1 *
+                                       {ADDRESS1.label}
                                     </label>
                                     <input
                                         type={ADDRESS1.type}
@@ -610,7 +608,7 @@ class BusinessDetail extends Component {
                             <div className={"col-md-6 col-sm-6 col-xs-12"}>
                                 <div className="form-group mb-3">
                                     <label htmlFor={PINCODE.id} className="bmd-label-floating">
-                                        Pincode *
+                                        {PINCODE.label}
                                     </label>
                                     <input
                                         type={PINCODE.type}
@@ -636,7 +634,7 @@ class BusinessDetail extends Component {
                                 <div className="form-group mb-3 ">
 
                                     <label htmlFor={ADDRESS2.id} className="bmd-label-floating">
-                                        Address 2
+                                        {ADDRESS2.label}
                                     </label>
                                     <input
                                         type={ADDRESS2.type}
