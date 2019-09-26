@@ -169,18 +169,18 @@ class PersonalDetail extends Component {
 
             case MOBILE:
                 if (value.length <= 10)
-                    this.tempState['mobile'] = value;
+                    this.tempState[MOBILE.slug] = value;
                 break;
 
             case PINCODE:
                 if (value.length <= 6) {
-                    this.tempState['pincode'] = value;
+                    this.tempState[PINCODE.slug] = value;
                     value.length === 6 && this._pincodeFetch(value);
                 }
                 break;
             case DOB:
                 // this.tempState['dob'] = retrieveDate(value);
-                this.tempState['dob'] = new Date(value);
+                this.tempState[DOB.slug] = new Date(value);
                 break;
             default:
                 this.tempState[field.slug] = value;
