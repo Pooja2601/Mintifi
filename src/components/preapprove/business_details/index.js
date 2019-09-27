@@ -282,7 +282,7 @@ class BusinessDetail extends Component {
   _customButtonValidation = () => {
     // Negate for disabling feature
     let result;
-    const { payload, showAlert } = this.props;
+    const { payload, showAlert, fieldAlert } = this.props;
     const {
       tnc_consent,
       gst_correct,
