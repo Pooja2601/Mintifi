@@ -50,7 +50,6 @@ const InputWrapper = props => {
   };
 
   const inputFunction = () => {
-    debugger;
     return (
       <>
         <div className="form-group mb-2">
