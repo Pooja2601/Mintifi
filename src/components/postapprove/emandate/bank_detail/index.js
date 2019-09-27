@@ -15,7 +15,8 @@ import {
   setToken,
   showAlert,
   EnachsetBankDetail,
-  EnachsetPayload
+  EnachsetPayload,
+  fieldAlert
 } from "../../../../actions";
 import { withRouter } from "react-router-dom";
 import {
@@ -31,6 +32,7 @@ import {
 import Select from "react-select";
 import { fetchAPI, apiActions, postAPI } from "../../../../api";
 import { validationBank } from "../../../../shared/validations";
+import InputWrapper from "../../../../layouts/input_wrapper";
 
 const { PUBLIC_URL } = process.env;
 
@@ -55,12 +57,12 @@ class ENachBankDetail extends Component {
 
   // ToDo : should be independent of a field
   validationHandler = () => {
-    const { showAlert } = this.props;
+    const { showAlert, fieldAlert } = this.props;
 
     const lomo = fieldValidationHandler({
-      showAlert: showAlert,
       validations: validationBank,
-      localState: this.state
+      localState: this.state,
+      fieldAlert
     });
 
     this.setState({ missed_fields: lomo }); // true : for disabling
@@ -79,22 +81,22 @@ class ENachBankDetail extends Component {
     switch (field) {
       case ACCOUNT_NUMBER:
         if (!isNaN(value))
-          if (value.length <= 18) this.tempState["acc_number"] = value;
+          if (value.length <= 18) this.tempState[ACCOUNT_NUMBER.slug] = value;
         break;
 
       case IFSC:
         if (value.length <= 11) {
-          this.tempState["ifsc_code"] = value;
+          this.tempState[IFSC.slug] = value;
           value.length === 11 && this._fetchIFSC(value);
         }
         break;
       case ACCOUNT_TYPE:
-        this.tempState["dropdownSelected"] = value;
+        this.tempState[ACCOUNT_TYPE.slug] = value;
         this.tempState["acc_type"] = value.value;
         break;
       case MICR_CODE:
         if (value.length <= 9 && !isNaN(value))
-          this.tempState["micr_code"] = value;
+          this.tempState[MICR_CODE.slug] = value;
 
         break;
       default:
@@ -362,77 +364,28 @@ class ENachBankDetail extends Component {
         <form id="serverless-contact-form" onSubmit={e => this._formSubmit(e)}>
           <div className={"row"}>
             <div className={"col-md-6 col-sm-6 col-xs-12"}>
-              <div className="form-group mb-3 ">
-                <label
-                  htmlFor={ACCOUNT_NAME.id}
-                  className={"bmd-label-floating"}
-                >
-                  {ACCOUNT_NAME.label}
-                </label>
-                <input
-                  type={ACCOUNT_NAME.type}
-                  className="form-control font_weight"
-                  // placeholder="Email"
-                  pattern={regexTrim(ACCOUNT_NAME.pattern)}
-                  title={ACCOUNT_NAME.title}
-                  autoCapitalize={ACCOUNT_NAME.autoCapitalize}
-                  id={ACCOUNT_NAME.id}
-                  required={ACCOUNT_NAME.title}
-                  value={this.state.acc_name}
-                  // ref={ref => (this.obj.pan = ref)}
-                  onChange={e =>
-                    this.onChangeHandler(ACCOUNT_NAME, e.target.value)
-                  }
-                />
-              </div>
+              <InputWrapper
+                validation={ACCOUNT_NAME}
+                localState={this.state}
+                onChangeHandler={this.onChangeHandler}
+              />
             </div>
             <div className={"col-md-6 col-sm-6 col-xs-12"}>
-              <div className="form-group mb-3">
-                <label
-                  htmlFor={ACCOUNT_NUMBER.id}
-                  className={"bmd-label-floating"}
-                >
-                  {ACCOUNT_NUMBER.label}
-                </label>
-                <input
-                  type={ACCOUNT_NUMBER.type}
-                  className="form-control font_weight"
-                  // placeholder="Mobile Number"
-                  pattern={regexTrim(ACCOUNT_NUMBER.pattern)}
-                  title={ACCOUNT_NUMBER.title}
-                  autoCapitalize={ACCOUNT_NUMBER.autoCapitalize}
-                  id={ACCOUNT_NUMBER.id}
-                  required={ACCOUNT_NUMBER.required}
-                  value={this.state.acc_number}
-                  // ref={ref => (this.obj.pan = ref)}
-                  onChange={e =>
-                    this.onChangeHandler(ACCOUNT_NUMBER, e.target.value)
-                  }
-                />
-              </div>
+              <InputWrapper
+                validation={ACCOUNT_NUMBER}
+                localState={this.state}
+                onChangeHandler={this.onChangeHandler}
+              />
             </div>
           </div>
 
           <div className={"row"}>
             <div className={"col-md-6 col-sm-6 col-xs-12"}>
-              <div className="form-group mb-3">
-                <label htmlFor={IFSC.id} className="bmd-label-floating">
-                  {IFSC.label}
-                </label>
-
-                <input
-                  type={IFSC.id}
-                  className="form-control font_weight text-capitalize"
-                  pattern={regexTrim(IFSC.pattern)}
-                  title={IFSC.title}
-                  autoCapitalize={IFSC.autoCapitalize}
-                  id={IFSC.id}
-                  required={IFSC.required}
-                  value={this.state.ifsc_code}
-                  // ref={ref => (this.obj.pan = ref)}
-                  onChange={e => this.onChangeHandler(IFSC, e.target.value)}
-                />
-              </div>
+              <InputWrapper
+                validation={IFSC}
+                localState={this.state}
+                onChangeHandler={this.onChangeHandler}
+              />
             </div>
             <div className={"col-md-6 col-sm-6 col-xs-12"}>
               <div className="form-group mb-3">
@@ -474,53 +427,25 @@ class ENachBankDetail extends Component {
           </div>
 
           <div className={"row"}>
-            <div className={"col-md-6 col-sm-6 col-xs-12"}>
-              <div
-                className="form-group mb-3"
-                style={{ display: this.state.bank_name ? "block" : "none" }}
-              >
-                <label htmlFor={BANK_NAME.id} className={"bmd-label-floating"}>
-                  {BANK_NAME.label}
-                </label>
-                <input
-                  type={BANK_NAME.type}
-                  className="form-control font_weight"
-                  // placeholder="Email"
-                  title={BANK_NAME.title}
-                  pattern={regexTrim(BANK_NAME.pattern)}
-                  autoCapitalize={BANK_NAME.autoCapitalize}
-                  id={BANK_NAME.id}
-                  required={BANK_NAME.required}
-                  disabled={BANK_NAME.disabled}
-                  value={this.state.bank_name}
-                  // ref={ref => (this.obj.pan = ref)}
-                  // onChange={(e) => this.onChangeHandler(BANK_NAME,e.target.value)}
-                />
-              </div>
+            <div
+              className={"col-md-6 col-sm-6 col-xs-12"}
+              style={{ display: this.state.bank_name ? "block" : "none" }}
+            >
+              <InputWrapper
+                validation={BANK_NAME}
+                localState={this.state}
+                onChangeHandler={this.onChangeHandler}
+              />
             </div>
-            <div className={"col-md-6 col-sm-6 col-xs-12"}>
-              <div
-                className="form-group mb-3"
-                style={{ display: this.state.micr_code ? "block" : "none" }}
-              >
-                <label htmlFor={MICR_CODE.id} className="bmd-label-floating">
-                  {MICR_CODE.label}
-                </label>
-                <input
-                  type={MICR_CODE.type}
-                  className="form-control font_weight"
-                  pattern={regexTrim(MICR_CODE.pattern)}
-                  title={MICR_CODE.title}
-                  autoCapitalize={MICR_CODE.autoCapitalize}
-                  id={MICR_CODE.id}
-                  disabled={MICR_CODE.disabled}
-                  value={this.state.micr_code}
-                  // ref={ref => (this.obj.pan = ref)}
-                  onChange={e =>
-                    this.onChangeHandler(MICR_CODE, e.target.value)
-                  }
-                />
-              </div>
+            <div
+              className={"col-md-6 col-sm-6 col-xs-12"}
+              style={{ display: this.state.micr_code ? "block" : "none" }}
+            >
+              <InputWrapper
+                validation={MICR_CODE}
+                localState={this.state}
+                onChangeHandler={this.onChangeHandler}
+              />
             </div>
           </div>
           <div
@@ -528,25 +453,11 @@ class ENachBankDetail extends Component {
             style={{ display: this.state.branch_name ? "block" : "none" }}
           >
             <div className={"col-sm-12"}>
-              <div className="form-group mb-3 ">
-                <label
-                  htmlFor={BRANCH_NAME.id}
-                  className={"bmd-label-floating"}
-                >
-                  {BRANCH_NAME.label}
-                </label>
-                <input
-                  type={BRANCH_NAME.type}
-                  className="form-control font_weight"
-                  // placeholder="Email"
-                  title={BRANCH_NAME.title}
-                  id={BRANCH_NAME.id}
-                  pattern={regexTrim(BRANCH_NAME.pattern)}
-                  required={BRANCH_NAME.required}
-                  disabled={BRANCH_NAME.disabled}
-                  value={this.state.branch_name}
-                />
-              </div>
+              <InputWrapper
+                validation={BRANCH_NAME}
+                localState={this.state}
+                onChangeHandler={this.onChangeHandler}
+              />
             </div>
           </div>
           {/*<div className="checkbox mt-5">
@@ -586,6 +497,13 @@ const mapStateToProps = state => ({
 export default withRouter(
   connect(
     mapStateToProps,
-    { EnachsetBankDetail, changeLoader, setToken, showAlert, EnachsetPayload }
+    {
+      EnachsetBankDetail,
+      changeLoader,
+      setToken,
+      showAlert,
+      EnachsetPayload,
+      fieldAlert
+    }
   )(ENachBankDetail)
 );

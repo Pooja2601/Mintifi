@@ -60,7 +60,9 @@ const validationPersonalDetails = {
     ...phoneNumber,
     required: true,
     id: "numberMobile",
-    label: "Mobile Number *"
+    label: "Mobile Number *",
+    error: "Invalid Mobile Number",
+    pattern: /^[0-9]{10}$/
   },
   EMAIL: {
     slug: "email",
@@ -165,7 +167,9 @@ const validationMobileOtp = {
     required: true,
     readOnly: true,
     disabled: true,
-    id: "numberMobile"
+    id: "numberMobile",
+    label: "Enter Mobile Number *",
+    error: "Invalid Mobile Number"
   },
   VERIFY_OTP: {
     slug: "otp",
@@ -178,7 +182,8 @@ const validationMobileOtp = {
     max: 999999,
     maxLength: 6,
     minLength: 6,
-    required: false
+    required: false,
+    label: "Enter OTP *"
   }
 };
 

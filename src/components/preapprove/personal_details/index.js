@@ -260,30 +260,12 @@ class PersonalDetail extends Component {
           </div>
           <div className={"row"}>
             <div className={"col-md-6 col-sm-6 col-xs-12"}>
-              <div className="form-group mb-3">
-                <label htmlFor={MOBILE.id} className={"bmd-label-floating"}>
-                  {MOBILE.label}
-                </label>
-                <div className={"input-group"}>
-                  <div className="input-group-prepend phoneDisplay">
-                    <span className="input-group-text" id="basic-addon3">
-                      +91
-                    </span>
-                  </div>
-                  <input
-                    type={MOBILE.type}
-                    className="form-control font_weight prependInput"
-                    // placeholder="Mobile Number"
-                    pattern={regexTrim(MOBILE.pattern)}
-                    title={MOBILE.title}
-                    id={MOBILE.id}
-                    required={MOBILE.required}
-                    value={this.state.mobile}
-                    // ref={ref => (this.obj.pan = ref)}
-                    onChange={e => this.onChangeHandler(MOBILE, e.target.value)}
-                  />
-                </div>
-              </div>
+              <InputWrapper
+                validation={MOBILE}
+                localState={this.state}
+                onChangeHandler={this.onChangeHandler}
+                isPhone={true}
+              />
             </div>
             <div className={"col-md-6 col-sm-6 col-xs-12"}>
               <InputWrapper
