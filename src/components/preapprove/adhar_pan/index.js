@@ -21,6 +21,7 @@ import { apiActions, fetchAPI } from "../../../api";
 import { validationAdharPan } from "./../../../shared/validations";
 import InputWrapper from "../../../layouts/input_wrapper";
 import ButtonWrapper from "../../../layouts/button_wrapper";
+import RenderGSTModal from "./gst_list_modal";
 const { PUBLIC_URL } = process.env;
 
 class AdharPan extends Component {
@@ -56,6 +57,20 @@ class AdharPan extends Component {
   RenderModalGST = () => {
     return (
       <>
+        {/*   <RenderGSTModal
+          onChangeRadio={e => {
+            this.setState(prevState => ({
+              checked: {
+                [key]: true
+              },
+              selectedGST: val.gstinId
+            }));
+          }}
+          setGst={this._setGST()}
+          localState={this.state}
+          triggerRefs={ref => (this.triggerModalGST = ref)}
+        /> */}
+
         <button
           type="button"
           style={{ visibility: "hidden" }}
@@ -133,7 +148,6 @@ class AdharPan extends Component {
                     <br />
                   </div>
                 </div>
-                {/*{this.state.selectedGST}*/}
               </div>
               <div className="modal-footer">
                 <button
