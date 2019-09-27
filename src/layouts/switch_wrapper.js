@@ -4,14 +4,7 @@ import { withRouter } from "react-router-dom";
 import connect from "react-redux/es/connect/connect";
 
 const SwitchButtonWrapper = props => {
-  const {
-    validation,
-    onChangeHandler,
-    localState,
-    alertObj,
-    addText,
-    isPhone
-  } = props;
+  const { validation, onChangeHandler, localState, alertObj, addText } = props;
   const VALIDATION = validation;
   const { showError, slug } = alertObj;
   return (
@@ -37,10 +30,10 @@ const SwitchButtonWrapper = props => {
               }`}
               onClick={() => onChangeHandler(VALIDATION, val.key)}
               style={{
-                border: localState.ownership === val.key && "2px solid #00bfa5"
+                border: localState[VALIDATION.slug] === val.key && "2px solid #00bfa5"
               }}
             >
-              <i className="fa fa-building" />
+              <i className={val.icon} />
               <small>{val.value}</small>
             </button>
           ))}
@@ -63,8 +56,7 @@ SwitchButtonWrapper.defaultProps = {
   validation: {},
   onChangeHandler: () => {},
   localState: {},
-  addText: "",
-  isPhone: false
+  addText: ""
 };
 
 const mapStateToProp = state => ({

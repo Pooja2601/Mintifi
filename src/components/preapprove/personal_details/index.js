@@ -20,9 +20,23 @@ import {
   retrieveDate
 } from "../../../shared/common_logic";
 import InputWrapper from "../../../layouts/input_wrapper";
+import SwitchButtonWrapper from "../../../layouts/switch_wrapper";
 import { validationPersonalDetails } from "../../../shared/validations";
 
 const { PUBLIC_URL } = process.env;
+const {
+  F_NAME,
+  M_NAME,
+  L_NAME,
+  MOBILE,
+  DOB,
+  ADDRESS2,
+  ADDRESS1,
+  EMAIL,
+  GENDER,
+  OWNERSHIP,
+  PINCODE
+} = validationPersonalDetails;
 
 class PersonalDetail extends Component {
   static propTypes = {
@@ -176,7 +190,6 @@ class PersonalDetail extends Component {
     // fields is Equivalent to F_NAME , L_NAME... thats an object
 
     // ToDo : comment those that are not required
-    const { MOBILE, PINCODE, DOB } = validationPersonalDetails;
 
     this.tempState = Object.assign({}, this.state);
     switch (field) {
@@ -208,20 +221,6 @@ class PersonalDetail extends Component {
   };
 
   render() {
-    const {
-      F_NAME,
-      M_NAME,
-      L_NAME,
-      MOBILE,
-      DOB,
-      ADDRESS2,
-      ADDRESS1,
-      EMAIL,
-      GENDER,
-      OWNERSHIP,
-      PINCODE
-    } = validationPersonalDetails;
-
     return (
       <>
         <Link
@@ -278,74 +277,18 @@ class PersonalDetail extends Component {
 
           <div className={"row"}>
             <div className={"col-sm-6 col-xs-12 col-md-6 text-left"}>
-              <label htmlFor={GENDER.id} className="d-block bmd-label">
-                {GENDER.label}
-              </label>
-              <div
-                className="btn-group ToggleBtn"
-                id={GENDER.id}
-                role="groupProperty"
-                aria-label="..."
-              >
-                <button
-                  type={GENDER.type}
-                  className="btn btn-default btnLeft"
-                  onClick={() => this.onChangeHandler(GENDER, "m")}
-                  style={{
-                    border: this.state.gender === "m" && "2px solid #00bfa5"
-                  }}
-                >
-                  <i className="fa fa-male" />
-                  <small>Male</small>
-                </button>
-                <button
-                  type={GENDER.type}
-                  className="btn btn-default btnRight"
-                  onClick={() => this.onChangeHandler(GENDER, "f")}
-                  style={{
-                    border: this.state.gender === "f" && "2px solid #00bfa5"
-                  }}
-                >
-                  <i className="fa fa-female" />
-                  <small>Female</small>
-                </button>
-              </div>
+              <SwitchButtonWrapper
+                validation={GENDER}
+                localState={this.state}
+                onChangeHandler={this.onChangeHandler}
+              />
             </div>
             <div className={"col-sm-6 col-xs-12 col-md-6 text-left"}>
-              <label htmlFor={OWNERSHIP.id} className="d-block bmd-label">
-                {OWNERSHIP.label}
-              </label>
-              <div
-                className="btn-group ToggleBtn"
-                id={OWNERSHIP.id}
-                role="groupProperty"
-                aria-label="..."
-              >
-                <button
-                  type={OWNERSHIP.type}
-                  className="btn btn-default btnLeft"
-                  onClick={() => this.onChangeHandler(OWNERSHIP, "rented")}
-                  style={{
-                    border:
-                      this.state.ownership === "rented" && "2px solid #00bfa5"
-                  }}
-                >
-                  <i className="fa fa-building" />
-                  <small>Rented</small>
-                </button>
-                <button
-                  type={OWNERSHIP.type}
-                  className="btn btn-default btnRight"
-                  onClick={() => this.onChangeHandler(OWNERSHIP, "owned")}
-                  style={{
-                    border:
-                      this.state.ownership === "owned" && "2px solid #00bfa5"
-                  }}
-                >
-                  <i className="fa fa-home" />
-                  <small>Owned</small>
-                </button>
-              </div>
+              <SwitchButtonWrapper
+                validation={OWNERSHIP}
+                localState={this.state}
+                onChangeHandler={this.onChangeHandler}
+              />
             </div>
           </div>
 

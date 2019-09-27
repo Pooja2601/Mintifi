@@ -17,7 +17,7 @@ const InputWrapper = props => {
     isDatepicker
   } = props;
   const VALIDATION = validation;
-  const { showError, slug } = alertObj;
+  const { showError, slug, message } = alertObj;
   let phoneClass = isPhone ? "input-group" : "";
   let disabled = VALIDATION.disabled ? VALIDATION.disabled : false;
 
@@ -101,7 +101,7 @@ const InputWrapper = props => {
 };
 
 InputWrapper.defaultProps = {
-  alertObj: { showError: false, slug: "" },
+  alertObj: { showError: false, slug: "", message: null },
   validation: {},
   onChangeHandler: () => {},
   localState: {},
