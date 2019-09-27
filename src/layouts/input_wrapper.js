@@ -4,9 +4,17 @@ import { withRouter } from "react-router-dom";
 import connect from "react-redux/es/connect/connect";
 
 const InputWrapper = props => {
-  const { validation, onChangeHandler, localState, alertObj, addText } = props;
+  const {
+    validation,
+    onChangeHandler,
+    localState,
+    alertObj,
+    addText,
+    isPhone
+  } = props;
   const VALIDATION = validation;
   const { showError, slug } = alertObj;
+  let phoneClass = isPhone ? "input-group" : "";
   return (
     <>
       <div className="form-group mb-2">
@@ -14,20 +22,32 @@ const InputWrapper = props => {
         <label htmlFor={VALIDATION.id} className={"bmd-label-floating"}>
           {VALIDATION.label}
         </label>
-
-        <input
-          type={VALIDATION.type}
-          className="form-control font_weight"
-          // placeholder="10 digit PAN Number"
-          pattern={regexTrim(VALIDATION.pattern)}
-          title={VALIDATION.title}
-          autoCapitalize={VALIDATION.autoCapitalize}
-          id={VALIDATION.id}
-          disabled={VALIDATION.disabled ? VALIDATION.disabled : false}
-          required={VALIDATION.required}
-          value={localState[VALIDATION.slug]}
-          onChange={e => onChangeHandler(VALIDATION, e.target.value)}
-        />
+        <div className={phoneClass}>
+          {isPhone ? (
+            <div className="input-group-prepend phoneDisplay">
+              <span className="input-group-text" id="basic-addon3">
+                +91
+              </span>
+            </div>
+          ) : (
+            ""
+          )}
+          <input
+            type={VALIDATION.type}
+            className={`form-control font_weight ${
+              isPhone ? "prependInput" : ""
+            }`}
+            // placeholder="10 digit PAN Number"
+            pattern={regexTrim(VALIDATION.pattern)}
+            title={VALIDATION.title}
+            autoCapitalize={VALIDATION.autoCapitalize}
+            id={VALIDATION.id}
+            disabled={VALIDATION.disabled ? VALIDATION.disabled : false}
+            required={VALIDATION.required}
+            value={localState[VALIDATION.slug]}
+            onChange={e => onChangeHandler(VALIDATION, e.target.value)}
+          />
+        </div>
         {showError && slug === VALIDATION.slug ? (
           <small style={{ color: "crimson", fontSize: "11px" }}>
             {VALIDATION.error}
@@ -46,7 +66,8 @@ InputWrapper.defaultProps = {
   validation: {},
   onChangeHandler: () => {},
   localState: {},
-  addText: ""
+  addText: "",
+  isPhone: false
 };
 
 const mapStateToProp = state => ({
