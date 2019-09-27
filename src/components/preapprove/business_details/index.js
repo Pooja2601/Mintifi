@@ -11,6 +11,7 @@ import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { PrivacyPolicy, TnCPolicy } from "../../../shared/policy";
 import Select from "react-select";
+import ButtonWrapper from "../../../layouts/button_wrapper";
 // import DatePicker from "react-datepicker";
 // import "react-datepicker/dist/react-datepicker.css";
 import {
@@ -78,7 +79,8 @@ class BusinessDetail extends Component {
     retailer_vintage: "",
     address1: "",
     address2: "",
-    gst_correct: true
+    gst_correct: true,
+    label: "Check your eligibility"
   };
 
   // validate = {company_type: false, gst: false, avgtrans: false, dealer_code: false};
@@ -582,14 +584,20 @@ class BusinessDetail extends Component {
           </div>
 
           <div className="mt-5 mb-5 text-center">
-            <button
+            <ButtonWrapper
+              localState={this.state}
+              onChangeHandler={this.onChangeHandler}
+              disabled={this.state.missed_fields}
+              label={this.state.label}
+            />
+            {/* <button
               type="submit"
               disabled={this._customButtonValidation()}
               onClick={e => this._formSubmit(e)}
               className="form-submit btn btn-raised greenButton"
             >
               Check your eligibility
-            </button>
+            </button> */}
           </div>
           {/*<div style={{display: (this.state.missed_fields) ? 'block' : 'none'}}
                          className={"alert alert-error"}>
