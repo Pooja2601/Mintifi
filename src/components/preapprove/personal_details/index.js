@@ -296,28 +296,6 @@ class PersonalDetail extends Component {
 
           <div className={"row"}>
             <div className={"col-md-6 col-sm-6 col-xs-12"}>
-              {/* <div className="form-group mb-3">
-                <label htmlFor={DOB.id} className="bmd-label-floating">
-                  {DOB.label}
-                </label>
-                <div className={"d-block"}>
-                  <DatePicker
-                    className="form-control font_weight"
-                    // placeholderText={"Date of Birth"}
-                    selected={new Date(this.state.dob)}
-                    id={DOB.id}
-                    pattern={regexTrim(DOB.pattern)}
-                    scrollableYearDropdown
-                    showMonthDropdown
-                    dropdownMode={"scroll"}
-                    required={DOB.required}
-                    showYearDropdown
-                    dateFormat={DOB.dateFormat}
-                    onChange={e => this.onChangeHandler(DOB, e)}
-                  />
-                </div>
-              </div> */}
-
               <InputWrapper
                 validation={DOB}
                 localState={this.state}
