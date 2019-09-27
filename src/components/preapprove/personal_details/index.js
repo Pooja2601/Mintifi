@@ -19,6 +19,7 @@ import {
   regexTrim,
   retrieveDate
 } from "../../../shared/common_logic";
+import ButtonWrapper from "../../../layouts/button_wrapper";
 import InputWrapper from "../../../layouts/input_wrapper";
 import SwitchButtonWrapper from "../../../layouts/switch_wrapper";
 import { validationPersonalDetails } from "../../../shared/validations";
@@ -369,14 +370,11 @@ class PersonalDetail extends Component {
 
           <div className="mt-5 mb-5 text-center ">
             {
-              <button
-                type="submit"
-                onClick={e => this._formSubmit(e)}
+              <ButtonWrapper
+                localState={this.state}
+                onChangeHandler={this.onChangeHandler}
                 disabled={this.state.missed_fields}
-                className=" btn btn-raised greenButton"
-              >
-                Proceed
-              </button>
+              />
             }
             {/* <a href={'#'} disabled={this.state.missed_fields} onClick={e => this._formSubmit(e)}
                            className="form-submit btn btn-raised greenButton">Proceed</a>*/}
