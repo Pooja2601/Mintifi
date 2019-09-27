@@ -282,7 +282,7 @@ class BusinessDetail extends Component {
   _customButtonValidation = () => {
     // Negate for disabling feature
     let result;
-    const { payload, showAlert } = this.props;
+    const { payload, showAlert, fieldAlert } = this.props;
     const {
       tnc_consent,
       gst_correct,
@@ -299,11 +299,30 @@ class BusinessDetail extends Component {
           result =
             PINCODE.pattern.test(pincode) && ADDRESS1.pattern.test(address1);
           !PINCODE.pattern.test(pincode) &&
-            showAlert("Invalid Pincode entered");
+            fieldAlert({
+              showError: true,
+              slug: PINCODE.slug,
+              message: "Invalid Pincode entered"
+            });
           !ADDRESS1.pattern.test(address1) &&
-            showAlert("Invalid Address-1 entered");
+            fieldAlert({
+              showError: true,
+              slug: ADDRESS1.slug,
+              message: "Invalid Address-1 entered"
+            });
         } else {
-          showAlert("Pincode or Address is Missing");
+          !pincode &&
+            fieldAlert({
+              showError: true,
+              slug: PINCODE.slug,
+              message: "Pincode is Missing"
+            });
+          !address1 &&
+            fieldAlert({
+              showError: true,
+              slug: ADDRESS1.slug,
+              message: "Address1 is Missing"
+            });
           result = false;
         }
       }
@@ -311,10 +330,18 @@ class BusinessDetail extends Component {
         if (retailer_vintage) {
           result = RETAILER_VINTAGE.pattern.test(retailer_vintage);
           !RETAILER_VINTAGE.pattern.test(retailer_vintage) &&
-            showAlert("Invalid Vintage (in months)");
+            fieldAlert({
+              showError: true,
+              slug: RETAILER_VINTAGE.slug,
+              message: "Invalid Vintage (in months)"
+            });
         } else {
           result = false;
-          showAlert("Missing Vintage (in months)");
+          fieldAlert({
+            showError: true,
+            slug: RETAILER_VINTAGE.slug,
+            message: "Vintage is Missing (in months)"
+          });
         }
     } else result = false;
     // Negate for disabling feature on submit button
