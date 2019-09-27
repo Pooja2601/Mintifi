@@ -63,7 +63,7 @@ const InputWrapper = props => {
             required={VALIDATION.required}
             id={VALIDATION.id}
             inputId={VALIDATION.inputId}
-            value={this.state.optionSelected}
+            value={localState[VALIDATION.selectedOption]}
             onChange={e => onChangeHandler(VALIDATION, e)}
           />
         </div>

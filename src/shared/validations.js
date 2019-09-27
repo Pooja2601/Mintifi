@@ -299,7 +299,8 @@ const validationBusinessDetails = {
     inputId: "companyType",
     options: BusinessType,
     error: "Invalid Company Type",
-    label: "Company Type *"
+    label: "Company Type *",
+    selectedOption: { value: "", label: "Select Company Type" }
   },
   GST_NUMBER: {
     slug: "gst",

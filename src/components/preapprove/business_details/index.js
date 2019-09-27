@@ -181,8 +181,8 @@ class BusinessDetail extends Component {
     this.tempState = Object.assign({}, this.state);
     switch (field) {
       case COMPANY_TYPE:
-        this.tempState["optionSelected"] = value;
-        this.tempState[field.slug] = value.value;
+        this.tempState[COMPANY_TYPE.selectedOption] = value;
+        this.tempState[COMPANY_TYPE.slug] = value.value;
         break;
       case GST_NUMBER:
         if (value.length <= 15) {
@@ -381,7 +381,7 @@ class BusinessDetail extends Component {
           <div className={"row"}>
             <div className={"col-md-6 col-sm-6 col-xs-12"}>
               {/* <InputWrapper validation={COMPANY_TYPE} onChangeHandler={this.onChangeHandler} localState={this.state} /> */}
-              <div className="form-group mb-3">
+              {/* <div className="form-group mb-3">
                 <label
                   htmlFor={COMPANY_TYPE.id}
                   className={"bmd-label-floating"}
@@ -394,15 +394,16 @@ class BusinessDetail extends Component {
                   id={COMPANY_TYPE.id}
                   inputId={COMPANY_TYPE.inputId}
                   value={this.state.optionSelected}
+                  // value={this.state.optionSelected}
                   onChange={e => this.onChangeHandler(COMPANY_TYPE, e)}
                 />
-              </div>
-              {/* <InputWrapper
+              </div> */}
+              <InputWrapper
                 validation={COMPANY_TYPE}
                 onChangeHandler={this.onChangeHandler}
                 localState={this.state}
                 isListType={true}
-              /> */}
+              />
             </div>
             <div className={"col-md-6 col-sm-6 col-xs-12"}>
               <InputWrapper
