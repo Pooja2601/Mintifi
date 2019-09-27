@@ -165,7 +165,8 @@ const validationMobileOtp = {
     required: true,
     readOnly: true,
     disabled: true,
-    id: "numberMobile"
+    id: "numberMobile",
+    label: "Enter Mobile Number *"
   },
   VERIFY_OTP: {
     slug: "otp",
@@ -178,7 +179,8 @@ const validationMobileOtp = {
     max: 999999,
     maxLength: 6,
     minLength: 6,
-    required: false
+    required: false,
+    label: "Enter OTP *"
   }
 };
 
