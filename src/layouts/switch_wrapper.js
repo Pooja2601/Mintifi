@@ -40,7 +40,7 @@ const SwitchButtonWrapper = props => {
                 border: localState.ownership === val.key && "2px solid #00bfa5"
               }}
             >
-              <i className="fa fa-building" />
+              <i className={val.icon} />
               <small>{val.value}</small>
             </button>
           ))}

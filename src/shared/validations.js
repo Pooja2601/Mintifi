@@ -2,6 +2,7 @@ import React from "react";
 import { accountType } from "../shared/constants";
 import { BusinessType } from "../shared/constants";
 
+// normaliser
 const phoneNumber = {
   type: "number",
   pattern: /^[0-9]{10}$/,
@@ -12,7 +13,7 @@ const phoneNumber = {
   maxLength: 10,
   minLength: 10
 };
-
+// normaliser
 const emailText = {
   type: "text",
   pattern: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
@@ -79,7 +80,10 @@ const validationPersonalDetails = {
     id: "genderHuman",
     pattern: /^[a-z]$/,
     label: "Gender *",
-    options: [{ key: "m", value: "Male" }, { key: "f", value: "Female" }]
+    options: [
+      { key: "m", value: "Male", icon: "fa fa-male" },
+      { key: "f", value: "Female", icon: "fa fa-female" }
+    ]
   },
   OWNERSHIP: {
     slug: "ownership",
@@ -89,8 +93,8 @@ const validationPersonalDetails = {
     pattern: /^[a-z]+$/,
     label: "Ownership *",
     options: [
-      { key: "rented", value: "Rented" },
-      { key: "owned", value: "Owned" }
+      { key: "rented", value: "Rented", icon: "fa fa-building" },
+      { key: "owned", value: "Owned", icon: "fa fa-home" }
     ]
   },
   ADDRESS1: {
@@ -428,8 +432,8 @@ const validationBusinessDetails = {
     pattern: /^[a-z]+$/,
     label: "Ownership *",
     options: [
-      { key: "rented", value: "Rented" },
-      { key: "owned", value: "Owned" }
+      { key: "rented", value: "Rented", icon: "fa fa-building" },
+      { key: "owned", value: "Owned", icon: "fa fa-home" }
     ]
   },
   RETAILER_VINTAGE: {
