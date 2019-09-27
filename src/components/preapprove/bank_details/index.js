@@ -46,7 +46,6 @@ class BankDetail extends Component {
   };
 
   state = {
-    dropdownSelected: { value: "", label: validationBank.ACCOUNT_TYPE.title },
     acc_type: null,
     bank_name: "",
     acc_number: "",
@@ -94,7 +93,7 @@ class BankDetail extends Component {
         }
         break;
       case ACCOUNT_TYPE:
-        this.tempState["dropdownSelected"] = value;
+        this.tempState[ACCOUNT_TYPE.selectedOption] = value;
         this.tempState[ACCOUNT_TYPE.slug] = value.value;
         break;
       case MICR_CODE:
@@ -357,41 +356,12 @@ class BankDetail extends Component {
               />
             </div>
             <div className={"col-md-6 col-sm-6 col-xs-12"}>
-              <div className="form-group mb-3">
-                <label
-                  htmlFor={ACCOUNT_TYPE.id}
-                  className={"bmd-label-floating"}
-                >
-                  {ACCOUNT_TYPE.label}
-                </label>
-                <Select
-                  options={ACCOUNT_TYPE.options}
-                  required={true}
-                  value={this.state.dropdownSelected}
-                  id={ACCOUNT_TYPE.id}
-                  inputId={ACCOUNT_TYPE.id}
-                  // onBlur={() => this.validationErrorMsg()}
-                  onChange={e => this.onChangeHandler(ACCOUNT_TYPE, e)}
-                />
-                {/*<select style={{fontWeight: 600}}
-                                        title="Please select Company Type"
-                                        value={this.state.acc_type} required={true}
-                                        onChange={(e) => {
-                                            let {value} = e.target;
-                                            this.setState({acc_type: value}, () => this.props.setBankDetail(this.state));
-                                            this.validate.acc_type = (value.length > 0);
-                                            this.handleValidation();
-                                        }}
-                                        onBlur={() => this.validationErrorMsg()}
-                                        className="form-control font_weight" id="accountType">
-                                    <option value={''}>Select Account Type</option>
-                                    {
-                                        Object.keys(accountType).map((key, index) =>
-                                            (<option key={index} value={key}>{accountType[key]}</option>)
-                                        )
-                                    }
-                                </select>*/}
-              </div>
+              <InputWrapper
+                validation={ACCOUNT_TYPE}
+                localState={this.state}
+                onChangeHandler={this.onChangeHandler}
+                isListType={true}
+              />
             </div>
           </div>
 

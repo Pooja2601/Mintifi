@@ -388,41 +388,12 @@ class ENachBankDetail extends Component {
               />
             </div>
             <div className={"col-md-6 col-sm-6 col-xs-12"}>
-              <div className="form-group mb-3">
-                <label
-                  htmlFor={ACCOUNT_TYPE.id}
-                  className={"bmd-label-floating"}
-                >
-                  {ACCOUNT_TYPE.label}
-                </label>
-                <Select
-                  options={ACCOUNT_TYPE.options}
-                  required={ACCOUNT_TYPE.required}
-                  id={ACCOUNT_TYPE.id}
-                  pattern={regexTrim(ACCOUNT_TYPE.pattern)}
-                  value={this.state.dropdownSelected}
-                  inputId={ACCOUNT_TYPE.id}
-                  onChange={e => this.onChangeHandler(ACCOUNT_TYPE, e)}
-                />
-                {/*<select style={{fontWeight: 600}}
-                                        title="Please select Company Type"
-                                        value={this.state.acc_type} required={true}
-                                        onChange={(e) => {
-                                            let {value} = e.target;
-                                            this.setState({acc_type: value}, () => this.props.EnachsetBankDetail(this.state));
-                                            this.validate.acc_type = (value.length > 0);
-                                            this.handleValidation();
-                                        }}
-                                        onBlur={() => this.validationErrorMsg()}
-                                        className="form-control font_weight" id="accountType">
-                                    <option value={''}>Select Account Type</option>
-                                    {
-                                        Object.keys(accountType).map((key, index) =>
-                                            (<option key={index} value={key}>{accountType[key]}</option>)
-                                        )
-                                    }
-                                </select>*/}
-              </div>
+              <InputWrapper
+                validation={ACCOUNT_TYPE}
+                localState={this.state}
+                onChangeHandler={this.onChangeHandler}
+                isListType={true}
+              />
             </div>
           </div>
 

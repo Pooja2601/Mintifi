@@ -238,7 +238,8 @@ const validationBank = {
     pattern: /^[a-z]{2,}$/,
     options: accountType,
     required: true,
-    label: "Account Type *"
+    label: "Account Type *",
+    selectedOption: { value: "", label: "Select Account Type" }
   },
   BANK_NAME: {
     id: "nameBank",
