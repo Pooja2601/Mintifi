@@ -4,6 +4,7 @@ import { withRouter } from "react-router-dom";
 import connect from "react-redux/es/connect/connect";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import Select from "react-select";
 
 const InputWrapper = props => {
   const {
@@ -14,7 +15,8 @@ const InputWrapper = props => {
     addText,
     isPhone,
     isSubmitted,
-    isDatepicker
+    isDatepicker,
+    isListType
   } = props;
   const VALIDATION = validation;
   const { showError, slug, message } = alertObj;
@@ -44,6 +46,26 @@ const InputWrapper = props => {
               onChange={e => onChangeHandler(VALIDATION, e)}
             />
           </div>
+        </div>
+      </>
+    );
+  };
+
+  const listSelectionFunction = () => {
+    return (
+      <>
+        <div className="form-group mb-3">
+          <label htmlFor={VALIDATION.id} className={"bmd-label-floating"}>
+            {VALIDATION.label}
+          </label>
+          <Select
+            options={VALIDATION.options}
+            required={VALIDATION.required}
+            id={VALIDATION.id}
+            inputId={VALIDATION.inputId}
+            value={this.state.optionSelected}
+            onChange={e => onChangeHandler(VALIDATION, e)}
+          />
         </div>
       </>
     );
@@ -96,7 +118,15 @@ const InputWrapper = props => {
     );
   };
 
-  return isDatepicker ? datePickerFunction() : inputFunction();
+  // return isDatepicker ? datePickerFunction() : inputFunction();
+
+  if (isDatepicker) {
+    return datePickerFunction();
+  } else if (isListType) {
+    return listSelectionFunction();
+  } else {
+    return inputFunction();
+  }
 };
 
 InputWrapper.defaultProps = {
@@ -107,7 +137,8 @@ InputWrapper.defaultProps = {
   addText: "",
   isPhone: false,
   isSubmitted: false,
-  isDatepicker: false
+  isDatepicker: false,
+  isListType: false
 };
 
 const mapStateToProp = state => ({

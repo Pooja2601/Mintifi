@@ -396,25 +396,13 @@ class BusinessDetail extends Component {
                   value={this.state.optionSelected}
                   onChange={e => this.onChangeHandler(COMPANY_TYPE, e)}
                 />
-                {/*<select style={{fontWeight: 600}}
-                                        title="Please select Company Type"
-                                        value={this.state.company_type} required={true}
-                                        onChange={(e) => {
-                                            let {value} = e.target;
-                                            this.setState({company_type: value}, () => this.props.setBusinessDetail(this.state));
-                                            this.validate.company_type = (value.length > 0);
-                                            this.handleValidation();
-                                        }}
-                                        onBlur={() => this.validationErrorMsg()}
-                                        className="form-control font_weight" id="companyType">
-                                    <option value={''}>Select Company Type</option>
-                                    {
-                                        Object.keys(BusinessType).map((key, index) =>
-                                            (<option key={index} value={key}>{BusinessType[key]}</option>)
-                                        )
-                                    }
-                                </select>*/}
               </div>
+              {/* <InputWrapper
+                validation={COMPANY_TYPE}
+                onChangeHandler={this.onChangeHandler}
+                localState={this.state}
+                isListType={true}
+              /> */}
             </div>
             <div className={"col-md-6 col-sm-6 col-xs-12"}>
               <InputWrapper
@@ -429,27 +417,12 @@ class BusinessDetail extends Component {
             <div className={"col-md-6 col-sm-6 col-xs-12"}>
               {/* <InputWrapper validation={INC_DATE} onChangeHandler={this.onChangeHandler} localState={this.state} /> */}
 
-              <div className="form-group mb-3">
-                <label htmlFor={INC_DATE.id} className="bmd-label-floating">
-                  {INC_DATE.label}
-                </label>
-                <div className={"d-block"}>
-                  <DatePicker
-                    className="form-control font_weight"
-                    // placeholderText={"Date of Birth"}
-                    selected={new Date(this.state.inc_date)}
-                    id={INC_DATE.id}
-                    pattern={regexTrim(INC_DATE.pattern)}
-                    scrollableYearDropdown
-                    dropdownMode={"scroll"}
-                    showMonthDropdown
-                    required={INC_DATE.required}
-                    showYearDropdown
-                    dateFormat={INC_DATE.dateFormat}
-                    onChange={date => this.onChangeHandler(INC_DATE, date)}
-                  />
-                </div>
-              </div>
+              <InputWrapper
+                validation={INC_DATE}
+                localState={this.state}
+                onChangeHandler={this.onChangeHandler}
+                isDatepicker={true}
+              />
             </div>
             <div className={"col-sm-6 col-xs-12 col-md-6 text-left"}>
               <SwitchButtonWrapper
