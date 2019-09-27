@@ -11,7 +11,8 @@ const ButtonWrapper = props => {
     localState,
     alertObj,
     addText,
-    disabled
+    disabled,
+    label
   } = props;
   const VALIDATION = validation;
   const { showError, slug } = alertObj;
@@ -26,7 +27,7 @@ const ButtonWrapper = props => {
             onClick={e => onChangeHandler(e)}
             disabled={localState.missed_fields ? disabled : ""}
           >
-            PROCEED
+            {label}
           </button>
         </div>
       </div>

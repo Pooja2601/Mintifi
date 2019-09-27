@@ -39,7 +39,8 @@ class AdharPan extends Component {
     gst_details: {},
     checked: {},
     selectedGST: "",
-    missed_fields: true
+    missed_fields: true,
+    label: "PROCEED"
   };
   gstDetails = {
     company_type: "",
@@ -360,6 +361,7 @@ class AdharPan extends Component {
               localState={this.state}
               onChangeHandler={this.onChangeHandler}
               disabled={this.state.missed_fields}
+              label={this.state.label}
             />
             {/* {!this.state.missed_fields && (
                             <input
