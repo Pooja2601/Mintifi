@@ -43,7 +43,8 @@ class MobileOtp extends Component {
     otp_reference_id: "",
     verified: false,
     verified_number: "",
-    mobile_correct: false
+    mobile_correct: false,
+    count: 0
   };
 
   tempState = this.state;
@@ -76,8 +77,12 @@ class MobileOtp extends Component {
       showAlert(resp.data.message, "warn");
       this.setState({ loading: false, submitted: false });
     } else if (resp.status === apiActions.SUCCESS_RESPONSE) {
-      this.setState({ otp_reference_id: resp.data.otp_reference_code }, () =>
-        setAdharManual(this.state)
+      this.setState(
+        {
+          otp_reference_id: resp.data.otp_reference_code,
+          count: this.state.count + 1
+        },
+        () => setAdharManual(this.state)
       );
       this.interval = setInterval(e => {
         this.setState({ timer: this.state.timer - 1 }, () => {
@@ -288,16 +293,16 @@ class MobileOtp extends Component {
               name="submit"
               style={{
                 visibility:
-                  !this.state.mobile_correct && !this.state.loading
+                  !this.state.submitted && !this.state.loading
                     ? "visible"
                     : "hidden"
               }}
-              // disabled={}
+              disabled={!(!this.state.missed_fields && !this.state.submitted)}
               // value={"Send OTP"}
               onClick={e => this._formSubmit(e)}
-              className="form-submit btn btn-raised greenButton m-auto d-block"
+              className="form-submit btn btn-raised greenButton"
             >
-              Send OTP
+              {this.state.count === 0 ? "Send OTP" : "Resend OTP"}
             </button>
 
             <button
