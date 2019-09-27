@@ -26,6 +26,7 @@ import {
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import InputWrapper from "./../../../layouts/input_wrapper";
+import SwitchButtonWrapper from "./../../../layouts/switch_wrapper";
 
 const {
   COMPANY_NAME,
@@ -424,40 +425,11 @@ class BusinessDetail extends Component {
               </div>
             </div>
             <div className={"col-sm-6 col-xs-12 col-md-6 text-left"}>
-              <label htmlFor={OWNERSHIP.id} className="d-block bmd-label">
-                {OWNERSHIP.label}
-              </label>
-              <div
-                className="btn-group ToggleBtn"
-                id={OWNERSHIP.id}
-                role="groupProperty"
-                aria-label="..."
-              >
-                <button
-                  type={OWNERSHIP.type}
-                  className="btn btn-default btnLeft"
-                  onClick={() => this.onChangeHandler(OWNERSHIP, "rented")}
-                  style={{
-                    border:
-                      this.state.ownership === "rented" && "2px solid #00bfa5"
-                  }}
-                >
-                  <i className="fa fa-building" />
-                  <small>Rented</small>
-                </button>
-                <button
-                  type={OWNERSHIP.type}
-                  className="btn btn-default btnRight"
-                  onClick={() => this.onChangeHandler(OWNERSHIP, "owned")}
-                  style={{
-                    border:
-                      this.state.ownership === "owned" && "2px solid #00bfa5"
-                  }}
-                >
-                  <i className="fa fa-home" />
-                  <small>Owned</small>
-                </button>
-              </div>
+              <SwitchButtonWrapper
+                onChangeHandler={this.onChangeHandler}
+                validation={OWNERSHIP}
+                localState={this.state}
+              />
             </div>
           </div>
 
