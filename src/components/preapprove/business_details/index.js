@@ -343,13 +343,16 @@ class BusinessDetail extends Component {
             // style={{visibility: (checkObject(gstProfile) && gstProfile.lgnm) ? 'visible' : 'hidden'}}
           >
             <div className={"col-md-12 col-sm-12 col-xs-12"}>
-                <InputWrapper validation={COMPANY_NAME} onChangeHandler={this.onChangeHandler} localState={this.state} />
-            
+              <InputWrapper
+                validation={COMPANY_NAME}
+                onChangeHandler={this.onChangeHandler}
+                localState={this.state}
+              />
             </div>
           </div>
           <div className={"row"}>
             <div className={"col-md-6 col-sm-6 col-xs-12"}>
-            {/* <InputWrapper validation={COMPANY_TYPE} onChangeHandler={this.onChangeHandler} localState={this.state} /> */}
+              {/* <InputWrapper validation={COMPANY_TYPE} onChangeHandler={this.onChangeHandler} localState={this.state} /> */}
               <div className="form-group mb-3">
                 <label
                   htmlFor={COMPANY_TYPE.id}
@@ -383,253 +386,281 @@ class BusinessDetail extends Component {
                                         )
                                     }
                                 </select>*/}
+              </div>
+            </div>
+            <div className={"col-md-6 col-sm-6 col-xs-12"}>
+              <InputWrapper
+                validation={GST_NUMBER}
+                onChangeHandler={this.onChangeHandler}
+                localState={this.state}
+              />
+            </div>
+          </div>
 
-                            </div>
-                        </div>
-                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
-                        <InputWrapper validation={GST_NUMBER} onChangeHandler={this.onChangeHandler} localState={this.state} />
-                            
-                        </div>
+          <div className={"row"}>
+            <div className={"col-md-6 col-sm-6 col-xs-12"}>
+              {/* <InputWrapper validation={INC_DATE} onChangeHandler={this.onChangeHandler} localState={this.state} /> */}
 
+              <div className="form-group mb-3">
+                <label htmlFor={INC_DATE.id} className="bmd-label-floating">
+                  {INC_DATE.label}
+                </label>
+                <div className={"d-block"}>
+                  <DatePicker
+                    className="form-control font_weight"
+                    // placeholderText={"Date of Birth"}
+                    selected={new Date(this.state.inc_date)}
+                    id={INC_DATE.id}
+                    pattern={regexTrim(INC_DATE.pattern)}
+                    scrollableYearDropdown
+                    dropdownMode={"scroll"}
+                    showMonthDropdown
+                    required={INC_DATE.required}
+                    showYearDropdown
+                    dateFormat={INC_DATE.dateFormat}
+                    onChange={date => this.onChangeHandler(INC_DATE, date)}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className={"col-sm-6 col-xs-12 col-md-6 text-left"}>
+              <label htmlFor={OWNERSHIP.id} className="d-block bmd-label">
+                {OWNERSHIP.label}
+              </label>
+              <div
+                className="btn-group ToggleBtn"
+                id={OWNERSHIP.id}
+                role="groupProperty"
+                aria-label="..."
+              >
+                <button
+                  type={OWNERSHIP.type}
+                  className="btn btn-default btnLeft"
+                  onClick={() => this.onChangeHandler(OWNERSHIP, "rented")}
+                  style={{
+                    border:
+                      this.state.ownership === "rented" && "2px solid #00bfa5"
+                  }}
+                >
+                  <i className="fa fa-building" />
+                  <small>Rented</small>
+                </button>
+                <button
+                  type={OWNERSHIP.type}
+                  className="btn btn-default btnRight"
+                  onClick={() => this.onChangeHandler(OWNERSHIP, "owned")}
+                  style={{
+                    border:
+                      this.state.ownership === "owned" && "2px solid #00bfa5"
+                  }}
+                >
+                  <i className="fa fa-home" />
+                  <small>Owned</small>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className={"row"}>
+            <div className={"col-md-6 col-sm-6 col-xs-12"}>
+              <InputWrapper
+                validation={AVERAGE_TRANSACTION}
+                onChangeHandler={this.onChangeHandler}
+                localState={this.state}
+              />
+            </div>
+
+            <div className={"col-md-6 col-sm-6 col-xs-12"}>
+              <InputWrapper
+                validation={DEALER_CODE}
+                onChangeHandler={this.onChangeHandler}
+                localState={this.state}
+              />
+            </div>
+          </div>
+
+          <div className={"row"}>
+            {!payload.retailer_onboarding_date ? (
+              <div className={"col-md-6 col-sm-6 col-xs-12"}>
+                <InputWrapper
+                  validation={RETAILER_VINTAGE}
+                  onChangeHandler={this.onChangeHandler}
+                  localState={this.state}
+                />
+              </div>
+            ) : (
+              <></>
+            )}
+          </div>
+          {this.state.gst_correct === false || this.state.gst === "" ? (
+            <>
+              <div className={"row"}>
+                <div className={"col-md-6 col-sm-6 col-xs-12"}>
+                  <InputWrapper
+                    validation={BUSINESS_EMAIL}
+                    onChangeHandler={this.onChangeHandler}
+                    localState={this.state}
+                  />
+                </div>
+                <div className={"col-md-6 col-sm-6 col-xs-12"}>
+                  <div className="form-group mb-3">
+                    <label
+                      htmlFor={BUSINESS_PHONE.id}
+                      className={"bmd-label-floating"}
+                    >
+                      {BUSINESS_PHONE.label}{" "}
+                    </label>
+                    <div className={"input-group"}>
+                      <div className="input-group-prepend phoneDisplay">
+                        <span className="input-group-text" id="basic-addon3">
+                          +91
+                        </span>
+                      </div>
+                      <input
+                        type={BUSINESS_PHONE.type}
+                        className="form-control font_weight prependInput"
+                        // placeholder="10 digit Mobile Number"
+                        name="url"
+                        disabled={this.state.submitted}
+                        min={BUSINESS_PHONE.min}
+                        max={BUSINESS_PHONE.max}
+                        maxLength={BUSINESS_PHONE.maxLength}
+                        minLength={BUSINESS_PHONE.minLength}
+                        pattern={regexTrim(BUSINESS_PHONE.pattern)}
+                        title={BUSINESS_PHONE.title}
+                        id={BUSINESS_PHONE.id}
+                        required={BUSINESS_PHONE.required}
+                        // readOnly={BUSINESS_PHONE.readOnly}
+                        value={this.state.business_phone}
+                        // ref={ref => (this.obj.number = ref)}
+                        onChange={e =>
+                          this.onChangeHandler(BUSINESS_PHONE, e.target.value)
+                        }
+                        aria-describedby="basic-addon3"
+                      />
                     </div>
+                  </div>
+                </div>
+              </div>
 
-                    <div className={"row"}>
+              <div className={"row"}>
+                <div className={"col-md-6 col-sm-6 col-xs-12"}>
+                  <div className="form-group mb-3">
+                    <label
+                      htmlFor="no_of_founders"
+                      className={"bmd-label-floating"}
+                    >
+                      {NO_OF_FOUNDERS.label}
+                    </label>
+                    <input
+                      type={NO_OF_FOUNDERS.type}
+                      className="form-control font_weight"
+                      pattern={regexTrim(NO_OF_FOUNDERS.pattern)}
+                      title={NO_OF_FOUNDERS.title}
+                      id={NO_OF_FOUNDERS.id}
+                      required={NO_OF_FOUNDERS.required}
+                      value={this.state.no_of_founders}
+                      onChange={e =>
+                        this.onChangeHandler(NO_OF_FOUNDERS, e.target.value)
+                      }
+                    />
+                  </div>
+                </div>
 
-                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
-                        {/* <InputWrapper validation={INC_DATE} onChangeHandler={this.onChangeHandler} localState={this.state} /> */}
-                       
-                            <div className="form-group mb-3">
-                                <label htmlFor={INC_DATE.id} className="bmd-label-floating">
-                                    {INC_DATE.label}
-                                </label>
-                                <div className={'d-block'}>
-                                    <DatePicker
-                                        className="form-control font_weight"
-                                        // placeholderText={"Date of Birth"}
-                                        selected={new Date(this.state.inc_date)}
-                                        id={INC_DATE.id}
-                                        pattern={regexTrim(INC_DATE.pattern)}
-                                        scrollableYearDropdown
-                                        dropdownMode={"scroll"}
-                                        showMonthDropdown
-                                        required={INC_DATE.required}
-                                        showYearDropdown
-                                        dateFormat={INC_DATE.dateFormat}
-                                        onChange={(date) => this.onChangeHandler(INC_DATE, date)}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div className={"col-sm-6 col-xs-12 col-md-6 text-left"}>
-                                                    
-                            <label htmlFor={OWNERSHIP.id} className="d-block bmd-label">
-                                {OWNERSHIP.label}
-                            </label>
-                            <div
-                                className="btn-group ToggleBtn"
-                                id={OWNERSHIP.id}
-                                role="groupProperty"
-                                aria-label="..."
-                            >
+                <div className={"col-md-6 col-sm-6 col-xs-12"}>
+                  <div className="form-group mb-3">
+                    <label
+                      htmlFor="no_of_employees"
+                      className={"bmd-label-floating"}
+                    >
+                      {NO_OF_EMPLOYEES.label}
+                    </label>
+                    <input
+                      type={NO_OF_EMPLOYEES.type}
+                      className="form-control font_weight"
+                      pattern={regexTrim(NO_OF_EMPLOYEES.pattern)}
+                      title={NO_OF_EMPLOYEES.title}
+                      id={NO_OF_EMPLOYEES.id}
+                      required={NO_OF_EMPLOYEES.required}
+                      value={this.state.no_of_employees}
+                      onChange={e =>
+                        this.onChangeHandler(NO_OF_EMPLOYEES, e.target.value)
+                      }
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className={"row"}>
+                <div className={"col-md-6 col-sm-6 col-xs-12"}>
+                  <div className="form-group mb-3 ">
+                    <label htmlFor={ADDRESS1.id} className="bmd-label-floating">
+                      {ADDRESS1.label}
+                    </label>
+                    <input
+                      type={ADDRESS1.type}
+                      className="form-control font_weight"
+                      // placeholder="Pincode"
+                      title={ADDRESS1.title}
+                      pattern={regexTrim(ADDRESS1.pattern)}
+                      autoCapitalize={ADDRESS1.autoCapitalize}
+                      id={ADDRESS1.id}
+                      required={ADDRESS1.required}
+                      value={this.state.address1}
+                      // ref={ref => (this.obj.pan = ref)}
+                      onChange={e =>
+                        this.onChangeHandler(ADDRESS1, e.target.value)
+                      }
+                    />
+                  </div>
+                </div>
 
-                                <button
-                                    type={OWNERSHIP.type}
-                                    className="btn btn-default btnLeft"
-                                    onClick={() => this.onChangeHandler(OWNERSHIP, 'rented')}
-                                    style={{
-                                        border:
-                                            this.state.ownership === "rented" && "2px solid #00bfa5",
-                                    }}
-                                >
-                                    <i
-                                        className="fa fa-building"
-                                    />
-                                    <small>Rented</small>
-                                </button>
-                                <button
-                                    type={OWNERSHIP.type}
-                                    className="btn btn-default btnRight"
-                                    onClick={() => this.onChangeHandler(OWNERSHIP, 'owned')}
-                                    style={{
-                                        border:
-                                            this.state.ownership === "owned" && "2px solid #00bfa5",
-                                    }}
-                                >
-                                    <i
-                                        className="fa fa-home"
-                                    />
-                                    <small>Owned</small>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                <div className={"col-md-6 col-sm-6 col-xs-12"}>
+                  <div className="form-group mb-3">
+                    <label htmlFor={PINCODE.id} className="bmd-label-floating">
+                      {PINCODE.label}
+                    </label>
+                    <input
+                      type={PINCODE.type}
+                      className="form-control font_weight"
+                      // placeholder="Pincode"
+                      pattern={regexTrim(PINCODE.pattern)}
+                      title={PINCODE.title}
+                      autoCapitalize={PINCODE.autoCapitalize}
+                      id={PINCODE.id}
+                      required={PINCODE.required}
+                      value={this.state.pincode}
+                      // ref={ref => (this.obj.pan = ref)}
+                      onChange={e =>
+                        this.onChangeHandler(PINCODE, e.target.value)
+                      }
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className={"row"}>
+                <div className={"col-md-6 col-sm-6 col-xs-12"}>
+                  <div className="form-group mb-3 ">
+                    <label htmlFor={ADDRESS2.id} className="bmd-label-floating">
+                      {ADDRESS2.label}
+                    </label>
+                    <input
+                      type={ADDRESS2.type}
+                      className="form-control font_weight"
+                      // placeholder="Pincode"
 
-                    <div className={"row"}>
-                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
-                             <InputWrapper validation={AVERAGE_TRANSACTION} onChangeHandler={this.onChangeHandler} localState={this.state} />
-                           
-                        </div>
-
-                        <div className={"col-md-6 col-sm-6 col-xs-12"}>
-                        <InputWrapper validation={DEALER_CODE} onChangeHandler={this.onChangeHandler} localState={this.state} />
-                           
-                        </div>
-                    </div>
-
-                    <div className={"row"}>
-                        {(!payload.retailer_onboarding_date) ?
-                            <div className={"col-md-6 col-sm-6 col-xs-12"}>
-                                 <InputWrapper validation={RETAILER_VINTAGE} onChangeHandler={this.onChangeHandler} localState={this.state} />
-                        
-                            </div> : <></>}
-                    </div>
-                    {(this.state.gst_correct === false || this.state.gst === "") ? <>
-                        <div className={"row"}>
-                            <div className={"col-md-6 col-sm-6 col-xs-12"}>
-                            <InputWrapper validation={BUSINESS_EMAIL} onChangeHandler={this.onChangeHandler} localState={this.state} />
-                               
-                            </div>
-                            <div className={"col-md-6 col-sm-6 col-xs-12"}>
-                                <div className="form-group mb-3">
-                                    <label htmlFor={BUSINESS_PHONE.id}
-                                           className={"bmd-label-floating"}>{BUSINESS_PHONE.label} </label>
-                                    <div className={"input-group"}>
-                                        <div className="input-group-prepend phoneDisplay">
-                                        <span className="input-group-text" id="basic-addon3">
-                                            +91
-                                        </span>
-                                        </div>
-                                        <input
-                                            type={BUSINESS_PHONE.type}
-                                            className="form-control font_weight prependInput"
-                                            // placeholder="10 digit Mobile Number"
-                                            name="url"
-                                            disabled={this.state.submitted}
-                                            min={BUSINESS_PHONE.min}
-                                            max={BUSINESS_PHONE.max}
-                                            maxLength={BUSINESS_PHONE.maxLength}
-                                            minLength={BUSINESS_PHONE.minLength}
-                                            pattern={regexTrim(BUSINESS_PHONE.pattern)}
-                                            title={BUSINESS_PHONE.title}
-                                            id={BUSINESS_PHONE.id}
-                                            required={BUSINESS_PHONE.required}
-                                            // readOnly={BUSINESS_PHONE.readOnly}
-                                            value={this.state.business_phone}
-                                            // ref={ref => (this.obj.number = ref)}
-                                            onChange={e =>
-                                                this.onChangeHandler(BUSINESS_PHONE, e.target.value)
-                                            }
-                                            aria-describedby="basic-addon3"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className={"row"}>
-
-                            <div className={"col-md-6 col-sm-6 col-xs-12"}>
-                                <div className="form-group mb-3">
-                                    <label htmlFor="no_of_founders" className={"bmd-label-floating"}>{NO_OF_FOUNDERS.label}</label>
-                                    <input
-                                        type={NO_OF_FOUNDERS.type}
-                                        className="form-control font_weight"
-                                        pattern={regexTrim(NO_OF_FOUNDERS.pattern)}
-                                        title={NO_OF_FOUNDERS.title}
-                                        id={NO_OF_FOUNDERS.id}
-                                        required={NO_OF_FOUNDERS.required}
-                                        value={this.state.no_of_founders}
-                                        onChange={(e) => this.onChangeHandler(NO_OF_FOUNDERS, e.target.value)}
-                                    />
-                                </div>
-                            </div>
-
-                            <div className={"col-md-6 col-sm-6 col-xs-12"}>
-                                <div className="form-group mb-3">
-                                    <label htmlFor="no_of_employees" className={"bmd-label-floating"}>{NO_OF_EMPLOYEES.label}</label>
-                                    <input
-                                        type={NO_OF_EMPLOYEES.type}
-                                        className="form-control font_weight"
-                                        pattern={regexTrim(NO_OF_EMPLOYEES.pattern)}
-                                        title={NO_OF_EMPLOYEES.title}
-                                        id={NO_OF_EMPLOYEES.id}
-                                        required={NO_OF_EMPLOYEES.required}
-                                        value={this.state.no_of_employees}
-                                        onChange={(e) => this.onChangeHandler(NO_OF_EMPLOYEES, e.target.value)}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div className={"row"}>
-                            <div className={"col-md-6 col-sm-6 col-xs-12"}>
-                                <div className="form-group mb-3 ">
-                                    <label htmlFor={ADDRESS1.id} className="bmd-label-floating">
-                                       {ADDRESS1.label}
-                                    </label>
-                                    <input
-                                        type={ADDRESS1.type}
-                                        className="form-control font_weight"
-                                        // placeholder="Pincode"
-                                        title={ADDRESS1.title}
-                                        pattern={regexTrim(ADDRESS1.pattern)}
-                                        autoCapitalize={ADDRESS1.autoCapitalize}
-                                        id={ADDRESS1.id}
-                                        required={ADDRESS1.required}
-                                        value={this.state.address1}
-                                        // ref={ref => (this.obj.pan = ref)}
-                                        onChange={(e) => this.onChangeHandler(ADDRESS1, e.target.value)}
-                                    />
-                                </div>
-                            </div>
-
-                            <div className={"col-md-6 col-sm-6 col-xs-12"}>
-                                <div className="form-group mb-3">
-                                    <label htmlFor={PINCODE.id} className="bmd-label-floating">
-                                        {PINCODE.label}
-                                    </label>
-                                    <input
-                                        type={PINCODE.type}
-                                        className="form-control font_weight"
-                                        // placeholder="Pincode"
-                                        pattern={regexTrim(PINCODE.pattern)}
-                                        title={PINCODE.title}
-                                        autoCapitalize={PINCODE.autoCapitalize}
-                                        id={PINCODE.id}
-                                        required={PINCODE.required}
-                                        value={this.state.pincode}
-                                        // ref={ref => (this.obj.pan = ref)}
-                                        onChange={(e) => this.onChangeHandler(PINCODE, e.target.value)}
-
-                                    />
-                                </div>
-
-                            </div>
-
-                        </div>
-                        <div className={"row"}>
-                            <div className={"col-md-6 col-sm-6 col-xs-12"}>
-                                <div className="form-group mb-3 ">
-
-                                    <label htmlFor={ADDRESS2.id} className="bmd-label-floating">
-                                        {ADDRESS2.label}
-                                    </label>
-                                    <input
-                                        type={ADDRESS2.type}
-                                        className="form-control font_weight"
-                                        // placeholder="Pincode"
-
-                                        title={ADDRESS2.title}
-                                        autoCapitalize={ADDRESS2.autoCapitalize}
-                                        pattern={regexTrim(ADDRESS2.pattern)}
-                                        id={ADDRESS2.id}
-                                        required={ADDRESS2.required}
-                                        value={this.state.address2}
-                                        // ref={ref => (this.obj.pan = ref)}
-                                        onChange={(e) => this.onChangeHandler(ADDRESS2, e.target.value)}
-
-                                    />
-                                </div>
-                            </div>
+                      title={ADDRESS2.title}
+                      autoCapitalize={ADDRESS2.autoCapitalize}
+                      pattern={regexTrim(ADDRESS2.pattern)}
+                      id={ADDRESS2.id}
+                      required={ADDRESS2.required}
+                      value={this.state.address2}
+                      // ref={ref => (this.obj.pan = ref)}
+                      onChange={e =>
+                        this.onChangeHandler(ADDRESS2, e.target.value)
+                      }
+                    />
+                  </div>
+                </div>
 
                 <div className={"col-md-6 col-sm-6 col-xs-12"}>
                   <div className="form-group mb-3">
