@@ -351,7 +351,7 @@ class PersonalDetail extends Component {
 
           <div className={"row"}>
             <div className={"col-md-6 col-sm-6 col-xs-12"}>
-              <div className="form-group mb-3">
+              {/* <div className="form-group mb-3">
                 <label htmlFor={DOB.id} className="bmd-label-floating">
                   {DOB.label}
                 </label>
@@ -368,10 +368,17 @@ class PersonalDetail extends Component {
                     required={DOB.required}
                     showYearDropdown
                     dateFormat={DOB.dateFormat}
-                    onChange={date => this.onChangeHandler(DOB, date)}
+                    onChange={e => this.onChangeHandler(DOB, e)}
                   />
                 </div>
-              </div>
+              </div> */}
+
+              <InputWrapper
+                validation={DOB}
+                localState={this.state}
+                onChangeHandler={this.onChangeHandler}
+                isDatepicker={true}
+              />
             </div>
             <div className={"col-md-6 col-sm-6 col-xs-12"}>
               <InputWrapper
