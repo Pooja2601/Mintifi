@@ -10,11 +10,13 @@ const InputWrapper = props => {
     localState,
     alertObj,
     addText,
-    isPhone
+    isPhone,
+    isSubmitted
   } = props;
   const VALIDATION = validation;
   const { showError, slug } = alertObj;
   let phoneClass = isPhone ? "input-group" : "";
+  let disabled = VALIDATION.disabled ? VALIDATION.disabled : false;
   return (
     <>
       <div className="form-group mb-2">
@@ -42,7 +44,7 @@ const InputWrapper = props => {
             title={VALIDATION.title}
             autoCapitalize={VALIDATION.autoCapitalize}
             id={VALIDATION.id}
-            disabled={VALIDATION.disabled ? VALIDATION.disabled : false}
+            disabled={isSubmitted ? false : disabled}
             required={VALIDATION.required}
             value={localState[VALIDATION.slug]}
             onChange={e => onChangeHandler(VALIDATION, e.target.value)}
@@ -67,7 +69,8 @@ InputWrapper.defaultProps = {
   onChangeHandler: () => {},
   localState: {},
   addText: "",
-  isPhone: false
+  isPhone: false,
+  isSubmitted: false
 };
 
 const mapStateToProp = state => ({
