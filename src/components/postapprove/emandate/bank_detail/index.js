@@ -356,7 +356,7 @@ class ENachBankDetail extends Component {
             {" "}
             Please submit your bank account details for loan disbursement.
             Please note that same bank account will be used to set up
-            auto-debit/standing instructions for repayment of your loan amount.
+            auto-debit/standing instructions for repayment :
           </b>
         </p>
         {/*<h5 className={"text-center"}>{(gstProfile === Object(gstProfile)) ? gstProfile.lgnm : ''}</h5>*/}
