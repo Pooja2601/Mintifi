@@ -78,7 +78,8 @@ const validationPersonalDetails = {
     required: false,
     id: "genderHuman",
     pattern: /^[a-z]$/,
-    label: "Gender *"
+    label: "Gender *",
+    options: [{ key: "m", value: "Male" }, { key: "f", value: "Female" }]
   },
   OWNERSHIP: {
     slug: "ownership",
@@ -86,7 +87,11 @@ const validationPersonalDetails = {
     required: false,
     id: "residenceOwnership",
     pattern: /^[a-z]+$/,
-    label: "Ownership *"
+    label: "Ownership *",
+    options: [
+      { key: "rented", value: "Rented" },
+      { key: "owned", value: "Owned" }
+    ]
   },
   ADDRESS1: {
     slug: "address1",
@@ -421,7 +426,11 @@ const validationBusinessDetails = {
     required: true,
     id: "businessOwnership",
     pattern: /^[a-z]+$/,
-    label: "Ownership *"
+    label: "Ownership *",
+    options: [
+      { key: "rented", value: "Rented" },
+      { key: "owned", value: "Owned" }
+    ]
   },
   RETAILER_VINTAGE: {
     slug: "retailer_vintage",
