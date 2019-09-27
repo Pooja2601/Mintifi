@@ -14,7 +14,7 @@ const InputWrapper = props => {
     isSubmitted
   } = props;
   const VALIDATION = validation;
-  const { showError, slug } = alertObj;
+  const { showError, slug, message } = alertObj;
   let phoneClass = isPhone ? "input-group" : "";
   let disabled = VALIDATION.disabled ? VALIDATION.disabled : false;
   return (
@@ -52,7 +52,7 @@ const InputWrapper = props => {
         </div>
         {showError && slug === VALIDATION.slug ? (
           <small style={{ color: "crimson", fontSize: "11px" }}>
-            {VALIDATION.error}
+            {message ? message : VALIDATION.error}
           </small>
         ) : (
           ""
@@ -64,7 +64,7 @@ const InputWrapper = props => {
 };
 
 InputWrapper.defaultProps = {
-  alertObj: { showError: false, slug: "" },
+  alertObj: { showError: false, slug: "", message: null },
   validation: {},
   onChangeHandler: () => {},
   localState: {},
