@@ -290,9 +290,9 @@ class BankDetail extends Component {
                 <p className="paragraph_styling  text-center secondLinePara">
                     <b>
                         {" "}
-                        Please submit your bank account details for loan disbursement.
+                        Please submit your bank account details for disbursement.
                         Please note that same bank account will be used to set up
-                        auto-debit/standing instructions for repayment of your loan amount.
+                        auto-debit/standing instructions for repayment: 
                     </b>
                 </p>
                 {/*<h5 className={"text-center"}>{(gstProfile === Object(gstProfile)) ? gstProfile.lgnm : ''}</h5>*/}
