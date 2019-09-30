@@ -267,6 +267,7 @@ class PersonalDetail extends Component {
                 localState={this.state}
                 onChangeHandler={this.onChangeHandler}
                 isPhone={true}
+                preventFloat={preventFloat}
               />
             </div>
             <div className={"col-md-6 col-sm-6 col-xs-12"}>

@@ -179,7 +179,7 @@ class MobileOtp extends Component {
   };
 
   onChangeHandler = (field, value) => {
-    // debugger;
+    // ;
     let that = this,
       regex,
       doby;

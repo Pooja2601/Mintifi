@@ -179,14 +179,21 @@ export const regexTrim = regex => {
 };
 
 export const preventFloat = event => {
-  let abcd =
-    event.which != 101 &&
-    event.which != 0 &&
-    (event.which < 43 || event.which > 57)
-      ? true
-      : !isNaN(Number(event.key));
-  if (!abcd) {
-    return event.preventDefault();
+  if (
+    event !== undefined &&
+    event !== "" &&
+    event.which !== undefined &&
+    event.which !== null
+  ) {
+    let abcd =
+      event.which != 101 &&
+      event.which != 0 &&
+      (event.which < 43 || event.which > 57)
+        ? true
+        : !isNaN(Number(event.key));
+    if (!abcd) {
+      return event.preventDefault();
+    }
   }
 };
 
