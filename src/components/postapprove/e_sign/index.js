@@ -40,7 +40,7 @@ class ESign extends Component {
   popUpWindow = "";
   intervalPing = "";
   checkStatusPopup = "";
-  COUNTER_PING = 1000; // 2 minutes
+  COUNTER_PING = 10; // 2 minutes
   INTERVAL_TIMER = 15000;
   eSignAttempt = 0;
 
