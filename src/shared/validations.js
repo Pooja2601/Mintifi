@@ -209,7 +209,7 @@ const validationBank = {
     label: "Account Name *"
   },
   ACCOUNT_NUMBER: {
-    type: "text",
+    type: "number",
     id: "numberAccount",
     slug: "acc_number",
     title: "Enter Account Number",
@@ -254,7 +254,7 @@ const validationBank = {
     label: "Bank Name *"
   },
   MICR_CODE: {
-    type: "text",
+    type: "number",
     pattern: /^[0-9]{9}$/,
     title: "Enter MICR Code",
     error: "Invalid MICR Code",
@@ -329,7 +329,7 @@ const validationBusinessDetails = {
   },
   AVERAGE_TRANSACTION: {
     slug: "avgtrans",
-    type: "text",
+    type: "number",
     pattern: /^[0-9]{5,10}$/,
     title: "Enter Average monthly Transactions",
     autoCapitalize: "characters",

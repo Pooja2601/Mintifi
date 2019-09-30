@@ -375,6 +375,7 @@ class ENachBankDetail extends Component {
                 validation={ACCOUNT_NUMBER}
                 localState={this.state}
                 onChangeHandler={this.onChangeHandler}
+                isNumber={true}
               />
             </div>
           </div>
@@ -416,6 +417,7 @@ class ENachBankDetail extends Component {
                 validation={MICR_CODE}
                 localState={this.state}
                 onChangeHandler={this.onChangeHandler}
+                isNumber={true}
               />
             </div>
           </div>

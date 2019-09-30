@@ -16,7 +16,8 @@ const InputWrapper = props => {
     isPhone,
     isSubmitted,
     isDatepicker,
-    isListType
+    isListType,
+    isNumber
   } = props;
   const VALIDATION = validation;
   const { showError, slug, message } = alertObj;
@@ -103,7 +104,7 @@ const InputWrapper = props => {
               required={VALIDATION.required}
               value={localState[VALIDATION.slug]}
               onChange={e => onChangeHandler(VALIDATION, e.target.value)}
-              onKeyPress={e => (isPhone ? preventFloat(e) : e.target.value)}
+              onKeyPress={e => (isNumber ? preventFloat(e) : e.target.value)}
             />
           </div>
           {showError && slug === VALIDATION.slug ? (
@@ -139,7 +140,8 @@ InputWrapper.defaultProps = {
   isPhone: false,
   isSubmitted: false,
   isDatepicker: false,
-  isListType: false
+  isListType: false,
+  isNumber: false
 };
 
 const mapStateToProp = state => ({
