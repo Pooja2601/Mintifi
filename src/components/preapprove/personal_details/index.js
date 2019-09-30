@@ -17,7 +17,8 @@ import {
   checkObject,
   fieldValidationHandler,
   regexTrim,
-  retrieveDate
+  retrieveDate,
+  preventFloat
 } from "../../../shared/common_logic";
 import ButtonWrapper from "../../../layouts/button_wrapper";
 import InputWrapper from "../../../layouts/input_wrapper";
