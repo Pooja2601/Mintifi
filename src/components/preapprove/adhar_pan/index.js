@@ -366,6 +366,7 @@ class AdharPan extends Component {
                 addText={
                   "Don't have mobile linked with Aadhaar ? No problem, you may skip it "
                 }
+                isNumber={true}
               />
             </div>
           </div>

@@ -260,6 +260,7 @@ class MobileOtp extends Component {
                 onChangeHandler={this.onChangeHandler}
                 isPhone={true}
                 isSubmitted={!this.state.submitted}
+                isNumber={true}
               />
             </div>
             <div
@@ -272,6 +273,7 @@ class MobileOtp extends Component {
                 validation={VERIFY_OTP}
                 localState={this.state}
                 onChangeHandler={this.onChangeHandler}
+                isNumber={true}
               />
             </div>
           </div>

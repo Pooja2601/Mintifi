@@ -461,6 +461,7 @@ class BusinessDetail extends Component {
                   validation={RETAILER_VINTAGE}
                   onChangeHandler={this.onChangeHandler}
                   localState={this.state}
+                  isNumber={true}
                 />
               </div>
             ) : (
@@ -483,6 +484,7 @@ class BusinessDetail extends Component {
                     onChangeHandler={this.onChangeHandler}
                     localState={this.state}
                     isPhone={true}
+                    isNumber={true}
                   />
                 </div>
               </div>
@@ -493,6 +495,7 @@ class BusinessDetail extends Component {
                     validation={NO_OF_FOUNDERS}
                     onChangeHandler={this.onChangeHandler}
                     localState={this.state}
+                    isNumber={true}
                   />
                 </div>
 
@@ -501,6 +504,7 @@ class BusinessDetail extends Component {
                     validation={NO_OF_EMPLOYEES}
                     onChangeHandler={this.onChangeHandler}
                     localState={this.state}
+                    isNumber={true}
                   />
                 </div>
               </div>
@@ -518,6 +522,7 @@ class BusinessDetail extends Component {
                     validation={PINCODE}
                     onChangeHandler={this.onChangeHandler}
                     localState={this.state}
+                    isNumber={true}
                   />
                 </div>
               </div>

@@ -1,44 +1,43 @@
-import {call, put, takeEvery, takeLatest} from "redux-saga/effects";
+import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
 import axios from "axios";
-import {types} from "../actions";
+import { types } from "../actions";
 import {
-    isCached,
-    setCached,
-    setObject,
-    getObject
+  isCached,
+  setCached,
+  setObject,
+  getObject
 } from "../shared/CacheLogic.js";
-import {gst_karza, test_kscan, karza_key, otpUrl} from "../shared/constants";
+import { gst_karza, test_kscan, karza_key, otpUrl } from "../shared/constants";
 
 // Watcher sagas
 export function* watchFetchAuth() {
-    yield takeEvery(types.FETCH_AUTH, workFetchAuth);
+  yield takeEvery(types.FETCH_AUTH, workFetchAuth);
 }
 
 export function* watchSendOTP() {
-    yield takeEvery(types.SEND_OTP, workSendOTP);
+  yield takeEvery(types.SEND_OTP, workSendOTP);
 }
 
 export function* watchVerifyOTP() {
-    yield takeEvery(types.RECEIVE_OTP, workVerifyOTP);
+  yield takeEvery(types.RECEIVE_OTP, workVerifyOTP);
 }
-
 
 // Worker sagas
 
 // sendOTP
-export function* workSendOTP({number}) {
-    // Authorization: "bearer " + token,
-    let config = {
-        headers: {"Content-Type": "application/json", "App-Id": 1}
-    };
-    let dataPayload = {
-        app_id: 1,
-        otp_type: "agent_profile_creation",
-        mobile_number: number,
-        timestamp: new Date()
-    };
-    console.log('workSendOTP')
-    /*
+export function* workSendOTP({ number }) {
+  // Authorization: "bearer " + token,
+  let config = {
+    headers: { "Content-Type": "application/json", "App-Id": 1 }
+  };
+  let dataPayload = {
+    app_id: 1,
+    otp_type: "agent_profile_creation",
+    mobile_number: number,
+    timestamp: new Date()
+  };
+  console.log("workSendOTP");
+  /*
       try {
         const uri = encodeURI(`${otpUrl}`);
         const response = yield call(axios.post, uri, dataPayload, config);
@@ -52,11 +51,10 @@ export function* workSendOTP({number}) {
       }*/
 }
 
-export function* workVerifyOTP({otp_id}) {
-}
+export function* workVerifyOTP({ otp_id }) {}
 
-export function* workFetchAuth({otp, token}) {
-    /* let config = {
+export function* workFetchAuth({ otp, token }) {
+  /* let config = {
          headers: {Authorization: "bearer " + token}
      };
      try {

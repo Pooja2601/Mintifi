@@ -324,7 +324,7 @@ class BankDetail extends Component {
             {" "}
             Please submit your bank account details for loan disbursement.
             Please note that same bank account will be used to set up
-            auto-debit/standing instructions for repayment of your loan amount.
+            auto-debit/standing instructions for repayment:
           </b>
         </p>
         {/*<h5 className={"text-center"}>{(gstProfile === Object(gstProfile)) ? gstProfile.lgnm : ''}</h5>*/}
@@ -343,6 +343,7 @@ class BankDetail extends Component {
                 validation={ACCOUNT_NUMBER}
                 localState={this.state}
                 onChangeHandler={this.onChangeHandler}
+                isNumber={true}
               />
             </div>
           </div>
@@ -384,6 +385,7 @@ class BankDetail extends Component {
                 validation={MICR_CODE}
                 localState={this.state}
                 onChangeHandler={this.onChangeHandler}
+                isNumber={true}
               />
             </div>
           </div>

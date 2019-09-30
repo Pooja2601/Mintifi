@@ -2,7 +2,10 @@
 import { toast } from "react-toastify";
 import { app_id, auth_secret, baseUrl, user_id } from "./constants";
 import { apiActions, postAPI } from "../api";
+<<<<<<< HEAD
 import { object } from "prop-types";
+=======
+>>>>>>> 0edecca84d3bf5518e73f24b8edb447e79c40e15
 
 const chars =
   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
@@ -177,6 +180,25 @@ export const checkObject = obj => {
 export const regexTrim = regex => {
   var str = `${regex}`;
   return str.split("/")[1];
+};
+
+export const preventFloat = event => {
+  if (
+    event !== undefined &&
+    event !== "" &&
+    event.which !== undefined &&
+    event.which !== null
+  ) {
+    let abcd =
+      event.which != 101 &&
+      event.which != 0 &&
+      (event.which < 43 || event.which > 57)
+        ? true
+        : !isNaN(Number(event.key));
+    if (!abcd) {
+      return event.preventDefault();
+    }
+  }
 };
 
 // Validates all the fields

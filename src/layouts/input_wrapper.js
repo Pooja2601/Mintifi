@@ -1,5 +1,5 @@
 import React from "react";
-import { checkObject, regexTrim } from "../shared/common_logic";
+import { checkObject, regexTrim, preventFloat } from "../shared/common_logic";
 import { withRouter } from "react-router-dom";
 import connect from "react-redux/es/connect/connect";
 import DatePicker from "react-datepicker";
@@ -16,13 +16,14 @@ const InputWrapper = props => {
     isPhone,
     isSubmitted,
     isDatepicker,
-    isListType
+    isListType,
+    isNumber
   } = props;
   const VALIDATION = validation;
   const { showError, slug, message } = alertObj;
   let phoneClass = isPhone ? "input-group" : "";
   let disabled = VALIDATION.disabled ? VALIDATION.disabled : false;
-
+  // let keyPress = isPhone ? preventFloat() : "";
   const datePickerFunction = () => {
     return (
       <>
@@ -103,6 +104,7 @@ const InputWrapper = props => {
               required={VALIDATION.required}
               value={localState[VALIDATION.slug]}
               onChange={e => onChangeHandler(VALIDATION, e.target.value)}
+              onKeyPress={e => (isNumber ? preventFloat(e) : e.target.value)}
             />
           </div>
           {showError && slug === VALIDATION.slug ? (
@@ -138,7 +140,8 @@ InputWrapper.defaultProps = {
   isPhone: false,
   isSubmitted: false,
   isDatepicker: false,
-  isListType: false
+  isListType: false,
+  isNumber: false
 };
 
 const mapStateToProp = state => ({
