@@ -1,5 +1,5 @@
 import React from "react";
-import { checkObject, regexTrim } from "../shared/common_logic";
+import { checkObject, regexTrim, preventFloat } from "../shared/common_logic";
 import { withRouter } from "react-router-dom";
 import connect from "react-redux/es/connect/connect";
 import DatePicker from "react-datepicker";
@@ -16,8 +16,7 @@ const InputWrapper = props => {
     isPhone,
     isSubmitted,
     isDatepicker,
-    isListType,
-    preventFloat
+    isListType
   } = props;
   const VALIDATION = validation;
   const { showError, slug, message } = alertObj;
@@ -104,7 +103,7 @@ const InputWrapper = props => {
               required={VALIDATION.required}
               value={localState[VALIDATION.slug]}
               onChange={e => onChangeHandler(VALIDATION, e.target.value)}
-              onKeyPress={e => preventFloat(e)}
+              onKeyPress={e => (isPhone ? preventFloat(e) : e.target.value)}
             />
           </div>
           {showError && slug === VALIDATION.slug ? (

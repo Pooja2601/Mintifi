@@ -16,7 +16,8 @@ import { fetchAPI, apiActions, postAPI } from "../../../api";
 import {
   checkObject,
   fieldValidationHandler,
-  regexTrim
+  regexTrim,
+  preventFloat
 } from "../../../shared/common_logic";
 import { validationMobileOtp } from "../../../shared/validations";
 import InputWrapper from "../../../layouts/input_wrapper";
@@ -260,6 +261,7 @@ class MobileOtp extends Component {
                 onChangeHandler={this.onChangeHandler}
                 isPhone={true}
                 isSubmitted={!this.state.submitted}
+                preventFloat={preventFloat}
               />
             </div>
             <div

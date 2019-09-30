@@ -17,8 +17,7 @@ import {
   checkObject,
   fieldValidationHandler,
   regexTrim,
-  retrieveDate,
-  preventFloat
+  retrieveDate
 } from "../../../shared/common_logic";
 import ButtonWrapper from "../../../layouts/button_wrapper";
 import InputWrapper from "../../../layouts/input_wrapper";
@@ -267,7 +266,6 @@ class PersonalDetail extends Component {
                 localState={this.state}
                 onChangeHandler={this.onChangeHandler}
                 isPhone={true}
-                preventFloat={preventFloat}
               />
             </div>
             <div className={"col-md-6 col-sm-6 col-xs-12"}>
