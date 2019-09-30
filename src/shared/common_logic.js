@@ -184,11 +184,11 @@ export const fieldValidationHandler = props => {
   const { showAlert, validations, localState, fieldAlert } = props;
   //   console.log(object.entries(validations));
   const lomo = Object.entries(validations).some((val, key) => {
-    console.log(
-      Object.entries(validations).some((val, key) => {
-        console.log(val);
-      })
-    );
+    // console.log(
+    //   Object.entries(validations).some((val, key) => {
+    //     console.log(val);
+    //   })
+    // );
     var i = 1;
     console.log(val[i].slug);
     if (val[i].required) {
