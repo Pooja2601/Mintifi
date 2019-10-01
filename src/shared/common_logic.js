@@ -151,6 +151,9 @@ export const retrieveDate = dateString => {
     date = dt.getDate();
     month = dt.getMonth() + 1;
     year = dt.getFullYear();
+
+    date = date.toString().length === 1 ? `0${date}` : date;
+    month = month.toString().length === 1 ? `0${month}` : month;
     return `${year}-${month}-${date}`;
   } catch (e) {
     return dateString;
