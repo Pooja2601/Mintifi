@@ -318,14 +318,14 @@ class ESign extends Component {
           {this.state.checkStatus ? (
             <ButtonWrapper
               localState={this.state}
-              onChangeHandler={e => this._pingDBStatus()}
+              onChangeHandler={this._pingDBStatus}
               disabled={!checkObject(eSignPayload) || !token}
               label="CHECK E-SIGN STATUS"
             />
           ) : (
             <ButtonWrapper
               localState={this.state}
-              onChangeHandler={e => this._triggerESign()}
+              onChangeHandler={this._triggerESign}
               disabled={!checkObject(eSignPayload) || !token}
               label="INITIATE E_SIGN"
             />

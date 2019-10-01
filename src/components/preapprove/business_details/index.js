@@ -570,8 +570,8 @@ class BusinessDetail extends Component {
           <div className="mt-5 mb-5 text-center">
             <ButtonWrapper
               localState={this.state}
-              onChangeHandler={this.onChangeHandler}
-              disabled={this.state.missed_fields}
+              onChangeHandler={this._formSubmit}
+              disabled={this._customButtonValidation()}
               label="CHECK YOUR ELIGIBILITY"
             />
             {/* <button
@@ -583,10 +583,6 @@ class BusinessDetail extends Component {
               Check your eligibility
             </button> */}
           </div>
-          {/*<div style={{display: (this.state.missed_fields) ? 'block' : 'none'}}
-                         className={"alert alert-error"}>
-                        Check {this.state.ctrerror} fields for the error, you might have missed something !
-                    </div>*/}
         </form>
         {this.RenderModalTnC()}
       </>

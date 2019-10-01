@@ -23,7 +23,7 @@ const ButtonWrapper = props => {
             type={VALIDATION.type}
             className={`btn btn-raised greenButton`}
             onClick={e => onChangeHandler(e)}
-            disabled={localState.missed_fields ? disabled : ""}
+            disabled={disabled}
           >
             {label}
           </button>
