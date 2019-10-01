@@ -201,7 +201,7 @@ export const preventFloat = event => {
 // Validates all the fields
 export const fieldValidationHandler = props => {
   const { showAlert, validations, localState, fieldAlert } = props;
-  // console.log(Object.entries(validations));
+  // console.log(validations);
   const lomo = Object.entries(validations).some((val, key) => {
     console.log(val);
     if (val[1].required) {

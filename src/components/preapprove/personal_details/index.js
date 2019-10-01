@@ -185,7 +185,7 @@ class PersonalDetail extends Component {
   };
 
   onChangeHandler = (field, value) => {
-    console.log(">>>", value);
+    // console.log(">>>", value);
     let that = this,
       regex,
       doby;
@@ -193,19 +193,19 @@ class PersonalDetail extends Component {
     // fields is Equivalent to F_NAME , L_NAME... thats an object
 
     // ToDo : comment those that are not required
-
     this.tempState = Object.assign({}, this.state);
     switch (field) {
-      // case F_NAME:
-      //   if (isNaN(value)) this.tempState[F_NAME.slug] = value;
+      case F_NAME:
+        if (value.includes())
+          if (F_NAME.pattern.test(value)) this.tempState[F_NAME.slug] = value;
+        break;
+      case L_NAME:
+        if (isNaN(value) || !value) this.tempState[L_NAME.slug] = value;
 
-      //   break;
-      // case L_NAME:
-      //   if (isNaN(value)) this.tempState[L_NAME.slug] = value;
-
-      //   break;
+        break;
       case MOBILE:
         if (value.length <= 10) this.tempState[MOBILE.slug] = value;
+        console.log("Mobile value", value);
         break;
 
       case PINCODE:
@@ -223,10 +223,10 @@ class PersonalDetail extends Component {
         break;
     }
 
-    this.setState({ ...this.state, ...this.tempState });
-
-    setAdharManual(that.state);
-    this.validationHandler();
+    this.setState({ ...this.state, ...this.tempState }, () => {
+      this.validationHandler();
+      setAdharManual(that.state);
+    });
   };
 
   render() {

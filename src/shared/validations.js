@@ -25,7 +25,7 @@ const validationPersonalDetails = {
   F_NAME: {
     slug: "f_name",
     type: "text",
-    pattern: /^[a-zA-Z]{2,}[^]+$/,
+    pattern: /^[a-zA-Z]*$/,
     title: "Please enter First Name",
     error: "This feild is required",
     required: true,
@@ -36,7 +36,7 @@ const validationPersonalDetails = {
   M_NAME: {
     slug: "m_name",
     type: "text",
-    pattern: /^[a-zA-Z]{2,}[^]+$/,
+    pattern: /^[a-zA-Z]*$/,
     title: "Please enter Middle Name",
     error: "Invalid Middle Name",
     required: false,
@@ -49,8 +49,8 @@ const validationPersonalDetails = {
     type: "text",
     pattern: /^[a-zA-Z]{2,}[^]+$/,
     // pattern: /^[a-zA-Z]{3,}(\s)?([a-zA-Z]+)?$/,
-    title: "This feild is required",
-    error: "Invalid Last Name",
+    title: "Please Enter Last Name",
+    error: "This feild is required",
     required: true,
     id: "lastName",
     autoCapitalize: "characters",
