@@ -96,7 +96,7 @@ class ReviewBusinessDetail extends Component {
       anchor_id: payload.anchor_id,
       distributor_dealer_code:
         businessObj.dealer_code && payload.distributor_dealer_code,
-      sales_agent_mobile_number: payload.sales_agent_mobile_number,
+      sales_agent_mobile_number: parseFloat(payload.sales_agent_mobile_number),
       // business_type: businessObj.company_type,
       anchor_transaction_id: payload.anchor_transaction_id,
       borrowers: {
@@ -106,14 +106,14 @@ class ReviewBusinessDetail extends Component {
         pan: pan,
         // gstin: businessObj.gst,
         dob: retrieveDate(dob),
-        mobile_number: adharObj.mobile,
+        mobile_number: parseFloat(adharObj.mobile),
         email: adharObj.email,
         gender: adharObj.gender,
         residence_address: {
           address_1: adharObj.address1,
           address_2: adharObj.address2 ? adharObj.address2 : "",
           ownership_type: adharObj.ownership,
-          pincode: adharObj.pincode
+          pincode: parseFloat(adharObj.pincode)
         }
       },
       business_details: {
@@ -124,22 +124,24 @@ class ReviewBusinessDetail extends Component {
         inc_date: retrieveDate(businessObj.inc_date),
         business_email: businessObj.business_email,
         business_phone: businessObj.business_phone,
-        no_of_founders: businessObj.no_of_founders,
-        no_of_employees: businessObj.no_of_employees,
-        monthly_anchor_txn_value: businessObj.avgtrans,
+        no_of_founders: parseFloat(businessObj.no_of_founders),
+        no_of_employees: parseFloat(businessObj.no_of_employees),
+        monthly_anchor_txn_value: parseFloat(businessObj.avgtrans),
         retailer_onboarding_date: payload.retailer_onboarding_date,
         retailer_vintage: payload.retailer_vintage
-          ? payload.retailer_vintage
-          : businessObj.retailer_vintage,
+          ? parseFloat(payload.retailer_vintage)
+          : parseFloat(businessObj.retailer_vintage),
         business_address: {
           ownership_type: businessObj.ownership,
           address_1: this._fallbackGSTOptional(businessObj.address1, ADDRESS1),
           address_2: businessObj.address2,
-          pincode: this._fallbackGSTOptional(businessObj.pincode, PINCODE)
+          pincode: parseFloat(
+            this._fallbackGSTOptional(businessObj.pincode, PINCODE)
+          )
         }
       },
       loan_details: {
-        loan_amount: payload.loan_amount,
+        loan_amount: parseFloat(payload.loan_amount),
         product_type: payload.product_type
       },
       tnc_accepted: true,

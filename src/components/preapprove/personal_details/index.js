@@ -195,14 +195,6 @@ class PersonalDetail extends Component {
     // ToDo : comment those that are not required
     this.tempState = Object.assign({}, this.state);
     switch (field) {
-      case F_NAME:
-        if (value.includes())
-          if (F_NAME.pattern.test(value)) this.tempState[F_NAME.slug] = value;
-        break;
-      case L_NAME:
-        if (isNaN(value) || !value) this.tempState[L_NAME.slug] = value;
-
-        break;
       case MOBILE:
         if (value.length <= 10) this.tempState[MOBILE.slug] = value;
         console.log("Mobile value", value);
