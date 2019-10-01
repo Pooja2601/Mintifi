@@ -5,30 +5,12 @@ import PropTypes from "prop-types";
 import {baseUrl, app_id, environment} from "../../../shared/constants";
 import {pan_adhar, setAdharManual, setBusinessDetail, changeLoader, showAlert} from "../../../actions";
 import {checkObject} from "../../../shared/common_logic";
+import {apiActions, postFileAPI} from "../../../api";
+import {doc_type_attr, doc_att, file_catalog} from './predefined';
 
 const file_msg = "Select a file";
 const {PUBLIC_URL} = process.env;
 
-const file_catalog = {
-    id_proof: ['pan', 'aadhaar', 'passport', 'driving_license', 'voterid'],
-    add_proof: ['aadhaar', 'driving_license', 'electricity_bill', 'gas_bill', 'passport', 'rent_agreement', 'property_tax', 'voterid'],
-    entity_proof: ['ghumasta_license', 'gst_certificate', 'other_govt_reg', 'st_vat_cst_registration'],
-    caddr_proof: ['electricity_bill', 'rent_agreement']
-};
-
-const doc_att = [
-    {doc_type: 'pan', doc_category: 'kyc', doc_owner: 'user'},
-    {doc_type: 'electricity_bill', doc_category: 'address', doc_owner: 'user'},
-    {doc_type: 'gst_certificate', doc_category: 'entity_proof', doc_owner: 'company'},
-    {doc_type: 'rent_agreement', doc_category: 'address', doc_owner: 'company'},
-];
-
-const doc_type_attr = [
-    'id_proof',
-    'add_proof',
-    'entity_proof',
-    'caddr_proof'
-];
 
 class DocsUpload extends Component {
 
@@ -224,7 +206,7 @@ class DocsUpload extends Component {
         }
     }
 
-    formSubmit() {
+    formSubmit = async () => {
 
         let {payload, token, preFlightResp, changeLoader, history, showAlert} = this.props;
         changeLoader(true);
@@ -251,38 +233,26 @@ class DocsUpload extends Component {
             ctr++;
         }
 
-        fetch(`${baseUrl}/documents`, {
-            method: 'POST',
-            headers: {
-                // "Content-Type": "",
-                "token": token,
-                "cache": "no-cache",
-            },
-            body: formData // This is your file object
-        })
-            .then(resp => resp.json())
-            .then(
-                resp => {
-                    changeLoader(false);
-                    // console.log(resp); // Handle the success response object
-                    if (checkObject(resp.error))
-                        showAlert("We couldn't upload the files, Kindly try again !", 'warn');
-                    else if (checkObject(resp.response))
-                        history.push(`${PUBLIC_URL}/preapprove/bankdetail`);
-                }
-            ).catch(
-            error => {
-                changeLoader(false);
-                // console.log(error); // Handle the error response object
-                showAlert();
-            }
-        );
+        const options = {
+            URL: `${baseUrl}/documents`,
+            data: formData,
+            token: token,
+            showAlert: showAlert,
+            changeLoader: changeLoader
+        };
+        const resp = await postFileAPI(options);
+
+        if (resp.status === apiActions.SUCCESS_RESPONSE) {
+            history.push(`${PUBLIC_URL}/preapprove/bankdetail`);
+        }
+
     }
 
     componentWillMount() {
 
-        const {payload, adharObj, businessObj, changeLoader, token, history} = this.props;
+        const {payload, adharObj, businessObj, changeLoader, token, history, showAlert} = this.props;
         changeLoader(false);
+        showAlert();
         if (!token)
             history.push(`${PUBLIC_URL}/preapprove/token`);
 

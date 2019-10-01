@@ -86,6 +86,7 @@ class EMandate extends Component {
             showAlert
         } = this.props;
         changeLoader(false);
+        showAlert();
 
         let {href} = window.location,
             base64_decode = {},

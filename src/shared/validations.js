@@ -2,114 +2,145 @@ import React from "react";
 import { accountType } from "../shared/constants";
 import { BusinessType } from "../shared/constants";
 
+// normaliser
 const phoneNumber = {
   type: "number",
   pattern: /^[0-9]{10}$/,
-  title: "Please enter Mobile Number",
-  error: "Invalid Mobile Number"
+  title: "Enter Mobile Number",
+  error: "Please enter 10 digit number",
+  min: 1000000000,
+  max: 9999999999,
+  maxLength: 10,
+  minLength: 10
 };
-
+// normaliser
 const emailText = {
   type: "text",
   pattern: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
-  error: "Invalid Email",
+  error: "Invalid Email entered",
   autoCapitalize: "characters"
+};
+
+const pincode = {
+  slug: "pincode",
+  type: "number",
+  title: "Please enter Pincode",
+  id: "numberPincode",
+  pattern: /^[0-9]{6}$/,
+  autoCapitalize: "characters",
+  error: "Invalid Pincode entered",
+  label: "Pincode *"
 };
 
 const validationPersonalDetails = {
   F_NAME: {
     slug: "f_name",
     type: "text",
-    pattern: /^[a-zA-Z]{2,}[^]+$/,
+    pattern: /^[a-zA-Z]{1,}[^]+$/,
     title: "Please enter First Name",
-    error: "Invalid First Name",
+    error: "Enter only Character, atleast upto 2",
     required: true,
     id: "firstName",
-    autoCapitalize: "characters"
+    autoCapitalize: "characters",
+    label: "First Name *"
   },
   M_NAME: {
     slug: "m_name",
     type: "text",
-    pattern: /^[a-zA-Z]{2,}[^]+$/,
+    pattern: /^[a-zA-Z]{1,}[^]+$/,
     title: "Please enter Middle Name",
-    error: "Invalid Middle Name",
+    error: "Enter only Character, atleast upto 2",
     required: false,
     id: "middleName",
-    autoCapitalize: "characters"
+    autoCapitalize: "characters",
+    label: "Middle Name"
   },
   L_NAME: {
     slug: "l_name",
     type: "text",
-    pattern: /^[a-zA-Z]{2,}[^]+$/,
+    pattern: /^[a-zA-Z]{1,}[^]+$/,
     // pattern: /^[a-zA-Z]{3,}(\s)?([a-zA-Z]+)?$/,
-    title: "Please enter Last Name",
-    error: "Invalid Last Name",
+    title: "Please Enter Last Name",
+    error: "Enter only Character, atleast upto 2",
     required: true,
     id: "lastName",
-    autoCapitalize: "characters"
+    autoCapitalize: "characters",
+    label: "Last Name *"
   },
   MOBILE: {
     slug: "mobile",
     ...phoneNumber,
     required: true,
-    id: "numberMobile"
+    id: "numberMobile",
+    label: "Mobile Number *",
+    pattern: /^[0-9]{10}$/,
+    error: "Invalid Mobile, Enter 10 digit number"
   },
   EMAIL: {
     slug: "email",
     title: "Please enter Email",
     required: true,
     id: "textEmail",
-    ...emailText
+    ...emailText,
+    label: "Email ID *"
   },
   GENDER: {
     slug: "gender",
     type: "button",
     required: false,
     id: "genderHuman",
-    pattern: /^[a-z]$/
+    pattern: /^[a-z]$/,
+    label: "Gender *",
+    options: [
+      { key: "male", value: "Male", icon: "fa fa-male" },
+      { key: "female", value: "Female", icon: "fa fa-female" }
+    ]
   },
   OWNERSHIP: {
     slug: "ownership",
     type: "button",
     required: false,
     id: "residenceOwnership",
-    pattern: /^[a-z]+$/
+    pattern: /^[a-z]+$/,
+    label: "Ownership *",
+    options: [
+      { key: "rented", value: "Rented", icon: "fa fa-building" },
+      { key: "owned", value: "Owned", icon: "fa fa-home" }
+    ]
   },
   ADDRESS1: {
     slug: "address1",
     type: "text",
     required: true,
-    pattern: /^[a-zA-Z0-9]{2,}[^]+$/,
+    pattern: /^[a-zA-Z0-9]{1,}[^]+$/,
     id: "textAddress1",
     title: "Please enter Address 1",
-    error: "Invalid Address 1",
-    autoCapitalize: "characters"
+    error: "Invalid Address 1, type atleast 2 characters",
+    autoCapitalize: "characters",
+    label: "Address 1 *"
   },
   ADDRESS2: {
     slug: "address2",
     type: "text",
     required: false,
-    pattern: /^[a-zA-Z0-9]{2,}[^]+$/,
+    pattern: /^[a-zA-Z0-9]{1,}[^]+$/,
     id: "textAddress2",
     title: "Please enter Address 2",
-    error: "Invalid Address 2",
-    autoCapitalize: "characters"
+    error: "Invalid Address 2, type atleast 2 characters",
+    autoCapitalize: "characters",
+    label: "  Address 2"
   },
   DOB: {
     slug: "dob",
     id: "dobDate",
     required: false,
     dateFormat: "dd/MM/yyyy",
-    pattern: /^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/
+    pattern: /^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/,
+    label: "Date of Birth"
   },
   PINCODE: {
-    slug: "pincode",
-    type: "number",
-    title: "Please enter Pincode",
     required: true,
-    id: "numberPincode",
-    pattern: /^[0-9]{6}$/,
-    autoCapitalize: "characters"
+    ...pincode
   }
 };
 
@@ -124,19 +155,21 @@ const validationAdharPan = {
     autoComplete: "off",
     minLength: 10,
     maxLength: 10,
-    error: "Invalid PAN Number",
+    error: "Invalid PAN Number, must be a personal PAN",
+    label: "PAN Number *",
     id: "numberPAN"
   },
   ADHAR_NUMBER: {
     slug: "adhar",
+    label: "Enter Aadhaar (optional)",
     type: "number",
     pattern: /^[0-9]{12}$/,
-    title: "Aadhaar is required",
+    title: "Enter Aadhaar Number",
     autoComplete: "off",
     required: false,
     maxLength: 12,
     minLength: 12,
-    error: "Invalid Adhar Number",
+    error: "Invalid Aadhaar Number",
     id: "numberAdhar"
   }
 };
@@ -144,18 +177,13 @@ const validationAdharPan = {
 const validationMobileOtp = {
   MOBILE_NUMBER: {
     slug: "mobile",
-    type: "number",
-    pattern: /^[0-9]{10}$/,
-    title: "Enter Mobile Number",
-    min: 1000000000,
-    max: 9999999999,
-    maxLength: 10,
-    minLength: 10,
+    ...phoneNumber,
     required: true,
     readOnly: true,
     disabled: true,
-    error: "Invalid Mobile Number entered",
-    id: "numberMobile"
+    id: "numberMobile",
+    label: "Enter Mobile Number *",
+    error: "Invalid Mobile Number"
   },
   VERIFY_OTP: {
     slug: "otp",
@@ -168,7 +196,8 @@ const validationMobileOtp = {
     max: 999999,
     maxLength: 6,
     minLength: 6,
-    required: false
+    required: false,
+    label: "Enter OTP *"
   }
 };
 
@@ -181,16 +210,18 @@ const validationBank = {
     error: "Invalid Account Name",
     required: true,
     pattern: /^[a-zA-Z]{2,}[^]+$/,
-    autoCapitalize: "characters"
+    autoCapitalize: "characters",
+    label: "Account Name *"
   },
   ACCOUNT_NUMBER: {
-    type: "text",
+    type: "number",
     id: "numberAccount",
     slug: "acc_number",
     title: "Enter Account Number",
     error: "Invalid Account Number",
     pattern: /^[0-9]{9,18}$/,
-    required: true
+    required: true,
+    label: "Account Number *"
   },
   IFSC: {
     type: "text",
@@ -200,7 +231,8 @@ const validationBank = {
     required: true,
     slug: "ifsc_code",
     autoCapitalize: "characters",
-    pattern: /[A-Za-z]{4}\d{7}$/
+    pattern: /[A-Za-z]{4}\d{7}$/,
+    label: "IFSC *"
   },
   ACCOUNT_TYPE: {
     type: "dropdown",
@@ -210,29 +242,33 @@ const validationBank = {
     error: "Select Account Type",
     pattern: /^[a-z]{2,}$/,
     options: accountType,
-    required: true
+    required: true,
+    label: "Account Type *",
+    selectedOption: { value: "", label: "Select Account Type" }
   },
   BANK_NAME: {
     id: "nameBank",
     type: "text",
     title: "Enter Bank Name",
-    error: "Invalid Bank Name",
+    error: "Invalid Bank Name, must have atleast 2 characters ",
     pattern: /^[a-zA-Z0-9]{2,}[^]+$/,
     slug: "bank_name",
     autoCapitalize: "characters",
     disabled: true,
-    required: true
+    required: true,
+    label: "Bank Name *"
   },
   MICR_CODE: {
-    type: "text",
+    type: "number",
     pattern: /^[0-9]{9}$/,
     title: "Enter MICR Code",
-    error: "Invalid MICR Code",
+    error: "Invalid MICR Code format",
     autoCapitalize: "characters",
     id: "micrCode",
     slug: "micr_code",
     required: false,
-    disabled: true
+    disabled: true,
+    label: "MICR Code"
   },
   BRANCH_NAME: {
     type: "text",
@@ -242,7 +278,8 @@ const validationBank = {
     slug: "branch_name",
     pattern: /^[a-zA-Z0-9]{2,}[^]+$/,
     required: true,
-    disabled: true
+    disabled: true,
+    label: "Branch Name *"
   }
 };
 
@@ -257,7 +294,8 @@ const validationBusinessDetails = {
     required: true,
     readOnly: false,
     disabled: false,
-    error: "Invalid Company Name"
+    error: "Invalid Company Name, must have atleast 2 characters",
+    label: "Company Legal Name"
   },
   COMPANY_TYPE: {
     slug: "company_type",
@@ -266,7 +304,9 @@ const validationBusinessDetails = {
     pattern: /^[^]+$/,
     inputId: "companyType",
     options: BusinessType,
-    error: "Invalid Company Type"
+    error: "Select Company Type",
+    label: "Company Type *",
+    selectedOption: { value: "", label: "Select Company Type" }
   },
   GST_NUMBER: {
     slug: "gst",
@@ -276,7 +316,8 @@ const validationBusinessDetails = {
     autoCapitalize: "characters",
     id: "numberGST",
     required: false,
-    error: "Invalid GST Number"
+    error: "Invalid GST Number format",
+    label: "GST Number"
   },
   PAN_NUMBER: {
     slug: "bpan",
@@ -288,46 +329,47 @@ const validationBusinessDetails = {
     required: false,
     readOnly: true,
     disabled: true,
-    error: "Invalid Pan Number"
+    error: "Invalid Pan Number format",
+    label: "PAN Number"
   },
   AVERAGE_TRANSACTION: {
     slug: "avgtrans",
-    type: "text",
+    type: "number",
     pattern: /^[0-9]{5,10}$/,
     title: "Enter Average monthly Transactions",
     autoCapitalize: "characters",
     id: "avgTrans",
     required: false,
-    error: "Invalid Transaction Amount"
+    error: "Invalid Transaction Amount, need to have atleast 5 digit",
+    label: "Average Monthly Trans."
   },
   DEALER_CODE: {
     slug: "dealer_code",
     type: "text",
-    pattern: /^[0-9A-Za-z]{4,10}$/,
+    pattern: /^[0-9A-Za-z]{3,10}$/,
     title: "Enter Dealer Code",
     autoCapitalize: "characters",
     id: "dealerCode",
     required: false,
-    error: "Invalid Dealer Code"
+    error: "Invalid Dealer Code",
+    label: "Dealer Code"
   },
   BUSINESS_EMAIL: {
     slug: "business_email",
     id: "business_email",
     ...emailText,
     required: false,
-    title: "Enter Business Email"
+    title: "Enter Business Email",
+    label: "Business Email"
   },
   BUSINESS_PHONE: {
     slug: "business_phone",
-    min: 1000000000,
-    max: 9999999999,
-    maxLength: 10,
-    minLength: 10,
     required: false,
     readOnly: false,
     disabled: false,
     ...phoneNumber,
-    id: "business_phone"
+    id: "business_phone",
+    label: "Business Phone"
   },
   NO_OF_FOUNDERS: {
     slug: "no_of_founders",
@@ -335,12 +377,13 @@ const validationBusinessDetails = {
     pattern: /^[0-9]+$/,
     title: "Enter Number of Founders",
     required: false,
-    error: "Invalid Number",
+    error: "Invalid number, type atleast 1 digit",
     min: 1000,
     max: 1000,
     maxLength: 5,
     minLength: 5,
-    id: "no_of_founders"
+    id: "no_of_founders",
+    label: "Number of Founders"
   },
   NO_OF_EMPLOYEES: {
     slug: "no_of_employees",
@@ -348,12 +391,13 @@ const validationBusinessDetails = {
     pattern: /^[0-9]+$/,
     title: "Enter Number of Employees",
     required: false,
-    error: "Invalid Number",
+    error: "Invalid number, type atleast 1 digit",
     min: 1000,
     max: 1000,
     maxLength: 5,
     minLength: 5,
-    id: "no_of_employees"
+    id: "no_of_employees",
+    label: "Number of Employees"
   },
   INC_DATE: {
     slug: "inc_date",
@@ -362,16 +406,12 @@ const validationBusinessDetails = {
     dateFormat: "dd/MM/yyyy",
     // pattern: /^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/,
     pattern: /^[^]{2,}$/,
-    error: "Invalid Date"
+    error: "Invalid Date",
+    label: "Date of Incorporation *"
   },
   PINCODE: {
-    slug: "pincode",
-    type: "number",
-    title: "Please enter Pincode",
     required: false, // custom validation on business page
-    id: "numberPincode",
-    pattern: /^[0-9]{6}$/,
-    autoCapitalize: "characters"
+    ...pincode
   },
   ADDRESS1: {
     slug: "address1",
@@ -380,8 +420,9 @@ const validationBusinessDetails = {
     pattern: /^[a-zA-Z0-9]{2,}[^]+$/,
     id: "textAddress1",
     title: "Please enter Address 1",
-    error: "Invalid Address 1",
-    autoCapitalize: "characters"
+    error: "Invalid Address 1, required atleast 2 characters",
+    autoCapitalize: "characters",
+    label: " Address 1 *"
   },
   ADDRESS2: validationPersonalDetails.ADDRESS2,
   OWNERSHIP: {
@@ -389,16 +430,22 @@ const validationBusinessDetails = {
     type: "button",
     required: true,
     id: "businessOwnership",
-    pattern: /^[a-z]+$/
+    pattern: /^[a-z]+$/,
+    label: "Ownership *",
+    options: [
+      { key: "rented", value: "Rented", icon: "fa fa-building" },
+      { key: "owned", value: "Owned", icon: "fa fa-home" }
+    ]
   },
   RETAILER_VINTAGE: {
     slug: "retailer_vintage",
     type: "number",
     required: false,
     id: "retailerVintage",
-    pattern: /^[0-9]{3,8}$/,
-    error: "Invalid Retailer Vintage",
-    title: "Retailer Vintage"
+    pattern: /^[0-9]{1,8}$/,
+    error: "Invalid Retailer vintage, must be atleast a digit",
+    title: "Retailer Vintage",
+    label: "Retailer Vintage *"
   }
 };
 

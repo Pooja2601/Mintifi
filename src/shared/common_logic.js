@@ -2,6 +2,7 @@
 import { toast } from "react-toastify";
 import { app_id, auth_secret, baseUrl, user_id } from "./constants";
 import { apiActions, postAPI } from "../api";
+import { object } from "prop-types";
 
 const chars =
   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
@@ -181,24 +182,51 @@ export const regexTrim = regex => {
   return str.split("/")[1];
 };
 
+export const preventFloat = event => {
+  if (
+    event !== undefined &&
+    event !== "" &&
+    event.which !== undefined &&
+    event.which !== null
+  ) {
+    let abcd =
+      event.which != 101 &&
+      event.which != 0 &&
+      (event.which < 43 || event.which > 57)
+        ? true
+        : !isNaN(Number(event.key));
+    if (!abcd) {
+      return event.preventDefault();
+    }
+  }
+};
+
 // Validates all the fields
 export const fieldValidationHandler = props => {
-  const { showAlert, validations, localState } = props;
-
+  const { showAlert, validations, localState, fieldAlert } = props;
+  // console.log(validations);
   const lomo = Object.entries(validations).some((val, key) => {
-    // console.log(val[1].slug);
+    // console.log(val);
     if (val[1].required) {
       let regexTest = val[1].pattern.test(localState[val[1].slug]);
+      // console.log("regexText", regexTest);
       if (!regexTest) {
         // false : failed pattern
-        if (localState[val[1].slug]) showAlert(val[1].error);
+        if (localState[val[1].slug])
+          fieldAlert({ showError: true, slug: val[1].slug });
+
+        // showAlert(val[1].error);
         return val[1];
+      } else {
+        fieldAlert({ showError: false, slug: val[1].slug });
       }
     }
   });
 
   if (!lomo) {
-    showAlert();
+    fieldAlert({ showError: false });
+    return false;
+    // showAlert();
   }
   return lomo; // true : for disabling
 };
