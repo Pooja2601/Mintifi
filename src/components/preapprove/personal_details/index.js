@@ -54,7 +54,7 @@ class PersonalDetail extends Component {
     mobile: "",
     email: "",
     dob: new Date(315577770),
-    gender: "m",
+    gender: "male",
     ownership: "rented",
     pincode: "",
     address1: "",
@@ -182,12 +182,10 @@ class PersonalDetail extends Component {
     });
 
     this.setState({ missed_fields: lomo }); // true : for disabling
-    // debugger;
   };
 
   onChangeHandler = (field, value) => {
     console.log(">>>", value);
-    // debugger;
     let that = this,
       regex,
       doby;
@@ -199,12 +197,11 @@ class PersonalDetail extends Component {
     this.tempState = Object.assign({}, this.state);
     switch (field) {
       // case F_NAME:
-      //   // if (value !== "" && value.length >= 0)
-      //   //   this.tempState[F_NAME.slug] = value;
+      //   if (isNaN(value)) this.tempState[F_NAME.slug] = value;
 
       //   break;
       // case L_NAME:
-      //   if (value !== "") this.tempState[L_NAME.slug] = value;
+      //   if (isNaN(value)) this.tempState[L_NAME.slug] = value;
 
       //   break;
       case MOBILE:

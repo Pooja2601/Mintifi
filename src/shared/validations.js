@@ -61,7 +61,9 @@ const validationPersonalDetails = {
     ...phoneNumber,
     required: true,
     id: "numberMobile",
-    label: "Mobile Number *"
+    label: "Mobile Number *",
+    pattern: /^[0-9]{10}$/,
+    error: "Please enter 10 digit number"
   },
   EMAIL: {
     slug: "email",
@@ -79,8 +81,8 @@ const validationPersonalDetails = {
     pattern: /^[a-z]$/,
     label: "Gender *",
     options: [
-      { key: "m", value: "Male", icon: "fa fa-male" },
-      { key: "f", value: "Female", icon: "fa fa-female" }
+      { key: "male", value: "Male", icon: "fa fa-male" },
+      { key: "female", value: "Female", icon: "fa fa-female" }
     ]
   },
   OWNERSHIP: {
