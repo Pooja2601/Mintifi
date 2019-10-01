@@ -303,13 +303,13 @@ class BusinessDetail extends Component {
             fieldAlert({
               showError: true,
               slug: PINCODE.slug,
-              message: "Invalid Pincode entered"
+              message: PINCODE.error
             });
           !ADDRESS1.pattern.test(address1) &&
             fieldAlert({
               showError: true,
               slug: ADDRESS1.slug,
-              message: "Invalid Address-1 entered"
+              message: ADDRESS1.error
             });
         } else {
           !pincode &&
@@ -334,7 +334,7 @@ class BusinessDetail extends Component {
             fieldAlert({
               showError: true,
               slug: RETAILER_VINTAGE.slug,
-              message: "Invalid Vintage (in months)"
+              message: RETAILER_VINTAGE.error
             });
         } else {
           result = false;

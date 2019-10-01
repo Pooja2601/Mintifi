@@ -151,6 +151,9 @@ export const retrieveDate = dateString => {
     date = dt.getDate();
     month = dt.getMonth() + 1;
     year = dt.getFullYear();
+
+    date = date.toString().length === 1 ? `0${date}` : date;
+    month = month.toString().length === 1 ? `0${month}` : month;
     return `${year}-${month}-${date}`;
   } catch (e) {
     return dateString;
@@ -201,12 +204,12 @@ export const preventFloat = event => {
 // Validates all the fields
 export const fieldValidationHandler = props => {
   const { showAlert, validations, localState, fieldAlert } = props;
-  // console.log(Object.entries(validations));
+  // console.log(validations);
   const lomo = Object.entries(validations).some((val, key) => {
-    console.log(val);
+    // console.log(val);
     if (val[1].required) {
       let regexTest = val[1].pattern.test(localState[val[1].slug]);
-      console.log("regexText", regexTest);
+      // console.log("regexText", regexTest);
       if (!regexTest) {
         // false : failed pattern
         if (localState[val[1].slug])
@@ -226,12 +229,4 @@ export const fieldValidationHandler = props => {
     // showAlert();
   }
   return lomo; // true : for disabling
-
-  // const lomo = Object.entries(validations).map((val, key) => {
-  //   console.log(">>", val);
-  //   if (val[1].required) {
-  //     if (localState[val[1].slug])
-  //       fieldAlert({ showError: true, slug: val[1].slug });
-  //   }
-  // });
 };
