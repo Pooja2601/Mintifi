@@ -179,7 +179,7 @@ class ReviewBusinessDetail extends Component {
               setTimeout(
                 () =>
                   history.push(`${PUBLIC_URL}/preapprove/appapproved`, {
-                    status: "aip"
+                    status: "approval_in_principle"
                   }),
                 500
               );
