@@ -208,16 +208,18 @@ export const fieldValidationHandler = props => {
     //     console.log(val);
     //   })
     // );
-    var i = 1;
-    console.log(val[i].slug);
-    if (val[i].required) {
-      let regexTest = val[i].pattern.test(localState[val[i].slug]);
+    // var i = 1;
+    // console.log(val[i].slug);
+    if (val[1].required) {
+      let regexTest = val[1].pattern.test(localState[val[1].slug]);
+      console.log(regexTest);
+
       if (!regexTest) {
         // false : failed pattern
-        if (localState[val[i].slug])
-          fieldAlert({ showError: true, slug: val[i].slug });
+        if (localState[val[1].slug])
+          fieldAlert({ showError: true, slug: val[1].slug });
         // showAlert(val[1].error);
-        return val[i];
+        return val[1];
       }
     }
   });

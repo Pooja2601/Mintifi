@@ -1,20 +1,21 @@
-import {types} from "../actions";
+import { types } from "../actions";
 
 export default (state = {}, action) => {
+  switch (action.type) {
+    case types.SHOW_ALERT:
+      return {
+        ...state,
+        alertMsg: action.alertMsg,
+        alertType: action.alertType
+      };
 
-    switch (action.type) {
+    case types.CHANGE_LOADER:
+      return { ...state, loader: action.loader };
 
-        case types.SHOW_ALERT:
-            return {...state, alertMsg: action.alertMsg, alertType: action.alertType};
+    case types.FIELD_ALERT:
+      return { ...state, alertObj: action.alertObj };
 
-        case types.CHANGE_LOADER:
-            return {...state, loader: action.loader};
-
-        case types.FIELD_ALERT:
-            return {...state, alertObj: action.alertObj};
-
-        default:
-            return state;
-    }
+    default:
+      return state;
+  }
 };
-
