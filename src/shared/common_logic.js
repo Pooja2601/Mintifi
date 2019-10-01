@@ -2,6 +2,7 @@
 import { toast } from "react-toastify";
 import { app_id, auth_secret, baseUrl, user_id } from "./constants";
 import { apiActions, postAPI } from "../api";
+import { object } from "prop-types";
 
 const chars =
   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
