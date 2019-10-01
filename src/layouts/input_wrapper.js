@@ -47,6 +47,14 @@ const InputWrapper = props => {
               onChange={e => onChangeHandler(VALIDATION, e)}
             />
           </div>
+          {showError && slug === VALIDATION.slug ? (
+            <small style={{ color: "crimson", fontSize: "11px" }}>
+              {VALIDATION.error}
+            </small>
+          ) : (
+            ""
+          )}
+          {addText && <span className="bmd-help">{addText}</span>}
         </div>
       </>
     );
@@ -67,6 +75,14 @@ const InputWrapper = props => {
             value={localState[VALIDATION.selectedOption]}
             onChange={e => onChangeHandler(VALIDATION, e)}
           />
+          {showError && slug === VALIDATION.slug ? (
+            <small style={{ color: "crimson", fontSize: "11px" }}>
+              {VALIDATION.error}
+            </small>
+          ) : (
+            ""
+          )}
+          {addText && <span className="bmd-help">{addText}</span>}
         </div>
       </>
     );

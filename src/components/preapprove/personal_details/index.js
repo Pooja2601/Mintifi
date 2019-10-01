@@ -182,9 +182,12 @@ class PersonalDetail extends Component {
     });
 
     this.setState({ missed_fields: lomo }); // true : for disabling
+    // debugger;
   };
 
   onChangeHandler = (field, value) => {
+    console.log(">>>", value);
+    // debugger;
     let that = this,
       regex,
       doby;
@@ -195,6 +198,15 @@ class PersonalDetail extends Component {
 
     this.tempState = Object.assign({}, this.state);
     switch (field) {
+      // case F_NAME:
+      //   // if (value !== "" && value.length >= 0)
+      //   //   this.tempState[F_NAME.slug] = value;
+
+      //   break;
+      // case L_NAME:
+      //   if (value !== "") this.tempState[L_NAME.slug] = value;
+
+      //   break;
       case MOBILE:
         if (value.length <= 10) this.tempState[MOBILE.slug] = value;
         break;
@@ -216,10 +228,8 @@ class PersonalDetail extends Component {
 
     this.setState({ ...this.state, ...this.tempState });
 
-    window.setTimeout(() => {
-      setAdharManual(that.state);
-      this.validationHandler();
-    }, 10);
+    setAdharManual(that.state);
+    this.validationHandler();
   };
 
   render() {
