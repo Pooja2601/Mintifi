@@ -449,7 +449,7 @@ class ENachBankDetail extends Component {
           <div className="mt-5 mb-5 text-center">
             <ButtonWrapper
               localState={this.state}
-              onChangeHandler={this.onChangeHandler}
+              onChangeHandler={this._formSubmit}
               disabled={this.state.missed_fields}
               label="SUBMIT RECORDS"
             />

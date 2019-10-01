@@ -197,19 +197,20 @@ class ENach extends Component {
         <div className="mt-5 mb-4 text-center">
           <ButtonWrapper
             localState={this.state}
-            onChangeHandler={e => this._triggerDigio()}
+            onChangeHandler={this._triggerDigio}
             disabled={!checkObject(eNachPayload) || !eNachPayload.mandate_id}
             label="INITIATE E_SIGN"
           />
           {/* <button
-                        type="button"
-                        onClick={e => this._triggerDigio()}
-                        disabled={!checkObject(eNachPayload) || !eNachPayload.mandate_id}
-                        className="form-submit btn btn-raised greenButton"
-                    >
-                        Initiate E-NACH
-                    </button> */}
+                type="button"
+                onClick={e => this._triggerDigio()}
+                disabled={!checkObject(eNachPayload) || !eNachPayload.mandate_id}
+                className="form-submit btn btn-raised greenButton"
+            >
+                Initiate E-NACH
+            </button> */}
         </div>
+        {/* ToDo : Will be made live after backend Fixes */}
         {/* <div className={"text-right"}>
                     <button type="button"
                             disabled={
