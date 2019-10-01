@@ -7,7 +7,7 @@ const phoneNumber = {
   type: "number",
   pattern: /^[0-9]{10}$/,
   title: "Enter Mobile Number",
-  error: "Invalid Mobile Number entered",
+  error: "Please enter 10 digit number",
   min: 1000000000,
   max: 9999999999,
   maxLength: 10,
@@ -27,7 +27,7 @@ const validationPersonalDetails = {
     type: "text",
     pattern: /^[a-zA-Z]{2,}[^]+$/,
     title: "Please enter First Name",
-    error: "Invalid First Name",
+    error: "This feild is required",
     required: true,
     id: "firstName",
     autoCapitalize: "characters",
@@ -49,7 +49,7 @@ const validationPersonalDetails = {
     type: "text",
     pattern: /^[a-zA-Z]{2,}[^]+$/,
     // pattern: /^[a-zA-Z]{3,}(\s)?([a-zA-Z]+)?$/,
-    title: "Please enter Last Name",
+    title: "This feild is required",
     error: "Invalid Last Name",
     required: true,
     id: "lastName",
@@ -61,9 +61,7 @@ const validationPersonalDetails = {
     ...phoneNumber,
     required: true,
     id: "numberMobile",
-    label: "Mobile Number *",
-    error: "Invalid Mobile Number",
-    pattern: /^[0-9]{10}$/
+    label: "Mobile Number *"
   },
   EMAIL: {
     slug: "email",
