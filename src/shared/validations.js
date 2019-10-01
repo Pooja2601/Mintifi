@@ -304,7 +304,7 @@ const validationBusinessDetails = {
     pattern: /^[^]+$/,
     inputId: "companyType",
     options: BusinessType,
-    error: "Selct Company Type",
+    error: "Select Company Type",
     label: "Company Type *",
     selectedOption: { value: "", label: "Select Company Type" }
   },
