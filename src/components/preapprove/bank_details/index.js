@@ -32,7 +32,7 @@ import Select from "react-select";
 import { fetchAPI, apiActions, postAPI } from "../../../api";
 import { validationBank } from "./../../../shared/validations";
 import InputWrapper from "../../../layouts/input_wrapper";
-
+import ButtonWrapper from "../../../layouts/button_wrapper";
 const { PUBLIC_URL } = process.env;
 
 class BankDetail extends Component {
@@ -414,14 +414,20 @@ class BankDetail extends Component {
                     </div>*/}
 
           <div className="mt-5 mb-5 text-center">
-            <button
+            <ButtonWrapper
+              localState={this.state}
+              onChangeHandler={this.onChangeHandler}
+              disabled={this.state.missed_fields}
+              label="SUBMIT RECORDS"
+            />
+            {/* <button
               type="submit"
               disabled={this.state.missed_fields}
               onClick={e => this._formSubmit(e)}
               className="form-submit btn btn-raised greenButton"
             >
               Submit Records
-            </button>
+            </button> */}
           </div>
         </form>
       </>

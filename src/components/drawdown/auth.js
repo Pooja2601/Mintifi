@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
+import ButtonWrapper from "../../layouts/button_wrapper";
 import { baseUrl, otpUrl, OTP_Timer, app_id } from "../../shared/constants";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
@@ -302,7 +303,26 @@ class MobileOtp extends Component {
           </div>
 
           <div className="mt-3 mb-2 text-center">
-            <button
+            <ButtonWrapper
+              localState={this.state}
+              style={{
+                visibility: !this.state.submitted ? "visible" : "hidden"
+              }}
+              onChangeHandler={this.onChangeHandler}
+              disabled={!(!this.state.missed_fields && !this.state.submitted)}
+              label={this.state.count === 0 ? "SEND OTP" : "RESEND OTP"}
+            />
+            <br />
+            <ButtonWrapper
+              localState={this.state}
+              style={{
+                visibility: this.state.submitted ? "visible" : "hidden"
+              }}
+              onChangeHandler={this.onChangeHandler}
+              disabled={!(!this.state.missed_fields && !this.state.submitted)}
+              label="VERIFY OTP"
+            />
+            {/* <button
               name="submit"
               style={{
                 visibility: !this.state.submitted ? "visible" : "hidden"
@@ -325,7 +345,7 @@ class MobileOtp extends Component {
               className="btn btn-raised greenButton text-center"
             >
               Verify OTP
-            </button>
+            </button> */}
           </div>
         </div>
       </>

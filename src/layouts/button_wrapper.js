@@ -1,5 +1,4 @@
 import React from "react";
-import { checkObject, regexTrim } from "../shared/common_logic";
 import { withRouter } from "react-router-dom";
 import connect from "react-redux/es/connect/connect";
 
@@ -15,7 +14,6 @@ const ButtonWrapper = props => {
     label
   } = props;
   const VALIDATION = validation;
-  const { showError, slug } = alertObj;
   return (
     <>
       <div className="form-group mb-2">

@@ -79,8 +79,7 @@ class BusinessDetail extends Component {
     retailer_vintage: "",
     address1: "",
     address2: "",
-    gst_correct: true,
-    label: "Check your eligibility"
+    gst_correct: true
   };
 
   // validate = {company_type: false, gst: false, avgtrans: false, dealer_code: false};
@@ -382,24 +381,6 @@ class BusinessDetail extends Component {
           </div>
           <div className={"row"}>
             <div className={"col-md-6 col-sm-6 col-xs-12"}>
-              {/* <InputWrapper validation={COMPANY_TYPE} onChangeHandler={this.onChangeHandler} localState={this.state} /> */}
-              {/* <div className="form-group mb-3">
-                <label
-                  htmlFor={COMPANY_TYPE.id}
-                  className={"bmd-label-floating"}
-                >
-                  Company Type *
-                </label>
-                <Select
-                  options={COMPANY_TYPE.options}
-                  required={COMPANY_TYPE.required}
-                  id={COMPANY_TYPE.id}
-                  inputId={COMPANY_TYPE.inputId}
-                  value={this.state.optionSelected}
-                  // value={this.state.optionSelected}
-                  onChange={e => this.onChangeHandler(COMPANY_TYPE, e)}
-                />
-              </div> */}
               <InputWrapper
                 validation={COMPANY_TYPE}
                 onChangeHandler={this.onChangeHandler}
@@ -418,8 +399,6 @@ class BusinessDetail extends Component {
 
           <div className={"row"}>
             <div className={"col-md-6 col-sm-6 col-xs-12"}>
-              {/* <InputWrapper validation={INC_DATE} onChangeHandler={this.onChangeHandler} localState={this.state} /> */}
-
               <InputWrapper
                 validation={INC_DATE}
                 localState={this.state}
@@ -593,7 +572,7 @@ class BusinessDetail extends Component {
               localState={this.state}
               onChangeHandler={this.onChangeHandler}
               disabled={this.state.missed_fields}
-              label={this.state.label}
+              label="CHECK YOUR ELIGIBILITY"
             />
             {/* <button
               type="submit"

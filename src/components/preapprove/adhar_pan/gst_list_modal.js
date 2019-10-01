@@ -2,6 +2,7 @@ import React from "react";
 import { withRouter } from "react-router-dom";
 import connect from "react-redux/es/connect/connect";
 import { checkObject } from "./../../../shared/common_logic";
+import ButtonWrapper from "../../../layouts/button_wrapper";
 
 const RenderModalGST = props => {
   const { localState, triggerRefs, onChangeRadio, setGst } = props;
@@ -88,7 +89,22 @@ const RenderModalGST = props => {
               {/*{this.state.selectedGST}*/}
             </div>
             <div className="modal-footer">
-              <button
+              <ButtonWrapper
+                localState={this.state}
+                onChangeHandler={e => this._setGST()}
+                disabled={!localState.selectedGST.length}
+                style={{ padding: "7px 11px 8px 11px" }}
+                data-dismiss="model"
+                label="SELECT GST"
+              />
+
+              <ButtonWrapper
+                style={{ padding: "7px 11px 8px 11px" }}
+                data-dismiss="modal"
+                label="CLOSE"
+              />
+
+              {/* <button
                 type="button"
                 className="btn greenButton btn-raised align-left"
                 onClick={() => this._setGST()}
@@ -101,11 +117,11 @@ const RenderModalGST = props => {
 
               <button
                 type="button"
-                className="btn btn-primary pull-right"
+                style={{ padding: "7px 11px 8px 11px" }}
                 data-dismiss="modal"
               >
                 Close
-              </button>
+              </button> */}
             </div>
           </div>
         </div>
