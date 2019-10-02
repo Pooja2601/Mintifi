@@ -70,7 +70,7 @@ class DrawLanding extends Component {
     }
   }
 
-  async _generateToken() {
+  _generateToken = async () => {
     const {
       changeLoader,
       DrawsetToken,
@@ -126,7 +126,7 @@ class DrawLanding extends Component {
                   ? "block"
                   : "none"
             }}
-            className="form-submit btn greenButton text-center"
+            className="form-submit text-center"
           />
           {/* <button
                     onClick={() => this._generateToken()}
