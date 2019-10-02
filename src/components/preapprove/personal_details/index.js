@@ -62,8 +62,7 @@ class PersonalDetail extends Component {
     city: "",
     state: "",
     list_posts: "",
-    missed_fields: true,
-    label: "PROCEED"
+    missed_fields: true
   };
 
   tempState = this.state;
@@ -375,7 +374,7 @@ class PersonalDetail extends Component {
               localState={this.state}
               onClick={this._formSubmit}
               disabled={this.state.missed_fields}
-              label={this.state.label}
+              label="PROCEED"
             />
 
             {/* <a href={'#'} disabled={this.state.missed_fields} onClick={e => this._formSubmit(e)}

@@ -69,15 +69,22 @@ class AdharPan extends Component {
           localState={this.state}
           triggerRefs={ref => (this.triggerModalGST = ref)}
         /> */}
-
-        <button
-          type="button"
+        <ButtonWrapper
+          localState={this.state}
           style={{ visibility: "hidden" }}
           ref={ref => (this.triggerModalGST = ref)}
           id={"triggerModalGST"}
           data-toggle="modal"
           data-target="#GSTSelModal"
         />
+        {/* <button
+          type="button"
+          style={{ visibility: "hidden" }}
+          ref={ref => (this.triggerModalGST = ref)}
+          id={"triggerModalGST"}
+          data-toggle="modal"
+          data-target="#GSTSelModal"
+        /> */}
 
         <div
           className="modal fade"
@@ -98,14 +105,21 @@ class AdharPan extends Component {
                 <h5 className="modal-title">
                   Select the GST for which you need loan
                 </h5>
-                <button
+                <ButtonWrapper
+                  className="close"
+                  data-dismiss="model"
+                  aria-label="CLOSE"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </ButtonWrapper>
+                {/* <button
                   type="button"
                   className="close"
                   data-dismiss="modal"
                   aria-label="Close"
                 >
                   <span aria-hidden="true">&times;</span>
-                </button>
+                </button> */}
               </div>
               <div className="modal-body">
                 <div className="checkbox">
@@ -149,7 +163,20 @@ class AdharPan extends Component {
                 </div>
               </div>
               <div className="modal-footer">
-                <button
+                <ButtonWrapper
+                  className="btn greenButton btn-raised align-left"
+                  onClick={this._setGST}
+                  disabled={!this.state.selectedGST.length}
+                  style={{ padding: "7px 11px 8px 11px" }}
+                  data-dismiss="modal"
+                  label="SELECT GST"
+                />
+                <ButtonWrapper
+                  className="btn btn-primary pull-right"
+                  data-dismiss="modal"
+                  label="CLOSE"
+                />
+                {/* <button
                   type="button"
                   className="btn greenButton btn-raised align-left"
                   onClick={() => this._setGST()}
@@ -158,15 +185,15 @@ class AdharPan extends Component {
                   data-dismiss="modal"
                 >
                   Select GST
-                </button>
+                </button> */}
 
-                <button
+                {/* <button
                   type="button"
                   className="btn btn-primary pull-right"
                   data-dismiss="modal"
                 >
                   Close
-                </button>
+                </button> */}
               </div>
             </div>
           </div>

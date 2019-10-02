@@ -9,14 +9,22 @@ const RenderModalGST = props => {
 
   return (
     <>
-      <button
+      <ButtonWrapper
+        localState={this.state}
+        style={{ visibility: "hidden" }}
+        ref={ref => (this.triggerModalGST = ref)}
+        id={"triggerModalGST"}
+        data-toggle="modal"
+        data-target="#GSTSelModal"
+      />
+      {/* <button
         type="button"
         style={{ visibility: "hidden" }}
         ref={ref => (this.triggerModalGST = ref)} //triggerRefs
         id={"triggerModalGST"}
         data-toggle="modal"
         data-target="#GSTSelModal"
-      />
+      /> */}
 
       <div
         className="modal fade"
@@ -37,14 +45,21 @@ const RenderModalGST = props => {
               <h5 className="modal-title">
                 Select the GST for which you need loan
               </h5>
-              <button
+              <ButtonWrapper
+                className="close"
+                data-dismiss="model"
+                aria-label="CLOSE"
+              >
+                <span aria-hidden="true">&times;</span>
+              </ButtonWrapper>
+              {/* <button
                 type="button"
                 className="close"
                 data-dismiss="modal"
                 aria-label="Close"
               >
                 <span aria-hidden="true">&times;</span>
-              </button>
+              </button> */}
             </div>
             <div className="modal-body">
               <div className="checkbox">
