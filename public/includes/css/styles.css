@@ -13,8 +13,9 @@ header {
     top: 0px;
     right: 0px;
     height: 85px;
-    background-image: linear-gradient(#74c0bc, #74C0D6);
+    /* background-image: linear-gradient(#74c0bc, #74C0D6); */
     box-shadow: 0 0 8px #cccccc;
+    background-color: #fff;
 }
 
 .css-1pahdxg-control {
