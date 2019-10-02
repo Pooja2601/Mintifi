@@ -3357,3 +3357,14 @@ like a tickmark */
 /* .form-control:invalid {
     background-image: linear-gradient(0deg, #009688 2px, rgba(213, 0, 0, 0) 0), linear-gradient(0deg, rgba(0, 0, 0, .26) 1px, transparent 0) !important;
 } */
+
+.btn:disabled{
+    background:#03a9f414;
+}
+
+.btn:hover{
+   /* display: block !important; */
+   background-color: #03a9f433 !important;
+   opacity: 0.3;
+   color: rgba(0, 0, 0, 0.24) !important;
+}
