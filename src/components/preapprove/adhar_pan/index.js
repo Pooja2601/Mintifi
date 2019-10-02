@@ -56,7 +56,7 @@ class AdharPan extends Component {
   RenderModalGST = () => {
     return (
       <>
-        {/*   <RenderGSTModal
+        {/* <RenderGSTModal
           onChangeRadio={e => {
             this.setState(prevState => ({
               checked: {
@@ -69,22 +69,15 @@ class AdharPan extends Component {
           localState={this.state}
           triggerRefs={ref => (this.triggerModalGST = ref)}
         /> */}
-        <ButtonWrapper
-          localState={this.state}
-          style={{ visibility: "hidden" }}
-          ref={ref => (this.triggerModalGST = ref)}
-          id={"triggerModalGST"}
-          data-toggle="modal"
-          data-target="#GSTSelModal"
-        />
-        {/* <button
+
+        <button
           type="button"
           style={{ visibility: "hidden" }}
           ref={ref => (this.triggerModalGST = ref)}
           id={"triggerModalGST"}
           data-toggle="modal"
           data-target="#GSTSelModal"
-        /> */}
+        />
 
         <div
           className="modal fade"
