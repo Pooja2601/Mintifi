@@ -203,7 +203,7 @@ class AdharPan extends Component {
   };
 
   //ToDo : Check the PAN with the backend AP for Confirmation of new user
-  _formSubmit = async e => {
+  _formSubmit = e => {
     e.preventDefault();
     this._panFetch();
   };
@@ -369,7 +369,7 @@ class AdharPan extends Component {
         <h5 className="paragraph_styling  text-center">
           <b>Let us fetch some information for you.</b>
         </h5>
-        <form id="serverless-contact-form" onSubmit={e => this._formSubmit(e)}>
+        <div id="serverless-contact-form">
           <div className={"row"}>
             <div className={"col-sm-11 col-md-8 m-auto"}>
               <InputWrapper
@@ -400,7 +400,7 @@ class AdharPan extends Component {
           <div className="mt-5 mb-5 text-center ">
             <ButtonWrapper
               localState={this.state}
-              onChangeHandler={this._formSubmit}
+              onClick={this._formSubmit}
               disabled={this.state.missed_fields}
               label="PROCEED"
             />
@@ -414,7 +414,7 @@ class AdharPan extends Component {
                             />
                         )} */}
           </div>
-        </form>
+        </div>
         {this.RenderModalGST()}
       </>
     );

@@ -6,7 +6,6 @@ const ButtonWrapper = props => {
   let missed_fields = false;
   const {
     validation,
-    onChangeHandler,
     onClick,
     localState,
     alertObj,
@@ -23,9 +22,9 @@ const ButtonWrapper = props => {
         <div className="btn-group ToggleBtn" aria-label="...">
           <button
             style={style}
-            type={VALIDATION.type}
+            localState={localState}
             className={`btn btn-raised greenButton`}
-            onClick={e => onChangeHandler(e)}
+            onClick={e => onClick(e)}
             disabled={disabled}
           >
             {label}
@@ -39,10 +38,10 @@ const ButtonWrapper = props => {
 ButtonWrapper.defaultProps = {
   alertObj: { showError: false, slug: "" },
   validation: {},
-  onChangeHandler: () => {},
   localState: {},
   disabled: false,
-  missed_fields: false
+  missed_fields: false,
+  onClick: () => {}
 };
 
 const mapStateToProp = state => ({
