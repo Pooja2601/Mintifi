@@ -171,7 +171,7 @@ class DocsUpload extends Component {
                             <div className="modal-footer">
                                 <ButtonWrapper
                                 className="btn greenButton btn-raised align-left"
-                                onChangeHandler={this.uploadFiles(this.state.active_modal)}
+                                onClick={this.uploadFiles(this.state.active_modal)}
                                 style={{padding: '7px 11px 8px 11px'}}
                                 data-dismiss="model"
                                 label="UPLOAD FILE"

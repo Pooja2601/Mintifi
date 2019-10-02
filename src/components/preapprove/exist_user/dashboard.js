@@ -132,7 +132,7 @@ class Dashboard extends Component {
                   : "hidden"
             }}
             className="form-submit btn btn-raised greenButton"
-            onChangeHandler={e =>
+            onClick={e =>
               history.push(`${PUBLIC_URL}/drawdown/token/`, {
                 token: token,
                 payload: base64_encode
