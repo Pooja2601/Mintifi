@@ -342,7 +342,8 @@ class AdharPan extends Component {
         <h5 className="paragraph_styling  text-center">
           <b>Let us fetch some information for you.</b>
         </h5>
-        <form id="serverless-contact-form" onSubmit={e => this._formSubmit(e)}>
+        {/* <form id="serverless-contact-form" onSubmit={e => this._formSubmit(e)}> */}
+        <div>
           <div className={"row"}>
             <div className={"col-sm-11 col-md-8 m-auto"}>
               <InputWrapper
@@ -387,7 +388,8 @@ class AdharPan extends Component {
                             />
                         )} */}
           </div>
-        </form>
+          {/* </form> */}
+        </div>
         {this.RenderModalGST()}
       </>
     );

@@ -136,12 +136,12 @@ class PersonalDetail extends Component {
     }
   }
 
-  _formSubmit(e) {
+  _formSubmit = e => {
     e.preventDefault();
     setTimeout(() => {
       this.props.history.push(`${PUBLIC_URL}/preapprove/mobileotp`);
     }, 500);
-  }
+  };
 
   _pincodeFetch = async pincode => {
     //http://postalpincode.in/api/pincode/
@@ -234,7 +234,8 @@ class PersonalDetail extends Component {
         <h5 className="paragraph_styling  text-center secondLinePara">
           <b> Enter your personal information to proceed.</b>
         </h5>
-        <form id="serverless-contact-form" onSubmit={e => this._formSubmit(e)}>
+        {/* <form id="serverless-contact-form" onSubmit={e => this._formSubmit(e)}> */}
+        <div>
           <div className={"row"}>
             <div className={"col-md-4 col-sm-4 col-xs-12"}>
               <InputWrapper
@@ -381,7 +382,8 @@ class PersonalDetail extends Component {
             {/* <a href={'#'} disabled={this.state.missed_fields} onClick={e => this._formSubmit(e)}
                            className="form-submit btn btn-raised greenButton">Proceed</a>*/}
           </div>
-        </form>
+          {/* </form> */}
+        </div>
       </>
     );
   }
