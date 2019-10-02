@@ -310,8 +310,9 @@ class MobileOtp extends Component {
               }}
               onClick={this._formSubmit}
               disabled={!(!this.state.missed_fields && !this.state.submitted)}
-              label={this.state.count === 0 ? "SEND OTP" : "RESEND OTP"}
-            />
+            >
+              {this.state.count === 0 ? "Send OTP" : "Resend OTP"}
+            </ButtonWrapper>
             <br />
             <ButtonWrapper
               localState={this.state}
@@ -319,7 +320,7 @@ class MobileOtp extends Component {
                 visibility: this.state.submitted ? "visible" : "hidden"
               }}
               onClick={this._verifyOTP}
-              disabled={!(!this.state.missed_fields && !this.state.submitted)}
+              disabled={this.state.otp.length !== 6}
               label="VERIFY OTP"
             />
             {/* <button

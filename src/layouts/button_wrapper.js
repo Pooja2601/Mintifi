@@ -7,6 +7,7 @@ const ButtonWrapper = props => {
   const {
     validation,
     onChangeHandler,
+    onClick,
     localState,
     alertObj,
     addText,
