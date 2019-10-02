@@ -183,7 +183,7 @@ const validationMobileOtp = {
     disabled: true,
     id: "numberMobile",
     label: "Enter Mobile Number *",
-    error: "Invalid Mobile Number"
+    error: "Please Enter 10 digit Mobile Number"
   },
   VERIFY_OTP: {
     slug: "otp",
