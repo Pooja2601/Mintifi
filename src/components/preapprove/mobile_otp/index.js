@@ -292,8 +292,7 @@ class MobileOtp extends Component {
           </div>
 
           <div className="mt-2 text-center ">
-            <ButtonWrapper />
-            {/* <button
+            <button
               name="submit"
               style={{
                 visibility:
@@ -321,7 +320,7 @@ class MobileOtp extends Component {
               className="btn btn-raised greenButton text-center m-auto d-block marginTopBottom"
             >
               Verify OTP
-            </button> */}
+            </button>
           </div>
         </div>
       </>

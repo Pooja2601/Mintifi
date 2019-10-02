@@ -6,6 +6,7 @@ const ButtonWrapper = props => {
   let missed_fields = false;
   const {
     validation,
+    onChangeHandler,
     onClick,
     localState,
     alertObj,
@@ -24,7 +25,8 @@ const ButtonWrapper = props => {
             style={style}
             localState={localState}
             className={`btn btn-raised greenButton`}
-            onClick={e => onClick(e)}
+            // onClick={e => onClick(e)}
+            onChangeHandler={e => onChangeHandler(e)}
             disabled={disabled}
           >
             {label}
@@ -41,7 +43,8 @@ ButtonWrapper.defaultProps = {
   localState: {},
   disabled: false,
   missed_fields: false,
-  onClick: () => {}
+  onClick: () => {},
+  onChangeHandler: () => {}
 };
 
 const mapStateToProp = state => ({
