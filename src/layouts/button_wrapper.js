@@ -7,6 +7,7 @@ const ButtonWrapper = props => {
   const {
     validation,
     onChangeHandler,
+    onClick,
     localState,
     alertObj,
     addText,
@@ -24,7 +25,7 @@ const ButtonWrapper = props => {
             style={style}
             type={VALIDATION.type}
             className={`btn btn-raised greenButton`}
-            onClick={e => onChangeHandler(e)}
+            onClick={e => onClick(e)}
             disabled={disabled}
           >
             {label}
