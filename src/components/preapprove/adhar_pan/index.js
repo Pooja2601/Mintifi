@@ -56,35 +56,14 @@ class AdharPan extends Component {
   RenderModalGST = () => {
     return (
       <>
-        {/*   <RenderGSTModal
-          onChangeRadio={e => {
-            this.setState(prevState => ({
-              checked: {
-                [key]: true
-              },
-              selectedGST: val.gstinId
-            }));
-          }}
-          setGst={this._setGST()}
-          localState={this.state}
-          triggerRefs={ref => (this.triggerModalGST = ref)}
-        /> */}
-        <ButtonWrapper
-          localState={this.state}
-          style={{ visibility: "hidden" }}
-          ref={ref => (this.triggerModalGST = ref)}
-          id={"triggerModalGST"}
-          data-toggle="modal"
-          data-target="#GSTSelModal"
-        />
-        {/* <button
+        <button
           type="button"
           style={{ visibility: "hidden" }}
           ref={ref => (this.triggerModalGST = ref)}
           id={"triggerModalGST"}
           data-toggle="modal"
           data-target="#GSTSelModal"
-        /> */}
+        />
 
         <div
           className="modal fade"
@@ -105,26 +84,21 @@ class AdharPan extends Component {
                 <h5 className="modal-title">
                   Select the GST for which you need loan
                 </h5>
-                <ButtonWrapper
-                  className="close"
-                  data-dismiss="model"
-                  aria-label="CLOSE"
-                >
-                  <span aria-hidden="true">&times;</span>
-                </ButtonWrapper>
-                {/* <button
+                <button
                   type="button"
                   className="close"
                   data-dismiss="modal"
                   aria-label="Close"
                 >
                   <span aria-hidden="true">&times;</span>
-                </button> */}
+                </button>
               </div>
               <div className="modal-body">
                 <div className="checkbox">
                   <div className={"row"}>
-                    {checkObject(this.state.gst_details) ? (
+                    {this.state.gst_details ===
+                      Object(this.state.gst_details) &&
+                    this.state.gst_details.length ? (
                       this.state.gst_details.map((val, key) => (
                         <div key={key} className={"col-sm-6"}>
                           <label>
@@ -161,22 +135,10 @@ class AdharPan extends Component {
                     <br />
                   </div>
                 </div>
+                {/*{this.state.selectedGST}*/}
               </div>
               <div className="modal-footer">
-                <ButtonWrapper
-                  className="btn greenButton btn-raised align-left"
-                  onClick={this._setGST}
-                  disabled={!this.state.selectedGST.length}
-                  style={{ padding: "7px 11px 8px 11px" }}
-                  data-dismiss="modal"
-                  label="SELECT GST"
-                />
-                <ButtonWrapper
-                  className="btn btn-primary pull-right"
-                  data-dismiss="modal"
-                  label="CLOSE"
-                />
-                {/* <button
+                <button
                   type="button"
                   className="btn greenButton btn-raised align-left"
                   onClick={() => this._setGST()}
@@ -185,15 +147,15 @@ class AdharPan extends Component {
                   data-dismiss="modal"
                 >
                   Select GST
-                </button> */}
+                </button>
 
-                {/* <button
+                <button
                   type="button"
                   className="btn btn-primary pull-right"
                   data-dismiss="modal"
                 >
                   Close
-                </button> */}
+                </button>
               </div>
             </div>
           </div>
@@ -398,21 +360,21 @@ class AdharPan extends Component {
           </div>
 
           <div className="mt-5 mb-5 text-center ">
-            <ButtonWrapper
+            {/* <ButtonWrapper
               localState={this.state}
-              onClick={this._formSubmit}
+              onClick={e => this._formSubmit(e)}
               disabled={this.state.missed_fields}
               label="PROCEED"
-            />
-            {/* {!this.state.missed_fields && (
-                            <input
-                                type="submit"
-                                name="submit"
-                                value={"Proceed"}
-                                onClick={e => this._formSubmit(e)}
-                                className="form-submit btn btn-raised btn-raised greenButton"
-                            />
-                        )} */}
+            /> */}
+            {!this.state.missed_fields && (
+              <input
+                type="submit"
+                name="submit"
+                value={"Proceed"}
+                onClick={e => this._formSubmit(e)}
+                className="form-submit btn btn-raised btn-raised greenButton"
+              />
+            )}
           </div>
         </div>
         {this.RenderModalGST()}
