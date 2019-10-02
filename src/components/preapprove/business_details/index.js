@@ -136,9 +136,9 @@ class BusinessDetail extends Component {
                 {this.state.tncModal
                   ? TnCPolicy({ fontSize: 13 })
                   : PrivacyPolicy({
-                      fontSize: 13,
-                      headSize: 1.5
-                    })}
+                    fontSize: 13,
+                    headSize: 1.5
+                  })}
               </div>
               <div className="modal-footer">
                 {/*<button type="button" className="btn btn-primary">Save changes</button>*/}
@@ -374,10 +374,10 @@ class BusinessDetail extends Component {
         <br />
         {/*<h5 className={"text-center"}>{(gstProfile === Object(gstProfile)) ? gstProfile.lgnm : ''}</h5>*/}
 
-        <form id="serverless-contact-form" onSubmit={e => this._formSubmit(e)}>
+        <div id="serverless-contact-form">
           <div
             className={"row"}
-            // style={{visibility: (checkObject(gstProfile) && gstProfile.lgnm) ? 'visible' : 'hidden'}}
+          // style={{visibility: (checkObject(gstProfile) && gstProfile.lgnm) ? 'visible' : 'hidden'}}
           >
             <div className={"col-md-12 col-sm-12 col-xs-12"}>
               <InputWrapper
@@ -442,7 +442,7 @@ class BusinessDetail extends Component {
           </div>
 
           <div className={"row"}>
-            {!payload.retailer_onboarding_date ? (
+            {checkObject(payload) && payload.retailer_onboarding_date ? (
               <div className={"col-md-6 col-sm-6 col-xs-12"}>
                 <InputWrapper
                   validation={RETAILER_VINTAGE}
@@ -452,8 +452,8 @@ class BusinessDetail extends Component {
                 />
               </div>
             ) : (
-              <></>
-            )}
+                <></>
+              )}
           </div>
           {this.state.gst_correct === false || this.state.gst === "" ? (
             <>
@@ -524,8 +524,8 @@ class BusinessDetail extends Component {
               </div>
             </>
           ) : (
-            <></>
-          )}
+              <></>
+            )}
 
           {/*    {(this.state.company_type !== "proprietorship" && this.state.company_type !== "") ? (
             <InputWrapper
@@ -591,7 +591,7 @@ class BusinessDetail extends Component {
               Check your eligibility
             </button> */}
           </div>
-        </form>
+        </div>
         {this.RenderModalTnC()}
       </>
     );

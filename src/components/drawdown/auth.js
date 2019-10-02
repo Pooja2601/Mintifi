@@ -94,7 +94,7 @@ class MobileOtp extends Component {
     }
   };
 
-  // TODO: check post function
+
   _verifyOTP = async e => {
     e.preventDefault();
     const { changeLoader, authObj, token, DrawsetAuth, showAlert } = this.props;
@@ -145,7 +145,7 @@ class MobileOtp extends Component {
     } = this.props;
     // `${baseUrl}/loans/${payload.company_id}/details/?app_id=${app_id}`,
 
-    // TODO: check fetchAPI function
+
     if (checkObject(payload)) {
       const options = {
         URL: `${baseUrl}/merchants/${payload.anchor_id}/get_details?app_id=${app_id}`,

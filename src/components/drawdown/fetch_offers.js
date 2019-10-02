@@ -1,13 +1,15 @@
-import React, {Component} from "react";
-import {withRouter} from "react-router-dom";
-import {connect} from "react-redux";
-import {changeLoader, DrawsetLoanPayload, showAlert} from "../../actions";
-import {otpUrl, baseUrl, environment, app_id} from "../../shared/constants";
-import {fetchAPI, apiActions, postAPI} from "../../api";
-import {checkObject} from "../../shared/common_logic";
+import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+import { changeLoader, DrawsetLoanPayload, showAlert } from "../../actions";
+import { otpUrl, baseUrl, environment, app_id } from "../../shared/constants";
+import { fetchAPI, apiActions, postAPI } from "../../api";
+import { checkObject } from "../../shared/common_logic";
 
-const {PUBLIC_URL} = process.env;
+const { PUBLIC_URL } = process.env;
 
+
+// ToDO : remove the below comments , once the API are working fine
 /*
 let creditLimit = {
     "status": "success",
@@ -66,7 +68,7 @@ class FetchOffers extends Component {
 
     // Getting Credit Limit
     _fetchCreditLimit = async () => {
-        const {token, payload, showAlert, changeLoader} = this.props;
+        const { token, payload, showAlert, changeLoader } = this.props;
 
         let reqParam = `?app_id=${app_id}&anchor_id=${payload.anchor_id}&loan_application_id=${payload.loan_application_id}`;
 
@@ -94,10 +96,10 @@ class FetchOffers extends Component {
 
     // Getting Loan Status
     _fetchLoanStatus = async () => {
-        const {token, payload, showAlert, changeLoader} = this.props;
+        const { token, payload, showAlert, changeLoader } = this.props;
 
         let reqParam = `?app_id=${app_id}&anchor_id=${payload.anchor_id}`;
-        // TODO: check fetchAPI function
+        // check fetchAPI function
         const options = {
             URL: `${baseUrl}/loans/${payload.loan_application_id}/status/${reqParam}`,
             token: token,
@@ -122,7 +124,7 @@ class FetchOffers extends Component {
 
     // Getting Loan Offers
     _fetchLoanOffers = async () => {
-        const {token, payload, showAlert, changeLoader} = this.props;
+        const { token, payload, showAlert, changeLoader } = this.props;
 
         let reqParam = `?app_id=${app_id}&anchor_id=${payload.anchor_id}&amount=${payload.drawdown_amount}`;
 
@@ -149,7 +151,7 @@ class FetchOffers extends Component {
     };
 
     _fetchInformation = async () => {
-        const {DrawsetLoanPayload, loanPayload, history} = this.props;
+        const { DrawsetLoanPayload, loanPayload, history } = this.props;
 
         let creditLimit = await this._fetchCreditLimit();
         let loanStatus = await this._fetchLoanStatus();
@@ -161,6 +163,8 @@ class FetchOffers extends Component {
             creditLimit: creditLimit
         });
 
+
+        // ToDo : rethink about this strategy
         if (creditLimit && loanStatus && loanOffers) {
             if (loanStatus.loan_application_status === "to_settle")
                 setTimeout(() => {
@@ -171,7 +175,7 @@ class FetchOffers extends Component {
     };
 
     componentWillMount() {
-        const {payload, authObj, changeLoader, history} = this.props;
+        const { payload, authObj, changeLoader, history } = this.props;
         changeLoader(true);
         if (!checkObject(authObj))
             history.push(`${PUBLIC_URL}/drawdown/auth`);
@@ -187,28 +191,22 @@ class FetchOffers extends Component {
         if (environment === "prod" || environment === "dev")
             this._fetchInformation();
 
-        // ToDo : uncomment this 2 lines for development
-        /*  if (environment === 'local') {
-                  DrawsetLoanPayload({loanOffers: loanOffers, loanStatus: loanStatus, creditLimit: creditLimit});
-                  DrawsetPreflight(preFlightResp);
-              }
-        */
     }
 
     render() {
         return (
             <>
                 <div className="justify-content-center text-center fetchLoadPage">
-                    <i className={"fa fa-clipboard-list"}/> <br/>
+                    <i className={"fa fa-clipboard-list"} /> <br />
                     <div className="lds-ellipsis">
-                        <div/>
-                        <div/>
-                        <div/>
-                        <div/>
+                        <div />
+                        <div />
+                        <div />
+                        <div />
                     </div>
                     {" "}
                     <p className="paragraph_section">
-                        Processing your Application.. <br/>
+                        Processing your Application.. <br />
                         Fetching the best offers for you, Hold on!
                     </p>{" "}
                 </div>

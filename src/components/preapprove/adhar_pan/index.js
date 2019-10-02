@@ -98,40 +98,40 @@ class AdharPan extends Component {
                   <div className={"row"}>
                     {this.state.gst_details ===
                       Object(this.state.gst_details) &&
-                    this.state.gst_details.length ? (
-                      this.state.gst_details.map((val, key) => (
-                        <div key={key} className={"col-sm-6"}>
-                          <label>
-                            <input
-                              type="radio"
-                              name={"gst_details"}
-                              checked={this.state.checked[key] || ""}
-                              onChange={e => {
-                                this.setState(prevState => ({
-                                  checked: {
-                                    [key]: true
-                                  },
-                                  selectedGST: val.gstinId
-                                }));
-                              }}
-                            />{" "}
-                            <b
-                              style={{
-                                marginLeft: "20px",
-                                fontSize: "13.5px",
-                                color: "black",
-                                cursor: "pointer",
-                                textTransform: "capitalize"
-                              }}
-                            >
-                              {val.gstinId}
-                            </b>
-                          </label>
-                        </div>
-                      ))
-                    ) : (
-                      <></>
-                    )}
+                      this.state.gst_details.length ? (
+                        this.state.gst_details.map((val, key) => (
+                          <div key={key} className={"col-sm-6"}>
+                            <label>
+                              <input
+                                type="radio"
+                                name={"gst_details"}
+                                checked={this.state.checked[key] || ""}
+                                onChange={e => {
+                                  this.setState(prevState => ({
+                                    checked: {
+                                      [key]: true
+                                    },
+                                    selectedGST: val.gstinId
+                                  }));
+                                }}
+                              />{" "}
+                              <b
+                                style={{
+                                  marginLeft: "20px",
+                                  fontSize: "13.5px",
+                                  color: "black",
+                                  cursor: "pointer",
+                                  textTransform: "capitalize"
+                                }}
+                              >
+                                {val.gstinId}
+                              </b>
+                            </label>
+                          </div>
+                        ))
+                      ) : (
+                        <></>
+                      )}
                     <br />
                   </div>
                 </div>
@@ -360,13 +360,13 @@ class AdharPan extends Component {
           </div>
 
           <div className="mt-5 mb-5 text-center ">
-            {/* <ButtonWrapper
+            <ButtonWrapper
               localState={this.state}
-              onClick={e => this._formSubmit(e)}
+              onClick={this._formSubmit}
               disabled={this.state.missed_fields}
               label="PROCEED"
-            /> */}
-            {!this.state.missed_fields && (
+            />
+            {/* {!this.state.missed_fields && (
               <input
                 type="submit"
                 name="submit"
@@ -374,7 +374,7 @@ class AdharPan extends Component {
                 onClick={e => this._formSubmit(e)}
                 className="form-submit btn btn-raised btn-raised greenButton"
               />
-            )}
+            )} */}
           </div>
         </div>
         {this.RenderModalGST()}

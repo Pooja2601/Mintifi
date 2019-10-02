@@ -1,6 +1,6 @@
-import React, {Component} from "react";
-import {connect} from "react-redux";
-import {Link, withRouter} from "react-router-dom";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { Link, withRouter } from "react-router-dom";
 import {
     changeLoader,
     EnachsetPayload,
@@ -25,7 +25,7 @@ import {
 
 import PropTypes from "prop-types";
 
-const {PUBLIC_URL} = process.env;
+const { PUBLIC_URL } = process.env;
 
 class PNach extends Component {
     static propTypes = {
@@ -41,13 +41,13 @@ class PNach extends Component {
     };
 
     componentWillMount() {
-        let {changeLoader, showAlert} = this.props;
+        let { changeLoader, showAlert } = this.props;
         changeLoader(false);
         showAlert();
     }
 
     _onChangeFile(e, targetMsg) {
-        let {value, files} = e.target;
+        let { value, files } = e.target;
         var allowedExt = /(\.jpg|\.jpeg|\.png|\.gif|\.pdf)$/i;
 
         if (!allowedExt.exec(value)) {
@@ -59,11 +59,11 @@ class PNach extends Component {
         const name = value.split(/\\|\//).pop();
         const truncated = name.length > 20 ? name.substr(name.length - 20) : name;
 
-        this.setState({upload_nach_msg: truncated});
+        this.setState({ upload_nach_msg: truncated });
     }
 
     formSubmit() {
-        let {eNachPayload, token, changeLoader, history, showAlert} = this.props;
+        let { eNachPayload, token, changeLoader, history, showAlert } = this.props;
         changeLoader(true);
 
         // ToDo : To be removed while shipping
@@ -92,6 +92,8 @@ class PNach extends Component {
             ctr++;
         }
 
+
+        // ToDo : make it modular via postAPI from 'api/'
         fetch(`${baseUrl}/documents`, {
             method: "POST",
             headers: {
@@ -108,7 +110,7 @@ class PNach extends Component {
                 if (checkObject(resp.error))
                     showAlert("We couldn't upload the file, Kindly try again !", "error");
                 else if (checkObject(resp.response)) {
-                    this.setState({disableUpload: true});
+                    this.setState({ disableUpload: true });
                     history.push(ENachResponseUrl.success_url);
                 }
             })
@@ -126,11 +128,11 @@ class PNach extends Component {
                     Go Back{" "}
                 </Link>
                 <h4 className={"text-center"}> Physical-NACH Mandate</h4>
-                <br/>
+                <br />
 
                 <div className={"alert alert-info text-center"}>
                     Kindly Download the Pre-filled NACH form,
-                    <br/>
+                    <br />
                     then take a print, sign on it and Upload it back.
                 </div>
                 <div className={"row text-center mt-3"}>
@@ -152,7 +154,7 @@ class PNach extends Component {
                     <div className={"col-12"}>
                         <div
                             className="input-container text-left"
-                            style={{cursor: "pointer"}}
+                            style={{ cursor: "pointer" }}
                             onClick={() => this.nachForm.click()}
                         >
                             <input
@@ -165,12 +167,13 @@ class PNach extends Component {
                                 className="btn btn-raised uploadButtonIcon inputFilebutton"
                                 id={"nachFormBtn"}
                             >
-                                <i className={"fa fa-upload"}/>
+                                <i className={"fa fa-upload"} />
                             </button>
                             <span className="helperUploadTxt">
-                {this.state.upload_nach_msg}
-              </span>
+                                {this.state.upload_nach_msg}
+                            </span>
                         </div>
+                        {/* ToDo : Need to be wrapper via a ButtonWrapper */}
                         <button
                             disabled={this.state.disableUpload}
                             onClick={() => {
@@ -197,6 +200,6 @@ const mapStateToProps = state => ({
 export default withRouter(
     connect(
         mapStateToProps,
-        {changeLoader, EnachsetPayload, EnachsetAttempt, setAnchorObj, showAlert}
+        { changeLoader, EnachsetPayload, EnachsetAttempt, setAnchorObj, showAlert }
     )(PNach)
 );

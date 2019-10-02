@@ -290,7 +290,7 @@ const validationBusinessDetails = {
     title: "Company Legal Name",
     autoCapitalize: "characters",
     id: "companyName",
-    pattern: /^[a-zA-Z0-9]{2,}[^]+$/,
+    pattern: /^[a-zA-Z0-9\/]{2,}[^]+$/,
     required: true,
     readOnly: false,
     disabled: false,

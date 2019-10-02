@@ -1,16 +1,16 @@
-import React, {Component} from "react";
-import {connect} from "react-redux";
-import {withRouter} from "react-router-dom";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
-import {baseUrl, app_id, environment} from "../../../shared/constants";
-import {pan_adhar, setAdharManual, setBusinessDetail, changeLoader, showAlert} from "../../../actions";
-import {checkObject} from "../../../shared/common_logic";
-import {apiActions, postFileAPI} from "../../../api";
+import { baseUrl, app_id, environment } from "../../../shared/constants";
+import { pan_adhar, setAdharManual, setBusinessDetail, changeLoader, showAlert } from "../../../actions";
+import { checkObject } from "../../../shared/common_logic";
+import { apiActions, postFileAPI } from "../../../api";
 import { doc_type_attr, doc_att, file_catalog } from './predefined';
 import ButtonWrapper from '../../../layouts/button_wrapper';
 
 const file_msg = "Select a file";
-const {PUBLIC_URL} = process.env;
+const { PUBLIC_URL } = process.env;
 
 
 class DocsUpload extends Component {
@@ -43,19 +43,19 @@ class DocsUpload extends Component {
     RenderModalMessage = () => {
         return (
             <>
-           
-                <button type="button" style={{visibility: 'hidden'}} ref={ref => this.triggerModal = ref}
-                        id={"triggerModal"} data-toggle="modal"
-                        data-target="#errorMsgModal">
+
+                <button type="button" style={{ visibility: 'hidden' }} ref={ref => this.triggerModal = ref}
+                    id={"triggerModal"} data-toggle="modal"
+                    data-target="#errorMsgModal">
                 </button>
 
                 <div className="modal fade" id={"errorMsgModal"} ref={ref => this.errorMsgModal = ref} tabIndex="-1"
-                     role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div className="modal-dialog" role="document" style={{margin: '5.75rem auto'}}>
+                    role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog" role="document" style={{ margin: '5.75rem auto' }}>
                         <div className="modal-content">
                             <div className="modal-header">
                                 <h5 className="modal-title">Invalid Filetype</h5>
-                              
+
                                 <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -65,9 +65,9 @@ class DocsUpload extends Component {
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-primary">Save changes</button>
-                               
+
                                 <button type="button" className="btn btn-primary" ref={ref => this.closeModal = ref}
-                                        data-dismiss="modal">Close
+                                    data-dismiss="modal">Close
                                 </button>
                             </div>
                         </div>
@@ -99,19 +99,19 @@ class DocsUpload extends Component {
 
         return (
             <>
-                 
-                <button type="button" style={{visibility: 'hidden'}} ref={ref => this.triggerModalUpload = ref}
-                        id={"triggerModalUpload"} data-toggle="modal"
-                        data-target="#docsSelModal">
+
+                <button type="button" style={{ visibility: 'hidden' }} ref={ref => this.triggerModalUpload = ref}
+                    id={"triggerModalUpload"} data-toggle="modal"
+                    data-target="#docsSelModal">
                 </button>
 
                 <div className="modal fade" id={"docsSelModal"} ref={ref => this.docsSelModal = ref} tabIndex="-1"
-                     role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div className="modal-dialog" role="document" style={{margin: '5.75rem auto'}}>
+                    role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog" role="document" style={{ margin: '5.75rem auto' }}>
                         <div className="modal-content">
                             <div className="modal-header">
                                 <h5 className="modal-title">Select the Document Type</h5>
-                               
+
                                 <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -121,35 +121,35 @@ class DocsUpload extends Component {
                                     {file_catalog[this.state.active_modal].map((val, key) => (
                                         <div key={val}><label>
                                             <input type="radio" name={this.state.active_modal}
-                                                   checked={(this.state.checked[this.state.active_modal] === val)}
-                                                   onChange={(e) => {
-                                                       this.setState(prevState => ({
-                                                           checked: {
-                                                               ...this.state.checked,
-                                                               [this.state.active_modal]: val
-                                                           }
-                                                       }));
-                                                   }
-                                                   }/> <b
-                                            style={{
-                                                marginLeft: "20px",
-                                                fontSize: '12px',
-                                                color: 'black',
-                                                cursor: 'pointer'
-                                            }}>{val.toUpperCase()}</b>
-                                        </label><br/></div>))}
+                                                checked={(this.state.checked[this.state.active_modal] === val)}
+                                                onChange={(e) => {
+                                                    this.setState(prevState => ({
+                                                        checked: {
+                                                            ...this.state.checked,
+                                                            [this.state.active_modal]: val
+                                                        }
+                                                    }));
+                                                }
+                                                } /> <b
+                                                    style={{
+                                                        marginLeft: "20px",
+                                                        fontSize: '12px',
+                                                        color: 'black',
+                                                        cursor: 'pointer'
+                                                    }}>{val.toUpperCase()}</b>
+                                        </label><br /></div>))}
                                 </div>
                             </div>
                             <div className="modal-footer">
-                              
-                                
+
+
                                 <button type="button" className="btn greenButton btn-raised align-left"
-                                        onClick={() => this.uploadFiles(this.state.active_modal)}
-                                        style={{padding: '7px 11px 8px 11px'}}
-                                        data-dismiss="modal">Upload File
+                                    onClick={() => this.uploadFiles(this.state.active_modal)}
+                                    style={{ padding: '7px 11px 8px 11px' }}
+                                    data-dismiss="modal">Upload File
                                 </button>
                                 <button type="button" className="btn btn-primary pull-right"
-                                        data-dismiss="modal">Close
+                                    data-dismiss="modal">Close
                                 </button>
                             </div>
                         </div>
@@ -171,7 +171,7 @@ class DocsUpload extends Component {
 
     _onChangeFile(e, targetMsg) {
 
-        let {value, files} = e.target;
+        let { value, files } = e.target;
         var allowedExt = /(\.jpg|\.jpeg|\.png|\.gif|\.pdf)$/i;
 
         if (!allowedExt.exec(value)) {
@@ -197,16 +197,16 @@ class DocsUpload extends Component {
 
         switch (targetMsg) {
             case 'id_proof':
-                this.setState({id_proof_msg: truncated});
+                this.setState({ id_proof_msg: truncated });
                 break;
             case 'add_proof':
-                this.setState({add_proof_msg: truncated});
+                this.setState({ add_proof_msg: truncated });
                 break;
             case 'entity_proof':
-                this.setState({entity_proof_msg: truncated});
+                this.setState({ entity_proof_msg: truncated });
                 break;
             case 'caddr_proof':
-                this.setState({caddr_proof_msg: truncated});
+                this.setState({ caddr_proof_msg: truncated });
                 break;
             /*            case 'bank_proof':
                             this.setState({bank_proof_msg: truncated});
@@ -216,11 +216,11 @@ class DocsUpload extends Component {
 
     formSubmit = async () => {
 
-        let {payload, token, preFlightResp, changeLoader, history, showAlert} = this.props;
+        let { payload, token, preFlightResp, changeLoader, history, showAlert } = this.props;
         changeLoader(true);
 
         if (environment === 'local')
-            preFlightResp = {loan_application_id: '1780'};
+            preFlightResp = { loan_application_id: '1780' };
 
         let ctr = 0;
 
@@ -258,7 +258,7 @@ class DocsUpload extends Component {
 
     componentWillMount() {
 
-        const {payload, adharObj, businessObj, changeLoader, token, history, showAlert} = this.props;
+        const { payload, adharObj, businessObj, changeLoader, token, history, showAlert } = this.props;
         changeLoader(false);
         showAlert();
         if (!token)
@@ -274,16 +274,25 @@ class DocsUpload extends Component {
 
         // console.log(businessObj);
         this.errorMsgModal = '';
-        this.idProofInput = {value: ''};
-        this.addProofInput = {value: ''};
-        this.entityProofInput = {value: ''};
-        this.cAddressProofInput = {value: ''};
+        this.idProofInput = { value: '' };
+        this.addProofInput = { value: '' };
+        this.entityProofInput = { value: '' };
+        this.cAddressProofInput = { value: '' };
         // this.bankProofInput = {value: ''};
+    }
+
+    submitDisabled = () => {
+        if (this.idProofInput.value === undefined &&
+            this.addProofInput.value === undefined &&
+            this.entityProofInput.value === undefined &&
+            this.cAddressProofInput.value === undefined)
+            return true;
+        else return false;
     }
 
     render() {
         if (checkObject(this.props.adharObj)) {
-            const {f_name, l_name} = this.props.adharObj;
+            const { f_name, l_name } = this.props.adharObj;
             return (
                 <>
                     {/* <button onClick={() => this.props.history.push('${PUBLIC_URL}/preapprove/businessdetail`)} className={"btn btn-link"}>
@@ -303,38 +312,38 @@ class DocsUpload extends Component {
 
                             <div className={"row mb-4 mt-4"}>
                                 <div className={"col-md-6 col-sm-6 col-xs-12"}>
-                                    <div className="input-container text-left" style={{cursor: 'pointer'}}
-                                         onClick={() => this.idProofInput.click()}>
+                                    <div className="input-container text-left" style={{ cursor: 'pointer' }}
+                                        onClick={() => this.idProofInput.click()}>
                                         <input type="file" id="idProofInput"
-                                               onChange={(e) => this._onChangeFile(e, 'id_proof')}
+                                            onChange={(e) => this._onChangeFile(e, 'id_proof')}
                                             ref={ref => this.idProofInput = ref} />
-                                      
+
                                         <button className="btn btn-raised uploadButton inputFilebutton"
-                                                id={"idProofBtn"}>
+                                            id={"idProofBtn"}>
                                             ID Proof
                                         </button>
                                         <span className="helperUploadTxt">{this.state.id_proof_msg}</span>
                                     </div>
-                                    <small className="text-muted" style={{fontSize: 'x-small'}}>Upload a PAN or
+                                    <small className="text-muted" style={{ fontSize: 'x-small' }}>Upload a PAN or
                                         Passport.
                                     </small>
                                 </div>
                                 <div className={"col-md-6 col-sm-6 col-xs-12"}>
-                                    <div className="input-container text-left" style={{cursor: 'pointer'}}
-                                         onClick={() => this._multiDimDocsUpload('add_proof')}>
+                                    <div className="input-container text-left" style={{ cursor: 'pointer' }}
+                                        onClick={() => this._multiDimDocsUpload('add_proof')}>
                                         <input type="file" id="addressProofInput"
-                                               onChange={(e) => this._onChangeFile(e, 'add_proof')}
+                                            onChange={(e) => this._onChangeFile(e, 'add_proof')}
                                             ref={ref => this.addProofInput = ref} />
-                                        
+
                                         <button className="btn btn-raised uploadButton inputFilebutton"
-                                                onClick={() => this._multiDimDocsUpload('add_proof')}
-                                                id={"addressProofBtn"}>
+                                            onClick={() => this._multiDimDocsUpload('add_proof')}
+                                            id={"addressProofBtn"}>
                                             Address Proof
                                         </button>
                                         <span className="helperUploadTxt"
                                         >{this.state.add_proof_msg}</span>
                                     </div>
-                                    <small className="text-muted" style={{fontSize: 'x-small'}}>Upload Aadhaar, Driving
+                                    <small className="text-muted" style={{ fontSize: 'x-small' }}>Upload Aadhaar, Driving
                                         License or Ration Card or
                                         Passport..
                                     </small>
@@ -364,59 +373,59 @@ class DocsUpload extends Component {
 
                             <div className={"row"}>
                                 <div className={"col-md-6 col-sm-6 col-xs-12"}>
-                                    <div className="input-container text-left" style={{cursor: 'pointer'}}
-                                         onClick={() => this._multiDimDocsUpload('entity_proof')}>
+                                    <div className="input-container text-left" style={{ cursor: 'pointer' }}
+                                        onClick={() => this._multiDimDocsUpload('entity_proof')}>
                                         <input type="file" id="addressProofInput"
-                                               onChange={(e) => this._onChangeFile(e, 'entity_proof')}
+                                            onChange={(e) => this._onChangeFile(e, 'entity_proof')}
                                             ref={ref => this.entityProofInput = ref} />
-                                        
+
                                         <button className="btn btn-raised uploadButton inputFilebutton "
-                                                onClick={() => this._multiDimDocsUpload('entity_proof')}
-                                                id={"addressProofBtn"}>
+                                            onClick={() => this._multiDimDocsUpload('entity_proof')}
+                                            id={"addressProofBtn"}>
                                             Shop Registration
 
                                         </button>
                                         <span className="helperUploadTxt"
                                         >{this.state.entity_proof_msg}</span>
                                     </div>
-                                    <small className="text-muted" style={{fontSize: 'x-small'}}>Upload Shop &
+                                    <small className="text-muted" style={{ fontSize: 'x-small' }}>Upload Shop &
                                         Establishment Certificate or GST
                                         Registration Certificate.
                                     </small>
                                 </div>
                                 <div className={"col-md-6 col-sm-6 col-xs-12 uploadContatiner"}>
-                                    <div className="input-container text-left" style={{cursor: 'pointer'}}
-                                         onClick={() => this._multiDimDocsUpload('caddr_proof')}>
+                                    <div className="input-container text-left" style={{ cursor: 'pointer' }}
+                                        onClick={() => this._multiDimDocsUpload('caddr_proof')}>
                                         <input type="file" id="addressProofInput"
-                                               onChange={(e) => this._onChangeFile(e, 'caddr_proof')}
+                                            onChange={(e) => this._onChangeFile(e, 'caddr_proof')}
                                             ref={ref => this.cAddressProofInput = ref} />
-                                       
-                                        
+
+
                                         <button className="btn btn-raised uploadButton inputFilebutton "
-                                                onClick={() => this._multiDimDocsUpload('caddr_proof')}
-                                                id={"addressProofBtn"}>
+                                            onClick={() => this._multiDimDocsUpload('caddr_proof')}
+                                            id={"addressProofBtn"}>
                                             Shop Address
                                         </button>
                                         <span className="helperUploadTxt"
                                         >{this.state.caddr_proof_msg}</span>
                                     </div>
-                                    <small className="text-muted" style={{fontSize: 'x-small'}}>Upload Company's
+                                    <small className="text-muted" style={{ fontSize: 'x-small' }}>Upload Company's
                                         Electricity Bill or Rent Agreement.
                                     </small>
                                 </div>
                             </div>
-                            <br/>
-                            <br/>
+                            <br />
+                            <br />
                         </div>
                     </div>
 
                     <div className="mb-3 text-center ">
-            <ButtonWrapper
-              className="form-submit btn btn-raised greenButton"
-              onClick={e => this.formSubmit(e)}
-              disabled={(this.idProofInput.value === undefined && this.addProofInput.value === undefined && this.entityProofInput.value === undefined && this.cAddressProofInput.value === undefined)}
-              label="COMPLETE LOAN APPLICATION"
-            />
+                        <ButtonWrapper
+                            className="form-submit btn btn-raised greenButton"
+                            onClick={this.formSubmit}
+                            disabled={this.submitDisabled()}
+                            label="COMPLETE LOAN APPLICATION"
+                        />
                         {/* <button
                             type="button"
                             disabled={(this.idProofInput.value === undefined && this.addProofInput.value === undefined && this.entityProofInput.value === undefined && this.cAddressProofInput.value === undefined)}
@@ -447,6 +456,6 @@ const mapStateToProps = state => ({
 export default withRouter(
     connect(
         mapStateToProps,
-        {setBusinessDetail, pan_adhar, setAdharManual, changeLoader, showAlert}
+        { setBusinessDetail, pan_adhar, setAdharManual, changeLoader, showAlert }
     )(DocsUpload)
 );
