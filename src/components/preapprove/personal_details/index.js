@@ -135,7 +135,7 @@ class PersonalDetail extends Component {
     }
   }
 
-  _formSubmit(e) {
+  _formSubmit=(e)=> {
     e.preventDefault();
     setTimeout(() => {
       this.props.history.push(`${PUBLIC_URL}/preapprove/mobileotp`);

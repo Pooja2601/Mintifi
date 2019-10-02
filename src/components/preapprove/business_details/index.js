@@ -579,7 +579,7 @@ class BusinessDetail extends Component {
             <ButtonWrapper
               localState={this.state}
               onClick={this._formSubmit}
-              disabled={this._customButtonValidation}
+              disabled={this._customButtonValidation()}
               label="CHECK YOUR ELIGIBILITY"
             />
             {/* <button

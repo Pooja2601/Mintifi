@@ -25,8 +25,8 @@ const ButtonWrapper = props => {
             style={style}
             localState={localState}
             className={`btn btn-raised greenButton`}
-            // onClick={e => onClick(e)}
-            onChangeHandler={e => onChangeHandler(e)}
+            onClick={e => onClick(e)}
+            //onChangeHandler={e => onChangeHandler(e)}
             disabled={disabled}
           >
             {label}
