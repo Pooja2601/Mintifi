@@ -303,25 +303,33 @@ class MobileOtp extends Component {
           </div>
 
           <div className="mt-3 mb-2 text-center">
-            <ButtonWrapper
-              localState={this.state}
-              style={{
-                visibility: !this.state.submitted ? "visible" : "hidden"
-              }}
-              onChangeHandler={this.onChangeHandler}
-              disabled={!(!this.state.missed_fields && !this.state.submitted)}
-              label={this.state.count === 0 ? "SEND OTP" : "RESEND OTP"}
-            />
+            {!this.state.submitted ? (
+              <ButtonWrapper
+                localState={this.state}
+                // style={{
+                //   visibility: !this.state.submitted ? "visible" : "hidden"
+                // }}
+                onChangeHandler={this._formSubmit}
+                disabled={!(!this.state.missed_fields && !this.state.submitted)}
+                label={this.state.count === 0 ? "SEND OTP" : "RESEND OTP"}
+              />
+            ) : (
+              <></>
+            )}
             <br />
-            <ButtonWrapper
-              localState={this.state}
-              style={{
-                visibility: this.state.submitted ? "visible" : "hidden"
-              }}
-              onChangeHandler={this.onChangeHandler}
-              disabled={!(!this.state.missed_fields && !this.state.submitted)}
-              label="VERIFY OTP"
-            />
+            {this.state.submitted ? (
+              <ButtonWrapper
+                localState={this.state}
+                // style={{
+                //   visibility: this.state.submitted ? "visible" : "hidden"
+                // }}
+                onChangeHandler={this._verifyOTP}
+                disabled={!(!this.state.missed_fields && !this.state.submitted)}
+                label="VERIFY OTP"
+              />
+            ) : (
+              <></>
+            )}
             {/* <button
               name="submit"
               style={{
