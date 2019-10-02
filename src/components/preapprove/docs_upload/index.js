@@ -370,7 +370,7 @@ class DocsUpload extends Component {
                                             ref={ref => this.addProofInput = ref} />
                                         <ButtonWrapper
                                             className="btn btn-raised uploadButton inputFilebutton"
-                                            onChangeHandler={this._multiDimDocsUpload('add_proof')}
+                                            onClick={this._multiDimDocsUpload('add_proof')}
                                             id={"addressProofBtn"}
                                             label="ADDRESS PROOF"
                                         />
@@ -419,7 +419,7 @@ class DocsUpload extends Component {
                                             ref={ref => this.entityProofInput = ref} />
                                         <ButtonWrapper
                                             className="btn btn-raised uploadButton inputFilebutton"
-                                            onChangeHandler={this._multiDimDocsUpload('entity_proof')}
+                                            onClick={this._multiDimDocsUpload('entity_proof')}
                                             id={"addressProofBtn"}
                                             label="SHOP REGISTRATION"
                                         />
@@ -445,7 +445,7 @@ class DocsUpload extends Component {
                                             ref={ref => this.cAddressProofInput = ref} />
                                         <ButtonWrapper
                                             className="btn btn-raised uploadButton inputFilebutton"
-                                            onChangeHandler={this._multiDimDocsUpload('caddr_proof')}
+                                            onClick={this._multiDimDocsUpload('caddr_proof')}
                                             id={"addressProofBtn"}
                                             label="SHOP ADDRESS"
                                         />
@@ -471,7 +471,7 @@ class DocsUpload extends Component {
                     <div className="mb-3 text-center ">
             <ButtonWrapper
               className="form-submit btn btn-raised greenButton"
-              onChangeHandler={this._formSubmit}
+              onClick={this._formSubmit}
               disabled={(this.idProofInput.value === undefined && this.addProofInput.value === undefined && this.entityProofInput.value === undefined && this.cAddressProofInput.value === undefined)}
               label="COMPLETE LOAN APPLICATION"
             />

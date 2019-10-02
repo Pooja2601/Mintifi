@@ -89,6 +89,7 @@ class Offers extends Component {
                   className="btn btn-primary"
                   ref={ref => (this.closeModal = ref)}
                   data-dismiss="modal"
+                  label="CLOSE"
                 />
                 {/* <button
                   type="button"

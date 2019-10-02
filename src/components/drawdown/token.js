@@ -119,7 +119,7 @@ class DrawLanding extends Component {
         <div className={"devTool_PayloadBtn"}>
           <ButtonWrapper
             label="CREATE PAYLOAD"
-            onClick={() => this._generateToken()}
+            onClick={this._generateToken}
             style={{
               display:
                 environment === "dev" || environment === "local"
