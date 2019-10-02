@@ -6,7 +6,8 @@ import {baseUrl, app_id, environment} from "../../../shared/constants";
 import {pan_adhar, setAdharManual, setBusinessDetail, changeLoader, showAlert} from "../../../actions";
 import {checkObject} from "../../../shared/common_logic";
 import {apiActions, postFileAPI} from "../../../api";
-import {doc_type_attr, doc_att, file_catalog} from './predefined';
+import { doc_type_attr, doc_att, file_catalog } from './predefined';
+import ButtonWrapper from '../../../layouts/button_wrapper';
 
 const file_msg = "Select a file";
 const {PUBLIC_URL} = process.env;
@@ -42,10 +43,16 @@ class DocsUpload extends Component {
     RenderModalMessage = () => {
         return (
             <>
-                <button type="button" style={{visibility: 'hidden'}} ref={ref => this.triggerModal = ref}
+                 <ButtonWrapper
+                    style={{ visibility: 'hidden' }}
+                    ref={ref => this.triggerModal = ref}
+                    id={"triggerModal"}
+                    data-toggle="modal"
+                    data-target="#errorMsgModal" />
+                {/* <button type="button" style={{visibility: 'hidden'}} ref={ref => this.triggerModal = ref}
                         id={"triggerModal"} data-toggle="modal"
                         data-target="#errorMsgModal">
-                </button>
+                </button> */}
 
                 <div className="modal fade" id={"errorMsgModal"} ref={ref => this.errorMsgModal = ref} tabIndex="-1"
                      role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -53,18 +60,31 @@ class DocsUpload extends Component {
                         <div className="modal-content">
                             <div className="modal-header">
                                 <h5 className="modal-title">Invalid Filetype</h5>
-                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                <ButtonWrapper
+                                        className="close"
+                                        data-dismiss="model"
+                                        aria-label="CLOSE"
+                                        >
+                                        <span aria-hidden="true">&times;</span>
+                                </ButtonWrapper>
+                                {/* <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
-                                </button>
+                                </button> */}
                             </div>
                             <div className="modal-body">
                                 <p>Please upload file having extensions .jpeg .jpg .png .gif and .pdf only.</p>
                             </div>
                             <div className="modal-footer">
                                 {/*<button type="button" className="btn btn-primary">Save changes</button>*/}
-                                <button type="button" className="btn btn-primary" ref={ref => this.closeModal = ref}
+                                <ButtonWrapper
+                                    className="btn btn-primary"
+                                    ref={ref => this.closeModal = ref}
+                                    data-dismiss="model"
+                                    label="CLOSE"
+                                    />
+                                {/* <button type="button" className="btn btn-primary" ref={ref => this.closeModal = ref}
                                         data-dismiss="modal">Close
-                                </button>
+                                </button> */}
                             </div>
                         </div>
                     </div>
@@ -95,10 +115,17 @@ class DocsUpload extends Component {
 
         return (
             <>
-                <button type="button" style={{visibility: 'hidden'}} ref={ref => this.triggerModalUpload = ref}
+                 <ButtonWrapper
+                    style={{visibility: 'hidden'}}
+                    ref={ref => this.triggerModalUpload = ref}
+                    id={"triggerModalUpload"}
+                    data-toggle="modal"
+                    data-target="#docsSelModal"
+                />
+                {/* <button type="button" style={{visibility: 'hidden'}} ref={ref => this.triggerModalUpload = ref}
                         id={"triggerModalUpload"} data-toggle="modal"
                         data-target="#docsSelModal">
-                </button>
+                </button> */}
 
                 <div className="modal fade" id={"docsSelModal"} ref={ref => this.docsSelModal = ref} tabIndex="-1"
                      role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -106,9 +133,16 @@ class DocsUpload extends Component {
                         <div className="modal-content">
                             <div className="modal-header">
                                 <h5 className="modal-title">Select the Document Type</h5>
-                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                <ButtonWrapper
+                                    className="close"
+                                    data-dismiss="model"
+                                    aria-label="CLOSE"
+                                    >
                                     <span aria-hidden="true">&times;</span>
-                                </button>
+                                </ButtonWrapper>
+                                {/* <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button> */}
                             </div>
                             <div className="modal-body">
                                 <div className="checkbox">
@@ -135,14 +169,27 @@ class DocsUpload extends Component {
                                 </div>
                             </div>
                             <div className="modal-footer">
-                                <button type="button" className="btn greenButton btn-raised align-left"
+                                <ButtonWrapper
+                                className="btn greenButton btn-raised align-left"
+                                onChangeHandler={this.uploadFiles(this.state.active_modal)}
+                                style={{padding: '7px 11px 8px 11px'}}
+                                data-dismiss="model"
+                                label="UPLOAD FILE"
+                                />
+                                <ButtonWrapper
+                                className="btn btn-primary pull-right"
+                                data-dismiss="model"
+                                label="CLOSE"
+                                />
+                                
+                                {/* <button type="button" className="btn greenButton btn-raised align-left"
                                         onClick={() => this.uploadFiles(this.state.active_modal)}
                                         style={{padding: '7px 11px 8px 11px'}}
                                         data-dismiss="modal">Upload File
                                 </button>
                                 <button type="button" className="btn btn-primary pull-right"
                                         data-dismiss="modal">Close
-                                </button>
+                                </button> */}
                             </div>
                         </div>
                     </div>
@@ -299,11 +346,16 @@ class DocsUpload extends Component {
                                          onClick={() => this.idProofInput.click()}>
                                         <input type="file" id="idProofInput"
                                                onChange={(e) => this._onChangeFile(e, 'id_proof')}
-                                               ref={ref => this.idProofInput = ref}/>
-                                        <button className="btn btn-raised uploadButton inputFilebutton"
+                                            ref={ref => this.idProofInput = ref} />
+                                        <ButtonWrapper
+                                            className="btn btn-raised uploadButton inputFilebutton"
+                                            id={"idProofBtn"}
+                                            label="ID PROOF"
+                                        />
+                                        {/* <button className="btn btn-raised uploadButton inputFilebutton"
                                                 id={"idProofBtn"}>
                                             ID Proof
-                                        </button>
+                                        </button> */}
                                         <span className="helperUploadTxt">{this.state.id_proof_msg}</span>
                                     </div>
                                     <small className="text-muted" style={{fontSize: 'x-small'}}>Upload a PAN or
@@ -315,12 +367,18 @@ class DocsUpload extends Component {
                                          onClick={() => this._multiDimDocsUpload('add_proof')}>
                                         <input type="file" id="addressProofInput"
                                                onChange={(e) => this._onChangeFile(e, 'add_proof')}
-                                               ref={ref => this.addProofInput = ref}/>
-                                        <button className="btn btn-raised uploadButton inputFilebutton"
+                                            ref={ref => this.addProofInput = ref} />
+                                        <ButtonWrapper
+                                            className="btn btn-raised uploadButton inputFilebutton"
+                                            onClick={this._multiDimDocsUpload('add_proof')}
+                                            id={"addressProofBtn"}
+                                            label="ADDRESS PROOF"
+                                        />
+                                        {/* <button className="btn btn-raised uploadButton inputFilebutton"
                                                 onClick={() => this._multiDimDocsUpload('add_proof')}
                                                 id={"addressProofBtn"}>
                                             Address Proof
-                                        </button>
+                                        </button> */}
                                         <span className="helperUploadTxt"
                                         >{this.state.add_proof_msg}</span>
                                     </div>
@@ -358,13 +416,19 @@ class DocsUpload extends Component {
                                          onClick={() => this._multiDimDocsUpload('entity_proof')}>
                                         <input type="file" id="addressProofInput"
                                                onChange={(e) => this._onChangeFile(e, 'entity_proof')}
-                                               ref={ref => this.entityProofInput = ref}/>
-                                        <button className="btn btn-raised uploadButton inputFilebutton "
+                                            ref={ref => this.entityProofInput = ref} />
+                                        <ButtonWrapper
+                                            className="btn btn-raised uploadButton inputFilebutton"
+                                            onClick={this._multiDimDocsUpload('entity_proof')}
+                                            id={"addressProofBtn"}
+                                            label="SHOP REGISTRATION"
+                                        />
+                                        {/* <button className="btn btn-raised uploadButton inputFilebutton "
                                                 onClick={() => this._multiDimDocsUpload('entity_proof')}
                                                 id={"addressProofBtn"}>
                                             Shop Registration
 
-                                        </button>
+                                        </button> */}
                                         <span className="helperUploadTxt"
                                         >{this.state.entity_proof_msg}</span>
                                     </div>
@@ -378,12 +442,19 @@ class DocsUpload extends Component {
                                          onClick={() => this._multiDimDocsUpload('caddr_proof')}>
                                         <input type="file" id="addressProofInput"
                                                onChange={(e) => this._onChangeFile(e, 'caddr_proof')}
-                                               ref={ref => this.cAddressProofInput = ref}/>
-                                        <button className="btn btn-raised uploadButton inputFilebutton "
+                                            ref={ref => this.cAddressProofInput = ref} />
+                                        <ButtonWrapper
+                                            className="btn btn-raised uploadButton inputFilebutton"
+                                            onClick={this._multiDimDocsUpload('caddr_proof')}
+                                            id={"addressProofBtn"}
+                                            label="SHOP ADDRESS"
+                                        />
+                                        
+                                        {/* <button className="btn btn-raised uploadButton inputFilebutton "
                                                 onClick={() => this._multiDimDocsUpload('caddr_proof')}
                                                 id={"addressProofBtn"}>
                                             Shop Address
-                                        </button>
+                                        </button> */}
                                         <span className="helperUploadTxt"
                                         >{this.state.caddr_proof_msg}</span>
                                     </div>
@@ -398,13 +469,19 @@ class DocsUpload extends Component {
                     </div>
 
                     <div className="mb-3 text-center ">
-                        <button
+            <ButtonWrapper
+              className="form-submit btn btn-raised greenButton"
+              onClick={this._formSubmit}
+              disabled={(this.idProofInput.value === undefined && this.addProofInput.value === undefined && this.entityProofInput.value === undefined && this.cAddressProofInput.value === undefined)}
+              label="COMPLETE LOAN APPLICATION"
+            />
+                        {/* <button
                             type="button"
                             disabled={(this.idProofInput.value === undefined && this.addProofInput.value === undefined && this.entityProofInput.value === undefined && this.cAddressProofInput.value === undefined)}
                             onClick={e => this.formSubmit(e)}
                             className="form-submit btn btn-raised greenButton"
                         >Complete Loan Application
-                        </button>
+                        </button> */}
                     </div>
                     <div>
                         {this.RenderModalMessage()}

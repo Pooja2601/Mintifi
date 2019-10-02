@@ -41,7 +41,7 @@ class ESign extends Component {
   popUpWindow = "";
   intervalPing = "";
   checkStatusPopup = "";
-  COUNTER_PING = 8; // 2 minutes
+  COUNTER_PING = 10; // 2 minutes
   INTERVAL_TIMER = 15000;
   eSignAttempt = 0;
 
@@ -318,14 +318,14 @@ class ESign extends Component {
           {this.state.checkStatus ? (
             <ButtonWrapper
               localState={this.state}
-              onChangeHandler={e => this._pingDBStatus()}
+              onChangeHandler={this._pingDBStatus}
               disabled={!checkObject(eSignPayload) || !token}
               label="CHECK E-SIGN STATUS"
             />
           ) : (
             <ButtonWrapper
               localState={this.state}
-              onChangeHandler={e => this._triggerESign()}
+              onChangeHandler={this._triggerESign}
               disabled={!checkObject(eSignPayload) || !token}
               label="INITIATE E_SIGN"
             />

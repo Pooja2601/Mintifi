@@ -11,7 +11,8 @@ const ButtonWrapper = props => {
     alertObj,
     addText,
     disabled,
-    label
+    label,
+    style
   } = props;
   const VALIDATION = validation;
   return (
@@ -20,10 +21,11 @@ const ButtonWrapper = props => {
         {/*#00b7a5*/}
         <div className="btn-group ToggleBtn" aria-label="...">
           <button
+            style={style}
             type={VALIDATION.type}
             className={`btn btn-raised greenButton`}
             onClick={e => onChangeHandler(e)}
-            disabled={localState.missed_fields ? disabled : ""}
+            disabled={disabled}
           >
             {label}
           </button>

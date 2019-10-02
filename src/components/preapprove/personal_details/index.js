@@ -62,8 +62,7 @@ class PersonalDetail extends Component {
     city: "",
     state: "",
     list_posts: "",
-    missed_fields: true,
-    label: "PROCEED"
+    missed_fields: true
   };
 
   tempState = this.state;
@@ -371,14 +370,13 @@ class PersonalDetail extends Component {
                     </div>*/}
 
           <div className="mt-5 mb-5 text-center ">
-            {
-              <ButtonWrapper
-                localState={this.state}
-                onChangeHandler={this.onChangeHandler}
-                disabled={this.state.missed_fields}
-                label={this.state.label}
-              />
-            }
+            <ButtonWrapper
+              localState={this.state}
+              onClick={this._formSubmit}
+              disabled={this.state.missed_fields}
+              label="PROCEED"
+            />
+
             {/* <a href={'#'} disabled={this.state.missed_fields} onClick={e => this._formSubmit(e)}
                            className="form-submit btn btn-raised greenButton">Proceed</a>*/}
           </div>

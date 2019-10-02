@@ -8,6 +8,7 @@ import {
   mintifiMail,
   mintifiMobile
 } from "../../shared/constants";
+import ButtonWrapper from "../../layouts/button_wrapper";
 import { postMessage, checkObject } from "../../shared/common_logic";
 
 const { PUBLIC_URL } = process.env;
@@ -29,27 +30,34 @@ const ErrorUrl = props => {
       loan_product = loan_product[0] + " " + loan_product[1];
     }
 
-        // ToDo : make it const in prod.
-        // let {creditLimit, loanStatus, loanOffers} = loanPayload;
+    // ToDo : make it const in prod.
+    // let {creditLimit, loanStatus, loanOffers} = loanPayload;
 
-        if (checkObject(preFlightResp)) {
-            loan_product = preFlightResp.offer.product_type.split("_");
-            loan_product = loan_product[0] + " " + loan_product[1];
-        }
+    if (checkObject(preFlightResp)) {
+      loan_product = preFlightResp.offer.product_type.split("_");
+      loan_product = loan_product[0] + " " + loan_product[1];
+    }
 
-        if (window.location.host !== window.parent.location.host) {
-            if (checkObject(payload))
-                postMessage({
-                    drawdown_status: "error",
-                    drawdown_offer: checkObject(preFlightResp) ? preFlightResp.offer : null,
-                    loan_id: loanPayload.loanOffers.loan.loan_application_id,
-                    drawdown_id: checkObject(preFlightResp) ? preFlightResp.drawdown_id : null,
-                    action: "close"
-                });
-        } else {
-            if (checkObject(payload))
-                window.setTimeout(() => window.location.href = `${payload.error_url}`, 5000);
-        }
+    if (window.location.host !== window.parent.location.host) {
+      if (checkObject(payload))
+        postMessage({
+          drawdown_status: "error",
+          drawdown_offer: checkObject(preFlightResp)
+            ? preFlightResp.offer
+            : null,
+          loan_id: loanPayload.loanOffers.loan.loan_application_id,
+          drawdown_id: checkObject(preFlightResp)
+            ? preFlightResp.drawdown_id
+            : null,
+          action: "close"
+        });
+    } else {
+      if (checkObject(payload))
+        window.setTimeout(
+          () => (window.location.href = `${payload.error_url}`),
+          5000
+        );
+    }
 
     return (
       <>
@@ -80,13 +88,18 @@ const ErrorUrl = props => {
             request.
           </small>
           <div className="mt-5 mb-5 text-center ">
-            <button
+            <ButtonWrapper
+              localState={this.state}
+              onClick={e => (window.location.href = payload.error_url)}
+              label="EXIT APPLICATION"
+            />
+            {/* <button
               type="button"
               onClick={e => (window.location.href = payload.error_url)}
               className="form-submit btn btn-raised greenButton"
             >
               Exit Application
-            </button>
+            </button> */}
           </div>
         </div>
       </>

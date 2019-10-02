@@ -2,6 +2,7 @@ import React, { Component } from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
 import { otpUrl, OTP_Timer, app_id } from "../../../shared/constants";
 import { connect } from "react-redux";
+import ButtonWrapper from "../../../layouts/button_wrapper";
 import PropTypes from "prop-types";
 import {
   setAuth,
@@ -291,7 +292,8 @@ class MobileOtp extends Component {
           </div>
 
           <div className="mt-2 text-center ">
-            <button
+            <ButtonWrapper />
+            {/* <button
               name="submit"
               style={{
                 visibility:
@@ -319,7 +321,7 @@ class MobileOtp extends Component {
               className="btn btn-raised greenButton text-center m-auto d-block marginTopBottom"
             >
               Verify OTP
-            </button>
+            </button> */}
           </div>
         </div>
       </>

@@ -87,14 +87,22 @@ class BusinessDetail extends Component {
   RenderModalTnC = () => {
     return (
       <>
-        <button
+        <ButtonWrapper
           type="button"
           style={{ visibility: "hidden" }}
           ref={ref => (this.triggerTnCModal = ref)}
           id={"triggerTnCModal"}
           data-toggle="modal"
           data-target="#TnCMsgModal"
-        ></button>
+        />
+        {/* <button
+          type="button"
+          style={{ visibility: "hidden" }}
+          ref={ref => (this.triggerTnCModal = ref)}
+          id={"triggerTnCModal"}
+          data-toggle="modal"
+          data-target="#TnCMsgModal"
+        ></button> */}
 
         <div
           className="modal fade"
@@ -116,14 +124,21 @@ class BusinessDetail extends Component {
                     ? "Terms and Conditions"
                     : "Privacy policy"}
                 </h5>
-                <button
+                <ButtonWrapper
+                  className="close"
+                  data-dismiss="model"
+                  aria-label="CLOSE"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </ButtonWrapper>
+                {/* <button
                   type="button"
                   className="close"
                   data-dismiss="modal"
                   aria-label="Close"
                 >
                   <span aria-hidden="true">&times;</span>
-                </button>
+                </button> */}
               </div>
               <div className="modal-body">
                 {this.state.tncModal
@@ -135,14 +150,23 @@ class BusinessDetail extends Component {
               </div>
               <div className="modal-footer">
                 {/*<button type="button" className="btn btn-primary">Save changes</button>*/}
-                <button
+                <ButtonWrapper
+                  type="button"
+                  className="btn btn-primary"
+                  ref={ref => (this.closeModal = ref)}
+                  data-dismiss="modal"
+                  label="CLOSE"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </ButtonWrapper>
+                {/* <button
                   type="button"
                   className="btn btn-primary"
                   ref={ref => (this.closeModal = ref)}
                   data-dismiss="modal"
                 >
                   Close
-                </button>
+                </button> */}
               </div>
             </div>
           </div>
@@ -570,8 +594,8 @@ class BusinessDetail extends Component {
           <div className="mt-5 mb-5 text-center">
             <ButtonWrapper
               localState={this.state}
-              onChangeHandler={this.onChangeHandler}
-              disabled={this.state.missed_fields}
+              onClick={this._formSubmit}
+              disabled={this._customButtonValidation}
               label="CHECK YOUR ELIGIBILITY"
             />
             {/* <button
@@ -583,10 +607,6 @@ class BusinessDetail extends Component {
               Check your eligibility
             </button> */}
           </div>
-          {/*<div style={{display: (this.state.missed_fields) ? 'block' : 'none'}}
-                         className={"alert alert-error"}>
-                        Check {this.state.ctrerror} fields for the error, you might have missed something !
-                    </div>*/}
         </form>
         {this.RenderModalTnC()}
       </>
