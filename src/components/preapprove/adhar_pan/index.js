@@ -56,20 +56,6 @@ class AdharPan extends Component {
   RenderModalGST = () => {
     return (
       <>
-        {/*   <RenderGSTModal
-          onChangeRadio={e => {
-            this.setState(prevState => ({
-              checked: {
-                [key]: true
-              },
-              selectedGST: val.gstinId
-            }));
-          }}
-          setGst={this._setGST()}
-          localState={this.state}
-          triggerRefs={ref => (this.triggerModalGST = ref)}
-        /> */}
-
         <button
           type="button"
           style={{ visibility: "hidden" }}
@@ -110,43 +96,46 @@ class AdharPan extends Component {
               <div className="modal-body">
                 <div className="checkbox">
                   <div className={"row"}>
-                    {checkObject(this.state.gst_details) ? (
-                      this.state.gst_details.map((val, key) => (
-                        <div key={key} className={"col-sm-6"}>
-                          <label>
-                            <input
-                              type="radio"
-                              name={"gst_details"}
-                              checked={this.state.checked[key] || ""}
-                              onChange={e => {
-                                this.setState(prevState => ({
-                                  checked: {
-                                    [key]: true
-                                  },
-                                  selectedGST: val.gstinId
-                                }));
-                              }}
-                            />{" "}
-                            <b
-                              style={{
-                                marginLeft: "20px",
-                                fontSize: "13.5px",
-                                color: "black",
-                                cursor: "pointer",
-                                textTransform: "capitalize"
-                              }}
-                            >
-                              {val.gstinId}
-                            </b>
-                          </label>
-                        </div>
-                      ))
-                    ) : (
-                      <></>
-                    )}
+                    {this.state.gst_details ===
+                      Object(this.state.gst_details) &&
+                      this.state.gst_details.length ? (
+                        this.state.gst_details.map((val, key) => (
+                          <div key={key} className={"col-sm-6"}>
+                            <label>
+                              <input
+                                type="radio"
+                                name={"gst_details"}
+                                checked={this.state.checked[key] || ""}
+                                onChange={e => {
+                                  this.setState(prevState => ({
+                                    checked: {
+                                      [key]: true
+                                    },
+                                    selectedGST: val.gstinId
+                                  }));
+                                }}
+                              />{" "}
+                              <b
+                                style={{
+                                  marginLeft: "20px",
+                                  fontSize: "13.5px",
+                                  color: "black",
+                                  cursor: "pointer",
+                                  textTransform: "capitalize"
+                                }}
+                              >
+                                {val.gstinId}
+                              </b>
+                            </label>
+                          </div>
+                        ))
+                      ) : (
+                        <></>
+                      )}
                     <br />
                   </div>
                 </div>
+                {/*{this.state.selectedGST}*/}
               </div>
               <div className="modal-footer">
                 <button
@@ -176,7 +165,7 @@ class AdharPan extends Component {
   };
 
   //ToDo : Check the PAN with the backend AP for Confirmation of new user
-  _formSubmit = async e => {
+  _formSubmit = e => {
     e.preventDefault();
     this._panFetch();
   };
@@ -342,8 +331,7 @@ class AdharPan extends Component {
         <h5 className="paragraph_styling  text-center">
           <b>Let us fetch some information for you.</b>
         </h5>
-        {/* <form id="serverless-contact-form" onSubmit={e => this._formSubmit(e)}> */}
-        <div>
+        <div id="serverless-contact-form">
           <div className={"row"}>
             <div className={"col-sm-11 col-md-8 m-auto"}>
               <InputWrapper
@@ -374,21 +362,20 @@ class AdharPan extends Component {
           <div className="mt-5 mb-5 text-center ">
             <ButtonWrapper
               localState={this.state}
-              onChangeHandler={this._formSubmit}
+              onClick={this._formSubmit}
               disabled={this.state.missed_fields}
               label="PROCEED"
             />
             {/* {!this.state.missed_fields && (
-                            <input
-                                type="submit"
-                                name="submit"
-                                value={"Proceed"}
-                                onClick={e => this._formSubmit(e)}
-                                className="form-submit btn btn-raised btn-raised greenButton"
-                            />
-                        )} */}
+              <input
+                type="submit"
+                name="submit"
+                value={"Proceed"}
+                onClick={e => this._formSubmit(e)}
+                className="form-submit btn btn-raised btn-raised greenButton"
+              />
+            )} */}
           </div>
-          {/* </form> */}
         </div>
         {this.RenderModalGST()}
       </>

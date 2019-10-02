@@ -91,7 +91,7 @@ const RenderModalGST = props => {
             <div className="modal-footer">
               <ButtonWrapper
                 localState={this.state}
-                onChangeHandler={e => this._setGST()}
+                onClick={this._setGST}
                 disabled={!localState.selectedGST.length}
                 style={{ padding: "7px 11px 8px 11px" }}
                 data-dismiss="model"

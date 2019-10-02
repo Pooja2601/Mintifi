@@ -116,6 +116,13 @@ class BusinessDetail extends Component {
                     ? "Terms and Conditions"
                     : "Privacy policy"}
                 </h5>
+                {/* <ButtonWrapper
+                  className="close"
+                  data-dismiss="model"
+                  aria-label="CLOSE"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </ButtonWrapper> */}
                 <button
                   type="button"
                   className="close"
@@ -129,12 +136,13 @@ class BusinessDetail extends Component {
                 {this.state.tncModal
                   ? TnCPolicy({ fontSize: 13 })
                   : PrivacyPolicy({
-                      fontSize: 13,
-                      headSize: 1.5
-                    })}
+                    fontSize: 13,
+                    headSize: 1.5
+                  })}
               </div>
               <div className="modal-footer">
                 {/*<button type="button" className="btn btn-primary">Save changes</button>*/}
+
                 <button
                   type="button"
                   className="btn btn-primary"
@@ -151,13 +159,13 @@ class BusinessDetail extends Component {
     );
   };
 
-  _formSubmit(e) {
+  _formSubmit = e => {
     e.preventDefault();
     // this.props.setBusinessDetail(this.state);
     setTimeout(() => {
       this.props.history.push(`${PUBLIC_URL}/preapprove/finalize`);
     });
-  }
+  };
 
   // ToDo : should be independent of a field
   validationHandler = () => {
@@ -366,10 +374,10 @@ class BusinessDetail extends Component {
         <br />
         {/*<h5 className={"text-center"}>{(gstProfile === Object(gstProfile)) ? gstProfile.lgnm : ''}</h5>*/}
 
-        <form id="serverless-contact-form" onSubmit={e => this._formSubmit(e)}>
+        <div id="serverless-contact-form">
           <div
             className={"row"}
-            // style={{visibility: (checkObject(gstProfile) && gstProfile.lgnm) ? 'visible' : 'hidden'}}
+          // style={{visibility: (checkObject(gstProfile) && gstProfile.lgnm) ? 'visible' : 'hidden'}}
           >
             <div className={"col-md-12 col-sm-12 col-xs-12"}>
               <InputWrapper
@@ -434,7 +442,7 @@ class BusinessDetail extends Component {
           </div>
 
           <div className={"row"}>
-            {!payload.retailer_onboarding_date ? (
+            {checkObject(payload) && payload.retailer_onboarding_date ? (
               <div className={"col-md-6 col-sm-6 col-xs-12"}>
                 <InputWrapper
                   validation={RETAILER_VINTAGE}
@@ -444,8 +452,8 @@ class BusinessDetail extends Component {
                 />
               </div>
             ) : (
-              <></>
-            )}
+                <></>
+              )}
           </div>
           {this.state.gst_correct === false || this.state.gst === "" ? (
             <>
@@ -516,8 +524,8 @@ class BusinessDetail extends Component {
               </div>
             </>
           ) : (
-            <></>
-          )}
+              <></>
+            )}
 
           {/*    {(this.state.company_type !== "proprietorship" && this.state.company_type !== "") ? (
             <InputWrapper
@@ -570,7 +578,7 @@ class BusinessDetail extends Component {
           <div className="mt-5 mb-5 text-center">
             <ButtonWrapper
               localState={this.state}
-              onChangeHandler={this._formSubmit}
+              onClick={this._formSubmit}
               disabled={this._customButtonValidation()}
               label="CHECK YOUR ELIGIBILITY"
             />
@@ -583,7 +591,7 @@ class BusinessDetail extends Component {
               Check your eligibility
             </button> */}
           </div>
-        </form>
+        </div>
         {this.RenderModalTnC()}
       </>
     );
