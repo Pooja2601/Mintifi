@@ -373,7 +373,7 @@ class PersonalDetail extends Component {
           <div className="mt-5 mb-5 text-center ">
             <ButtonWrapper
               localState={this.state}
-              onChangeHandler={this._formSubmit}
+              onClick={this._formSubmit}
               disabled={this.state.missed_fields}
               label={this.state.label}
             />

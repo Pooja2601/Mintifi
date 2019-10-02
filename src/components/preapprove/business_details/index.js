@@ -570,7 +570,7 @@ class BusinessDetail extends Component {
           <div className="mt-5 mb-5 text-center">
             <ButtonWrapper
               localState={this.state}
-              onChangeHandler={this._formSubmit}
+              onClick={this._formSubmit}
               disabled={this._customButtonValidation()}
               label="CHECK YOUR ELIGIBILITY"
             />
