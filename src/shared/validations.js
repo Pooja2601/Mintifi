@@ -74,7 +74,6 @@ const validationPersonalDetails = {
     id: "numberMobile",
     label: "Mobile Number *",
     pattern: /^[0-9]{10}$/,
-    error: "Invalid Mobile, Enter 10 digit number"
   },
   EMAIL: {
     slug: "email",
@@ -183,7 +182,6 @@ const validationMobileOtp = {
     disabled: true,
     id: "numberMobile",
     label: "Enter Mobile Number *",
-    error: "Please Enter 10 digit Mobile Number"
   },
   VERIFY_OTP: {
     slug: "otp",

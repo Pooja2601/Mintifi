@@ -195,11 +195,11 @@ class MobileOtp extends Component {
       case MOBILE_NUMBER:
         // console.log(">>>", value.length);
         if (value.length <= 10) {
-          this.tempState["mobile"] = value;
+          this.tempState[MOBILE_NUMBER.slug] = value;
         }
         break;
       case VERIFY_OTP:
-        if (value.length <= 6) this.tempState["otp"] = value;
+        if (value.length <= 6) this.tempState[VERIFY_OTP.slug] = value;
         break;
 
       default:
