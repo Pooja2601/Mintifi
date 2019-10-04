@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
+import ButtonWrapper from "../../layouts/button_wrapper";
 import { baseUrl, otpUrl, OTP_Timer, app_id } from "../../shared/constants";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
@@ -9,7 +10,8 @@ import {
   setAnchorObj,
   changeLoader,
   DrawAnchorPayload,
-  showAlert
+  showAlert,
+  fieldAlert
 } from "../../actions";
 import PropTypes from "prop-types";
 import { fetchAPI, apiActions, postAPI } from "../../api";
@@ -19,6 +21,7 @@ import {
   fieldValidationHandler
 } from "../../shared/common_logic";
 import { validationMobileOtp } from "../../shared/validations";
+import InputWrapper from "../../layouts/input_wrapper";
 
 const Timer = OTP_Timer;
 const { PUBLIC_URL } = process.env;
@@ -40,7 +43,8 @@ class MobileOtp extends Component {
     otp_reference_id: "",
     verified: false,
     mobile_correct: false,
-    missed_fields: true
+    missed_fields: true,
+    count: 0
   };
 
   _formSubmit = async e => {
@@ -65,11 +69,15 @@ class MobileOtp extends Component {
 
     if (resp.status === apiActions.ERROR_RESPONSE) {
       showAlert(resp.data.message, "warn");
-      this.setState({ submitted: false });
+      this.setState({ submitted: true });
     } else if (resp.status === apiActions.SUCCESS_RESPONSE) {
       // alertModule(resp.success.message, "warn");
-      this.setState({ otp_reference_id: resp.data.otp_reference_code }, () =>
-        DrawsetAuth(this.state)
+      this.setState(
+        {
+          otp_reference_id: resp.data.otp_reference_code,
+          count: this.state.count + 1
+        },
+        () => DrawsetAuth(this.state)
       );
       this.interval = setInterval(e => {
         this.setState({ timer: this.state.timer - 1 }, () => {
@@ -86,7 +94,7 @@ class MobileOtp extends Component {
     }
   };
 
-  // TODO: check post function
+
   _verifyOTP = async e => {
     e.preventDefault();
     const { changeLoader, authObj, token, DrawsetAuth, showAlert } = this.props;
@@ -137,7 +145,7 @@ class MobileOtp extends Component {
     } = this.props;
     // `${baseUrl}/loans/${payload.company_id}/details/?app_id=${app_id}`,
 
-    // TODO: check fetchAPI function
+
     if (checkObject(payload)) {
       const options = {
         URL: `${baseUrl}/merchants/${payload.anchor_id}/get_details?app_id=${app_id}`,
@@ -159,34 +167,20 @@ class MobileOtp extends Component {
     }
   };
 
-  //authObj
-  _setMobile = e => {
-    const { value } = e.target;
-    const { DrawsetAuth } = this.props;
-
-    if (value.length <= 10) {
-      // console.log(value.length);
-      this.setState(
-        { mobile: value, mobile_correct: value.length !== 10 },
-        () => DrawsetAuth(this.state)
-      );
-    }
-  };
-
   validationHandler = () => {
-    const { showAlert } = this.props;
+    const { showAlert, fieldAlert } = this.props;
 
     const lomo = fieldValidationHandler({
-      showAlert: showAlert,
       validations: validationMobileOtp,
-      localState: this.state
+      localState: this.state,
+      fieldAlert
     });
 
     this.setState({ missed_fields: lomo }); // true : for disabling
   };
 
   onChangeHandler = (field, value) => {
-    // debugger;
+    // ;
     let that = this,
       regex,
       doby;
@@ -201,11 +195,11 @@ class MobileOtp extends Component {
       case MOBILE_NUMBER:
         // console.log(">>>", value.length);
         if (value.length <= 10) {
-          this.tempState["mobile"] = value;
+          this.tempState[MOBILE_NUMBER.slug] = value;
         }
         break;
       case VERIFY_OTP:
-        if (value.length <= 6) this.tempState["otp"] = value;
+        if (value.length <= 6) this.tempState[VERIFY_OTP.slug] = value;
         break;
 
       default:
@@ -222,12 +216,15 @@ class MobileOtp extends Component {
   };
 
   componentWillMount() {
+    const { changeLoader, match, showAlert } = this.props;
+    changeLoader(false);
+    showAlert();
     /*const {changeLoader, match, DrawsetToken} = this.props;
-                    changeLoader(false);
-                    const {token, payload} = match.params;
-                    if (!token &&  !checkObject(payload))
-                        alertModule("You cannot access this page directly without Authorised session!! ", 'error');
-                    else DrawsetToken(token, payload);*/
+
+                        const {token, payload} = match.params;
+                        if (!token &&  !checkObject(payload))
+                            alertModule("You cannot access this page directly without Authorised session!! ", 'error');
+                        else DrawsetToken(token, payload);*/
   }
 
   componentDidMount() {
@@ -269,84 +266,30 @@ class MobileOtp extends Component {
         <div id="serverless-contact-form">
           <div className={"row"}>
             <div className={"col-sm-11 col-md-8 m-auto"}>
-              <div className="form-group mb-3">
-                <label htmlFor="numberMobile" className={"bmd-label-floating"}>
-                  Mobile Number *
-                </label>
-                <div className={"input-group"}>
-                  <div className="input-group-prepend">
-                    <span className="input-group-text" id="basic-addon3">
-                      +91
-                    </span>
-                  </div>
-                  <input
-                    type={MOBILE_NUMBER.type}
-                    className="form-control font_weight prependInput"
-                    // placeholder="10 digit Mobile Number"
-                    name="url"
-                    disabled={this.state.submitted}
-                    min={MOBILE_NUMBER.min}
-                    max={MOBILE_NUMBER.max}
-                    maxLength={MOBILE_NUMBER.maxLength}
-                    minLength={MOBILE_NUMBER.minLength}
-                    pattern={regexTrim(MOBILE_NUMBER.pattern)}
-                    title={MOBILE_NUMBER.title}
-                    id={MOBILE_NUMBER.id}
-                    required={MOBILE_NUMBER.required}
-                    value={this.state.mobile}
-                    // ref={ref => (this.obj.number = ref)}
-                    // onChange={e => this._setMobile(e)}
-                    onChange={e =>
-                      this.onChangeHandler(MOBILE_NUMBER, e.target.value)
-                    }
-                    aria-describedby="basic-addon3"
-                  />
-                </div>
-              </div>
+              <InputWrapper
+                validation={MOBILE_NUMBER}
+                localState={this.state}
+                onChangeHandler={this.onChangeHandler}
+                isPhone={true}
+                isSubmitted={!this.state.submitted}
+                isNumber={true}
+              />
             </div>
-            <div className={"col-sm-11 col-md-8 m-auto"}>
-              <div
-                className="form-group mb-3"
-                style={{
-                  visibility: this.state.submitted ? "visible" : "hidden"
-                }}
-              >
-                <label htmlFor="otpVerify" className={"bmd-label-floating"}>
-                  OTP *
-                </label>
-                <div className={"input-group"}>
-                  <input
-                    type={VERIFY_OTP.type}
-                    className="form-control font_weight mr-1"
-                    // placeholder="Enter the OTP"
-                    name="url"
-                    pattern={regexTrim(VERIFY_OTP.pattern)}
-                    title={VERIFY_OTP.title}
-                    id={VERIFY_OTP.id}
-                    value={this.state.otp}
-                    min={VERIFY_OTP.min}
-                    max={VERIFY_OTP.max}
-                    onChange={e =>
-                      this.onChangeHandler(VERIFY_OTP, e.target.value)
-                    }
-                    // onChange={e => {
-                    //   if (e.target.value.length <= 6)
-                    //     this.setState({ otp: e.target.value });
-                    // }}
-                    aria-describedby="otp-area"
-                    required={VERIFY_OTP.required}
-                  />
-                  {/* <div className="input-group-append">
-                                        <label style={{
-                                            fontSize: 'small',
-                                            paddingTop: '14px',
-                                            color: '#bbb'
-                                        }}>Next OTP in {(this.state.timer) && ` ${this.state.timer} Sec`}</label>
-                                    </div>*/}
-                </div>
-              </div>
+            <div
+              className={"col-sm-11 col-md-8 m-auto"}
+              style={{
+                visibility: this.state.submitted ? "visible" : "hidden"
+              }}
+            >
+              <InputWrapper
+                validation={VERIFY_OTP}
+                localState={this.state}
+                onChangeHandler={this.onChangeHandler}
+                isNumber={true}
+              />
             </div>
           </div>
+
           <div className={"text-center"}>
             <label
               className={"resendOTPLabel"}
@@ -359,32 +302,28 @@ class MobileOtp extends Component {
             </label>
           </div>
 
-          <div className="mt-3 mb-2 text-center ">
-            <button
-              name="submit"
+          <div className="mt-3 mb-2 text-center">
+            <ButtonWrapper
+              localState={this.state}
               style={{
-                visibility:
-                  !this.state.missed_fields && !this.state.submitted
-                    ? "visible"
-                    : "hidden"
+                visibility: !this.state.submitted ? "visible" : "hidden"
               }}
-              // value={"Send OTP"}
-              onClick={e => this._formSubmit(e)}
-              className="form-submit btn btn-raised greenButton"
-            >
-              Send OTP
-            </button>
+              onClick={this._formSubmit}
+              disabled={!(!this.state.missed_fields && !this.state.submitted)}
+              label={this.state.count === 0 ? "Send OTP" : "Resend OTP"}
+            ></ButtonWrapper>
             <br />
-
-            <button
+            <ButtonWrapper
+              localState={this.state}
               style={{
-                visibility: this.state.otp.length === 6 ? "visible" : "hidden"
+                visibility: this.state.submitted ? "visible" : "hidden"
               }}
-              onClick={e => this._verifyOTP(e)}
-              className="btn btn-raised greenButton text-center"
-            >
-              Verify OTP
-            </button>
+              onClick={this._verifyOTP}
+              disabled={this.state.otp.length !== 6}
+              label="VERIFY OTP"
+            />
+
+
           </div>
         </div>
       </>
@@ -407,7 +346,8 @@ export default withRouter(
       changeLoader,
       DrawAnchorPayload,
       showAlert,
-      setAnchorObj
+      setAnchorObj,
+      fieldAlert
     }
   )(MobileOtp)
 );

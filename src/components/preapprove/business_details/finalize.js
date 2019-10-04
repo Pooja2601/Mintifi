@@ -13,9 +13,11 @@ import {
 } from "../../../actions/index";
 import { withRouter } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
-import { checkObject } from "../../../shared/common_logic";
+import { checkObject, retrieveDate } from "../../../shared/common_logic";
+import { validationBusinessDetails } from "../../../shared/validations";
 
 const { PUBLIC_URL } = process.env;
+const { ADDRESS1, PINCODE, GST_NUMBER, OWNERSHIP } = validationBusinessDetails;
 
 class ReviewBusinessDetail extends Component {
   obj = { pan_correct: "", adhar_correct: "" };
@@ -32,11 +34,11 @@ class ReviewBusinessDetail extends Component {
     // authObj: {mobile: '', verified: ''},
     pan_adhar: { pan: "", adhar: "" },
     businessDetail: {
-      companytype: "",
+      company_type: "",
       gst: "",
       bpan: "",
       avgtrans: "",
-      dealercode: ""
+      dealer_code: ""
     },
     tnc_consent: false,
     tncModal: false
@@ -53,6 +55,29 @@ class ReviewBusinessDetail extends Component {
         history.push(`${PUBLIC_URL}/preapprove/businessdetail`);
     } else history.push(`${PUBLIC_URL}/preapprove/token`);
   }
+
+  // For removing Blank values , which are in optional dilemma
+  _fallbackGSTOptional = (val, field) => {
+    let result, isGSTValid;
+
+    isGSTValid = GST_NUMBER.pattern.test(this.props.businessObj.gst);
+
+    switch (field) {
+      case GST_NUMBER.slug:
+        result = GST_NUMBER.pattern.test(val) ? val : "";
+        break;
+      case ADDRESS1.slug:
+        result = ADDRESS1.pattern.test(val) ? (isGSTValid ? "" : val) : "";
+        break;
+      case PINCODE.slug:
+        result = PINCODE.pattern.test(val) ? (isGSTValid ? "" : val) : "";
+        break;
+      case OWNERSHIP.slug:
+        result = OWNERSHIP.pattern.test(val) ? (isGSTValid ? "" : val) : "";
+        break;
+    }
+    return result;
+  };
 
   _formSubmit(e) {
     // e.preventDefault();
@@ -71,56 +96,75 @@ class ReviewBusinessDetail extends Component {
       showAlert
     } = this.props;
     changeLoader(true);
-    if (checkObject(adharObj))
-      if (adharObj.dob) {
-        let dobObj = new Date(adharObj.dob);
-        dob =
-          dobObj.getFullYear() +
-          "-" +
-          (dobObj.getMonth() + 1) +
-          "-" +
-          dobObj.getDate();
-      }
 
+    let data = {
+      app_id: app_id,
+      anchor_id: payload.anchor_id,
+      distributor_dealer_code:
+        businessObj.dealer_code && payload.distributor_dealer_code,
+      sales_agent_mobile_number: parseFloat(payload.sales_agent_mobile_number),
+      // business_type: businessObj.company_type,
+      anchor_transaction_id: payload.anchor_transaction_id,
+      borrowers: {
+        first_name: adharObj.f_name || "_",
+        middle_name: adharObj.m_name,
+        last_name: adharObj.l_name,
+        pan: pan,
+        // gstin: businessObj.gst,
+        dob: retrieveDate(dob),
+        mobile_number: parseFloat(adharObj.mobile),
+        email: adharObj.email,
+        gender: adharObj.gender,
+        residence_address: {
+          address_1: adharObj.address1,
+          address_2: adharObj.address2 ? adharObj.address2 : "",
+          ownership_type: adharObj.ownership,
+          pincode: parseFloat(adharObj.pincode)
+        }
+      },
+      business_details: {
+        business_name: businessObj.company_name,
+        business_type: businessObj.company_type,
+        gstin: this._fallbackGSTOptional(businessObj.gst, GST_NUMBER.slug),
+        business_pan: businessObj.bpan,
+        inc_date: retrieveDate(businessObj.inc_date),
+        business_email: businessObj.business_email,
+        business_phone: businessObj.business_phone,
+        no_of_founders: parseFloat(businessObj.no_of_founders),
+        no_of_employees: parseFloat(businessObj.no_of_employees),
+        monthly_anchor_txn_value: parseFloat(businessObj.avgtrans),
+        retailer_onboarding_date: payload.retailer_onboarding_date,
+        retailer_vintage: payload.retailer_vintage
+          ? parseFloat(payload.retailer_vintage)
+          : parseFloat(businessObj.retailer_vintage),
+        business_address: {
+          ownership_type: this._fallbackGSTOptional(
+            businessObj.ownership,
+            OWNERSHIP.slug
+          ),
+          address_1: this._fallbackGSTOptional(
+            businessObj.address1,
+            ADDRESS1.slug
+          ),
+          address_2: businessObj.address2,
+          pincode: parseFloat(
+            this._fallbackGSTOptional(businessObj.pincode, PINCODE.slug)
+          )
+        }
+      },
+      loan_details: {
+        loan_amount: parseFloat(payload.loan_amount),
+        product_type: payload.product_type
+      },
+      tnc_accepted: true,
+      is_credit_decision: true,
+      timestamp: new Date(),
+      transactions_details: {}
+    };
     fetch(`${loanUrl}/application/instant`, {
       method: "POST",
       headers: { "Content-Type": "application/json", token: token },
-      body: JSON.stringify({
-        app_id: app_id,
-        anchor_id: payload.anchor_id,
-        distributor_dealer_code:
-          businessObj.dealercode && payload.distributor_dealer_code,
-        sales_agent_mobile_number: payload.sales_agent_mobile_number,
-        business_type: businessObj.companytype,
-        anchor_transaction_id: payload.anchor_transaction_id,
-        borrowers: {
-          first_name: adharObj.f_name || "_",
-          middle_name: adharObj.m_name,
-          last_name: adharObj.l_name,
-          pan: pan,
-          gstin: businessObj.gst,
-          dob: dob,
-          mobile_number: adharObj.mobile,
-          email: adharObj.email,
-          gender: adharObj.gender,
-          residence_address: {
-            address_1: adharObj.address1,
-            address_2: adharObj.address2 ? adharObj.address2 : " ",
-            ownership_type: adharObj.ownership,
-            pincode: adharObj.pincode
-          }
-        },
-        loan_details: {
-          loan_amount: payload.loan_amount,
-          product_type: payload.product_type,
-          average_monthly_transaction: businessObj.avgtrans,
-          retailer_onboarding_date: payload.retailer_onboarding_date
-          // "vintage": 60
-        },
-        tnc_accepted: true,
-        is_credit_decision: true,
-        timestamp: new Date()
-      })
+      body: JSON.stringify(data)
     })
       .then(resp => resp.json())
       .then(
@@ -147,7 +191,7 @@ class ReviewBusinessDetail extends Component {
               setTimeout(
                 () =>
                   history.push(`${PUBLIC_URL}/preapprove/appapproved`, {
-                    status: "aip"
+                    status: "approval_in_principle"
                   }),
                 500
               );

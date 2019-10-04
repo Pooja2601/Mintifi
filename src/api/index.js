@@ -97,3 +97,50 @@ export const postAPI = propsParam => {
             throw error;
         });
 };
+
+
+export const postFileAPI = propsParam => {
+    const {URL, token, data, showAlert, changeLoader} = propsParam;
+    let isLoader = typeof changeLoader === "function";
+    let isAlert = typeof showAlert === "function";
+
+    isLoader && changeLoader(true);
+    return fetch(`${URL}`, {
+        method: "POST",
+        headers: {
+            // "Content-Type": "application/json",
+            token: token,
+            "App-id": app_id,
+            "cache": "no-cache",
+        },
+        body: data
+    })
+        .then(resp => resp.json())
+        .then(
+            resp => {
+                isLoader && changeLoader(false);
+
+                if (!checkObject(resp.response)) {
+                    showAlert("We couldn't upload the files, Kindly try again !", 'warn');
+                    return {status: apiActions.ERROR_RESPONSE, data: resp.error};
+                } else {
+                    return {status: apiActions.SUCCESS_RESPONSE, data: resp.response};
+                }
+            },
+            () => {
+                isLoader && changeLoader(false);
+                isAlert && showAlert("net");
+                return {status: apiActions.ERROR_NET};
+            }
+        )
+        .catch(e => {
+            isLoader && changeLoader(false);
+            isAlert && showAlert("net");
+            const error = new Error();
+            error.code = e.code;
+            error.status = apiActions.ERROR_NET;
+            error.message = e.message;
+            error.response = e.responseError;
+            throw error;
+        });
+};

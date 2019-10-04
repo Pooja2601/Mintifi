@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
+import ButtonWrapper from "../../../layouts/button_wrapper";
 import {
   changeLoader,
   setAnchorObj,
@@ -40,7 +41,7 @@ class ESign extends Component {
   popUpWindow = "";
   intervalPing = "";
   checkStatusPopup = "";
-  COUNTER_PING = 1000; // 2 minutes
+  COUNTER_PING = 1000; // (0.4*1000) minutes
   INTERVAL_TIMER = 15000;
   eSignAttempt = 0;
 
@@ -216,6 +217,7 @@ class ESign extends Component {
       showAlert
     } = this.props;
     changeLoader(false);
+    showAlert();
 
     let { href } = window.location,
       base64_decode = {},
@@ -305,33 +307,43 @@ class ESign extends Component {
               </p>
             </>
           ) : (
-            <p className="paragraph_styling alert alert-danger">
-              You may not access this page directly without appropriate
-              payload/session.
+              <p className="paragraph_styling alert alert-danger">
+                You may not access this page directly without appropriate
+                payload/session.
             </p>
-          )}
+            )}
         </div>
         <br />
         <div className="mt-5 mb-4 text-center">
           {this.state.checkStatus ? (
-            <button
-              type="button"
-              onClick={e => this._pingDBStatus()}
+            <ButtonWrapper
+              localState={this.state}
+              onClick={this._pingDBStatus}
               disabled={!checkObject(eSignPayload) || !token}
-              className="form-submit btn btn-raised greenButton"
-            >
-              Check E-SIGN Status
-            </button>
+              label="CHECK E-SIGN STATUS"
+            />
           ) : (
-            <button
-              type="button"
-              onClick={e => this._triggerESign()}
-              disabled={!checkObject(eSignPayload) || !token}
-              className="form-submit btn btn-raised greenButton"
-            >
-              Initiate E-SIGN
-            </button>
-          )}
+              <ButtonWrapper
+                localState={this.state}
+                onClick={this._triggerESign}
+                disabled={!checkObject(eSignPayload) || !token}
+                label="INITIATE E_SIGN"
+              />
+            )}
+          {/* {this.state.checkStatus ?
+                        <button type="button"
+                                onClick={e => this._pingDBStatus()}
+                                disabled={!checkObject(eSignPayload) || !token}
+                                className="form-submit btn btn-raised greenButton">
+                            Check E-SIGN Status
+                        </button> : <button
+                            type="button"
+                            onClick={e => this._triggerESign()}
+                            disabled={!checkObject(eSignPayload) || !token}
+                            className="form-submit btn btn-raised greenButton"
+                        >
+                            Initiate E-SIGN
+                        </button>} */}
         </div>
       </>
     );

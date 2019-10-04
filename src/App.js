@@ -13,17 +13,17 @@ import configureStore from "./store";
 import {PersistGate} from "redux-persist/integration/react";
 import {ToastContainer, toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {routes} from './routes'
+import {routes} from './shared/routes'
 
 // import {TransitionGroup, CSSTransition} from "react-transition-group";
 
 // import Header from "./shared/header";
 // import Footer from "./shared/footer";
-import Loader from "./shared/loader";
-import Error from "./shared/error";
+import Loader from "./layouts/loader_layout";
+import Error_404 from "./layouts/404_layout";
 
-import Headers from "./shared/header";
-import CustomAlert from "./shared/custom_alerts";
+import Headers from "./layouts/header_layout";
+import CustomAlert from "./layouts/alerts_wrapper";
 
 const {store, persistor} = configureStore();
 
@@ -56,7 +56,6 @@ class App extends Component {
                                     >
                                         <div
                                             className="col-11 col-md-6 ml-5 mr-5 mb-3 partner_section mainCardBody"
-
                                         >
                                             <CustomAlert/>
                                             <Loader/>
@@ -76,7 +75,7 @@ class App extends Component {
                                                         />
                                                     ))}
 
-                                                    <Route component={Error}/>
+                                                    <Route component={Error_404}/>
                                                 </Switch>
                                                 {/*</CSSTransition>*/}
                                                 {/*</TransitionGroup>*/}

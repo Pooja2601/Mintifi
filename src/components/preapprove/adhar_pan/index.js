@@ -7,7 +7,8 @@ import {
   changeLoader,
   setGstProfile,
   setBusinessDetail,
-  showAlert
+  showAlert,
+  fieldAlert
 } from "../../../actions";
 import PropTypes from "prop-types";
 import { Link, withRouter } from "react-router-dom";
@@ -18,7 +19,9 @@ import {
 } from "../../../shared/common_logic";
 import { apiActions, fetchAPI } from "../../../api";
 import { validationAdharPan } from "./../../../shared/validations";
-
+import InputWrapper from "../../../layouts/input_wrapper";
+import ButtonWrapper from "../../../layouts/button_wrapper";
+import RenderGSTModal from "./gst_list_modal";
 const { PUBLIC_URL } = process.env;
 
 class AdharPan extends Component {
@@ -40,11 +43,11 @@ class AdharPan extends Component {
     missed_fields: true
   };
   gstDetails = {
-    companytype: "",
+    company_type: "",
     gst: "",
     bpan: "",
     avgtrans: "",
-    dealercode: "",
+    dealer_code: "",
     lgnm: "",
     tnc_consent: false
   };
@@ -93,40 +96,42 @@ class AdharPan extends Component {
               <div className="modal-body">
                 <div className="checkbox">
                   <div className={"row"}>
-                    {checkObject(this.state.gst_details) ? (
-                      this.state.gst_details.map((val, key) => (
-                        <div key={key} className={"col-sm-6"}>
-                          <label>
-                            <input
-                              type="radio"
-                              name={"gst_details"}
-                              checked={this.state.checked[key] || ""}
-                              onChange={e => {
-                                this.setState(prevState => ({
-                                  checked: {
-                                    [key]: true
-                                  },
-                                  selectedGST: val.gstinId
-                                }));
-                              }}
-                            />{" "}
-                            <b
-                              style={{
-                                marginLeft: "20px",
-                                fontSize: "13.5px",
-                                color: "black",
-                                cursor: "pointer",
-                                textTransform: "capitalize"
-                              }}
-                            >
-                              {val.gstinId}
-                            </b>
-                          </label>
-                        </div>
-                      ))
-                    ) : (
-                      <></>
-                    )}
+                    {this.state.gst_details ===
+                      Object(this.state.gst_details) &&
+                      this.state.gst_details.length ? (
+                        this.state.gst_details.map((val, key) => (
+                          <div key={key} className={"col-sm-6"}>
+                            <label>
+                              <input
+                                type="radio"
+                                name={"gst_details"}
+                                checked={this.state.checked[key] || ""}
+                                onChange={e => {
+                                  this.setState(prevState => ({
+                                    checked: {
+                                      [key]: true
+                                    },
+                                    selectedGST: val.gstinId
+                                  }));
+                                }}
+                              />{" "}
+                              <b
+                                style={{
+                                  marginLeft: "20px",
+                                  fontSize: "13.5px",
+                                  color: "black",
+                                  cursor: "pointer",
+                                  textTransform: "capitalize"
+                                }}
+                              >
+                                {val.gstinId}
+                              </b>
+                            </label>
+                          </div>
+                        ))
+                      ) : (
+                        <></>
+                      )}
                     <br />
                   </div>
                 </div>
@@ -160,15 +165,15 @@ class AdharPan extends Component {
   };
 
   //ToDo : Check the PAN with the backend AP for Confirmation of new user
-  _formSubmit(e) {
+  _formSubmit = e => {
     e.preventDefault();
     this._panFetch();
-  }
+  };
 
   _setGST = () => {
     /* Object.keys(this.state.checked).map(val => { //0, 1, 2, 3
-                 this.gstDetails.gst = this.state.gst_details[val].gstinId;
-             });*/
+                     this.gstDetails.gst = this.state.gst_details[val].gstinId;
+                 });*/
     this.gstDetails.gst = this.state.selectedGST;
     this.props.setBusinessDetail(this.gstDetails);
     this._gstFetch(this.gstDetails.gst);
@@ -250,16 +255,15 @@ class AdharPan extends Component {
   };
 
   validationHandler = () => {
-    const { showAlert } = this.props;
+    const { showAlert, fieldAlert } = this.props;
 
-    const lomo = fieldValidationHandler({
-      showAlert: showAlert,
+    const missed_fields = fieldValidationHandler({
       validations: validationAdharPan,
-      localState: this.state
+      localState: this.state,
+      fieldAlert
     });
-    // debugger
 
-    this.setState({ missed_fields: lomo }); // true : for disabling
+    this.setState({ missed_fields }); // true : for disabling
   };
 
   onChangeHandler = (field, value) => {
@@ -276,11 +280,12 @@ class AdharPan extends Component {
 
     switch (field) {
       case PAN_NUMBER:
-        if (value.length <= 10) this.tempState["pan"] = value.toUpperCase();
+        if (value.length <= 10)
+          this.tempState[PAN_NUMBER.slug] = value.toUpperCase();
 
         break;
       case ADHAR_NUMBER:
-        if (value.length <= 12) this.tempState["adhar"] = value;
+        if (value.length <= 12) this.tempState[ADHAR_NUMBER.slug] = value;
 
         break;
       default:
@@ -291,24 +296,28 @@ class AdharPan extends Component {
     this.setState({ ...this.state, ...this.tempState });
 
     window.setTimeout(() => {
-      pan_adhar(this.tempState["pan"], this.tempState["adhar"]);
+      pan_adhar(
+        this.tempState[PAN_NUMBER.slug],
+        this.tempState[ADHAR_NUMBER.slug]
+      );
       this.validationHandler();
     }, 10);
   };
 
   componentWillMount() {
-    const { payload } = this.props;
+    const { payload, changeLoader, showAlert } = this.props;
+    changeLoader(false);
+    showAlert();
     if (!checkObject(payload))
       this.props.history.push(`${PUBLIC_URL}/preapprove/token`);
     // console.log(typeof payload);
   }
 
   componentDidMount() {
-    const { changeLoader, pan, adhar, pan_adhar } = this.props;
+    const { pan, adhar, pan_adhar } = this.props;
     if (!!pan || !!adhar) this.setState({ pan: pan, adhar: adhar });
     else pan_adhar(this.state.pan, this.state.adhar);
     window.setTimeout(() => this.validationHandler(), 500);
-    changeLoader(false);
   }
 
   render() {
@@ -322,93 +331,42 @@ class AdharPan extends Component {
         <h5 className="paragraph_styling  text-center">
           <b>Let us fetch some information for you.</b>
         </h5>
-        <form id="serverless-contact-form" onSubmit={e => this._formSubmit(e)}>
+        <div id="serverless-contact-form">
           <div className={"row"}>
             <div className={"col-sm-11 col-md-8 m-auto"}>
-              <div className="form-group mb-3">
-                {/*#00b7a5*/}
-                <label htmlFor="numberPAN" className={"bmd-label-floating"}>
-                  PAN Number *{" "}
-                </label>
-
-                <input
-                  type={PAN_NUMBER.type}
-                  className="form-control font_weight"
-                  // placeholder="10 digit PAN Number"
-                  autoComplete={PAN_NUMBER.autoComplete}
-                  name="url"
-                  maxLength={PAN_NUMBER.maxLength}
-                  minLength={PAN_NUMBER.minLength}
-                  pattern={regexTrim(PAN_NUMBER.pattern)}
-                  title={PAN_NUMBER.title}
-                  autoCapitalize={PAN_NUMBER.autoCapitalize}
-                  id={PAN_NUMBER.id}
-                  required={PAN_NUMBER.required}
-                  value={this.state.pan}
-                  // ref={ref => (this.obj.pan = ref)}
-                  // onChange={e => this._PANEnter(e)}
-                  onChange={e =>
-                    this.onChangeHandler(PAN_NUMBER, e.target.value)
-                  }
-                />
-                <br />
-              </div>
+              <InputWrapper
+                validation={PAN_NUMBER}
+                localState={this.state}
+                onChangeHandler={this.onChangeHandler}
+              />
             </div>
-            {/*<div className={"col-sm-11 col-md-8"} style={{ margin: 'auto 45%'}}>
-                            Or
-              </div>*/}
-            <div className={"col-sm-11 col-md-8 m-auto"}>
-              <div
-                className="form-group"
-                style={{
-                  visibility: !this.state.missed_fields ? "visible" : "hidden"
-                }}
-              >
-                <label htmlFor="numberAdhar" className={"bmd-label-floating"}>
-                  Aadhaar Number (optional)
-                </label>
-                <div className={"input-group"}>
-                  <input
-                    type={ADHAR_NUMBER.type}
-                    className="form-control font_weight"
-                    name="url"
-                    pattern={regexTrim(ADHAR_NUMBER.pattern)}
-                    title={ADHAR_NUMBER.title}
-                    autoComplete={ADHAR_NUMBER.autoComplete}
-                    id={ADHAR_NUMBER.id}
-                    maxLength={ADHAR_NUMBER.maxLength}
-                    minLength={ADHAR_NUMBER.minLength}
-                    value={this.state.adhar}
-                    // onChange={e => this._AdharEnter(e)}
-                    onChange={e =>
-                      this.onChangeHandler(ADHAR_NUMBER, e.target.value)
-                    }
-                    // ref={ref => (this.obj.adhar = ref)}
-                    aria-describedby="adhar-area"
-                  />
-                  {/* <br /> */}
 
-                  {/* <div className="input-group-append">
-                        <button
-                            className={(this.state.adhar_skip) ? 'btn btn-secondary' : 'btn btn-default'}
-                            style={{fontSize: '13px'}}
-                            type="button" onClick={() => this.adharSkipped()}
-                            id="adhar-area">Skip Aadhaar
-                        </button>
-                    </div>*/}
-                </div>
-                <span className="bmd-help">
-                  Don't have mobile linked with Aadhaar ?
-                </span>
-                <span className="bmd-help">
-                  No problem, you may skip it {/*on the right side*/}.
-                </span>
-              </div>
+            <div
+              style={{
+                visibility: !this.state.missed_fields ? "visible" : "hidden"
+              }}
+              className={"col-sm-11 col-md-8 m-auto"}
+            >
+              <InputWrapper
+                validation={ADHAR_NUMBER}
+                localState={this.state}
+                onChangeHandler={this.onChangeHandler}
+                addText={
+                  "Don't have mobile linked with Aadhaar ? No problem, you may skip it "
+                }
+                isNumber={true}
+              />
             </div>
           </div>
 
           <div className="mt-5 mb-5 text-center ">
-            {!this.state.missed_fields && (
+            <ButtonWrapper
+              localState={this.state}
+              onClick={this._formSubmit}
+              disabled={this.state.missed_fields}
+              label="PROCEED"
+            />
+            {/* {!this.state.missed_fields && (
               <input
                 type="submit"
                 name="submit"
@@ -416,9 +374,9 @@ class AdharPan extends Component {
                 onClick={e => this._formSubmit(e)}
                 className="form-submit btn btn-raised btn-raised greenButton"
               />
-            )}
+            )} */}
           </div>
-        </form>
+        </div>
         {this.RenderModalGST()}
       </>
     );
@@ -436,6 +394,13 @@ const mapStateToProps = state => ({
 export default withRouter(
   connect(
     mapStateToProps,
-    { pan_adhar, changeLoader, setGstProfile, setBusinessDetail, showAlert }
+    {
+      pan_adhar,
+      changeLoader,
+      setGstProfile,
+      setBusinessDetail,
+      showAlert,
+      fieldAlert
+    }
   )(AdharPan)
 );
