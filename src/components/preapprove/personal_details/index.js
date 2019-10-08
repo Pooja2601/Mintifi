@@ -16,6 +16,7 @@ import { fetchAPI, apiActions, postAPI } from "../../../api";
 import {
   checkObject,
   fieldValidationHandler,
+  validateKeyStrokes,
   regexTrim,
   retrieveDate
 } from "../../../shared/common_logic";
@@ -242,6 +243,8 @@ class PersonalDetail extends Component {
                 validation={F_NAME}
                 localState={this.state}
                 onChangeHandler={this.onChangeHandler}
+                onKeyPress={e=>validateKeyStrokes(e)}
+                isNumber={false}
               />
             </div>
             <div className={"col-md-4 col-sm-4 col-xs-12"}>
