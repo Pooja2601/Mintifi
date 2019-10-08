@@ -6,23 +6,27 @@ const ButtonWrapper = props => {
   let missed_fields = false;
   const {
     validation,
-    onChangeHandler,
+    onClick,
     localState,
     alertObj,
-    addText,
+    className,
     disabled,
-    label
+    label,
+    style
   } = props;
   const VALIDATION = validation;
+  // const classCustom = className ? `btn btn-raised greenButton ${className}` : `btn btn-raised greenButton`;
   return (
     <>
       <div className="form-group mb-2">
         {/*#00b7a5*/}
         <div className="btn-group ToggleBtn" aria-label="...">
           <button
-            type={VALIDATION.type}
-            className={`btn btn-raised greenButton`}
-            onClick={e => onChangeHandler(e)}
+            style={style}
+            // localState={localState}
+            className={`btn btn-raised greenButton ${className}`}
+            onClick={e => onClick(e)}
+            //onChangeHandler={e => onChangeHandler(e)}
             disabled={disabled}
           >
             {label}
@@ -36,10 +40,11 @@ const ButtonWrapper = props => {
 ButtonWrapper.defaultProps = {
   alertObj: { showError: false, slug: "" },
   validation: {},
-  onChangeHandler: () => {},
   localState: {},
   disabled: false,
-  missed_fields: false
+  missed_fields: false,
+  onClick: () => { },
+  onChangeHandler: () => { }
 };
 
 const mapStateToProp = state => ({

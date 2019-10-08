@@ -117,7 +117,7 @@ class ENach extends Component {
     // if (eNachAttempt) this.setState({ctr: eNachAttempt});
     let that = this;
 
-    document.addEventListener("responseDigio", function(obj) {
+    document.addEventListener("responseDigio", function (obj) {
       let { detail } = obj;
 
       // console.log(JSON.stringify(detail));
@@ -174,11 +174,11 @@ class ENach extends Component {
               Remember, you may only try twice.
             </p>
           ) : (
-            <p className="paragraph_styling alert alert-danger">
-              You may not access this page directly without appropriate
-              payload/session.
+              <p className="paragraph_styling alert alert-danger">
+                You may not access this page directly without appropriate
+                payload/session.
             </p>
-          )}
+            )}
         </div>
         <br />
         <div
@@ -197,18 +197,11 @@ class ENach extends Component {
         <div className="mt-5 mb-4 text-center">
           <ButtonWrapper
             localState={this.state}
-            onChangeHandler={this._triggerDigio}
+            onClick={this._triggerDigio}
             disabled={!checkObject(eNachPayload) || !eNachPayload.mandate_id}
             label="INITIATE E_SIGN"
           />
-          {/* <button
-                type="button"
-                onClick={e => this._triggerDigio()}
-                disabled={!checkObject(eNachPayload) || !eNachPayload.mandate_id}
-                className="form-submit btn btn-raised greenButton"
-            >
-                Initiate E-NACH
-            </button> */}
+        
         </div>
         {/* ToDo : Will be made live after backend Fixes */}
         {/* <div className={"text-right"}>

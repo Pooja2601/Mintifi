@@ -94,7 +94,7 @@ class MobileOtp extends Component {
     }
   };
 
-  // TODO: check post function
+
   _verifyOTP = async e => {
     e.preventDefault();
     const { changeLoader, authObj, token, DrawsetAuth, showAlert } = this.props;
@@ -145,7 +145,7 @@ class MobileOtp extends Component {
     } = this.props;
     // `${baseUrl}/loans/${payload.company_id}/details/?app_id=${app_id}`,
 
-    // TODO: check fetchAPI function
+
     if (checkObject(payload)) {
       const options = {
         URL: `${baseUrl}/merchants/${payload.anchor_id}/get_details?app_id=${app_id}`,
@@ -195,11 +195,11 @@ class MobileOtp extends Component {
       case MOBILE_NUMBER:
         // console.log(">>>", value.length);
         if (value.length <= 10) {
-          this.tempState["mobile"] = value;
+          this.tempState[MOBILE_NUMBER.slug] = value;
         }
         break;
       case VERIFY_OTP:
-        if (value.length <= 6) this.tempState["otp"] = value;
+        if (value.length <= 6) this.tempState[VERIFY_OTP.slug] = value;
         break;
 
       default:
@@ -303,57 +303,27 @@ class MobileOtp extends Component {
           </div>
 
           <div className="mt-3 mb-2 text-center">
-            {!this.state.submitted ? (
-              <ButtonWrapper
-                localState={this.state}
-                // style={{
-                //   visibility: !this.state.submitted ? "visible" : "hidden"
-                // }}
-                onChangeHandler={this._formSubmit}
-                disabled={!(!this.state.missed_fields && !this.state.submitted)}
-                label={this.state.count === 0 ? "SEND OTP" : "RESEND OTP"}
-              />
-            ) : (
-              <></>
-            )}
-            <br />
-            {this.state.submitted ? (
-              <ButtonWrapper
-                localState={this.state}
-                // style={{
-                //   visibility: this.state.submitted ? "visible" : "hidden"
-                // }}
-                onChangeHandler={this._verifyOTP}
-                disabled={!(!this.state.missed_fields && !this.state.submitted)}
-                label="VERIFY OTP"
-              />
-            ) : (
-              <></>
-            )}
-            {/* <button
-              name="submit"
+            <ButtonWrapper
+              localState={this.state}
               style={{
                 visibility: !this.state.submitted ? "visible" : "hidden"
               }}
+              onClick={this._formSubmit}
               disabled={!(!this.state.missed_fields && !this.state.submitted)}
-              // value={"Send OTP"}
-              onClick={e => this._formSubmit(e)}
-              className="form-submit btn btn-raised greenButton"
-            >
-              {this.state.count === 0 ? "Send OTP" : "Resend OTP"}
-            </button>
-
+              label={this.state.count === 0 ? "Send OTP" : "Resend OTP"}
+            ></ButtonWrapper>
             <br />
-            <button
+            <ButtonWrapper
+              localState={this.state}
               style={{
                 visibility: this.state.submitted ? "visible" : "hidden"
               }}
+              onClick={this._verifyOTP}
               disabled={this.state.otp.length !== 6}
-              onClick={e => this._verifyOTP(e)}
-              className="btn btn-raised greenButton text-center"
-            >
-              Verify OTP
-            </button> */}
+              label="VERIFY OTP"
+            />
+
+
           </div>
         </div>
       </>

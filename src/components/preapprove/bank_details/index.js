@@ -226,7 +226,7 @@ class BankDetail extends Component {
       } else if (resp.status === apiActions.ERROR_RESPONSE) {
         showAlert(resp.data.message, "warn");
       }
-    } else showAlert("Something went wrong with the Request", "warn");
+    } else showAlert("Something went wrong with the request, have you received the AIP ?", "warn");
   };
 
   _fetchIFSC(ifsc) {
@@ -329,7 +329,7 @@ class BankDetail extends Component {
         </p>
         {/*<h5 className={"text-center"}>{(gstProfile === Object(gstProfile)) ? gstProfile.lgnm : ''}</h5>*/}
 
-        <form id="serverless-contact-form" onSubmit={e => this._formSubmit(e)}>
+        <div id="serverless-contact-form" >
           <div className={"row"}>
             <div className={"col-md-6 col-sm-6 col-xs-12"}>
               <InputWrapper
@@ -416,7 +416,7 @@ class BankDetail extends Component {
           <div className="mt-5 mb-5 text-center">
             <ButtonWrapper
               localState={this.state}
-              onChangeHandler={this._formSubmit}
+              onClick={this._formSubmit}
               disabled={this.state.missed_fields}
               label="SUBMIT RECORDS"
             />
@@ -429,7 +429,7 @@ class BankDetail extends Component {
               Submit Records
             </button> */}
           </div>
-        </form>
+        </div>
       </>
     );
   }

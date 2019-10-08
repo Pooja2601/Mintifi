@@ -5,7 +5,7 @@ import { changeLoader } from "../actions";
 
 const { PUBLIC_URL } = process.env;
 const Header = props => {
-  const {anchorObj} = props;
+  const { anchorObj } = props;
   if (window.location === window.parent.location)
     return (
       <>
@@ -14,12 +14,12 @@ const Header = props => {
             <div className="mb-4">
               {/*    ToDo : Swap All $PUBLIC_URL$ to ./ in production */}
               <img
-                src={`${PUBLIC_URL}/images/Mintifi-Logo-white_2.png`}
+                src={`${PUBLIC_URL}/images/Mintifi-logo-1.png`}
                 alt="Mintifi Logo"
                 className={"logoHeader"}
               />
               {/*<b className={"anchorText"}>Anchor Merchant</b>*/}
-              {(anchorObj === Object(anchorObj) && anchorObj) ? (
+              {anchorObj === Object(anchorObj) && anchorObj ? (
                 <img
                   src={anchorObj.anchor_logo}
                   alt="Anchor Logo"

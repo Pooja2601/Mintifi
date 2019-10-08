@@ -2,6 +2,7 @@ import React, { Component } from "react";
 // import {GetinTouch} from "../../shared/getin_touch";
 import { otpUrl, OTP_Timer, app_id } from "../../../shared/constants";
 import { connect } from "react-redux";
+import ButtonWrapper from "../../../layouts/button_wrapper";
 import PropTypes from "prop-types";
 import {
   setAuth,
@@ -291,8 +292,7 @@ class MobileOtp extends Component {
           </div>
 
           <div className="mt-2 text-center ">
-            <button
-              name="submit"
+            <ButtonWrapper
               style={{
                 visibility:
                   !this.state.submitted && !this.state.loading
@@ -300,14 +300,13 @@ class MobileOtp extends Component {
                     : "hidden"
               }}
               disabled={!(!this.state.missed_fields && !this.state.submitted)}
-              // value={"Send OTP"}
-              onClick={e => this._formSubmit(e)}
-              className="form-submit btn btn-raised greenButton"
-            >
-              {this.state.count === 0 ? "Send OTP" : "Resend OTP"}
-            </button>
+              onClick={this._formSubmit}
+              className="form-submit"
+              label={this.state.count === 0 ? "Send OTP" : "Resend OTP"}
+            />
 
-            <button
+
+            <ButtonWrapper
               style={{
                 visibility:
                   this.state.loading && this.state.submitted
@@ -315,11 +314,13 @@ class MobileOtp extends Component {
                     : "hidden"
               }}
               disabled={this.state.loading && this.state.otp.length !== 6}
-              onClick={e => this._verifyOTP(e)}
-              className="btn btn-raised greenButton text-center m-auto d-block marginTopBottom"
-            >
-              Verify OTP
-            </button>
+              onClick={this._verifyOTP}
+              className="text-center m-auto d-block marginTopBottom"
+              label={"Verify OTP"}
+
+            />
+
+
           </div>
         </div>
       </>

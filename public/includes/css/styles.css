@@ -13,8 +13,9 @@ header {
     top: 0px;
     right: 0px;
     height: 85px;
-    background-image: linear-gradient(#74c0bc, #74C0D6);
+    /* background-image: linear-gradient(#74c0bc, #74C0D6); */
     box-shadow: 0 0 8px #cccccc;
+    background-color: #fff;
 }
 
 .css-1pahdxg-control {
@@ -2717,31 +2718,7 @@ input[type=number]::-webkit-outer-spin-button {
 #dealerCode:valid,
 #ifscCode:valid,
 #numberAccount:valid,
-#micrCode:valid
-#companyName:valid
-#companyType:valid
-#numberGST:valid
-#numberPAN:valid
-#avgTrans:valid
-#dealerCode:valid
-#business_email:valid
-#business_phone:valid
-#no_of_founders:valid
-#no_of_employees:valid
-#incDate:valid
-#numberPincode:valid
-#textAddress1:valid
-#businessOwnership:valid
-#retailerVintage:valid
-#nameBranch:valid
-#micrCode:valid
-#nameBank:valid
-#dropdown:valid
-#ifscCode:valid
-#numberAccount:valid
-#nameAccount:valid
-
- {
+#micrCode:valid #companyName:valid #companyType:valid #numberGST:valid #numberPAN:valid #avgTrans:valid #dealerCode:valid #business_email:valid #business_phone:valid #no_of_founders:valid #no_of_employees:valid #incDate:valid #numberPincode:valid #textAddress1:valid #businessOwnership:valid #retailerVintage:valid #nameBranch:valid #micrCode:valid #nameBank:valid #dropdown:valid #ifscCode:valid #numberAccount:valid #nameAccount:valid {
     color: black !important;
     border-color: black !important;
 }
@@ -2764,32 +2741,10 @@ input[type=number]::-webkit-outer-spin-button {
 #dealerCode:invalid,
 #ifscCode:invalid,
 #numberAccount:invalid,
-#micrCode:invalid
-#companyName:invalid
-#companyType:invalid
-#numberGST:invalid
-#numberPAN:invalid
-#avgTrans:invalid
-#dealerCode:invalid
-#business_email:invalid
-#business_phone:invalid
-#no_of_founders:invalid
-#no_of_employees:invalid
-#incDate:invalid
-#numberPincode:invalid
-#textAddress1:invalid
-#businessOwnership:invalid
-#retailerVintage:invalid
-#nameBranch:invalid
-#micrCode:invalid
-#nameBank:invalid
-#dropdown:invalid
-#ifscCode:invalid
-#numberAccount:invalid
-#nameAccount:invalid {
+#micrCode:invalid #companyName:invalid #companyType:invalid #numberGST:invalid #numberPAN:invalid #avgTrans:invalid #dealerCode:invalid #business_email:invalid #business_phone:invalid #no_of_founders:invalid #no_of_employees:invalid #incDate:invalid #numberPincode:invalid #textAddress1:invalid #businessOwnership:invalid #retailerVintage:invalid #nameBranch:invalid #micrCode:invalid #nameBank:invalid #dropdown:invalid #ifscCode:invalid #numberAccount:invalid #nameAccount:invalid {
     color: black !important;
     /* indianred */
-    border-color: crimson !important;
+    border-color: #00bfa5 !important;
 }
 
 .selectedBtn {
@@ -2811,7 +2766,7 @@ input[type=number]::-webkit-outer-spin-button {
     width: 100%;
     padding: 10px;
     text-align: center;
-    color: crimson;
+    color: #00bfa5;
 }
 
 .lds-hourglass {
@@ -3093,7 +3048,7 @@ input[type=checkbox] {
 based on demand */
 .geekmark {
     position: absolute;
-    top: 0;
+    margin-top: -10px;
     left: 0;
     height: 25px;
     width: 25px;
@@ -3104,19 +3059,19 @@ based on demand */
 
 /* Specify the background color to be
 shown when hovering over checkbox */
-.main:hover input ~ .geekmark {
+.main:hover input~.geekmark {
     background-color: darkgray;
 }
 
 /* Specify the background color to be
 shown when checkbox is active */
-.main input:active ~ .geekmark {
+.main input:active~.geekmark {
     background-color: darkgreen;
 }
 
 /* Specify the background color to be
 shown when checkbox is checked */
-.main input:checked ~ .geekmark {
+.main input:checked~.geekmark {
     background-color: teal;
 }
 
@@ -3129,7 +3084,7 @@ shown when checkbox is checked */
 }
 
 /* Display checkmark when checked */
-.main input:checked ~ .geekmark:after {
+.main input:checked~.geekmark:after {
     display: block;
 }
 
@@ -3293,7 +3248,7 @@ like a tickmark */
     width: 90%;
 }
 
-.cardContainerOuter > div {
+.cardContainerOuter>div {
     padding: 0.2rem 5px;
 }
 
@@ -3327,15 +3282,15 @@ like a tickmark */
     color: #6c757d;
 }
 
-.phoneDisplay{
-   z-index: 999 !important;
+.phoneDisplay {
+    z-index: 999 !important;
 }
 
-.hideFields{
+.hideFields {
     display: none;
 }
 
-.selectedMark{
+.selectedMark {
     position: absolute;
     height: 25px;
     width: 25px;
@@ -3344,12 +3299,12 @@ like a tickmark */
     right: -20px;
 }
 
-.modalHeight{
+.modalHeight {
     height: 100%;
     overflow: scroll;
 }
 
-.marginTopBottom{
+.marginTopBottom {
     margin-top: 20px !important;
     margin-bottom: 20px !important;
 }
@@ -3357,3 +3312,18 @@ like a tickmark */
 /* .form-control:invalid {
     background-image: linear-gradient(0deg, #009688 2px, rgba(213, 0, 0, 0) 0), linear-gradient(0deg, rgba(0, 0, 0, .26) 1px, transparent 0) !important;
 } */
+
+.btn:disabled {
+    background: #03a9f414;
+}
+
+/* .btn:hover{
+ 
+   background-color: #03a9f433 !important;
+   opacity: 0.3;
+   color: rgba(0, 0, 0, 0.24) !important;
+} */
+
+.form-control:invalid {
+    background-image: linear-gradient(0deg, #00bfa5 2px, rgba(213, 0, 0, 0) 0), linear-gradient(0deg, rgba(0, 0, 0, .26) 1px, transparent 0) !important;
+}

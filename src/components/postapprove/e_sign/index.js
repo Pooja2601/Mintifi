@@ -307,29 +307,29 @@ class ESign extends Component {
               </p>
             </>
           ) : (
-            <p className="paragraph_styling alert alert-danger">
-              You may not access this page directly without appropriate
-              payload/session.
+              <p className="paragraph_styling alert alert-danger">
+                You may not access this page directly without appropriate
+                payload/session.
             </p>
-          )}
+            )}
         </div>
         <br />
         <div className="mt-5 mb-4 text-center">
           {this.state.checkStatus ? (
             <ButtonWrapper
               localState={this.state}
-              onChangeHandler={this._pingDBStatus}
+              onClick={this._pingDBStatus}
               disabled={!checkObject(eSignPayload) || !token}
               label="CHECK E-SIGN STATUS"
             />
           ) : (
-            <ButtonWrapper
-              localState={this.state}
-              onChangeHandler={this._triggerESign}
-              disabled={!checkObject(eSignPayload) || !token}
-              label="INITIATE E_SIGN"
-            />
-          )}
+              <ButtonWrapper
+                localState={this.state}
+                onClick={this._triggerESign}
+                disabled={!checkObject(eSignPayload) || !token}
+                label="INITIATE E_SIGN"
+              />
+            )}
           {/* {this.state.checkStatus ?
                         <button type="button"
                                 onClick={e => this._pingDBStatus()}
